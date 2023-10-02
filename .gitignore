@@ -6,7 +6,11 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
-
+.vscode
+blog-api.postman_collection.json
+z_test
+fortest.js
+uploads
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
@@ -76,8 +80,10 @@ web_modules/
 .env
 .env.development.local
 .env.test.local
+.env.test
 .env.production.local
 .env.local
+
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

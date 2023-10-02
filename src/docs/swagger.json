@@ -1,0 +1,443 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "TaskRabbit Clone API",
+      "version": "1.0.0",
+      "description": "API documentation for the TaskRabbit clone backend"
+    },
+    "basePath": "/api",
+    "schemes": [
+      "https"
+    ],
+    "securityDefinitions": {
+      "JWT": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "paths": {
+      "/users/register": {
+        "post": {
+          "tags": [
+            "User"
+          ],
+          "summary": "Register a new user (client or tasker)",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UserRegistrationRequest"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "User registration successful"
+            },
+            "400": {
+              "description": "Invalid request body or missing required fields"
+            },
+            "409": {
+              "description": "User with the same username or email already exists"
+            }
+          }
+        }
+      },
+      "/auth/login": {
+        "post": {
+          "tags": [
+            "Authentication"
+          ],
+          "summary": "Authenticate a user and obtain a JWT token",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UserLoginRequest"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Login successful, returns JWT token in the response body"
+            },
+            "400": {
+              "description": "Invalid request body or missing required fields"
+            },
+            "401": {
+              "description": "Invalid credentials"
+            }
+          }
+        }
+      },
+      "/tasks": {
+        "post": {
+          "tags": [
+            "Task"
+          ],
+          "summary": "Create a new task",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/CreateTaskRequest"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Task creation successful"
+            },
+            "400": {
+              "description": "Invalid request body or missing required fields"
+            },
+            "401": {
+              "description": "Authentication required"
+            }
+          }
+        }
+      },
+      "/tasks/{taskId}": {
+        "get": {
+          "tags": [
+            "Task"
+          ],
+          "summary": "Get details of a specific task",
+          "parameters": [
+            {
+              "name": "taskId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Task details retrieved successfully"
+            },
+            "404": {
+              "description": "Task with the specified ID not found"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Task"
+          ],
+          "summary": "Update details of a specific task",
+          "parameters": [
+            {
+              "name": "taskId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UpdateTaskRequest"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Task updated successfully"
+            },
+            "400": {
+              "description": "Invalid request body"
+            },
+            "401": {
+              "description": "Authentication required"
+            },
+            "404": {
+              "description": "Task with the specified ID not found"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Task"
+          ],
+          "summary": "Delete a specific task",
+          "parameters": [
+            {
+              "name": "taskId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Task deleted successfully"
+            },
+            "401": {
+              "description": "Authentication required"
+            },
+            "404": {
+              "description": "Task with the specified ID not found"
+            }
+          }
+        }
+      },
+      "/tasks/search": {
+        "get": {
+          "tags": [
+            "Task"
+          ],
+          "summary": "Search for tasks based on keywords and filters",
+          "parameters": [
+            {
+              "name": "keywords",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "category",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "location",
+              "in": "query",
+              "type": "string"
+            },
+            {
+              "name": "minPrice",
+              "in": "query",
+              "type": "number"
+            },
+            {
+              "name": "maxPrice",
+              "in": "query",
+              "type": "number"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Tasks retrieved successfully"
+            }
+          }
+        }
+      },
+      "/admin/users": {
+        "get": {
+          "tags": [
+            "Admin"
+          ],
+          "summary": "Get a list of all users registered in the system",
+          "responses": {
+            "200": {
+              "description": "Users retrieved successfully"
+            },
+            "401": {
+              "description": "Authentication required"
+            },
+            "403": {
+              "description": "Access denied"
+            }
+          }
+        }
+      },
+      "/admin/users/{userId}": {
+        "get": {
+          "tags": [
+            "Admin"
+          ],
+          "summary": "Get detailed information about a specific user by their ID",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User retrieved successfully"
+            },
+            "401": {
+              "description": "Authentication required"
+            },
+            "403": {
+              "description": "Access denied"
+            },
+            "404": {
+              "description": "User with the specified ID not found"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Admin"
+          ],
+          "summary": "Update the details of a specific user",
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UpdateUserRequest"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User updated successfully"
+            },
+            "401": {
+              "description": "Authentication required"
+            },
+            "403": {
+              "description": "Access denied"
+            },
+            "404": {
+              "description": "User with the specified ID not found"
+            }
+          }
+        },
+        "delete": {
+            "tags": [
+              "Admin"
+            ],
+            "summary": "Delete a specific user",
+            "parameters": [
+              {
+                "name": "userId",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "204": {
+                "description": "User deleted successfully"
+              },
+              "401": {
+                "description": "Authentication required"
+              },
+              "403": {
+                "description": "Access denied"
+              },
+              "404": {
+                "description": "User with the specified ID not found"
+              }
+            }
+          }
+        }
+      },
+      "definitions": {
+        "UserRegistrationRequest": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "username",
+            "email",
+            "password"
+          ]
+        },
+        "UserLoginRequest": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "username",
+            "password"
+          ]
+        },
+        "CreateTaskRequest": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            },
+            "price": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "title",
+            "description",
+            "category",
+            "location",
+            "price"
+          ]
+        },
+        "UpdateTaskRequest": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            },
+            "price": {
+              "type": "number"
+            }
+          }
+        },
+        "UpdateUserRequest": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }

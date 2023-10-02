@@ -1,0 +1,6 @@
+{
+  "watch": ["src", "swagger.json", "swagger.yaml", "z_test"],
+  "ext": ".ts,.js",
+  "exec": "ts-node ./src/index.ts",
+  "ignore": ["__test__"]
+}
