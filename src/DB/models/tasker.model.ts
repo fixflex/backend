@@ -1,8 +1,8 @@
 import { Document, Schema, model } from 'mongoose';
 
-import { IClient } from '../../interfaces/User.interface';
+import { ITasker } from '../../interfaces/User.interface';
 
-let clientSchema: Schema<IClient & Document> = new Schema(
+let taskerSchema: Schema<ITasker & Document> = new Schema(
   {
     firstName: {
       type: String,
@@ -39,7 +39,7 @@ let clientSchema: Schema<IClient & Document> = new Schema(
       type: String,
     },
 
-    role: 'client',
+    role: 'tasker',
     active: {
       type: Boolean,
       default: true,
@@ -48,6 +48,6 @@ let clientSchema: Schema<IClient & Document> = new Schema(
   { timestamps: true }
 );
 
-let Client = model<IClient & Document>('Client', clientSchema);
+let Tasker = model<ITasker & Document>('Client', taskerSchema);
 
-export default Client;
+export default Tasker;

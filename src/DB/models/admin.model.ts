@@ -1,8 +1,8 @@
 import { Document, Schema, model } from 'mongoose';
 
-import { IClient } from '../../interfaces/User.interface';
+import { IAdmin } from '../../interfaces/User.interface';
 
-let clientSchema: Schema<IClient & Document> = new Schema(
+let clientSchema: Schema<IAdmin & Document> = new Schema(
   {
     firstName: {
       type: String,
@@ -28,18 +28,8 @@ let clientSchema: Schema<IClient & Document> = new Schema(
       type: String,
       required: true,
     },
-    profilePicture: {
-      type: Object,
-      default: {
-        url: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png',
-        publicId: null,
-      },
-    },
-    bio: {
-      type: String,
-    },
 
-    role: 'client',
+    role: 'admin',
     active: {
       type: Boolean,
       default: true,
@@ -48,6 +38,6 @@ let clientSchema: Schema<IClient & Document> = new Schema(
   { timestamps: true }
 );
 
-let Client = model<IClient & Document>('Client', clientSchema);
+let Admin = model<IAdmin & Document>('Client', clientSchema);
 
-export default Client;
+export default Admin;
