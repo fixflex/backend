@@ -1,14 +1,16 @@
-import { ObjectId } from 'mongoose';
-
 export interface IUser {
   _id?: string;
-  firstName: string;
+  firstName: {
+    type: string;
+    required: [true, 'First name is required'];
+    trem: true;
+  };
   lastName: string;
+
   email: string;
   password: string;
   role: {
     enum: ['client', 'tasker', 'admin'];
-    default: 'client';
   };
   profilePicture: {
     url: string;

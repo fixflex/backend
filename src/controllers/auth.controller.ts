@@ -18,11 +18,11 @@ export class AuthController {
   });
 
   public login = asyncHandler(async (req: Request, res: Response ) => {
-    let { emailOrUsername, password } = req.body;
+    let { email, password } = req.body;
     
-    let {user, token} = await this.authService.login(emailOrUsername, password);
+    let {user, token} = await this.authService.login(email, password);
    
-    const userData = { _id: user._id, email: user.email, username: user.username };
+    const userData = { _id: user._id, email: user.email };
 
     res.status(200).json({ data: userData, token });
   });
