@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 
 import { server } from '../../';
-import User from '../../DB/models/client.model';
+import User from '../../DB/models/user/client.model';
 import { cloudinaryDeleteImage } from '../../utils/cloudinary';
 import { createToken } from '../../utils/createToken';
 

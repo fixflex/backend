@@ -3,7 +3,7 @@ import { Request } from 'express';
 import asyncHandler from 'express-async-handler';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
-import User from '../DB/models/client.model';
+import User from '../DB/models/user/client.model';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import { AuthRequest } from '../interfaces/auth.interface';

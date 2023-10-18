@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 
-import { IUser } from '../../interfaces/User.interface';
-import UserModel from '../models/client.model';
+import { IUser } from '../../interfaces/user.interface';
+import UserModel from '../models/user/client.model';
 
 class UserDao {
   async getUserByUsername(emailOrUsername: string): Promise<(IUser & Document) | null> {

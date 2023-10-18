@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongoose';
+
 export interface IUser {
   _id?: string;
   firstName: string;
@@ -8,25 +10,35 @@ export interface IUser {
     enum: ['client', 'tasker', 'admin'];
     default: 'client';
   };
+  profilePicture: {
+    url: string;
+    publicId: string | null;
+  };
+  phoneNumber: string;
   active: boolean;
+  location: {
+    type: {
+      enum: ['Point'];
+      default: 'Point';
+    };
+    coordinates: [number, number];
+  };
+  country: string;
+  city: string;
+  address: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
-export interface IAdmin extends IUser {}
-export interface IClient extends IUser {
-  profilePicture: {
-    url: string;
-    publicId: string | null;
-  };
-  bio: string;
-  phoneNumber: string;
+export interface IClient {
+  _id?: string; // client id
+  userId: string; // user id
 }
 
-export interface ITasker extends IUser {
-  profilePicture: {
-    url: string;
-    publicId: string | null;
-  };
-  bio: string;
+export interface ITasker {
+  _id?: string; // tasker id
+  userId: string; // user id
   skills: string[];
-  phoneNumber: string;
+  rating: number; // average of reviews
+  bio: string;
 }

@@ -3,9 +3,9 @@ import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import fs from 'fs';
 
-import User from '../DB/models/client.model';
+import User from '../DB/models/user/client.model';
 import HttpException from '../exceptions/HttpException';
-import { IUser } from '../interfaces/User.interface';
+import { IUser } from '../interfaces/user.interface';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../utils/cloudinary';
 
 class UserController {

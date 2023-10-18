@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import { Document } from 'mongoose';
 
 import HttpException from '../exceptions/HttpException';
-import { IUser } from '../interfaces/User.interface';
+import { IUser } from '../interfaces/user.interface';
 import { createToken } from '../utils/createToken';
 
 @injectable()

@@ -1,12 +1,12 @@
 import { Document, Schema, model } from 'mongoose';
 
-import { IClient } from '../../interfaces/User.interface';
+import { IUser } from '../../../interfaces/user.interface';
 
-let clientSchema: Schema<IClient & Document> = new Schema(
+let userSchema: Schema<IUser & Document> = new Schema(
   {
     firstName: {
       type: String,
-      required: [true, 'first name is required'],
+      required: [true, 'Name is required'],
       trim: true,
     },
     lastName: {
@@ -35,19 +35,34 @@ let clientSchema: Schema<IClient & Document> = new Schema(
         publicId: null,
       },
     },
-    bio: {
+    role: {
       type: String,
+      enum: ['client', 'tasker', 'admin'],
+      default: 'client',
     },
-
-    role: 'client',
     active: {
       type: Boolean,
       default: true,
     },
+    phoneNumber: String,
+    location: {
+      type: {
+        type: String,
+        enum: ['Point'],
+        default: 'Point',
+      },
+      coordinates: {
+        type: [Number],
+        default: [0, 0],
+      },
+    },
+    country: String,
+    city: String,
+    address: String,
   },
   { timestamps: true }
 );
 
-let Client = model<IClient & Document>('Client', clientSchema);
+let User = model<IUser & Document>('User', userSchema);
 
-export default Client;
+export default User;
