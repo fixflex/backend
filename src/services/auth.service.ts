@@ -1,22 +1,37 @@
-import {   injectable } from 'tsyringe';
-import UserDao from '../DB/dao/user.dao';
 import bcrypt from 'bcrypt';
+import { injectable } from 'tsyringe';
 
+import UserDao from '../DB/dao/user.dao';
 import HttpException from '../exceptions/HttpException';
-import { createToken } from '../utils/createToken';
 import { IUser } from '../interfaces/user.interface';
+import { createToken } from '../utils/createToken';
 
 @injectable()
 export class AuthServie {
   constructor(private readonly userDao: UserDao) {}
-  
-  async signup(user: IUser) {
-    let newuser = await this.userDao.create(user);  
-    return newuser;
+
+  /**
+   * Signup a new user
+   * @param user - The user object to signup
+   * @returns An object containing the newly created user and a token
+   * @throws HttpException if the email or username already exists
+   */
+  async signup(user: IUser): Promise<{ user: IUser; token: string }> {
+    // check if the user already exists
+    let isEmailExists = await this.userDao.getUserByEmail(user.email);
+
+    if (isEmailExists) {
+      throw new HttpException(409, `E-Mail address ${user.email} is already exists, please pick a different one.`);
+    }
+    // hash the password
+    user.password = await bcrypt.hash(user.password, 10);
+    let newUser = await this.userDao.create(user);
+    let token = createToken(newUser._id!);
+
+    return { user: newUser, token };
   }
 
   async login(email: string, password: string) {
-
     let user: IUser | null;
 
     if (!email || !password) {

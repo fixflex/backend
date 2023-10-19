@@ -11,8 +11,9 @@ export class AuthController {
   constructor(private readonly authService: AuthServie) {}
 
   public signup = asyncHandler(async (req: Request, res: Response) => {
-    let response = await this.authService.signup(req.body);
-    res.status(201).json(response);
+    let { user, token } = await this.authService.signup(req.body);
+    const userData = { _id: user._id, email: user.email };
+    res.status(201).json({ data: userData, token });
   });
 
   public login = asyncHandler(async (req: Request, res: Response) => {
