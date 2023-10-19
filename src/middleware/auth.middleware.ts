@@ -39,7 +39,7 @@ const authenticateUser = asyncHandler(async (req: AuthRequest, _res: Response, n
   next();
 });
 
-// Authorization (user permissions)
+// Authorization (User permissions)
 const allowedTo =
   (...roles: UserType[]) =>
   (req: AuthRequest, _res: Response, next: NextFunction) => {
