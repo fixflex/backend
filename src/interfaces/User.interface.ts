@@ -1,17 +1,15 @@
+export enum UserType {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+}
+
 export interface IUser {
   _id?: string;
-  firstName: {
-    type: string;
-    required: [true, 'First name is required'];
-    trem: true;
-  };
+  firstName: string;
   lastName: string;
-
   email: string;
   password: string;
-  role: {
-    enum: ['client', 'tasker', 'admin'];
-  };
+  role: UserType;
   profilePicture: {
     url: string;
     publicId: string | null;
@@ -44,3 +42,5 @@ export interface ITasker {
   rating: number; // average of reviews
   bio: string;
 }
+
+export interface IUserRole {}

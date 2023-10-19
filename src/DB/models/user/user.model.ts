@@ -1,6 +1,6 @@
 import { Document, Schema, model } from 'mongoose';
 
-import { IUser } from '../../../interfaces/user.interface';
+import { IUser, UserType } from '../../../interfaces/user.interface';
 
 let userSchema: Schema<IUser & Document> = new Schema(
   {
@@ -37,8 +37,8 @@ let userSchema: Schema<IUser & Document> = new Schema(
     },
     role: {
       type: String,
-      enum: ['client', 'tasker', 'admin'],
-      default: 'client',
+      enum: Object.values(UserType),
+      default: UserType.USER,
     },
     active: {
       type: Boolean,

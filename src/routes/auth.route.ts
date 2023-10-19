@@ -1,16 +1,16 @@
 import { Router } from 'express';
-import { container } from 'tsyringe';
+import { autoInjectable } from 'tsyringe';
 
 import { AuthController } from '../controllers';
 import { Routes } from '../interfaces/routes.interface';
 import { loginValidator, signupValidator } from '../middleware/validation';
 
+@autoInjectable()
 export class AuthRoute implements Routes {
   public path = '/auth';
   public router = Router();
-  public authController = container.resolve(AuthController);
 
-  constructor() {
+  constructor(private readonly authController: AuthController) {
     this.initializerRoutes();
   }
 
