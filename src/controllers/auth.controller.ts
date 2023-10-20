@@ -5,7 +5,7 @@ import { autoInjectable } from 'tsyringe';
 import { AuthServie } from '../services/auth.service';
 
 // TODO: use passport.js for authentication
-
+// TODO: refresh token and logout routes
 @autoInjectable()
 export class AuthController {
   constructor(private readonly authService: AuthServie) {}

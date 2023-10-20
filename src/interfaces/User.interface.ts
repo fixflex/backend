@@ -38,9 +38,10 @@ export interface IClient {
 export interface ITasker {
   _id?: string; // tasker id
   userId: string; // user id
-  skills: string[];
   rating: number; // average of reviews
   bio: string;
+  completedTasks: number;
+  services: string[];
 }
 
 export interface IUserRole {}

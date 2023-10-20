@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
-import HttpException from '../exceptions/HttpException';
-import { AuthRequest } from '../interfaces/auth.interface';
-import { UserService } from '../services/user.service';
+import HttpException from '../../exceptions/HttpException';
+import { AuthRequest } from '../../interfaces/auth.interface';
+import { UserService } from '../../services/users/user.service';
 
 @autoInjectable()
 class UserController {

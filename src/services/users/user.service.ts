@@ -2,12 +2,12 @@ import bcrypt from 'bcrypt';
 import fs from 'fs';
 import { autoInjectable } from 'tsyringe';
 
-import UserDao from '../DB/dao/user.dao';
-import HttpException from '../exceptions/HttpException';
-import { IPagination } from '../interfaces/respons.interface';
-import { IUser } from '../interfaces/user.interface';
-import APIFeatures from '../utils/apiFeatures';
-import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../utils/cloudinary';
+import UserDao from '../../DB/dao/user.dao';
+import HttpException from '../../exceptions/HttpException';
+import { IPagination } from '../../interfaces/respons.interface';
+import { IUser } from '../../interfaces/user.interface';
+import APIFeatures from '../../utils/apiFeatures';
+import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../../utils/cloudinary';
 
 @autoInjectable()
 class UserService {

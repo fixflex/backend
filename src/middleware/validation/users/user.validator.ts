@@ -1,6 +1,6 @@
 import { check } from 'express-validator';
 
-import validatorMiddleware from '../errors/validation.middleware';
+import validatorMiddleware from '../../errors/validation.middleware';
 
 export const updateLoggedUserValidator = [
   check('name').optional().isString().withMessage('Name must be a string'),

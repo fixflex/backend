@@ -9,16 +9,20 @@ let taskerSchema: Schema<ITasker & Document> = new Schema(
       ref: 'User',
       required: true,
     },
-    skills: [
+    services: [
       {
         type: String,
-        ref: 'Skill',
+        ref: 'Service',
       },
     ],
     rating: {
       type: Number,
       max: 5,
       min: 0,
+      default: 0,
+    },
+    completedTasks: {
+      type: Number,
       default: 0,
     },
     bio: String,
