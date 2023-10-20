@@ -29,7 +29,6 @@ class UserDao {
   }
 
   async update(userId: string, user: IUser): Promise<IUser | null> {
-    console.log(user);
     return await UserModel.findByIdAndUpdate(userId, user, { new: true }).lean();
   }
 

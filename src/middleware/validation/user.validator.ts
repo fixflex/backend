@@ -7,46 +7,24 @@ export const updateLoggedUserValidator = [
 
   check('email').optional().isEmail().withMessage('invalid email address'),
 
-  check('password')
-    .optional()
-    .isLength({ min: 8 })
-    .withMessage('Password must be at least 8 characters'),
+  check('password').isEmpty().withMessage('Cannot change password from here'),
 
-  check('confirmPassword')
-    .optional()
-    .custom((confirmPassword, { req }) => {
-      if (confirmPassword !== req.body.password) {
-        throw new Error('Passwords must match');
-      }
-      return true;
-    }),
-  check('role')
-    .optional()
-    .custom(value => {
-      if (value || value === '') {
-        throw new Error('Role is not allowed');
-      }
-    }),
+  check('role').isEmpty().withMessage('Role is not allowed'),
   check('active').isEmpty().withMessage('Active is not allowed'),
+  check('createdAt').isEmpty().withMessage('createdAt is not allowed'),
+  check('updatedAt').isEmpty().withMessage('updatedAt is not allowed'),
+  check('_id').isEmpty().withMessage('_id is not allowed'),
 
   validatorMiddleware,
 ];
 
 export const getUserValidator = [
-  check('id')
-    .notEmpty()
-    .withMessage('User id is required')
-    .isMongoId()
-    .withMessage('Invalid user id format '),
+  check('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '),
 
   validatorMiddleware,
 ];
 export const deleteUserValidator = [
-  check('id')
-    .notEmpty()
-    .withMessage('User id is required')
-    .isMongoId()
-    .withMessage('Invalid user id format '),
+  check('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '),
 
   validatorMiddleware,
 ];
