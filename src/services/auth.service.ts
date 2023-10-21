@@ -1,15 +1,11 @@
 import bcrypt from 'bcrypt';
-import { injectable } from 'tsyringe';
 
 import UserDao from '../DB/dao/user.dao';
 import HttpException from '../exceptions/HttpException';
 import { IUser } from '../interfaces/user.interface';
 import { createToken } from '../utils/createToken';
 
-@injectable()
 export class AuthServie {
-  constructor(private readonly userDao: UserDao) {}
-
   /**
    * Signup a new user
    * @param user - The user object to signup
@@ -18,14 +14,14 @@ export class AuthServie {
    */
   async signup(user: IUser): Promise<{ user: IUser; token: string }> {
     // check if the user already exists
-    let isEmailExists = await this.userDao.getUserByEmail(user.email);
+    let isEmailExists = await UserDao.getUserByEmail(user.email);
 
     if (isEmailExists) {
       throw new HttpException(409, `E-Mail address ${user.email} is already exists, please pick a different one.`);
     }
     // hash the password
     user.password = await bcrypt.hash(user.password, 10);
-    let newUser = await this.userDao.create(user);
+    let newUser = await UserDao.create(user);
     let token = createToken(newUser._id!);
 
     return { user: newUser, token };
@@ -38,7 +34,7 @@ export class AuthServie {
       throw new HttpException(400, 'Email and password are required');
     }
 
-    user = await this.userDao.getUserByEmail(email);
+    user = await UserDao.getUserByEmail(email);
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new HttpException(401, 'Incorrect email or password');

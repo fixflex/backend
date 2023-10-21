@@ -2,11 +2,11 @@ import { ITasker } from '../../interfaces/user.interface';
 import TaskerModel from '../models/user/tasker.model';
 
 class TaskerDao {
-  async getTaskerByUserId(userId: string): Promise<ITasker | null> {
+  static async getTaskerByUserId(userId: string): Promise<ITasker | null> {
     return await TaskerModel.findOne({ userId }).lean();
   }
 
-  // async listUsers(query: any = {}, paginate: { skip: number; limit: number }, sort: any = {}, select: any = '-__v'): Promise<ITasker[]> {
+  // static async listUsers(query: any = {}, paginate: { skip: number; limit: number }, sort: any = {}, select: any = '-__v'): Promise<ITasker[]> {
   //   // build the query
   //   let users = TaskerModel.find(query);
   //   if (paginate.skip) users = users.skip(paginate.skip);
@@ -16,11 +16,11 @@ class TaskerDao {
   //   return await users.lean();
   // }
 
-  async create(user: ITasker): Promise<ITasker | null> {
+  static async create(user: ITasker): Promise<ITasker | null> {
     return await TaskerModel.create(user);
   }
 
-  async updateTaskerByUserId(userId: string, tasker: ITasker): Promise<ITasker | null> {
+  static async updateTaskerByUserId(userId: string, tasker: ITasker): Promise<ITasker | null> {
     if (tasker.services) {
       // let services = tasker.services;
       // delete tasker.services;
@@ -31,7 +31,7 @@ class TaskerDao {
     return TaskerModel.findOneAndUpdate({ userId }, tasker, { new: true }).lean();
   }
 
-  async deleteTaskerByUserId(userId: string): Promise<ITasker | null> {
+  static async deleteTaskerByUserId(userId: string): Promise<ITasker | null> {
     return await TaskerModel.findOneAndDelete({ userId }).lean();
   }
 }
