@@ -1,15 +1,10 @@
-import { autoInjectable } from 'tsyringe';
-
 import ServiceDao from '../../src/DB/dao/service.dao';
 import HttpException from '../../src/exceptions/HttpException';
 import { IPagination } from '../../src/interfaces/respons.interface';
 import { IService } from '../../src/interfaces/services.interface';
 import APIFeatures from '../../src/utils/apiFeatures';
 
-@autoInjectable()
 class ServiceService {
-  constructor(private readonly serviceDao: ServiceDao) {}
-
   async getServices(reqQuery: any): Promise<{
     services: IService[] | null;
     paginate: IPagination;
@@ -20,35 +15,35 @@ class ServiceService {
     let sort = apiFeatures.sort();
     let fields = apiFeatures.selectFields();
 
-    let services = await this.serviceDao.listServices(query, paginate, sort, fields);
+    let services = await ServiceDao.listServices(query, paginate, sort, fields);
     if (services) paginate = apiFeatures.paginate(services.length); // update the pagination object with the total documents
 
     return { services, paginate };
   }
 
   async getService(serviceId: string) {
-    return await this.serviceDao.getServiceById(serviceId);
+    return await ServiceDao.getServiceById(serviceId);
   }
 
   async createService(service: IService) {
-    let isServiceExists = await this.serviceDao.getServiceByName(service.name);
+    let isServiceExists = await ServiceDao.getServiceByName(service.name);
     if (isServiceExists) {
       throw new HttpException(409, `Service ${service.name} is already exists, please pick a different one.`);
     }
-    let newService = await this.serviceDao.create(service);
+    let newService = await ServiceDao.create(service);
     return newService;
   }
 
   async updateService(serviceId: string, service: IService) {
-    let isServiceExists = await this.serviceDao.getServiceById(serviceId);
+    let isServiceExists = await ServiceDao.getServiceById(serviceId);
     if (!isServiceExists) throw new HttpException(404, 'No service found');
-    return await this.serviceDao.update(serviceId, service);
+    return await ServiceDao.update(serviceId, service);
   }
 
   async deleteService(serviceId: string) {
-    let isServiceExists = await this.serviceDao.getServiceById(serviceId);
+    let isServiceExists = await ServiceDao.getServiceById(serviceId);
     if (!isServiceExists) throw new HttpException(404, 'No service found');
-    return await this.serviceDao.delete(serviceId);
+    return await ServiceDao.delete(serviceId);
   }
 }
 

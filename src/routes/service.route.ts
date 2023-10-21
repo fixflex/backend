@@ -18,8 +18,8 @@ export class ServiceRoute implements Routes {
 
   private initializeRoutes() {
     // Public routes
-    this.router.get(`${this.path}/:id`, isMongoId, this.serviceController.getService);
     this.router.get(`${this.path}`, this.serviceController.getServices);
+    this.router.get(`${this.path}/:id`, isMongoId, this.serviceController.getService);
 
     // Admin routes
     this.router.use(`${this.path}`, authenticateUser, allowedTo(UserType.ADMIN));
@@ -28,3 +28,5 @@ export class ServiceRoute implements Routes {
     this.router.delete(`${this.path}/:id`, isMongoId, this.serviceController.deleteService);
   }
 }
+
+//give me a conventiona commit message for all the files that have been change

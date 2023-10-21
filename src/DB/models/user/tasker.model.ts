@@ -5,6 +5,7 @@ import { ITasker } from '../../../interfaces/user.interface';
 let taskerSchema: Schema<ITasker & Document> = new Schema(
   {
     userId: {
+      unique: true,
       type: String,
       ref: 'User',
       required: true,
@@ -30,6 +31,6 @@ let taskerSchema: Schema<ITasker & Document> = new Schema(
   { timestamps: true }
 );
 
-let Tasker = model<ITasker & Document>('Client', taskerSchema);
+let Tasker = model<ITasker & Document>('Tasker', taskerSchema);
 
 export default Tasker;

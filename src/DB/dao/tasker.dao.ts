@@ -24,7 +24,7 @@ class TaskerDao {
     return await users.lean();
   }
 
-  async create(user: ITasker): Promise<ITasker> {
+  async create(user: ITasker): Promise<ITasker | null> {
     return await TaskerModel.create(user);
   }
 

@@ -12,6 +12,7 @@ class ServiceController {
   // public Routes
   public getService = asyncHandler(async (req: Request, res: Response) => {
     let service = await this.serviceService.getService(req.params.id);
+    if (!service) throw new HttpException(404, 'No service found');
     res.status(200).json({ data: service });
   });
 

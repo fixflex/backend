@@ -4,10 +4,11 @@ import { autoInjectable } from 'tsyringe';
 import { TaskerController } from '../controllers/users/tasker.controller';
 import { Routes } from '../interfaces/routes.interface';
 import { authenticateUser } from '../middleware/auth.middleware';
+import { createTaskerValidator } from '../middleware/validation/users/tasker.validator';
 
 @autoInjectable()
-class UserRoute implements Routes {
-  public path = '/tasker';
+class TaskerRoute implements Routes {
+  public path = '/taskers';
   public router = Router();
 
   constructor(private readonly taskerController: TaskerController) {
@@ -15,8 +16,9 @@ class UserRoute implements Routes {
   }
 
   private insitializeRoutes() {
-    this.router.post(`${this.path}/become-tasker`, createTaskerValidator, authenticateUser, this.taskerController.becomeTasker);
+    this.router.use(`${this.path}`, authenticateUser);
+    this.router.post(`${this.path}/become-tasker`, createTaskerValidator, this.taskerController.becomeTasker);
   }
 }
 
-export { UserRoute };
+export { TaskerRoute };
