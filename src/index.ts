@@ -5,7 +5,7 @@ import App from './app';
 import { UserRoute } from './routes';
 import { AuthRoute } from './routes';
 import { ServiceRoute } from './routes';
-import { TaskerRoute } from './routes/tasker.route';
+import { TaskerRoute } from './routes/users/tasker.route';
 
 let authRoute = container.resolve(AuthRoute);
 let userRoute = container.resolve(UserRoute);

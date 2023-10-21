@@ -28,5 +28,3 @@ export class ServiceRoute implements Routes {
     this.router.delete(`${this.path}/:id`, isMongoId, this.serviceController.deleteService);
   }
 }
-
-//give me a conventiona commit message for all the files that have been change
