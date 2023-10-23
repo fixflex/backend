@@ -9,7 +9,9 @@
     "start:dev": "cross-env NODE_ENV=development nodemon  ./src/index.ts",
     "start:test": "cross-env NODE_ENV=testing  jest --detectOpenHandles --runInBand  --verbose  --watchAll",
     "start:prod": "cross-env NODE_ENV=production  nodemon  ./src/index.ts",
-    "debug": "ndb  ./src/index.ts"
+    "debug": "ndb  ./src/index.ts",
+    "build-ts": "tsc",
+    "watch-ts": "tsc -w"
   },
   "author": "Ahmed Mostata",
   "license": "ISC",
