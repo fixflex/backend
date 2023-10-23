@@ -26,10 +26,26 @@ let taskerSchema: Schema<ITasker & Document> = new Schema(
       type: Number,
       default: 0,
     },
+    location: {
+      type: {
+        type: String,
+        enum: ['Point'],
+        default: 'Point',
+      },
+      coordinates: {
+        // [longitude, latitude] [x, y]
+        type: [Number],
+        default: [0, 0],
+      },
+    },
+
     bio: String,
   },
   { timestamps: true }
 );
+// Apply the geospatial index to the coordinates field inside the location object
+// taskerSchema.index({ 'location.coordinates': '2dsphere' });
+taskerSchema.index({ location: '2dsphere' });
 
 let Tasker = model<ITasker & Document>('Tasker', taskerSchema);
 

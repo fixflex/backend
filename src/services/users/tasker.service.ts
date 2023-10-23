@@ -21,6 +21,17 @@ class TaskerService {
     return await TaskerDao.getTaskerByUserId(userId);
   }
 
+  async getListOfTaskers(reqQuery: any) {
+    console.log(reqQuery.longitude, reqQuery.latitude, reqQuery.services, reqQuery.maxDistance);
+    if (reqQuery.services) {
+      // check if service is exists in DB
+      let isServiceExists = await ServiceDao.getServiceById(reqQuery.services);
+      if (!isServiceExists) throw new HttpException(404, `Service ID ${reqQuery.services} doesn't exist in DB`);
+    }
+    let taskers = await TaskerDao.listTaskers(reqQuery.longitude, reqQuery.latitude, reqQuery.services, reqQuery.maxDistance);
+    return taskers;
+  }
+
   async updateMyTaskerProfile(userId: string, tasker: ITasker) {
     if (tasker.services)
       await Promise.all(

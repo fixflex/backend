@@ -45,21 +45,8 @@ let userSchema: Schema<IUser & Document> = new Schema(
       default: true,
     },
     phoneNumber: String,
-    location: {
-      type: {
-        type: String,
-        enum: ['Point'],
-        default: 'Point',
-      },
-      coordinates: {
-        // [longitude, latitude] [x, y]
-        type: [Number],
-        default: [0, 0],
-      },
-    },
-    country: String,
-    city: String,
-    address: String,
+
+    ipAddress: String,
   },
   { timestamps: true }
 );

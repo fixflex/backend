@@ -16,16 +16,8 @@ export interface IUser {
   };
   phoneNumber: string;
   active: boolean;
-  location: {
-    type: {
-      enum: ['Point'];
-      default: 'Point';
-    };
-    coordinates: [number, number];
-  };
-  country: string;
-  city: string;
-  address: string;
+  // ip address of the user when he registered or logged in
+  ipAddress: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -33,6 +25,13 @@ export interface IUser {
 export interface IClient {
   _id?: string; // client id
   userId: string; // user id
+  location: {
+    type: {
+      enum: ['Point'];
+      default: 'Point';
+    };
+    coordinates: [number, number];
+  };
 }
 
 export interface ITasker {
@@ -42,6 +41,14 @@ export interface ITasker {
   bio: string;
   completedTasks: number;
   services: string[];
+  location: {
+    type: {
+      type: string;
+      enum: ['Point'];
+      default: 'Point';
+    };
+    coordinates: [number, number];
+  };
 }
 
 export interface IUserRole {}

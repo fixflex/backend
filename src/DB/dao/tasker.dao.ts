@@ -6,15 +6,27 @@ class TaskerDao {
     return await TaskerModel.findOne({ userId }).lean();
   }
 
-  // static async listUsers(query: any = {}, paginate: { skip: number; limit: number }, sort: any = {}, select: any = '-__v'): Promise<ITasker[]> {
-  //   // build the query
-  //   let users = TaskerModel.find(query);
-  //   if (paginate.skip) users = users.skip(paginate.skip);
-  //   if (paginate.limit) users = users.limit(paginate.limit);
-  //   users = users.sort(sort).select(select);
-  //   // execute the query
-  //   return await users.lean();
-  // }
+  static async listTaskers(longitude: number, latitude: number, services: string, maxDistance: number = 60): Promise<ITasker[] | null> {
+    let taskers: ITasker[];
+    console.log(longitude, latitude, services, maxDistance);
+    if (latitude && longitude && services) {
+      taskers = await TaskerModel.find({
+        location: {
+          $near: {
+            $maxDistance: maxDistance * 1000, // convert km to meters (mongodb uses meters) it is 60km by default
+            $geometry: {
+              type: 'Point',
+              coordinates: [longitude, latitude], // [longitude, latitude] [x, y]
+            },
+          },
+        },
+        // where services = service
+        services: { $eq: services },
+      }).lean();
+    } else taskers = await TaskerModel.find({}).lean();
+
+    return taskers;
+  }
 
   static async create(user: ITasker): Promise<ITasker | null> {
     return await TaskerModel.create(user);

@@ -25,6 +25,12 @@ class TaskerController {
     res.status(200).json({ data: user });
   });
 
+  getListOfTaskers = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
+    let taskers = await this.taskerService.getListOfTaskers(req.query);
+    if (!taskers) return next(new HttpException(400, 'Something went wrong, please try again later'));
+    res.status(200).json({ results: taskers.length, taskers });
+  });
+
   updateMyTaskerProfile = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
     let userId = req.user?._id;
     let user = await this.taskerService.updateMyTaskerProfile(userId!, req.body);
