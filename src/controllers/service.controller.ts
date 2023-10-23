@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
-import HttpException from '../../src/exceptions/HttpException';
-import { ServiceService } from '../../src/services/service.service';
+import HttpException from '../exceptions/HttpException';
+import { ServiceService } from '../services/service.service';
 
 @autoInjectable()
 class ServiceController {

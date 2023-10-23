@@ -1,8 +1,8 @@
-import ServiceDao from '../../src/DB/dao/service.dao';
-import HttpException from '../../src/exceptions/HttpException';
-import { IPagination } from '../../src/interfaces/respons.interface';
-import { IService } from '../../src/interfaces/services.interface';
-import APIFeatures from '../../src/utils/apiFeatures';
+import ServiceDao from '../DB/dao/service.dao';
+import HttpException from '../exceptions/HttpException';
+import { IPagination } from '../interfaces/respons.interface';
+import { IService } from '../interfaces/services.interface';
+import APIFeatures from '../utils/apiFeatures';
 
 class ServiceService {
   async getServices(reqQuery: any): Promise<{

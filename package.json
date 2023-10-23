@@ -1,24 +1,23 @@
 {
   "name": "TasksRunner",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
     "nodemon": "nodemon",
-    "start": "ts-node ./src/index.ts",
     "start:dev": "cross-env NODE_ENV=development nodemon  ./src/index.ts",
     "start:test": "cross-env NODE_ENV=testing  jest --detectOpenHandles --runInBand  --verbose  --watchAll",
-    "start:prod": "cross-env NODE_ENV=production  nodemon  ./src/index.ts",
+    "start:prod": "cross-env NODE_ENV=production  node  ./dist/index.js",
+    "start": "NODE_OPTIONS='--experimental-specifier-resolution=node'    node ./dist/index.js",
     "debug": "ndb  ./src/index.ts",
+    "build": "npm i",
     "build-ts": "tsc",
     "watch-ts": "tsc -w"
   },
   "author": "Ahmed Mostata",
   "license": "ISC",
   "dependencies": {
-    "@types/express-winston": "^4.0.0",
-    "@types/multer": "^1.4.7",
-    "@types/winston": "^2.4.4",
     "bcrypt": "^5.1.1",
     "cloudinary": "^1.40.0",
     "dotenv": "^16.3.1",
@@ -42,6 +41,9 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@types/express-winston": "^4.0.0",
+    "@types/multer": "^1.4.7",
+    "@types/winston": "^2.4.4",
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.17",
