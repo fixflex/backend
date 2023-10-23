@@ -4,10 +4,23 @@ import validatorMiddleware from '../../errors/validation.middleware';
 
 export const updateLoggedUserValidator = [
   check('name').optional().isString().withMessage('Name must be a string'),
-
   check('email').optional().isEmail().withMessage('invalid email address'),
-
   check('password').isEmpty().withMessage('Cannot change password from here'),
+
+  check('location')
+    .optional()
+    .isArray()
+    .withMessage('Coordinates must be an array of numbers')
+    // check if coordinates are valid numbers (longitude, latitude) [x, y]
+    .custom(coordinates => {
+      if (coordinates.length !== 2) {
+        throw new Error('Coordinates must be an array of 2 numbers');
+      }
+      if (typeof coordinates[0] !== 'number' || typeof coordinates[1] !== 'number') {
+        throw new Error('Coordinates must be an array of 2 numbers');
+      }
+      return true;
+    }),
 
   check('role').isEmpty().withMessage('Role is not allowed'),
   check('active').isEmpty().withMessage('Active is not allowed'),

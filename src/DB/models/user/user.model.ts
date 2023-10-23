@@ -52,6 +52,7 @@ let userSchema: Schema<IUser & Document> = new Schema(
         default: 'Point',
       },
       coordinates: {
+        // [longitude, latitude] [x, y]
         type: [Number],
         default: [0, 0],
       },
