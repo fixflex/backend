@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,58 +8,54 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-import asyncHandler from 'express-async-handler';
-import { autoInjectable } from 'tsyringe';
-import HttpException from '../exceptions/HttpException';
-import { ServiceService } from '../services/service.service';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ServiceController = void 0;
+const express_async_handler_1 = __importDefault(require("express-async-handler"));
+const tsyringe_1 = require("tsyringe");
+const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
+const service_service_1 = require("../services/service.service");
 let ServiceController = class ServiceController {
     constructor(serviceService) {
         this.serviceService = serviceService;
         // public Routes
-        this.getService = asyncHandler((req, res) => __awaiter(this, void 0, void 0, function* () {
-            let service = yield this.serviceService.getService(req.params.id);
+        this.getService = (0, express_async_handler_1.default)(async (req, res) => {
+            let service = await this.serviceService.getService(req.params.id);
             if (!service)
-                throw new HttpException(404, 'No service found');
+                throw new HttpException_1.default(404, 'No service found');
             res.status(200).json({ data: service });
-        }));
-        this.getServices = asyncHandler((req, res) => __awaiter(this, void 0, void 0, function* () {
-            let { services, paginate } = yield this.serviceService.getServices(req.query);
+        });
+        this.getServices = (0, express_async_handler_1.default)(async (req, res) => {
+            let { services, paginate } = await this.serviceService.getServices(req.query);
             res.status(200).json({ data: services, paginate });
-        }));
+        });
         // authenticated routes
-        this.createService = asyncHandler((req, res, next) => __awaiter(this, void 0, void 0, function* () {
+        this.createService = (0, express_async_handler_1.default)(async (req, res, next) => {
             if (!req.body)
-                return next(new HttpException(400, 'Please provide a service'));
-            let service = yield this.serviceService.createService(req.body);
+                return next(new HttpException_1.default(400, 'Please provide a service'));
+            let service = await this.serviceService.createService(req.body);
             res.status(201).json({ data: service });
-        }));
-        this.updateService = asyncHandler((req, res, next) => __awaiter(this, void 0, void 0, function* () {
+        });
+        this.updateService = (0, express_async_handler_1.default)(async (req, res, next) => {
             if (!req.body)
-                return next(new HttpException(400, 'Please provide a service'));
-            let service = yield this.serviceService.updateService(req.params.id, req.body);
+                return next(new HttpException_1.default(400, 'Please provide a service'));
+            let service = await this.serviceService.updateService(req.params.id, req.body);
             if (!service)
-                return next(new HttpException(404, 'No service found'));
+                return next(new HttpException_1.default(404, 'No service found'));
             res.status(200).json({ data: service });
-        }));
-        this.deleteService = asyncHandler((req, res, next) => __awaiter(this, void 0, void 0, function* () {
-            let service = yield this.serviceService.deleteService(req.params.id);
+        });
+        this.deleteService = (0, express_async_handler_1.default)(async (req, res, next) => {
+            let service = await this.serviceService.deleteService(req.params.id);
             if (!service)
-                return next(new HttpException(404, 'No service found'));
+                return next(new HttpException_1.default(404, 'No service found'));
             res.sendStatus(204);
-        }));
+        });
     }
 };
-ServiceController = __decorate([
-    autoInjectable(),
-    __metadata("design:paramtypes", [ServiceService])
+exports.ServiceController = ServiceController;
+exports.ServiceController = ServiceController = __decorate([
+    (0, tsyringe_1.autoInjectable)(),
+    __metadata("design:paramtypes", [service_service_1.ServiceService])
 ], ServiceController);
-export { ServiceController };

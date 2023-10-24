@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,23 +8,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Router } from 'express';
-import { autoInjectable } from 'tsyringe';
-import { AuthController } from '../controllers';
-import { loginValidator, signupValidator } from '../middleware/validation';
-export let AuthRoute = class AuthRoute {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AuthRoute = void 0;
+const express_1 = require("express");
+const tsyringe_1 = require("tsyringe");
+const controllers_1 = require("../controllers");
+const validation_1 = require("../middleware/validation");
+let AuthRoute = class AuthRoute {
     constructor(authController) {
         this.authController = authController;
         this.path = '/auth';
-        this.router = Router();
+        this.router = (0, express_1.Router)();
         this.initializerRoutes();
     }
     initializerRoutes() {
-        this.router.post(`${this.path}/signup`, signupValidator, this.authController.signup);
-        this.router.post(`${this.path}/login`, loginValidator, this.authController.login);
+        this.router.post(`${this.path}/signup`, validation_1.signupValidator, this.authController.signup);
+        this.router.post(`${this.path}/login`, validation_1.loginValidator, this.authController.login);
     }
 };
-AuthRoute = __decorate([
-    autoInjectable(),
-    __metadata("design:paramtypes", [AuthController])
+exports.AuthRoute = AuthRoute;
+exports.AuthRoute = AuthRoute = __decorate([
+    (0, tsyringe_1.autoInjectable)(),
+    __metadata("design:paramtypes", [controllers_1.AuthController])
 ], AuthRoute);

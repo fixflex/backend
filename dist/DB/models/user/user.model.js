@@ -1,6 +1,8 @@
-import { Schema, model } from 'mongoose';
-import { UserType } from '../../../interfaces/user.interface';
-let userSchema = new Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = require("mongoose");
+const user_interface_1 = require("../../../interfaces/user.interface");
+let userSchema = new mongoose_1.Schema({
     firstName: {
         type: String,
         required: [true, 'Name is required'],
@@ -32,8 +34,8 @@ let userSchema = new Schema({
     },
     role: {
         type: String,
-        enum: Object.values(UserType),
-        default: UserType.USER,
+        enum: Object.values(user_interface_1.UserType),
+        default: user_interface_1.UserType.USER,
     },
     active: {
         type: Boolean,
@@ -42,5 +44,5 @@ let userSchema = new Schema({
     phoneNumber: String,
     ipAddress: String,
 }, { timestamps: true });
-let User = model('User', userSchema);
-export default User;
+let User = (0, mongoose_1.model)('User', userSchema);
+exports.default = User;

@@ -1,15 +1,11 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-import mongoose from 'mongoose';
-import env from '../config/validateEnv';
-import logger from '../utils/log';
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = __importDefault(require("mongoose"));
+const validateEnv_1 = __importDefault(require("../config/validateEnv"));
+const log_1 = __importDefault(require("../utils/log"));
 // const options = {
 //   useNewUrlParser: true,
 //   useCreateIndex: true,
@@ -21,17 +17,17 @@ import logger from '../utils/log';
 //   connectTimeoutMS: 10000, // Give up initial connection after 10 seconds
 //   socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 // };
-const dbConnection = () => __awaiter(void 0, void 0, void 0, function* () {
-    mongoose
-        .connect(env.DB_URI)
+const dbConnection = async () => {
+    mongoose_1.default
+        .connect(validateEnv_1.default.DB_URI)
         .then(conn => {
-        logger.info(`Database Connected ✌️ ${conn.connection.host} `);
+        log_1.default.info(`Database Connected ✌️ ${conn.connection.host} `);
     })
         .catch(err => {
-        logger.error(`Error: ${err.message}`);
+        log_1.default.error(`Error: ${err.message}`);
         setTimeout(() => {
             process.exit(1);
         }, 100); // Delay the process
     });
-});
-export default dbConnection;
+};
+exports.default = dbConnection;

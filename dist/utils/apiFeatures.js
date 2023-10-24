@@ -1,10 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class APIFeatures {
     constructor(reqQuery) {
         this.reqQuery = reqQuery;
     }
     filter() {
         // 1- Filteration
-        let query = Object.assign({}, this.reqQuery);
+        let query = { ...this.reqQuery };
         let excludedFields = ['page', 'sort', 'limit', 'fields', 'keyword'];
         excludedFields.forEach(field => delete query[field]);
         // 2- Advanced Filteration (gt, gte, lt, lte, in) (mongodb operators)
@@ -35,16 +37,14 @@ class APIFeatures {
         return pagination;
     }
     sort() {
-        var _a;
         // 3- Sorting
-        let sort = ((_a = this.reqQuery.sort) === null || _a === void 0 ? void 0 : _a.split(',').join(' ')) || '-createdAt'; // default sort by createdAt desc
+        let sort = this.reqQuery.sort?.split(',').join(' ') || '-createdAt'; // default sort by createdAt desc
         return sort;
     }
     selectFields() {
-        var _a;
         // 4- Fields limiting (projecting & selecting)
-        let fields = ((_a = this.reqQuery.fields) === null || _a === void 0 ? void 0 : _a.split(',').join(' ')) || '-__v'; // default exclude __v field
+        let fields = this.reqQuery.fields?.split(',').join(' ') || '-__v'; // default exclude __v field
         return fields;
     }
 }
-export default APIFeatures;
+exports.default = APIFeatures;

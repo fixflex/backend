@@ -1,19 +1,25 @@
-import { check } from 'express-validator';
-import validatorMiddleware from '../../errors/validation.middleware';
-export const getTaskersValidator = [
-    check('longitude').optional().isNumeric().withMessage('Longitude must be a number'),
-    check('latitude').optional().isNumeric().withMessage('Latitude must be a number'),
-    check('services').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
-    validatorMiddleware,
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateTaskerValidator = exports.createTaskerValidator = exports.getTaskersValidator = void 0;
+const express_validator_1 = require("express-validator");
+const validation_middleware_1 = __importDefault(require("../../errors/validation.middleware"));
+exports.getTaskersValidator = [
+    (0, express_validator_1.check)('longitude').optional().isNumeric().withMessage('Longitude must be a number'),
+    (0, express_validator_1.check)('latitude').optional().isNumeric().withMessage('Latitude must be a number'),
+    (0, express_validator_1.check)('services').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
+    validation_middleware_1.default,
 ];
-export const createTaskerValidator = [
-    check('services').isArray().withMessage('Services must be an array').isLength({ min: 1 }).withMessage('Services must have at least one service'),
-    check('services.*').isMongoId().withMessage('Service must be a valid mongo ID'),
+exports.createTaskerValidator = [
+    (0, express_validator_1.check)('services').isArray().withMessage('Services must be an array').isLength({ min: 1 }).withMessage('Services must have at least one service'),
+    (0, express_validator_1.check)('services.*').isMongoId().withMessage('Service must be a valid mongo ID'),
     //         "location": {
     // "coordinates": [32.1617485, 26.0524745]
     // }
     // custom validator to check if coordinates are valid numbers (longitude, latitude) [x, y]
-    check('location')
+    (0, express_validator_1.check)('location')
         .notEmpty()
         .withMessage('Location is required')
         .custom(location => {
@@ -25,21 +31,21 @@ export const createTaskerValidator = [
         }
         return true;
     }),
-    check('bio').optional().isString().withMessage('Bio must be a string'),
-    check('rating').isEmpty().withMessage('Rating is not allowed'),
-    check('completedTasks').isEmpty().withMessage('Completed tasks is not allowed'),
-    validatorMiddleware,
+    (0, express_validator_1.check)('bio').optional().isString().withMessage('Bio must be a string'),
+    (0, express_validator_1.check)('rating').isEmpty().withMessage('Rating is not allowed'),
+    (0, express_validator_1.check)('completedTasks').isEmpty().withMessage('Completed tasks is not allowed'),
+    validation_middleware_1.default,
 ];
-export const updateTaskerValidator = [
-    check('services')
+exports.updateTaskerValidator = [
+    (0, express_validator_1.check)('services')
         .optional()
         .isArray()
         .withMessage('Services must be an array')
         .isLength({ min: 1 })
         .withMessage('Services must have at least one service'),
-    check('services.*').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
-    check('bio').optional().isString().withMessage('Bio must be a string'),
-    check('rating').isEmpty().withMessage('Rating is not allowed'),
-    check('completedTasks').isEmpty().withMessage('Completed tasks is not allowed'),
-    validatorMiddleware,
+    (0, express_validator_1.check)('services.*').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
+    (0, express_validator_1.check)('bio').optional().isString().withMessage('Bio must be a string'),
+    (0, express_validator_1.check)('rating').isEmpty().withMessage('Rating is not allowed'),
+    (0, express_validator_1.check)('completedTasks').isEmpty().withMessage('Completed tasks is not allowed'),
+    validation_middleware_1.default,
 ];

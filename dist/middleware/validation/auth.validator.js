@@ -1,27 +1,33 @@
-import { check } from 'express-validator';
-import validatorMiddleware from '../errors/validation.middleware';
-export const signupValidator = [
-    check('firstName')
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.loginValidator = exports.signupValidator = void 0;
+const express_validator_1 = require("express-validator");
+const validation_middleware_1 = __importDefault(require("../errors/validation.middleware"));
+exports.signupValidator = [
+    (0, express_validator_1.check)('firstName')
         .notEmpty()
         .withMessage('firstName is required')
         .isString()
         .withMessage('Name must be a string'),
-    check('lastName')
+    (0, express_validator_1.check)('lastName')
         .notEmpty()
         .withMessage('lastName is required')
         .isString()
         .withMessage('Name must be a string'),
-    check('email')
+    (0, express_validator_1.check)('email')
         .notEmpty()
         .withMessage('User email is required')
         .isEmail()
         .withMessage('Email is invalid'),
-    check('password')
+    (0, express_validator_1.check)('password')
         .notEmpty()
         .withMessage('User password is required')
         .isLength({ min: 8 })
         .withMessage('Password must be at least 8 characters'),
-    check('confirmPassword')
+    (0, express_validator_1.check)('confirmPassword')
         .notEmpty()
         .withMessage('Confirm password is required')
         .custom((confirmPassword, { req }) => {
@@ -32,20 +38,20 @@ export const signupValidator = [
             return true;
         }
     }),
-    check('role').isEmpty().withMessage('Role is not allowed'),
-    check('active').isEmpty().withMessage('Active is not allowed'),
-    validatorMiddleware,
+    (0, express_validator_1.check)('role').isEmpty().withMessage('Role is not allowed'),
+    (0, express_validator_1.check)('active').isEmpty().withMessage('Active is not allowed'),
+    validation_middleware_1.default,
 ];
-export const loginValidator = [
-    check('email')
+exports.loginValidator = [
+    (0, express_validator_1.check)('email')
         .notEmpty()
         .withMessage('User email is required')
         .isEmail()
         .withMessage('Email is invalid'),
-    check('password')
+    (0, express_validator_1.check)('password')
         .notEmpty()
         .withMessage('User password is required')
         .isLength({ min: 8 })
         .withMessage('Password must be at least 8 characters'),
-    validatorMiddleware,
+    validation_middleware_1.default,
 ];

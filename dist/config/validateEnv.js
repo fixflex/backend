@@ -1,20 +1,22 @@
-import { config } from 'dotenv';
-import { cleanEnv, port, str, url } from 'envalid';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = require("dotenv");
+const envalid_1 = require("envalid");
 if (process.env.NODE_ENV === 'testing') {
-    config({ path: '.env.test' });
+    (0, dotenv_1.config)({ path: '.env.test' });
 }
 else {
-    config();
+    (0, dotenv_1.config)();
 }
-const validateEnv = cleanEnv(process.env, {
-    PORT: port(),
-    NODE_ENV: str(),
-    BASE_URL: url(),
-    DB_URI: str(),
-    JWT_SECRET_KEY: str(),
-    JWT_EXPIRATION: str(),
-    CLOUDINARY_API_SECRET: str(),
-    CLOUDINARY_API_KEY: str(),
-    CLOUDINARY_CLOUD_NAME: str(),
+const validateEnv = (0, envalid_1.cleanEnv)(process.env, {
+    PORT: (0, envalid_1.port)(),
+    NODE_ENV: (0, envalid_1.str)(),
+    BASE_URL: (0, envalid_1.url)(),
+    DB_URI: (0, envalid_1.str)(),
+    JWT_SECRET_KEY: (0, envalid_1.str)(),
+    JWT_EXPIRATION: (0, envalid_1.str)(),
+    CLOUDINARY_API_SECRET: (0, envalid_1.str)(),
+    CLOUDINARY_API_KEY: (0, envalid_1.str)(),
+    CLOUDINARY_CLOUD_NAME: (0, envalid_1.str)(),
 });
-export default validateEnv;
+exports.default = validateEnv;

@@ -1,59 +1,46 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-import ServiceDao from '../DB/dao/service.dao';
-import HttpException from '../exceptions/HttpException';
-import APIFeatures from '../utils/apiFeatures';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ServiceService = void 0;
+const service_dao_1 = __importDefault(require("../DB/dao/service.dao"));
+const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
+const apiFeatures_1 = __importDefault(require("../utils/apiFeatures"));
 class ServiceService {
-    getServices(reqQuery) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let apiFeatures = new APIFeatures(reqQuery);
-            let query = apiFeatures.filter();
-            let paginate = apiFeatures.paginate();
-            let sort = apiFeatures.sort();
-            let fields = apiFeatures.selectFields();
-            let services = yield ServiceDao.listServices(query, paginate, sort, fields);
-            if (services)
-                paginate = apiFeatures.paginate(services.length); // update the pagination object with the total documents
-            return { services, paginate };
-        });
+    async getServices(reqQuery) {
+        let apiFeatures = new apiFeatures_1.default(reqQuery);
+        let query = apiFeatures.filter();
+        let paginate = apiFeatures.paginate();
+        let sort = apiFeatures.sort();
+        let fields = apiFeatures.selectFields();
+        let services = await service_dao_1.default.listServices(query, paginate, sort, fields);
+        if (services)
+            paginate = apiFeatures.paginate(services.length); // update the pagination object with the total documents
+        return { services, paginate };
     }
-    getService(serviceId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield ServiceDao.getServiceById(serviceId);
-        });
+    async getService(serviceId) {
+        return await service_dao_1.default.getServiceById(serviceId);
     }
-    createService(service) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let isServiceExists = yield ServiceDao.getServiceByName(service.name);
-            if (isServiceExists) {
-                throw new HttpException(409, `Service ${service.name} is already exists, please pick a different one.`);
-            }
-            let newService = yield ServiceDao.create(service);
-            return newService;
-        });
+    async createService(service) {
+        let isServiceExists = await service_dao_1.default.getServiceByName(service.name);
+        if (isServiceExists) {
+            throw new HttpException_1.default(409, `Service ${service.name} is already exists, please pick a different one.`);
+        }
+        let newService = await service_dao_1.default.create(service);
+        return newService;
     }
-    updateService(serviceId, service) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let isServiceExists = yield ServiceDao.getServiceById(serviceId);
-            if (!isServiceExists)
-                throw new HttpException(404, 'No service found');
-            return yield ServiceDao.update(serviceId, service);
-        });
+    async updateService(serviceId, service) {
+        let isServiceExists = await service_dao_1.default.getServiceById(serviceId);
+        if (!isServiceExists)
+            throw new HttpException_1.default(404, 'No service found');
+        return await service_dao_1.default.update(serviceId, service);
     }
-    deleteService(serviceId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let isServiceExists = yield ServiceDao.getServiceById(serviceId);
-            if (!isServiceExists)
-                throw new HttpException(404, 'No service found');
-            return yield ServiceDao.delete(serviceId);
-        });
+    async deleteService(serviceId) {
+        let isServiceExists = await service_dao_1.default.getServiceById(serviceId);
+        if (!isServiceExists)
+            throw new HttpException_1.default(404, 'No service found');
+        return await service_dao_1.default.delete(serviceId);
     }
 }
-export { ServiceService };
+exports.ServiceService = ServiceService;

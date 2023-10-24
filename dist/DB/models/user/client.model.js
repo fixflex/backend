@@ -1,10 +1,12 @@
-import { Schema, model } from 'mongoose';
-let clientSchema = new Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = require("mongoose");
+let clientSchema = new mongoose_1.Schema({
     userId: {
         type: String,
         ref: 'User',
         required: true,
     },
 }, { timestamps: true });
-let Client = model('Client', clientSchema);
-export default Client;
+let Client = (0, mongoose_1.model)('Client', clientSchema);
+exports.default = Client;

@@ -1,5 +1,7 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @description   this class is responsible about operational error (errors that can be predicted)*/
-export default class HttpException extends Error {
+class HttpException extends Error {
     constructor(statusCode, message) {
         super(message);
         this.statusCode = statusCode;
@@ -7,3 +9,4 @@ export default class HttpException extends Error {
         this.isOperational = true;
     }
 }
+exports.default = HttpException;

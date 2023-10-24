@@ -1,9 +1,15 @@
-import { check } from 'express-validator';
-import validatorMiddleware from '../../errors/validation.middleware';
-export const updateLoggedUserValidator = [
-    check('name').optional().isString().withMessage('Name must be a string'),
-    check('email').optional().isEmail().withMessage('invalid email address'),
-    check('password').isEmpty().withMessage('Cannot change password from here'),
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteUserValidator = exports.getUserValidator = exports.updateLoggedUserValidator = void 0;
+const express_validator_1 = require("express-validator");
+const validation_middleware_1 = __importDefault(require("../../errors/validation.middleware"));
+exports.updateLoggedUserValidator = [
+    (0, express_validator_1.check)('name').optional().isString().withMessage('Name must be a string'),
+    (0, express_validator_1.check)('email').optional().isEmail().withMessage('invalid email address'),
+    (0, express_validator_1.check)('password').isEmpty().withMessage('Cannot change password from here'),
     // check('location')
     //   .optional()
     //   .isArray()
@@ -18,20 +24,20 @@ export const updateLoggedUserValidator = [
     //     }
     //     return true;
     //   }),
-    check('role').isEmpty().withMessage('Role is not allowed'),
-    check('active').isEmpty().withMessage('Active is not allowed'),
-    check('createdAt').isEmpty().withMessage('createdAt is not allowed'),
-    check('updatedAt').isEmpty().withMessage('updatedAt is not allowed'),
-    check('_id').isEmpty().withMessage('_id is not allowed'),
-    validatorMiddleware,
+    (0, express_validator_1.check)('role').isEmpty().withMessage('Role is not allowed'),
+    (0, express_validator_1.check)('active').isEmpty().withMessage('Active is not allowed'),
+    (0, express_validator_1.check)('createdAt').isEmpty().withMessage('createdAt is not allowed'),
+    (0, express_validator_1.check)('updatedAt').isEmpty().withMessage('updatedAt is not allowed'),
+    (0, express_validator_1.check)('_id').isEmpty().withMessage('_id is not allowed'),
+    validation_middleware_1.default,
 ];
-export const getUserValidator = [
-    check('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '),
-    validatorMiddleware,
+exports.getUserValidator = [
+    (0, express_validator_1.check)('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '),
+    validation_middleware_1.default,
 ];
-export const deleteUserValidator = [
-    check('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '),
-    validatorMiddleware,
+exports.deleteUserValidator = [
+    (0, express_validator_1.check)('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '),
+    validation_middleware_1.default,
 ];
 // ===================  =====================
 // export const updateUserValidator = [

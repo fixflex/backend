@@ -1,9 +1,11 @@
-import { validationResult } from 'express-validator';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_validator_1 = require("express-validator");
 const validatorMiddleware = (req, res, next) => {
-    const errors = validationResult(req);
+    const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
     next();
 };
-export default validatorMiddleware;
+exports.default = validatorMiddleware;

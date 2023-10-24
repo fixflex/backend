@@ -1,49 +1,43 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-import bcrypt from 'bcrypt';
-import UserDao from '../DB/dao/user.dao';
-import HttpException from '../exceptions/HttpException';
-import { createToken } from '../utils/createToken';
-export class AuthServie {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AuthServie = void 0;
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const user_dao_1 = __importDefault(require("../DB/dao/user.dao"));
+const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
+const createToken_1 = require("../utils/createToken");
+class AuthServie {
     /**
      * Signup a new user
      * @param user - The user object to signup
      * @returns An object containing the newly created user and a token
      * @throws HttpException if the email or username already exists
      */
-    signup(user) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // check if the user already exists
-            let isEmailExists = yield UserDao.getUserByEmail(user.email);
-            if (isEmailExists) {
-                throw new HttpException(409, `E-Mail address ${user.email} is already exists, please pick a different one.`);
-            }
-            // hash the password
-            user.password = yield bcrypt.hash(user.password, 10);
-            let newUser = yield UserDao.create(user);
-            let token = createToken(newUser._id);
-            return { user: newUser, token };
-        });
+    async signup(user) {
+        // check if the user already exists
+        let isEmailExists = await user_dao_1.default.getUserByEmail(user.email);
+        if (isEmailExists) {
+            throw new HttpException_1.default(409, `E-Mail address ${user.email} is already exists, please pick a different one.`);
+        }
+        // hash the password
+        user.password = await bcrypt_1.default.hash(user.password, 10);
+        let newUser = await user_dao_1.default.create(user);
+        let token = (0, createToken_1.createToken)(newUser._id);
+        return { user: newUser, token };
     }
-    login(email, password) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let user;
-            if (!email || !password) {
-                throw new HttpException(400, 'Email and password are required');
-            }
-            user = yield UserDao.getUserByEmail(email);
-            if (!user || !(yield bcrypt.compare(password, user.password))) {
-                throw new HttpException(401, 'Incorrect email or password');
-            }
-            let token = createToken(user._id);
-            return { user, token };
-        });
+    async login(email, password) {
+        let user;
+        if (!email || !password) {
+            throw new HttpException_1.default(400, 'Email and password are required');
+        }
+        user = await user_dao_1.default.getUserByEmail(email);
+        if (!user || !(await bcrypt_1.default.compare(password, user.password))) {
+            throw new HttpException_1.default(401, 'Incorrect email or password');
+        }
+        let token = (0, createToken_1.createToken)(user._id);
+        return { user, token };
     }
 }
+exports.AuthServie = AuthServie;

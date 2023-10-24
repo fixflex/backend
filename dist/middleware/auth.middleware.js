@@ -1,47 +1,44 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-import asyncHandler from 'express-async-handler';
-import jwt from 'jsonwebtoken';
-import UserModel from '../DB/models/user/user.model';
-import env from '../config/validateEnv';
-import HttpException from '../exceptions/HttpException';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.allowedTo = exports.authenticateUser = void 0;
+const express_async_handler_1 = __importDefault(require("express-async-handler"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const user_model_1 = __importDefault(require("../DB/models/user/user.model"));
+const validateEnv_1 = __importDefault(require("../config/validateEnv"));
+const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
 const checkTokenExists = (req, next) => {
-    var _a;
-    if (!((_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.startsWith('Bearer'))) {
-        return next(new HttpException(401, `You are not authorized, you must login to get access this route`));
+    if (!req.headers.authorization?.startsWith('Bearer')) {
+        return next(new HttpException_1.default(401, `You are not authorized, you must login to get access this route`));
     }
     const token = req.headers.authorization.split(' ')[1];
     if (!token) {
-        return next(new HttpException(401, `You are not authorized, you must login to get access this route`));
+        return next(new HttpException_1.default(401, `You are not authorized, you must login to get access this route`));
     }
     return token;
 };
-const checkUserExists = (userId, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield UserModel.findById(userId);
+const checkUserExists = async (userId, next) => {
+    const user = await user_model_1.default.findById(userId);
     if (!user) {
-        return next(new HttpException(401, 'The user that belongs to this token no longer exists'));
+        return next(new HttpException_1.default(401, 'The user that belongs to this token no longer exists'));
     }
     return user;
-});
-const authenticateUser = asyncHandler((req, _res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+const authenticateUser = (0, express_async_handler_1.default)(async (req, _res, next) => {
     const token = checkTokenExists(req, next);
-    const decoded = jwt.verify(token, env.JWT_SECRET_KEY);
-    const user = yield checkUserExists(decoded.userId, next);
+    const decoded = jsonwebtoken_1.default.verify(token, validateEnv_1.default.JWT_SECRET_KEY);
+    const user = await checkUserExists(decoded.userId, next);
     req.user = user;
     next();
-}));
+});
+exports.authenticateUser = authenticateUser;
 // Authorization (User permissions)
 const allowedTo = (...roles) => (req, _res, next) => {
     if (!roles.includes(req.user.role)) {
-        return next(new HttpException(403, `You are not allowed to perform this action`));
+        return next(new HttpException_1.default(403, `You are not allowed to perform this action`));
     }
     next();
 };
-export { authenticateUser, allowedTo };
+exports.allowedTo = allowedTo;

@@ -1,20 +1,17 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-import { v2 as cloudinary } from 'cloudinary';
-import HttpException from '../exceptions/HttpException';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.cloudinaryDeleteImage = exports.cloudinaryUploadImage = void 0;
+const cloudinary_1 = require("cloudinary");
+const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
 // import logger from '../log';
-import env from '../config/validateEnv';
-cloudinary.config({
-    cloud_name: env.CLOUDINARY_CLOUD_NAME,
-    api_key: env.CLOUDINARY_API_KEY,
-    api_secret: env.CLOUDINARY_API_SECRET,
+const validateEnv_1 = __importDefault(require("../config/validateEnv"));
+cloudinary_1.v2.config({
+    cloud_name: validateEnv_1.default.CLOUDINARY_CLOUD_NAME,
+    api_key: validateEnv_1.default.CLOUDINARY_API_KEY,
+    api_secret: validateEnv_1.default.CLOUDINARY_API_SECRET,
 });
 //   try {
 //     const result = await cloudinary.uploader.upload(fileToUpload, {
@@ -26,18 +23,19 @@ cloudinary.config({
 //     throw new HttpException(500, 'Something went wrong while uploading the image');
 //   }
 // };
-const cloudinaryDeleteImage = (publicId) => __awaiter(void 0, void 0, void 0, function* () {
+const cloudinaryDeleteImage = async (publicId) => {
     try {
-        const result = yield cloudinary.uploader.destroy(publicId);
+        const result = await cloudinary_1.v2.uploader.destroy(publicId);
         return result;
     }
     catch (error) {
-        throw new HttpException(500, 'Something went wrong while deleting the image');
+        throw new HttpException_1.default(500, 'Something went wrong while deleting the image');
     }
-});
-const cloudinaryUploadImage = (fileToUpload) => __awaiter(void 0, void 0, void 0, function* () {
+};
+exports.cloudinaryDeleteImage = cloudinaryDeleteImage;
+const cloudinaryUploadImage = async (fileToUpload) => {
     try {
-        const result = yield cloudinary.uploader.upload(fileToUpload, {
+        const result = await cloudinary_1.v2.uploader.upload(fileToUpload, {
             quality: 80,
             resource_type: 'auto',
             transformation: [
@@ -53,7 +51,7 @@ const cloudinaryUploadImage = (fileToUpload) => __awaiter(void 0, void 0, void 0
         return result;
     }
     catch (error) {
-        throw new HttpException(500, 'Something went wrong while uploading the image');
+        throw new HttpException_1.default(500, 'Something went wrong while uploading the image');
     }
-});
-export { cloudinaryUploadImage, cloudinaryDeleteImage };
+};
+exports.cloudinaryUploadImage = cloudinaryUploadImage;

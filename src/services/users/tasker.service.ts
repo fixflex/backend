@@ -22,7 +22,6 @@ class TaskerService {
   }
 
   async getListOfTaskers(reqQuery: any) {
-    console.log(reqQuery.longitude, reqQuery.latitude, reqQuery.services, reqQuery.maxDistance);
     if (reqQuery.services) {
       // check if service is exists in DB
       let isServiceExists = await ServiceDao.getServiceById(reqQuery.services);

@@ -1,5 +1,7 @@
-import { Schema, model } from 'mongoose';
-let taskerSchema = new Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = require("mongoose");
+let taskerSchema = new mongoose_1.Schema({
     userId: {
         unique: true,
         type: String,
@@ -39,5 +41,5 @@ let taskerSchema = new Schema({
 // Apply the geospatial index to the coordinates field inside the location object
 // taskerSchema.index({ 'location.coordinates': '2dsphere' });
 taskerSchema.index({ location: '2dsphere' });
-let Tasker = model('Tasker', taskerSchema);
-export default Tasker;
+let Tasker = (0, mongoose_1.model)('Tasker', taskerSchema);
+exports.default = Tasker;

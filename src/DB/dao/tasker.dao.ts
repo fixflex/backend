@@ -8,7 +8,6 @@ class TaskerDao {
 
   static async listTaskers(longitude: number, latitude: number, services: string, maxDistance: number = 60): Promise<ITasker[] | null> {
     let taskers: ITasker[];
-    console.log(longitude, latitude, services, maxDistance);
     if (latitude && longitude && services) {
       taskers = await TaskerModel.find({
         location: {
@@ -37,7 +36,6 @@ class TaskerDao {
       // let services = tasker.services;
       // delete tasker.services;
       const { services, ...taskerWithoutServices } = tasker;
-      console.log(services);
       return await TaskerModel.findOneAndUpdate({ userId }, { $addToSet: { services }, ...taskerWithoutServices }, { new: true }).lean();
     }
     return TaskerModel.findOneAndUpdate({ userId }, tasker, { new: true }).lean();

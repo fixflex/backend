@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,33 +8,35 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Router } from 'express';
-import { autoInjectable } from 'tsyringe';
-import { UserController } from '../../controllers/users/user.controller';
-import { authenticateUser } from '../../middleware/auth.middleware';
-import { imageUpload } from '../../middleware/uploadImages.middleware';
-import { getUserValidator, updateLoggedUserValidator } from '../../middleware/validation';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserRoute = void 0;
+const express_1 = require("express");
+const tsyringe_1 = require("tsyringe");
+const user_controller_1 = require("../../controllers/users/user.controller");
+const auth_middleware_1 = require("../../middleware/auth.middleware");
+const uploadImages_middleware_1 = require("../../middleware/uploadImages.middleware");
+const validation_1 = require("../../middleware/validation");
 let UserRoute = class UserRoute {
     constructor(userController) {
         this.userController = userController;
         this.path = '/users';
-        this.router = Router();
+        this.router = (0, express_1.Router)();
         this.insitializeRoutes();
     }
     insitializeRoutes() {
         //  Logged in user routes (authenticated)
         this.router
             .route(`${this.path}/me`)
-            .get(authenticateUser, this.userController.getMe)
-            .patch(authenticateUser, updateLoggedUserValidator, this.userController.updateMe)
-            .delete(authenticateUser, this.userController.deleteMe);
-        this.router.route(`${this.path}/profile-picture-upload`).patch(imageUpload.single('profilePicture'), this.userController.updateMyProfileImage);
+            .get(auth_middleware_1.authenticateUser, this.userController.getMe)
+            .patch(auth_middleware_1.authenticateUser, validation_1.updateLoggedUserValidator, this.userController.updateMe)
+            .delete(auth_middleware_1.authenticateUser, this.userController.deleteMe);
+        this.router.route(`${this.path}/profile-picture-upload`).patch(uploadImages_middleware_1.imageUpload.single('profilePicture'), this.userController.updateMyProfileImage);
         // Public routes
-        this.router.get(`${this.path}/:id`, getUserValidator, this.userController.getUser);
+        this.router.get(`${this.path}/:id`, validation_1.getUserValidator, this.userController.getUser);
     }
 };
-UserRoute = __decorate([
-    autoInjectable(),
-    __metadata("design:paramtypes", [UserController])
+exports.UserRoute = UserRoute;
+exports.UserRoute = UserRoute = __decorate([
+    (0, tsyringe_1.autoInjectable)(),
+    __metadata("design:paramtypes", [user_controller_1.UserController])
 ], UserRoute);
-export { UserRoute };
