@@ -53,7 +53,6 @@ class App {
   private initializeSwagger() {
     if (this.env === 'development') {
       this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-      this.app.get('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     }
   }
 

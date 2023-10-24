@@ -45,7 +45,6 @@ class App {
     initializeSwagger() {
         if (this.env === 'development') {
             this.app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_json_1.default));
-            this.app.get('/', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_json_1.default));
         }
     }
     initializeErrorHandling() {

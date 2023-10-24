@@ -10,9 +10,12 @@ class HealthzRoute implements Routes {
   constructor() {
     this.initializerRoutes();
   }
-
   private initializerRoutes() {
     this.router.get(`${this.path}`, (_req: Request, res: Response) => {
+      res.status(200).send('OK');
+    });
+
+    this.router.get('/', (_req: Request, res: Response) => {
       res.status(200).send('OK');
     });
   }

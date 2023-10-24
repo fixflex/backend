@@ -11,6 +11,9 @@ class HealthzRoute {
         this.router.get(`${this.path}`, (_req, res) => {
             res.status(200).send('OK');
         });
+        this.router.get('/', (_req, res) => {
+            res.status(200).send('OK');
+        });
     }
 }
 exports.default = HealthzRoute;
