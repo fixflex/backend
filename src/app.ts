@@ -43,6 +43,9 @@ class App {
     }
     this.app.use(express.json());
 
+    this.app.get('/', (_req, res) => {
+      res.status(200).send('OK');
+    });
     // healthz check
     this.app.get('/healthz', (_req, res) => {
       res.status(200).send('OK');
