@@ -42,14 +42,6 @@ class App {
       this.app.use(morgan('dev'));
     }
     this.app.use(express.json());
-
-    this.app.get('/', (_req, res) => {
-      res.status(200).send('OK');
-    });
-    // healthz check
-    this.app.get('/healthz', (_req, res) => {
-      res.status(200).send('OK');
-    });
   }
 
   private initializeRoutes(routes: Routes[]) {
@@ -61,6 +53,7 @@ class App {
   private initializeSwagger() {
     if (this.env === 'development') {
       this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+      this.app.get('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     }
   }
 
