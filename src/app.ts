@@ -42,6 +42,11 @@ class App {
       this.app.use(morgan('dev'));
     }
     this.app.use(express.json());
+
+    // healthz check
+    this.app.get('/healthz', (_req, res) => {
+      res.status(200).send('OK');
+    });
   }
 
   private initializeRoutes(routes: Routes[]) {
