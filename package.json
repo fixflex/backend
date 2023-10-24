@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "nodemon": "nodemon",
-    "start:dev": "cross-env NODE_ENV=development nodemon  ./src/index.ts",
+    "start:dev": "tsc && cross-env NODE_ENV=development nodemon  ./src/index.ts",
     "start:test": "cross-env NODE_ENV=testing  jest --detectOpenHandles --runInBand  --verbose  --watchAll",
     "start:prod": "cross-env NODE_ENV=production  node  ./dist/index.js",
     "start": "cross-env NODE_ENV=development node ./dist/index.js",

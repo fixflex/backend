@@ -14,7 +14,7 @@ let serviseRoute = container.resolve(ServiceRoute);
 let taskerRoute = container.resolve(TaskerRoute);
 let healthzRoute = container.resolve(HealthzRoute);
 
-let app = new App([healthzRoute, authRoute, userRoute, serviseRoute, taskerRoute]);
+let app = new App([healthzRoute, authRoute, userRoute, taskerRoute, serviseRoute]);
 
 let server = app.listen();
 let client = app.getServer();
