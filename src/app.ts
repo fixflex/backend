@@ -10,7 +10,6 @@ import { notFound } from './exceptions/notFound';
 import './exceptions/shutdownHandler';
 import { Routes } from './interfaces/routes.interface';
 import { errorMiddleware } from './middleware/errors';
-import logger from './utils/log';
 
 class App {
   public app: express.Application;
@@ -59,12 +58,6 @@ class App {
   private initializeErrorHandling() {
     this.app.use(notFound);
     this.app.use(errorMiddleware);
-  }
-
-  public listen() {
-    return this.app.listen(this.port, () => {
-      logger.info(`🚀 App listening in ${process.env.NODE_ENV} mode on the port ${this.port}`);
-    });
   }
 }
 

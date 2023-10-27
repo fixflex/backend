@@ -9,6 +9,7 @@ if (process.env.NODE_ENV === 'testing') {
 
 const validateEnv = cleanEnv(process.env, {
   PORT: port(),
+  SOCKET_PORT: port(),
   NODE_ENV: str(),
   BASE_URL: url(),
   DB_URI: str(),
