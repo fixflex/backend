@@ -13,7 +13,6 @@ const swagger_json_1 = __importDefault(require("./docs/swagger.json"));
 const notFound_1 = require("./exceptions/notFound");
 require("./exceptions/shutdownHandler");
 const errors_1 = require("./middleware/errors");
-const log_1 = __importDefault(require("./utils/log"));
 class App {
     constructor(routes) {
         this.app = (0, express_1.default)();
@@ -50,11 +49,6 @@ class App {
     initializeErrorHandling() {
         this.app.use(notFound_1.notFound);
         this.app.use(errors_1.errorMiddleware);
-    }
-    listen() {
-        return this.app.listen(this.port, () => {
-            log_1.default.info(`🚀 App listening in ${process.env.NODE_ENV} mode on the port ${this.port}`);
-        });
     }
 }
 exports.default = App;

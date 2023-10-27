@@ -10,6 +10,7 @@ else {
 }
 const validateEnv = (0, envalid_1.cleanEnv)(process.env, {
     PORT: (0, envalid_1.port)(),
+    SOCKET_PORT: (0, envalid_1.port)(),
     NODE_ENV: (0, envalid_1.str)(),
     BASE_URL: (0, envalid_1.url)(),
     DB_URI: (0, envalid_1.str)(),

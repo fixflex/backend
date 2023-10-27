@@ -8,6 +8,6 @@ const messageSchema = new Schema<IMessage & Document>({
   createdAt: { type: Date, default: Date.now },
 });
 
-const Chat = model<IMessage & Document>('Chat', messageSchema);
+const MessageModel = model<IMessage & Document>('Message', messageSchema);
 
-export default Chat;
+export { MessageModel };

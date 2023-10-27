@@ -17,7 +17,7 @@ const user_interface_1 = require("../interfaces/user.interface");
 const auth_middleware_1 = require("../middleware/auth.middleware");
 const isMongoID_validator_1 = require("../middleware/validation/isMongoID.validator");
 const serviceValidator_1 = require("../middleware/validation/serviceValidator");
-let ServiceRoute = class ServiceRoute {
+let ServiceRoute = exports.ServiceRoute = class ServiceRoute {
     constructor(serviceController) {
         this.serviceController = serviceController;
         this.path = '/services';
@@ -35,7 +35,6 @@ let ServiceRoute = class ServiceRoute {
         this.router.delete(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.serviceController.deleteService);
     }
 };
-exports.ServiceRoute = ServiceRoute;
 exports.ServiceRoute = ServiceRoute = __decorate([
     (0, tsyringe_1.autoInjectable)(),
     __metadata("design:paramtypes", [service_controller_1.ServiceController])

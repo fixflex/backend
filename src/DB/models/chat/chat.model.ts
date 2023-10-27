@@ -8,6 +8,6 @@ const chatSchema = new Schema<IChat & Document>({
   messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
 });
 
-const Chat = model<IChat & Document>('Chat', chatSchema);
+const ChatModel = model<IChat & Document>('Chat', chatSchema);
 
-export default Chat;
+export { ChatModel };

@@ -14,7 +14,7 @@ const express_1 = require("express");
 const tsyringe_1 = require("tsyringe");
 const controllers_1 = require("../controllers");
 const validation_1 = require("../middleware/validation");
-let AuthRoute = class AuthRoute {
+let AuthRoute = exports.AuthRoute = class AuthRoute {
     constructor(authController) {
         this.authController = authController;
         this.path = '/auth';
@@ -26,7 +26,6 @@ let AuthRoute = class AuthRoute {
         this.router.post(`${this.path}/login`, validation_1.loginValidator, this.authController.login);
     }
 };
-exports.AuthRoute = AuthRoute;
 exports.AuthRoute = AuthRoute = __decorate([
     (0, tsyringe_1.autoInjectable)(),
     __metadata("design:paramtypes", [controllers_1.AuthController])

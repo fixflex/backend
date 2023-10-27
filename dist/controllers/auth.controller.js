@@ -18,7 +18,7 @@ const tsyringe_1 = require("tsyringe");
 const auth_service_1 = require("../services/auth.service");
 // TODO: use passport.js for authentication
 // TODO: refresh token and logout routes
-let AuthController = class AuthController {
+let AuthController = exports.AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
         this.signup = (0, express_async_handler_1.default)(async (req, res) => {
@@ -34,7 +34,6 @@ let AuthController = class AuthController {
         });
     }
 };
-exports.AuthController = AuthController;
 exports.AuthController = AuthController = __decorate([
     (0, tsyringe_1.autoInjectable)(),
     __metadata("design:paramtypes", [auth_service_1.AuthServie])
