@@ -10,7 +10,7 @@
 <body>
     <div id="messages"></div>
     <input type="text" id="messageInput">
-    <button onclick="sendMessage()">Send</button>
+    <button onclick="sendMessage()">Send message</button>
     <button onclick="joinRoom()">Join</button>
     <button onclick="leaveRoom()">Leave Room</button>
     <button onclick="leaveAllRooms()">Leave All Rooms</button>
@@ -33,10 +33,12 @@
         function sendMessage() {
             let data = {
                 message: document.getElementById("messageInput").value,
-                userId: 1,
-                roomId: 1
+                sender: "653c078a976a85f7b91bbde3",
+                chatId: "653c126cfaa6376e11108809",
+                createdAt: new Date().toISOString()
             }
-            socket.emit("clientMessage", data);
+            socket.emit("message", data);
+            console.log(data);
         }
 
         function joinRoom() {

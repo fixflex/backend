@@ -2,6 +2,9 @@ import http from 'http';
 // import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Server } from 'socket.io';
 
+import { ChatModel } from '../DB/models/chat/chat.model';
+import { MessageModel } from '../DB/models/chat/message.model';
+import { IMessage } from '../interfaces/message.interface';
 // import { ChatModel } from '../DB/models/chat/chat.model';
 // import { MessageModel } from '../DB/models/chat/message.model';
 // import env from '../config/validateEnv';
@@ -35,13 +38,39 @@ class SocketService {
       this.io.on('connection', (socket: AuthSocket) => {
         console.log('User connected ', socket.id);
 
-        this.io.on('message', data => {
-          console.log(socket.userId, data);
+        socket.on('message', async (data: IMessage) => {
+          try {
+            console.log(data.sender, data.message, data.createdAt, data.chatId);
+            // TODO
+            let chatRoom = await ChatModel.findById(data.chatId);
+            // if !chatRoom throw error
+            if (!chatRoom) throw new Error('Chat room not found');
+            // if chatRoom.participants doesn't include the sender throw error
+            console.log(chatRoom.client, chatRoom.tasker, data.sender);
+            if (chatRoom.client !== data.sender && chatRoom.tasker !== data.sender) throw new Error('You are not a participant in this chat room');
+
+            let message = await MessageModel.create(data);
+            if (!message) throw new Error('Message not created');
+            // push the message id to the messages array in the chat room and save it
+            chatRoom.messages.push(message._id);
+            await chatRoom.save();
+
+            // emit the message to the tasker in the chat room
+            // broadcast to all clients in the chat room except the sender
+            socket.broadcast.to(data.chatId!).emit('message', data);
+          } catch (error: any) {
+            console.log(error);
+            socket.emit('error', { message: error.message });
+          }
+        });
+
+        socket.on('disconnect', () => {
+          console.log('User disconnected from socket:', socket.id);
         });
       });
 
       // get connected users each 30 seconds
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
     }
   }

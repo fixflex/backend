@@ -1,8 +1,7 @@
-import { ObjectId } from 'mongoose';
-
 export interface IMessage {
-  _id: string;
-  sender: ObjectId; // ref: User
+  _id?: string;
+  sender: string; // ref: User
   message: string;
+  chatId?: string;
   createdAt: Date;
 }
