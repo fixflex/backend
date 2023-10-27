@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
+import { autoInjectable } from 'tsyringe';
 
 import HttpException from '../exceptions/HttpException';
 import { ChatService } from '../services/chat.service';
 
+@autoInjectable()
 class ChatController {
   constructor(private readonly chatService: ChatService) {}
 

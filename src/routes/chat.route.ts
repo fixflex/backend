@@ -9,7 +9,7 @@ import { isMongoId } from '../middleware/validation/isMongoID.validator';
 
 @autoInjectable()
 class ChatRoute implements Routes {
-  public path = '/chat';
+  public path = '/chats';
   public router = Router();
 
   constructor(private readonly chatController: ChatController) {
@@ -20,7 +20,7 @@ class ChatRoute implements Routes {
     //  protected routes
     this.router.use(`${this.path}`, authenticateUser);
     this.router.post(`${this.path}`, createChatValidator, this.chatController.createChat);
-    this.router.get(`${this.path}:id`, isMongoId, this.chatController.getChatById);
+    this.router.get(`${this.path}/:id`, isMongoId, this.chatController.getChatById);
   }
 }
 
