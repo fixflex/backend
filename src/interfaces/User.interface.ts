@@ -9,7 +9,7 @@ export interface IUser {
   lastName: string;
   email: string;
   password: string;
-  role: UserType;
+  role: string;
   profilePicture: {
     url: string;
     publicId: string | null;
