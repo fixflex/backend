@@ -8,6 +8,7 @@ class TaskerDao {
 
   static async listTaskers(longitude: number, latitude: number, services: string, maxDistance: number = 60): Promise<ITasker[] | null> {
     let taskers: ITasker[];
+    // /api/v1/taskers?longitude=35.5&latitude=33.5&services=cleaning&maxDistance=60
     if (latitude && longitude && services) {
       taskers = await TaskerModel.find({
         location: {

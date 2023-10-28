@@ -1,19 +1,14 @@
 {
   "openapi": "3.0.0",
   "info": {
+    "title": "TasksRunner API",
     "description": "API for TasksRunner Application",
-    "version": "1.0.0",
-    "title": "TasksRunner API"
-  },
-
-  "host": "localhost:8080",
-  "basePath": "/api/v1",
-  "schemes": ["http", "https"],
-
-  "contact": {
-    "name": "Ahmed Mostafa",
-    "email": "ahmed.elasiriy@gmail.com",
-    "url": "ahmedelasiriy.me"
+    "contact": {
+      "name": "TasksRunner",
+      "url": "https://tasksrunner.onrender.com",
+      "email": "ahmedelasiriy@gmail.com"
+    },
+    "version": "1.0.0"
   },
 
   "servers": [
@@ -27,31 +22,42 @@
     }
   ],
 
-  "securityDefinitions": {
-    "Bearer": {
-      "type": "apiKey",
-      "name": "Authorization",
-      "in": "header"
-    }
-  },
   "tags": [
     {
-      "name": "Healthz"
+      "name": "Healthz",
+      "description": "Health check endpoint"
     },
     {
       "name": "Auth"
     },
     {
-      "name": "Taskers"
+      "name": "Users",
+      "description": "Operations about users"
+    },
+    {
+      "name": "Taskers",
+      "description": "Operations about taskers"
     },
     {
       "name": "Services"
     },
     {
-      "name": "Users"
+      "name": "Chats"
     }
   ],
+
   "paths": {
+    "/": {
+      "get": {
+        "tags": ["Healthz"],
+        "summary": "Health check endpoint",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/healthz": {
       "get": {
         "tags": ["Healthz"],
@@ -66,23 +72,28 @@
     "/auth/signup": {
       "post": {
         "tags": ["Auth"],
-        "summary": "User signup",
-        "parameters": [
-          {
-            "name": "user",
-            "in": "body",
-            "description": "User registration details",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UserSignup"
+        "summary": "Register a new user",
+        "requestBody": {
+          "description": "Create a new user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignup"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
+
         "responses": {
           "201": {
-            "description": "User registered successfully",
-            "schema": {
-              "$ref": "#/definitions/SignupResponse"
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignupResponse"
+                }
+              }
             }
           },
           "400": {
@@ -98,23 +109,30 @@
       "post": {
         "tags": ["Auth"],
         "summary": "User login",
-        "parameters": [
-          {
-            "name": "credentials",
-            "in": "body",
-            "description": "User credentials (email or username and password)",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UserLogin"
+        "requestBody": {
+          "description": "User login",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
             }
-          }
-        ],
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "Login successful",
-            "schema": {
-              "$ref": "#/definitions/LoginResponse"
+            "description": "User logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
             }
+          },
+          "400": {
+            "description": "Invalid request"
           },
           "401": {
             "description": "Unauthorized"
@@ -125,38 +143,150 @@
         }
       }
     },
-    "/taskers": {
+    "/users/me": {
       "get": {
-        "tags": ["Taskers"],
-        "description": "Returns all pets from the system that the user has access to\nNam sed condimentum est.\n",
-        "summary": "Get list of taskers",
-
-        "parameters": [
-          {
-            "name": "tags",
-            "in": "query",
-            "description": "tags to filter by",
-            "required": false,
-            "style": "form",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
+        "tags": ["Users"],
+        "summary": "Get logged-in user details",
+        "description": "Get logged-in user details\n\n**Note:** This endpoint requires the user to be authenticated.",
+        "responses": {
+          "200": {
+            "description": "User details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
               }
             }
           },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
           {
-            "name": "limit",
-            "in": "query",
-            "description": "maximum number of results to return",
-            "required": false,
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Update logged-in user profile",
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete logged-in user",
+        "responses": {
+          "204": {
+            "description": "User deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/taskers/{taskerId}": {
+      "get": {
+        "tags": ["Taskers"],
+        "summary": "Get tasker details",
+        "description": "Get tasker details by taskerId\n\n**Note:** This endpoint is public.",
+        "parameters": [
+          {
+            "name": "taskerId",
+            "in": "path",
+            "description": "Tasker ID",
+            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           }
         ],
-
+        "responses": {
+          "200": {
+            "description": "Tasker details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tasker"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Tasker not found"
+          }
+        }
+      }
+    },
+    "/taskers": {
+      "get": {
+        "tags": ["Taskers"],
+        "summary": "Get list of taskers",
+        "description": "Get a list of taskers filtered and ordered by location. \n\n**Query Parameters:**\n\n* `services` (*optional*): Filter taskers by service(s). Can pass a single service or comma separated list.\n* `longitude` (*optional*): User's longitude location.\n* `latitude` (*optional*): User's latitude location.\n* `maxDistance` (*optional*, default: `60`): Maximum distance in km to search.\n\nIf location parameters are provided, taskers will be returned sorted by proximity to the given point. \n\n_If no parameters are provided, taskers will be returned randomly without filtering or sorting._",
+        "parameters": [
+          {
+            "name": "service",
+            "in": "query",
+            "description": "Service ID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "description": "User's latitude",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "description": "User's longitude",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "maxDistance",
+            "in": "query",
+            "description": "Maximum distance in kilometers",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Get list of taskers",
@@ -165,41 +295,66 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/Tasker"
+                    "$ref": "#/components/schemas/Tasker"
                   }
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
           }
+        },
+        "400": {
+          "description": "Invalid request"
         }
-      },
+      }
+    },
+    "tasker/become-tasker": {
       "post": {
         "tags": ["Taskers"],
-        "summary": "Create a new tasker",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "tasker",
-            "in": "body",
-            "description": "Tasker details",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/TaskerInput"
+        "summary": "Become a tasker",
+        "description": "Register a new taskers. The user must be authenticated with a valid JWT bearer token.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "services": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "location": {
+                    "type": "object",
+                    "properties": {
+                      "coordinates": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "required": ["coordinates"]
+                  },
+                  "phoneNumber": {
+                    "type": "string"
+                  }
+                },
+                "required": ["services", "location", "phoneNumber"]
+              }
             }
           }
-        ],
+        },
+
         "responses": {
           "201": {
             "description": "Tasker created successfully",
-            "schema": {
-              "$ref": "#/definitions/Tasker"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tasker"
+                }
+              }
             }
           },
           "400": {
@@ -208,16 +363,22 @@
           "401": {
             "description": "Unauthorized"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
+
     "/services": {
       "get": {
         "tags": ["Services"],
         "summary": "Get list of services",
         "security": [
           {
-            "Bearer": []
+            "bearerAuth": []
           }
         ],
         "responses": {
@@ -226,7 +387,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Service"
+                "$ref": "#/components/schemas/Service"
               }
             }
           },
@@ -250,7 +411,7 @@
             "description": "Service details",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ServiceInput"
+              "$ref": "#/components/schemas/ServiceInput"
             }
           }
         ],
@@ -258,81 +419,11 @@
           "201": {
             "description": "Service created successfully",
             "schema": {
-              "$ref": "#/definitions/Service"
+              "$ref": "#/components/schemas/Service"
             }
           },
           "400": {
             "description": "Invalid request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/users/me": {
-      "get": {
-        "tags": ["Users"],
-        "summary": "Get logged-in user details",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/UserResponse"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      },
-      "patch": {
-        "tags": ["Users"],
-        "summary": "Update logged-in user profile",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "user",
-            "in": "body",
-            "description": "Updated user profile details",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UserUpdate"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "User profile updated successfully"
-          },
-          "400": {
-            "description": "Invalid request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["Users"],
-        "summary": "Delete logged-in user",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "User deleted successfully"
           },
           "401": {
             "description": "Unauthorized"
@@ -341,192 +432,208 @@
       }
     }
   },
-  "definitions": {
-    "UserSignup": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "username": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        },
-        "confirmPassword": {
-          "type": "string"
-        }
-      },
-      "required": ["name", "email", "username", "password", "confirmPassword"]
-    },
-    "UserLogin": {
-      "type": "object",
-      "properties": {
-        "emailOrUsername": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        }
-      },
-      "required": ["emailOrUsername", "password"]
-    },
-    "SignupResponse": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "object",
-          "properties": {
-            "_id": {
-              "type": "string"
-            },
-            "email": {
-              "type": "string"
-            },
-            "username": {
-              "type": "string"
-            }
+  "components": {
+    "schemas": {
+      "UserSignup": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           },
-          "required": ["_id", "email", "username"]
-        },
-        "token": {
-          "type": "string"
-        }
-      },
-      "required": ["data", "token"]
-    },
-    "LoginResponse": {
-      "type": "object",
-      "properties": {
-        "data": {
-          "type": "object",
-          "properties": {
-            "_id": {
-              "type": "string"
-            },
-            "email": {
-              "type": "string"
-            },
-            "username": {
-              "type": "string"
-            }
+          "email": {
+            "type": "string"
           },
-          "required": ["_id", "email", "username"]
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "confirmPassword": {
+            "type": "string"
+          }
         },
-        "token": {
-          "type": "string"
+        "required": ["name", "email", "username", "password", "confirmPassword"]
+      },
+      "UserLogin": {
+        "type": "object",
+        "properties": {
+          "emailOrUsername": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["emailOrUsername", "password"]
+      },
+      "SignupResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              }
+            },
+            "required": ["_id", "email", "username"]
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": ["data", "token"]
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              }
+            },
+            "required": ["_id", "email", "username"]
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": ["data", "token"]
+      },
+      "Tasker": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "specialization": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "number"
+          }
         }
       },
-      "required": ["data", "token"]
-    },
-    "Tasker": {
-      "type": "object",
-      "properties": {
-        "_id": {
-          "type": "string"
+      "TaskerInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "specialization": {
+            "type": "string"
+          }
         },
-        "name": {
-          "type": "string"
-        },
-        "specialization": {
-          "type": "string"
-        },
-        "rating": {
-          "type": "number"
-        }
-      }
-    },
-    "TaskerInput": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "specialization": {
-          "type": "string"
+        "required": ["name", "specialization"]
+      },
+      "Service": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          }
         }
       },
-      "required": ["name", "specialization"]
-    },
-    "Service": {
-      "type": "object",
-      "properties": {
-        "_id": {
-          "type": "string"
+      "ServiceInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          }
         },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "price": {
-          "type": "number"
-        }
-      }
-    },
-    "ServiceInput": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "price": {
-          "type": "number"
+        "required": ["name", "description", "price"]
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "profilePicture": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            }
+          }
         }
       },
-      "required": ["name", "description", "price"]
-    },
-    "UserResponse": {
-      "type": "object",
-      "properties": {
-        "_id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "username": {
-          "type": "string"
-        },
-        "profilePicture": {
-          "type": "object",
-          "properties": {
-            "url": {
-              "type": "string"
+      "UserUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "profilePicture": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
             }
           }
         }
       }
     },
-    "UserUpdate": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "username": {
-          "type": "string"
-        },
-        "profilePicture": {
-          "type": "object",
-          "properties": {
-            "url": {
-              "type": "string"
-            }
+
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "in": "header",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://tasksrunner.onrender.com/auth/login"
           }
         }
       }

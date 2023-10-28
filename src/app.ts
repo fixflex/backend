@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
 import 'reflect-metadata';
@@ -40,6 +41,7 @@ class App {
     if (this.env === 'development') {
       this.app.use(morgan('dev'));
     }
+    this.app.use(cors());
     this.app.use(express.json());
   }
 
