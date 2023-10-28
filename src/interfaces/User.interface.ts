@@ -14,7 +14,6 @@ export interface IUser {
     url: string;
     publicId: string | null;
   };
-  phoneNumber: string;
   active: boolean;
   // ip address of the user when he registered or logged in
   ipAddress: string;
@@ -41,6 +40,7 @@ export interface ITasker {
   bio: string;
   completedTasks: number;
   services: string[];
+  phoneNumber: string;
   location: {
     type: {
       type: string;

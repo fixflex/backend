@@ -37,6 +37,13 @@ let taskerSchema = new mongoose_1.Schema({
         },
     },
     bio: String,
+    phoneNumber: {
+        unique: true,
+        type: String,
+        required: true,
+        minlength: 11,
+        maxlength: 11,
+    },
 }, { timestamps: true });
 // Apply the geospatial index to the coordinates field inside the location object
 // taskerSchema.index({ 'location.coordinates': '2dsphere' });

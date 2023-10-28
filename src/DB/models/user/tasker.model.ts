@@ -38,8 +38,14 @@ let taskerSchema: Schema<ITasker & Document> = new Schema(
         default: [0, 0],
       },
     },
-
     bio: String,
+    phoneNumber: {
+      unique: true,
+      type: String,
+      required: true,
+      minlength: 11,
+      maxlength: 11,
+    },
   },
   { timestamps: true }
 );

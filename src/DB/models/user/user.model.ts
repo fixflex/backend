@@ -44,8 +44,6 @@ let userSchema: Schema<IUser & Document> = new Schema(
       type: Boolean,
       default: true,
     },
-    phoneNumber: String,
-
     ipAddress: String,
   },
   { timestamps: true }
