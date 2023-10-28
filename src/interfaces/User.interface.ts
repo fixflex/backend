@@ -51,4 +51,4 @@ export interface ITasker {
   };
 }
 
-export interface IUserRole {}
+// export interface IUserRole {}
