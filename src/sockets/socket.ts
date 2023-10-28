@@ -36,17 +36,14 @@ class SocketService {
       // });
 
       this.io.on('connection', (socket: AuthSocket) => {
-        console.log('User connected ', socket.id);
-
         socket.on('message', async (data: IMessage) => {
           try {
-            console.log(data.sender, data.message, data.createdAt, data.chatId);
             // TODO
+            console.log(data.message);
             let chatRoom = await ChatModel.findById(data.chatId);
             // if !chatRoom throw error
             if (!chatRoom) throw new Error('Chat room not found');
             // if chatRoom.participants doesn't include the sender throw error
-            console.log(chatRoom.client, chatRoom.tasker, data.sender);
             if (chatRoom.client !== data.sender && chatRoom.tasker !== data.sender) throw new Error('You are not a participant in this chat room');
 
             let message = await MessageModel.create(data);
@@ -57,7 +54,9 @@ class SocketService {
 
             // emit the message to the tasker in the chat room
             // broadcast to all clients in the chat room except the sender
-            socket.broadcast.to(data.chatId!).emit('message', data);
+            // socket.broadcast.to(data.chatId!).emit('message', data);
+            // emit to all clients in the chat room
+            this.io.to(data.chatId!).emit('message', data);
           } catch (error: any) {
             console.log(error);
             socket.emit('error', { message: error.message });

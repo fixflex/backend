@@ -5,6 +5,10 @@ class ChatService {
     return await ChatDao.getChatById(id);
   }
 
+  async getChatByUserId(id: string) {
+    return await ChatDao.getChatByUserId(id);
+  }
+
   async createChat(data: any) {
     return await ChatDao.createChat(data);
   }

@@ -22,8 +22,8 @@
             console.log('Connected to server');
         });
 
-        socket.on('serverMessage', (data) => {
-            console.log(data);
+        socket.on('message', (data) => {
+            console.log(data.message);
         });
 
         socket.on('disconnect', () => {
@@ -38,7 +38,6 @@
                 createdAt: new Date().toISOString()
             }
             socket.emit("message", data);
-            console.log(data);
         }
 
         function joinRoom() {
