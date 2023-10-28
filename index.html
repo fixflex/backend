@@ -10,7 +10,8 @@
 <body>
     <div id="messages"></div>
     <input type="text" id="messageInput">
-    <button onclick="sendMessage()">Send message</button>
+    <button onclick="sendMessageClient()">sendClient</button>
+    <button onclick="sendMessageTasker()">sendTasker</button>
     <button onclick="joinRoom()">Join</button>
     <button onclick="leaveRoom()">Leave Room</button>
     <button onclick="leaveAllRooms()">Leave All Rooms</button>
@@ -30,7 +31,7 @@
             console.log('Disconnected from server');
         });
 
-        function sendMessage() {
+        function sendMessageClient() {
             let data = {
                 message: document.getElementById("messageInput").value,
                 sender: "653c078a976a85f7b91bbde3",
@@ -39,13 +40,22 @@
             }
             socket.emit("message", data);
         }
+        function sendMessageTasker() {
+            let data = {
+                message: document.getElementById("messageInput").value,
+                sender: "653637b1a8a134962aa13456",
+                chatId: "653c126cfaa6376e11108809",
+                createdAt: new Date().toISOString()
+            }
+            socket.emit("message", data);
+        }
 
         function joinRoom() {
-            socket.emit("joinRoom", { roomId: 1 });
+            socket.emit("join", "653c126cfaa6376e11108809"); // 653c126cfaa6376e11108809 chatId
         }
 
         function leaveRoom() {
-            socket.emit("leaveRoom", { roomId: 1 });
+            socket.emit("leaveRoom", "653c126cfaa6376e11108809")
         }
 
         function leaveAllRooms() {
