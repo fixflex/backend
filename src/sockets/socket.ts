@@ -38,7 +38,6 @@ class SocketService {
       socket.on('message', async (data: IMessage) => {
         try {
           // TODO
-          console.log(data.message);
           let chatRoom = await ChatModel.findById(data.chatId);
           // if !chatRoom throw error
           if (!chatRoom) throw new Error('Chat room not found');
@@ -57,7 +56,6 @@ class SocketService {
           // emit to all clients in the chat room
           // this.io.to(data.chatId!).emit('message', data);
         } catch (error: any) {
-          console.log(error);
           socket.emit('error', { message: error.message });
         }
       });
@@ -67,7 +65,6 @@ class SocketService {
         try {
           // TODO
           // check if the user is a participant in the chat room
-          console.log(chatId, '###################################');
           let chatRoom = await ChatModel.findById(chatId);
           // if !chatRoom throw error
           if (!chatRoom) throw new Error('Chat room not found');
@@ -81,9 +78,7 @@ class SocketService {
         }
       });
 
-      socket.on('disconnect', () => {
-        console.log('User disconnected from socket:', socket.id);
-      });
+      // socket.on('disconnect', () => {});
     });
 
     // get connected users each 30 seconds
