@@ -50,7 +50,7 @@ class App {
   }
 
   private initializeSwagger() {
-    if (this.env === 'development') {
+    if (this.env !== 'production') {
       this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     }
   }
