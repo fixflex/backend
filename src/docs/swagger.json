@@ -557,7 +557,39 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Chat"
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    },
+                    "client": {
+                      "type": "string"
+                    },
+                    "tasker": {
+                      "type": "string"
+                    },
+                    "messages": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "sender": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -774,41 +806,22 @@
         "type": "object",
         "properties": {
           "_id": {
-            "type": "string"
+            "type": "string",
+            "description": "Chat ID"
           },
-          "participants": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "messages": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "text": {
-                  "type": "string"
-                },
-                "sender": {
-                  "type": "string"
-                },
-                "timestamp": {
-                  "type": "string"
-                }
-              }
-            }
-          }
+
+          "client": { "type": "string" },
+          "tasker": { "type": "string" }
         }
       },
       "CreateChatInput": {
         "type": "object",
         "properties": {
-          "participants": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "client": {
+            "type": "string"
+          },
+          "tasker": {
+            "type": "string"
           }
         },
         "required": ["participants"]
