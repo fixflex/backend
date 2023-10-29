@@ -11,6 +11,7 @@ class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
   getChatById = asyncHandler(async (req: AuthRequest, res: Response) => {
+    console.log('from chat controller');
     let chat = await this.chatService.getChatById(req.params.id);
     if (!chat) throw new HttpException(404, 'No chat found');
     res.status(200).json({ data: chat });

@@ -10,6 +10,7 @@ class TaskerDao {
     }
     static async listTaskers(longitude, latitude, services, maxDistance = 60) {
         let taskers;
+        // /api/v1/taskers?longitude=35.5&latitude=33.5&services=cleaning&maxDistance=60
         if (latitude && longitude && services) {
             taskers = await tasker_model_1.default.find({
                 location: {

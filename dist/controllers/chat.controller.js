@@ -21,6 +21,7 @@ let ChatController = class ChatController {
     constructor(chatService) {
         this.chatService = chatService;
         this.getChatById = (0, express_async_handler_1.default)(async (req, res) => {
+            console.log('from chat controller');
             let chat = await this.chatService.getChatById(req.params.id);
             if (!chat)
                 throw new HttpException_1.default(404, 'No chat found');

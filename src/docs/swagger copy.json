@@ -727,6 +727,9 @@
           },
           "description": {
             "type": "string"
+          },
+          "price": {
+            "type": "number"
           }
         }
       },
@@ -738,9 +741,12 @@
           },
           "description": {
             "type": "string"
+          },
+          "price": {
+            "type": "number"
           }
         },
-        "required": ["name", "description"]
+        "required": ["name", "description", "price"]
       },
       "UserUpdate": {
         "type": "object",

@@ -6,7 +6,10 @@ class ChatDao {
   }
 
   static async getChatByUserId(id: string) {
-    return await ChatModel.find({ $or: [{ client: id }, { tasker: id }] }, 'client tasker');
+    let chats = await ChatModel.find({ $or: [{ client: id }, { tasker: id }] }, 'client tasker');
+
+    // console.log(chats);
+    return chats;
   }
 
   static async createChat(data: any) {
