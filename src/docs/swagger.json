@@ -376,50 +376,45 @@
       "get": {
         "tags": ["Services"],
         "summary": "Get list of services",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "description": "Get a list of all services that taskers can provide. \n\n**Note:** This endpoint not requires authentication.",
         "responses": {
           "200": {
             "description": "Get list of services",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Service"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Service"
+                  }
+                }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
           }
         }
       },
       "post": {
         "tags": ["Services"],
         "summary": "Create a new service",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "service",
-            "in": "body",
-            "description": "Service details",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/ServiceInput"
+        "description": "Creates a new service record. This route is intended for administrative users but for now any logged in user can create a service for testing purposes.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServiceInput"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "201": {
             "description": "Service created successfully",
-            "schema": {
-              "$ref": "#/components/schemas/Service"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Service"
+                }
+              }
             }
           },
           "400": {
@@ -428,7 +423,123 @@
           "401": {
             "description": "Unauthorized"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+
+    "/chats": {
+      "get": {
+        "tags": ["Chats"],
+        "summary": "Get user's chat list",
+        "description": "Get a list of chats associated with the logged-in user. Each chat represents a conversation with other users or taskers. **Note:** Requires authentication.",
+        "responses": {
+          "200": {
+            "description": "List of user's chats",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Chat"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Chats"],
+        "summary": "Create a new chat",
+        "description": "Start a new chat with another user or tasker. This allows users to initiate conversations and send messages to other participants. **Note:** Requires authentication.",
+        "requestBody": {
+          "description": "Create a new chat",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateChatInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Chat created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Chat"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/chats/{id}": {
+      "get": {
+        "tags": ["Chats"],
+        "summary": "Get chat by ID",
+        "description": "Get a specific chat by its unique ID. This endpoint allows you to retrieve a detailed conversation between the user and other users or taskers. **Note:** Requires authentication.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Chat ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Chat"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Chat not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     }
   },
@@ -622,6 +733,49 @@
             }
           }
         }
+      },
+      "Chat": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "participants": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string"
+                },
+                "sender": {
+                  "type": "string"
+                },
+                "timestamp": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateChatInput": {
+        "type": "object",
+        "properties": {
+          "participants": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["participants"]
       }
     },
 
