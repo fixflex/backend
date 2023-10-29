@@ -10,15 +10,20 @@
     },
     "version": "1.0.0"
   },
+  "schemes": ["http", "https"],
 
   "servers": [
     {
-      "url": "http://localhost:8080/api/v1",
-      "description": "Local server"
-    },
-    {
-      "url": "https://tasksrunner.onrender.com/api/v1",
-      "description": "Production server"
+      "url": "{serverUrl}/api/{apiVersion}",
+      "variables": {
+        "serverUrl": {
+          "default": "https://tasksrunner.onrender.com",
+          "enum": ["https://tasksrunner.onrender.com", "http://localhost:8080"]
+        },
+        "apiVersion": {
+          "default": "v1"
+        }
+      }
     }
   ],
 
