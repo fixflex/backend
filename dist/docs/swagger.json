@@ -144,7 +144,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/LoginResponse"
+                                    "$ref": "#/components/schemas/AuthResponse"
                                 }
                             }
                         }
@@ -604,24 +604,6 @@
     },
     "components": {
         "schemas": {
-            "UserSignup": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "email": {
-                        "type": "string"
-                    },
-                    "password": {
-                        "type": "string"
-                    },
-                    "confirmPassword": {
-                        "type": "string"
-                    }
-                },
-                "required": ["name", "email", "password", "confirmPassword"]
-            },
             "UserLogin": {
                 "type": "object",
                 "properties": {
@@ -635,33 +617,6 @@
                 "required": ["email", "password"]
             },
             "AuthResponse": {
-                "type": "object",
-                "properties": {
-                    "data": {
-                        "type": "object",
-                        "properties": {
-                            "_id": {
-                                "type": "string"
-                            },
-                            "email": {
-                                "type": "string"
-                            },
-                            "firstName": {
-                                "type": "string"
-                            },
-                            "lastName": {
-                                "type": "string"
-                            }
-                        },
-                        "required": ["_id", "email", "firstName", "lastName"]
-                    },
-                    "token": {
-                        "type": "string"
-                    }
-                },
-                "required": ["data", "token"]
-            },
-            "LoginResponse": {
                 "type": "object",
                 "properties": {
                     "data": {
@@ -726,18 +681,6 @@
                     }
                 },
                 "required": ["_id", "userId", "services", "rating", "completedTasks", "location", "createdAt", "updatedAt"]
-            },
-            "TaskerInput": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "specialization": {
-                        "type": "string"
-                    }
-                },
-                "required": ["name", "specialization"]
             },
             "Service": {
                 "type": "object",
