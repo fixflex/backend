@@ -5,6 +5,7 @@ import { ServiceController } from '../controllers/service.controller';
 import { Routes } from '../interfaces/routes.interface';
 import { UserType } from '../interfaces/user.interface';
 import { allowedTo, authenticateUser } from '../middleware/auth.middleware';
+import { imageUpload } from '../middleware/uploadImages.middleware';
 import { isMongoId } from '../middleware/validation/isMongoID.validator';
 import { createServiceValidator } from '../middleware/validation/serviceValidator';
 
@@ -24,6 +25,8 @@ export class ServiceRoute implements Routes {
     // Admin routes
     this.router.use(`${this.path}`, authenticateUser, allowedTo(UserType.ADMIN));
     this.router.post(`${this.path}`, createServiceValidator, this.serviceController.createService);
+
+    this.router.route(`${this.path}/upload-service-image/:id`).patch(imageUpload.single('serviceImage'), this.serviceController.uploadServiceImage);
     this.router.patch(`${this.path}/:id`, isMongoId, this.serviceController.updateService);
     this.router.delete(`${this.path}/:id`, isMongoId, this.serviceController.deleteService);
   }

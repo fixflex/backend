@@ -1,8 +1,11 @@
+import fs from 'fs';
+
 import ServiceDao from '../DB/dao/service.dao';
 import HttpException from '../exceptions/HttpException';
 import { IPagination } from '../interfaces/respons.interface';
 import { IService } from '../interfaces/services.interface';
 import APIFeatures from '../utils/apiFeatures';
+import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../utils/cloudinary';
 
 class ServiceService {
   async getServices(reqQuery: any): Promise<{
@@ -38,6 +41,22 @@ class ServiceService {
     let isServiceExists = await ServiceDao.getServiceById(serviceId);
     if (!isServiceExists) throw new HttpException(404, 'No service found');
     return await ServiceDao.update(serviceId, service);
+  }
+
+  async uploadServiceImage(serviceId: string, file: Express.Multer.File) {
+    const filePath = `${file.path}`;
+    const result = await cloudinaryUploadImage(filePath);
+    // update the service with the image url and public id
+    let service = await ServiceDao.getServiceById(serviceId);
+    if (!service) throw new HttpException(404, 'No service found');
+    // delete the old image from cloudinary if exists
+    if (service.image.publicId) await cloudinaryDeleteImage(service.image.publicId);
+    // update the image field in the DB with the new image url and public id
+    service = await ServiceDao.update(serviceId, { image: { url: result.secure_url, publicId: result.public_id } } as IService);
+
+    // remove the file from the server
+    fs.unlinkSync(filePath);
+    return service;
   }
 
   async deleteService(serviceId: string) {

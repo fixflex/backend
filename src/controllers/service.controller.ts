@@ -37,6 +37,14 @@ class ServiceController {
     res.status(200).json({ data: service });
   });
 
+  public uploadServiceImage = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.file) return next(new HttpException(400, 'Please provide an image'));
+
+    let service = await this.serviceService.uploadServiceImage(req.params.id, req.file);
+    if (!service) return next(new HttpException(404, 'No service found'));
+    res.status(200).json({ data: service });
+  });
+
   public deleteService = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     let service = await this.serviceService.deleteService(req.params.id);
     if (!service) return next(new HttpException(404, 'No service found'));

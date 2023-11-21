@@ -2,16 +2,15 @@ import { Request } from 'express';
 import multer, { FileFilterCallback } from 'multer';
 
 import HttpException from '../exceptions/HttpException';
-import { AuthRequest } from '../interfaces/auth.interface';
 
+// TODO: use memory storage instead of disk storage
 const multerStorage = multer.diskStorage({
   destination: (_req, _file, cb) => {
     cb(null, `${process.cwd()}/uploads`);
   },
-  filename: (req: AuthRequest, file, cb) => {
-    const userId = req.user?._id;
+  filename: (_req, file, cb) => {
     const ext = file.mimetype.split('/')[1];
-    const imageFileName = `user-${userId}-${new Date().toISOString().replace(/:/g, '-')}.${ext}`;
+    const imageFileName = `${new Date().toISOString().replace(/:/g, '-')}.${ext}`;
     cb(null, imageFileName);
   },
 });

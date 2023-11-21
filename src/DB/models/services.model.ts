@@ -8,6 +8,8 @@ const serviceSchema: Schema<IService & Document> = new Schema({
     type: String,
     required: true,
   },
+  description: String,
+  image: String,
 });
 
 // Create the Service model
