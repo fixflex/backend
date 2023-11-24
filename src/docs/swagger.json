@@ -96,9 +96,6 @@
 
                   "password": {
                     "type": "string"
-                  },
-                  "confirmPassword": {
-                    "type": "string"
                   }
                 }
               }
@@ -636,14 +633,11 @@
                 "type": "string"
               },
 
-              "firstName": {
-                "type": "string"
-              },
-              "lastName": {
+              "fullName": {
                 "type": "string"
               }
             },
-            "required": ["_id", "email", "firstName", "lastName"]
+            "required": ["_id", "email", "fullName"]
           },
           "token": {
             "type": "string"

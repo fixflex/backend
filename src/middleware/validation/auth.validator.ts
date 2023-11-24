@@ -3,40 +3,13 @@ import { check } from 'express-validator';
 import validatorMiddleware from '../errors/validation.middleware';
 
 export const signupValidator = [
-  check('firstName')
-    .notEmpty()
-    .withMessage('firstName is required')
-    .isString()
-    .withMessage('Name must be a string'),
+  check('firstName').notEmpty().withMessage('firstName is required').isString().withMessage('Name must be a string'),
 
-  check('lastName')
-    .notEmpty()
-    .withMessage('lastName is required')
-    .isString()
-    .withMessage('Name must be a string'),
+  check('lastName').notEmpty().withMessage('lastName is required').isString().withMessage('Name must be a string'),
 
-  check('email')
-    .notEmpty()
-    .withMessage('User email is required')
-    .isEmail()
-    .withMessage('Email is invalid'),
+  check('email').notEmpty().withMessage('User email is required').isEmail().withMessage('Email is invalid'),
 
-  check('password')
-    .notEmpty()
-    .withMessage('User password is required')
-    .isLength({ min: 8 })
-    .withMessage('Password must be at least 8 characters'),
-
-  check('confirmPassword')
-    .notEmpty()
-    .withMessage('Confirm password is required')
-    .custom((confirmPassword, { req }) => {
-      if (confirmPassword !== req.body.password) {
-        throw new Error('Passwords must match');
-      } else {
-        return true;
-      }
-    }),
+  check('password').notEmpty().withMessage('User password is required').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
 
   check('role').isEmpty().withMessage('Role is not allowed'),
   check('active').isEmpty().withMessage('Active is not allowed'),
@@ -44,17 +17,9 @@ export const signupValidator = [
 ];
 
 export const loginValidator = [
-  check('email')
-    .notEmpty()
-    .withMessage('User email is required')
-    .isEmail()
-    .withMessage('Email is invalid'),
+  check('email').notEmpty().withMessage('User email is required').isEmail().withMessage('Email is invalid'),
 
-  check('password')
-    .notEmpty()
-    .withMessage('User password is required')
-    .isLength({ min: 8 })
-    .withMessage('Password must be at least 8 characters'),
+  check('password').notEmpty().withMessage('User password is required').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
 
   validatorMiddleware,
 ];

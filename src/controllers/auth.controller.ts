@@ -12,7 +12,7 @@ export class AuthController {
 
   public signup = asyncHandler(async (req: Request, res: Response) => {
     let { user, token } = await this.authService.signup(req.body);
-    const userData = { _id: user._id, email: user.email };
+    const userData = { _id: user._id, email: user.email, fullName: user.firstName + ' ' + user.lastName };
     res.status(201).json({ data: userData, token });
   });
 
