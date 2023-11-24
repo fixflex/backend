@@ -46,6 +46,14 @@ let ServiceController = class ServiceController {
                 return next(new HttpException_1.default(404, 'No service found'));
             res.status(200).json({ data: service });
         });
+        this.uploadServiceImage = (0, express_async_handler_1.default)(async (req, res, next) => {
+            if (!req.file)
+                return next(new HttpException_1.default(400, 'Please provide an image'));
+            let service = await this.serviceService.uploadServiceImage(req.params.id, req.file);
+            if (!service)
+                return next(new HttpException_1.default(404, 'No service found'));
+            res.status(200).json({ data: service });
+        });
         this.deleteService = (0, express_async_handler_1.default)(async (req, res, next) => {
             let service = await this.serviceService.deleteService(req.params.id);
             if (!service)

@@ -15,6 +15,7 @@ const tsyringe_1 = require("tsyringe");
 const service_controller_1 = require("../controllers/service.controller");
 const user_interface_1 = require("../interfaces/user.interface");
 const auth_middleware_1 = require("../middleware/auth.middleware");
+const uploadImages_middleware_1 = require("../middleware/uploadImages.middleware");
 const isMongoID_validator_1 = require("../middleware/validation/isMongoID.validator");
 const serviceValidator_1 = require("../middleware/validation/serviceValidator");
 let ServiceRoute = exports.ServiceRoute = class ServiceRoute {
@@ -31,6 +32,7 @@ let ServiceRoute = exports.ServiceRoute = class ServiceRoute {
         // Admin routes
         this.router.use(`${this.path}`, auth_middleware_1.authenticateUser, (0, auth_middleware_1.allowedTo)(user_interface_1.UserType.ADMIN));
         this.router.post(`${this.path}`, serviceValidator_1.createServiceValidator, this.serviceController.createService);
+        this.router.route(`${this.path}/upload-service-image/:id`).patch(uploadImages_middleware_1.imageUpload.single('serviceImage'), this.serviceController.uploadServiceImage);
         this.router.patch(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.serviceController.updateService);
         this.router.delete(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.serviceController.deleteService);
     }

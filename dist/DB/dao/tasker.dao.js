@@ -10,7 +10,7 @@ class TaskerDao {
     }
     static async listTaskers(longitude, latitude, services, maxDistance = 60) {
         let taskers;
-        // /api/v1/taskers?longitude=35.5&latitude=33.5&services=cleaning&maxDistance=60
+        // /api/v1/taskers?longitude=35.5&latitude=33.5&services=6560fabd6f972e1d74a71242&maxDistance=60
         if (latitude && longitude && services) {
             taskers = await tasker_model_1.default.find({
                 location: {
@@ -24,6 +24,25 @@ class TaskerDao {
                 },
                 // where services = service
                 services: { $eq: services },
+            }).lean();
+        }
+        else if (services) {
+            taskers = await tasker_model_1.default.find({
+                // where services = service
+                services: { $eq: services },
+            }).lean();
+        }
+        else if (latitude && longitude) {
+            taskers = await tasker_model_1.default.find({
+                location: {
+                    $near: {
+                        $maxDistance: maxDistance * 1000,
+                        $geometry: {
+                            type: 'Point',
+                            coordinates: [longitude, latitude], // [longitude, latitude] [x, y]
+                        },
+                    },
+                },
             }).lean();
         }
         else

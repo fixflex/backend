@@ -8,7 +8,8 @@ const service_dao_1 = __importDefault(require("../../DB/dao/service.dao"));
 const tasker_dao_1 = __importDefault(require("../../DB/dao/tasker.dao"));
 const HttpException_1 = __importDefault(require("../../exceptions/HttpException"));
 class TaskerService {
-    async registerAsTasker(userId, tasker) {
+    async createTasker(userId, tasker) {
+        // check if service is exists in DB
         await Promise.all(tasker.services.map(async (service) => {
             let serviceExists = await service_dao_1.default.getServiceById(service);
             if (!serviceExists)

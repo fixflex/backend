@@ -5,7 +5,7 @@
     "description": "API for khidma Application",
     "contact": {
       "name": "khidma",
-      "url": "https://khidma.onrender.com",
+      "url": "https://khidma.websites.co.in",
       "email": "ahmedelasiriy@gmail.com"
     },
     "version": "1.0.0"
@@ -304,7 +304,7 @@
         "description": "Get a list of taskers filtered and ordered by location. \n\n**Query Parameters:**\n\n* `services` (*optional*): Filter taskers by service(s). Can pass a single service or comma separated list.\n* `longitude` (*optional*): User's longitude location.\n* `latitude` (*optional*): User's latitude location.\n* `maxDistance` (*optional*, default: `60`): Maximum distance in km to search.\n\nIf location parameters are provided, taskers will be returned sorted by proximity to the given point. \n\n_If no parameters are provided, taskers will be returned randomly without filtering or sorting._",
         "parameters": [
           {
-            "name": "service",
+            "name": "services",
             "in": "query",
             "description": "Service ID",
             "required": false,

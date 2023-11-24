@@ -27,7 +27,13 @@ let UserController = class UserController {
         });
         // user profile routes (authenticated)
         this.getMe = (0, express_async_handler_1.default)(async (req, res) => {
-            res.status(200).json({ data: req.user });
+            let userData = {
+                _id: req.user?._id,
+                fullName: req.user?.firstName + ' ' + req.user?.lastName,
+                email: req.user?.email,
+                profilePicture: req.user?.profilePicture,
+            };
+            res.status(200).json({ data: userData });
         });
         this.updateMe = (0, express_async_handler_1.default)(async (req, res) => {
             let user = await this.userService.updateUser(req.user?._id, req.body);

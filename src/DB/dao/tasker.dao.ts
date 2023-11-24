@@ -8,7 +8,7 @@ class TaskerDao {
 
   static async listTaskers(longitude: number, latitude: number, services: string, maxDistance: number = 60): Promise<ITasker[] | null> {
     let taskers: ITasker[];
-    // /api/v1/taskers?longitude=35.5&latitude=33.5&services=cleaning&maxDistance=60
+    // /api/v1/taskers?longitude=35.5&latitude=33.5&services=6560fabd6f972e1d74a71242&maxDistance=60
     if (latitude && longitude && services) {
       taskers = await TaskerModel.find({
         location: {
@@ -22,6 +22,23 @@ class TaskerDao {
         },
         // where services = service
         services: { $eq: services },
+      }).lean();
+    } else if (services) {
+      taskers = await TaskerModel.find({
+        // where services = service
+        services: { $eq: services },
+      }).lean();
+    } else if (latitude && longitude) {
+      taskers = await TaskerModel.find({
+        location: {
+          $near: {
+            $maxDistance: maxDistance * 1000, // convert km to meters (mongodb uses meters) it is 60km by default
+            $geometry: {
+              type: 'Point',
+              coordinates: [longitude, latitude], // [longitude, latitude] [x, y]
+            },
+          },
+        },
       }).lean();
     } else taskers = await TaskerModel.find({}).lean();
 

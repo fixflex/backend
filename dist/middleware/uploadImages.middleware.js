@@ -6,14 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.imageUpload = void 0;
 const multer_1 = __importDefault(require("multer"));
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
+// TODO: use memory storage instead of disk storage
 const multerStorage = multer_1.default.diskStorage({
     destination: (_req, _file, cb) => {
         cb(null, `${process.cwd()}/uploads`);
     },
-    filename: (req, file, cb) => {
-        const userId = req.user?._id;
+    filename: (_req, file, cb) => {
         const ext = file.mimetype.split('/')[1];
-        const imageFileName = `user-${userId}-${new Date().toISOString().replace(/:/g, '-')}.${ext}`;
+        const imageFileName = `${new Date().toISOString().replace(/:/g, '-')}.${ext}`;
         cb(null, imageFileName);
     },
 });

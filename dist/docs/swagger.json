@@ -1,11 +1,11 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "TasksRunner API",
-        "description": "API for TasksRunner Application",
+        "title": "khidma API",
+        "description": "API for khidma Application",
         "contact": {
-            "name": "TasksRunner",
-            "url": "https://tasksrunner.onrender.com",
+            "name": "khidma",
+            "url": "https://khidma.websites.co.in",
             "email": "ahmedelasiriy@gmail.com"
         },
         "version": "1.0.0"
@@ -16,8 +16,8 @@
             "url": "{serverUrl}/api/{apiVersion}",
             "variables": {
                 "serverUrl": {
-                    "default": "https://tasksrunner.onrender.com",
-                    "enum": ["https://tasksrunner.onrender.com", "http://localhost:8080"]
+                    "default": "https://khidma.onrender.com",
+                    "enum": ["https://khidma.onrender.com", "http://localhost:8080"]
                 },
                 "apiVersion": {
                     "default": "v1"
@@ -92,9 +92,6 @@
                                         "type": "string"
                                     },
                                     "password": {
-                                        "type": "string"
-                                    },
-                                    "confirmPassword": {
                                         "type": "string"
                                     }
                                 }
@@ -172,7 +169,29 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/User"
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string"
+                                        },
+                                        "fullName": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "profilePicture": {
+                                            "type": "object",
+                                            "properties": {
+                                                "url": {
+                                                    "type": "string"
+                                                },
+                                                "publicId": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -207,7 +226,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/AuthResponse"
+                                    "$ref": "#/components/schemas/User"
                                 }
                             }
                         }
@@ -281,7 +300,7 @@
                 "description": "Get a list of taskers filtered and ordered by location. \n\n**Query Parameters:**\n\n* `services` (*optional*): Filter taskers by service(s). Can pass a single service or comma separated list.\n* `longitude` (*optional*): User's longitude location.\n* `latitude` (*optional*): User's latitude location.\n* `maxDistance` (*optional*, default: `60`): Maximum distance in km to search.\n\nIf location parameters are provided, taskers will be returned sorted by proximity to the given point. \n\n_If no parameters are provided, taskers will be returned randomly without filtering or sorting._",
                 "parameters": [
                     {
-                        "name": "service",
+                        "name": "services",
                         "in": "query",
                         "description": "Service ID",
                         "required": false,
@@ -604,6 +623,35 @@
     },
     "components": {
         "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "profilePicture": {
+                        "type": "object",
+                        "properties": {
+                            "url": {
+                                "type": "string"
+                            },
+                            "publicId": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "required": ["_id", "firstName", "lastName", "email", "profilePicture"]
+            },
             "UserLogin": {
                 "type": "object",
                 "properties": {
@@ -628,14 +676,11 @@
                             "email": {
                                 "type": "string"
                             },
-                            "firstName": {
-                                "type": "string"
-                            },
-                            "lastName": {
+                            "fullName": {
                                 "type": "string"
                             }
                         },
-                        "required": ["_id", "email", "firstName", "lastName"]
+                        "required": ["_id", "email", "fullName"]
                     },
                     "token": {
                         "type": "string"
@@ -767,7 +812,7 @@
                 "in": "header",
                 "flows": {
                     "implicit": {
-                        "authorizationUrl": "https://tasksrunner.onrender.com/auth/login"
+                        "authorizationUrl": "https://khidma.onrender.com/auth/login"
                     }
                 }
             }

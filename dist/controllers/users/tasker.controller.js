@@ -22,7 +22,7 @@ let TaskerController = class TaskerController {
         this.taskerService = taskerService;
         this.becomeTasker = (0, express_async_handler_1.default)(async (req, res, next) => {
             let userId = req.user?._id;
-            let user = await this.taskerService.registerAsTasker(userId, req.body);
+            let user = await this.taskerService.createTasker(userId, req.body);
             if (!user)
                 return next(new HttpException_1.default(400, 'Something went wrong, please try again later'));
             res.status(200).json({ data: user });
