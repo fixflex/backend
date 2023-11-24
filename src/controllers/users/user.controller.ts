@@ -18,7 +18,14 @@ class UserController {
 
   // user profile routes (authenticated)
   public getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
-    res.status(200).json({ data: req.user });
+    let userData = {
+      _id: req.user?._id,
+      fullName: req.user?.firstName + ' ' + req.user?.lastName,
+      email: req.user?.email,
+      profilePicture: req.user?.profilePicture,
+    };
+
+    res.status(200).json({ data: userData });
   });
 
   public updateMe = asyncHandler(async (req: AuthRequest, res: Response) => {

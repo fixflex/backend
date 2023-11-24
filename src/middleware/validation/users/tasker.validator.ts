@@ -33,7 +33,6 @@ export const createTaskerValidator = [
   //  ckeck that the phone number is valid  and be from egypt
   check('phoneNumber').notEmpty().withMessage('Phone number is required').isMobilePhone('ar-EG').withMessage('Invalid phone number'),
   // https://www.npmjs.com/package/google-libphonenumber
-  check('bio').optional().isString().withMessage('Bio must be a string'),
   check('rating').isEmpty().withMessage('Rating is not allowed'),
   check('completedTasks').isEmpty().withMessage('Completed tasks is not allowed'),
 

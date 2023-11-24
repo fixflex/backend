@@ -11,7 +11,7 @@ class TaskerController {
   constructor(private readonly taskerService: TaskerService) {}
   becomeTasker = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
     let userId = req.user?._id;
-    let user = await this.taskerService.registerAsTasker(userId!, req.body);
+    let user = await this.taskerService.createTasker(userId!, req.body);
     if (!user) return next(new HttpException(400, 'Something went wrong, please try again later'));
     res.status(200).json({ data: user });
   });

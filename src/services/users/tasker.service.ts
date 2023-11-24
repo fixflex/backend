@@ -4,7 +4,8 @@ import HttpException from '../../exceptions/HttpException';
 import { ITasker } from '../../interfaces/user.interface';
 
 class TaskerService {
-  async registerAsTasker(userId: string, tasker: ITasker) {
+  async createTasker(userId: string, tasker: ITasker) {
+    // check if service is exists in DB
     await Promise.all(
       tasker.services.map(async service => {
         let serviceExists = await ServiceDao.getServiceById(service);

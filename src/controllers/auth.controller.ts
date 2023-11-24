@@ -21,7 +21,7 @@ export class AuthController {
 
     let { user, token } = await this.authService.login(email, password);
 
-    const userData = { _id: user._id, email: user.email };
+    const userData = { _id: user._id, email: user.email, fullName: user.firstName + ' ' + user.lastName, profilePicture: user.profilePicture };
 
     res.status(200).json({ data: userData, token });
   });
