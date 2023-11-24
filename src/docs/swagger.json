@@ -360,7 +360,7 @@
         }
       }
     },
-    "tasker/become-tasker": {
+    "/taskers/become-tasker": {
       "post": {
         "tags": ["Taskers"],
         "summary": "Become a tasker",
