@@ -53,7 +53,7 @@ const errorMiddleware = (err, _req, res, _next) => {
     if (process.env.NODE_ENV === 'development') {
         sendForDev(err, res);
     }
-    else if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'testing') {
+    else {
         if (err.name === 'CastError') {
             err = handelCastErrorDB(err);
         }

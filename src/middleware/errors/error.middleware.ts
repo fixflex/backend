@@ -20,8 +20,7 @@ const handelValidationErrorDB = (err: HttpException) => {
   return new HttpException(400, message);
 };
 
-const handleJwtInvalidSignture = () =>
-  new HttpException(401, 'Invalid token, please login again..');
+const handleJwtInvalidSignture = () => new HttpException(401, 'Invalid token, please login again..');
 
 const handleJwtExpired = () => new HttpException(401, 'Expired token, please login again..');
 
@@ -51,19 +50,14 @@ const sendForProd = (err: HttpException, res: Response) => {
   }
 };
 
-export const errorMiddleware = (
-  err: HttpException,
-  _req: Request,
-  res: Response,
-  _next: NextFunction
-) => {
+export const errorMiddleware = (err: HttpException, _req: Request, res: Response, _next: NextFunction) => {
   err.statusCode = err.statusCode || 500;
   err.message = err.message || 'Something went wrong';
   err.status = err.status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
     sendForDev(err, res);
-  } else if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'testing') {
+  } else {
     if (err.name === 'CastError') {
       err = handelCastErrorDB(err);
     }
