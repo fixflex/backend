@@ -1,12 +1,12 @@
 import { ITasker } from '../../interfaces/user.interface';
 import TaskerModel from '../models/user/tasker.model';
+import CommonDAO from './commonDAO';
 
-class TaskerDao {
-  static async getTaskerByUserId(userId: string): Promise<ITasker | null> {
-    return await TaskerModel.findOne({ userId }).lean();
+class TaskerDao extends CommonDAO<ITasker> {
+  constructor() {
+    super(TaskerModel);
   }
-
-  static async listTaskers(longitude: number, latitude: number, services: string, maxDistance: number = 60): Promise<ITasker[] | null> {
+  async listTaskers(longitude: number, latitude: number, services: string, maxDistance: number = 60): Promise<ITasker[] | null> {
     let taskers: ITasker[];
     // /api/v1/taskers?longitude=35.5&latitude=33.5&services=6560fabd6f972e1d74a71242&maxDistance=60
     if (latitude && longitude && services) {
@@ -43,24 +43,6 @@ class TaskerDao {
     } else taskers = await TaskerModel.find({}).lean();
 
     return taskers;
-  }
-
-  static async create(user: ITasker): Promise<ITasker | null> {
-    return await TaskerModel.create(user);
-  }
-
-  static async updateTaskerByUserId(userId: string, tasker: ITasker): Promise<ITasker | null> {
-    if (tasker.services) {
-      // let services = tasker.services;
-      // delete tasker.services;
-      const { services, ...taskerWithoutServices } = tasker;
-      return await TaskerModel.findOneAndUpdate({ userId }, { $addToSet: { services }, ...taskerWithoutServices }, { new: true }).lean();
-    }
-    return TaskerModel.findOneAndUpdate({ userId }, tasker, { new: true }).lean();
-  }
-
-  static async deleteTaskerByUserId(userId: string): Promise<ITasker | null> {
-    return await TaskerModel.findOneAndDelete({ userId }).lean();
   }
 }
 

@@ -1,8 +1,8 @@
-import { Document, Schema, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 import { ITasker } from '../../../interfaces/user.interface';
 
-let taskerSchema: Schema<ITasker & Document> = new Schema(
+let taskerSchema: Schema<ITasker> = new Schema(
   {
     userId: {
       unique: true,
@@ -53,6 +53,6 @@ let taskerSchema: Schema<ITasker & Document> = new Schema(
 // taskerSchema.index({ 'location.coordinates': '2dsphere' });
 taskerSchema.index({ location: '2dsphere' });
 
-let Tasker = model<ITasker & Document>('Tasker', taskerSchema);
+let Tasker = model<ITasker>('Tasker', taskerSchema);
 
 export default Tasker;
