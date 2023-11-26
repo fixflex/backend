@@ -3,7 +3,9 @@ import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
 import HttpException from '../exceptions/HttpException';
+import { IService } from '../interfaces/services.interface';
 import { ServiceService } from '../services/service.service';
+import customResponse from '../utils/customResponse';
 
 @autoInjectable()
 class ServiceController {
@@ -13,12 +15,13 @@ class ServiceController {
   public getService = asyncHandler(async (req: Request, res: Response) => {
     let service = await this.serviceService.getService(req.params.id);
     if (!service) throw new HttpException(404, 'No service found');
-    res.status(200).json({ data: service });
+    res.status(200).json(customResponse<IService>({ data: service, success: true, status: 200, message: 'Service found', error: false }));
   });
 
   public getServices = asyncHandler(async (req: Request, res: Response) => {
     let { services, paginate } = await this.serviceService.getServices(req.query);
-    res.status(200).json({ data: services, paginate });
+
+    res.status(200).json(Object.assign(customResponse<IService[]>({ data: services!, success: true, status: 200, message: 'Services found', error: false }), { paginate }));
   });
 
   // authenticated routes

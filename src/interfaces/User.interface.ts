@@ -21,6 +21,7 @@ export interface IUser {
   updatedAt?: string;
 }
 
+
 export interface IClient {
   _id?: string; // client id
   userId: string; // user id

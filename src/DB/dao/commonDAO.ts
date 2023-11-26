@@ -9,7 +9,7 @@ export default abstract class CommonDAO<T> {
   }
 
   async getOneById(id: string | ObjectId, useLean: boolean = true) {
-    return await this.model.findById(id).lean(useLean);
+    return await this.model.findById(id).select('-password -__v -role').lean(useLean);
   }
 
   async getMany(filter: FilterQuery<T> = {}, useLean: boolean = true) {
