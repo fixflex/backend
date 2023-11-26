@@ -1,7 +1,33 @@
 import { NextFunction, Request, Response } from 'express';
 
 import HttpException from '../../exceptions/HttpException';
+import { ErrorResponse } from '../../interfaces';
 import logger from '../../utils/log';
+
+export const errorMiddleware = (err: HttpException, _req: Request, res: Response<ErrorResponse>, _next: NextFunction) => {
+  err.statusCode = err.statusCode || 500;
+  err.message = err.message || 'Something went wrong';
+  err.status = err.status || 'error';
+
+  if (process.env.NODE_ENV === 'development') {
+    sendForDev(err, res);
+  } else {
+    if (err.name === 'CastError') {
+      err = handelCastErrorDB(err);
+    }
+    if (err.code === 11000) {
+      err = handelDuplicateFieldsDB(err);
+    }
+    if (err.name === 'ValidationError') {
+      err = handelValidationErrorDB(err);
+    }
+
+    if (err.name === 'JsonWebTokenError') err = handleJwtInvalidSignture();
+    if (err.name === 'TokenEpiredError') err = handleJwtExpired();
+
+    sendForProd(err, res);
+  }
+};
 
 const handelCastErrorDB = (err: HttpException) => {
   const message = `Invalid ${err.path}: ${err.value} `;
@@ -26,51 +52,32 @@ const handleJwtExpired = () => new HttpException(401, 'Expired token, please log
 
 const sendForDev = (err: HttpException, res: Response) => {
   res.status(err.statusCode).json({
-    status: err.status,
-    error: err,
+    data: null,
+    success: false,
+    error: true,
     message: err.message,
+    status: err.status,
     stack: err.stack,
   });
 };
 
 const sendForProd = (err: HttpException, res: Response) => {
-  // Operational, trusted error: send message to client
+  // A) Operational, trusted error: send message to client
   if (err.isOperational) {
     res.status(err.statusCode).json({
-      status: err.status,
+      data: null,
+      success: false,
+      error: true,
       message: err.message,
+      status: err.status,
     });
-    // Programming or other unknown error: don't leak error details
-  } else {
+  }
+  // B) Programming or other unknown error: don't leak error details
+  else {
     // 1) Log error
     logger.error('ERROR 💥', err);
 
     // 2) Send generic message
     res.status(500).json({ status: 'error', message: 'Something went wrong!' });
-  }
-};
-
-export const errorMiddleware = (err: HttpException, _req: Request, res: Response, _next: NextFunction) => {
-  err.statusCode = err.statusCode || 500;
-  err.message = err.message || 'Something went wrong';
-  err.status = err.status || 'error';
-
-  if (process.env.NODE_ENV === 'development') {
-    sendForDev(err, res);
-  } else {
-    if (err.name === 'CastError') {
-      err = handelCastErrorDB(err);
-    }
-    if (err.code === 11000) {
-      err = handelDuplicateFieldsDB(err);
-    }
-    if (err.name === 'ValidationError') {
-      err = handelValidationErrorDB(err);
-    }
-
-    if (err.name === 'JsonWebTokenError') err = handleJwtInvalidSignture();
-    if (err.name === 'TokenEpiredError') err = handleJwtExpired();
-
-    sendForProd(err, res);
   }
 };
