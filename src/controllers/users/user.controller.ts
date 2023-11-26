@@ -46,7 +46,7 @@ class UserController {
     let userId = req.user?._id;
     if (!req.file) return next(new HttpException(400, 'Please upload a file'));
 
-    let user = this.userService.updateProfileImage(userId!, req.file);
+    let user = await this.userService.updateProfileImage(userId!, req.file);
     if (!user) return next(new HttpException(404, 'No user found'));
     res.status(200).json(customResponse({ data: user, success: true, status: 200, message: 'User updated', error: false }));
   });

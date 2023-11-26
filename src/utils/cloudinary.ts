@@ -1,8 +1,8 @@
 import { v2 as cloudinary } from 'cloudinary';
 
-import HttpException from '../exceptions/HttpException';
 // import logger from '../log';
 import env from '../config/validateEnv';
+import HttpException from '../exceptions/HttpException';
 
 cloudinary.config({
   cloud_name: env.CLOUDINARY_CLOUD_NAME,

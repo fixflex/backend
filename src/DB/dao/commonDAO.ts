@@ -17,7 +17,7 @@ export default abstract class CommonDAO<T> {
   }
 
   async updateOneById(id: string | ObjectId, payload: UpdateQuery<T>) {
-    return await this.model.findByIdAndUpdate(id, payload, { new: true }).lean();
+    return await this.model.findByIdAndUpdate(id, payload, { new: true }).select('-password -__v -role').lean();
   }
 
   async updateMany(filter: FilterQuery<T>, payload: UpdateQuery<T>) {
