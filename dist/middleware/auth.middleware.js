@@ -14,9 +14,8 @@ const checkTokenExists = (req, next) => {
         return next(new HttpException_1.default(401, `You are not authorized, you must login to get access this route`));
     }
     const token = req.headers.authorization.split(' ')[1];
-    if (!token) {
-        return next(new HttpException_1.default(401, `You are not authorized, you must login to get access this route`));
-    }
+    if (!token)
+        return;
     return token;
 };
 const checkUserExists = async (userId, next) => {
@@ -28,6 +27,10 @@ const checkUserExists = async (userId, next) => {
 };
 const authenticateUser = (0, express_async_handler_1.default)(async (req, _res, next) => {
     const token = checkTokenExists(req, next);
+    if (!token) {
+        // throw next(new HttpException(500, 'Auth Failed (Invalid Credentials)'));
+        return;
+    }
     const decoded = jsonwebtoken_1.default.verify(token, validateEnv_1.default.JWT_SECRET_KEY);
     const user = await checkUserExists(decoded.userId, next);
     req.user = user;

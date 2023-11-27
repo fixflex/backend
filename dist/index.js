@@ -34,6 +34,6 @@ exports.server = server;
 // Setup socket server
 let socket = new socket_1.default(server);
 socket.initializeSocket();
-server.listen(8080).on('listening', () => {
-    log_1.default.info(`🚀 App listening in ${process.env.NODE_ENV} mode on the port ${validateEnv_1.default.PORT}`);
+server.listen(validateEnv_1.default.PORT).on('listening', () => {
+    log_1.default.info(`🚀 App listening in ${validateEnv_1.default.NODE_ENV} mode on the port ${validateEnv_1.default.PORT}`);
 });

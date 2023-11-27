@@ -33,8 +33,8 @@ let TaskerService = class TaskerService {
         tasker.userId = userId;
         return await this.taskerDao.create(tasker);
     }
-    async getTaskerProfile(userId) {
-        return await this.taskerDao.getOneById(userId);
+    async getTaskerProfile(taskerId) {
+        return await this.taskerDao.getOneById(taskerId);
     }
     async getListOfTaskers(reqQuery) {
         if (reqQuery.services) {
