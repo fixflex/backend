@@ -263,6 +263,53 @@
         ]
       }
     },
+    "/users/me/profile-picture-upload": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Upload profile picture",
+        "description": "Upload profile picture for the logged-in user. \n\n**Note:** This endpoint requires the user to be authenticated.",
+        "requestBody": {
+          "description": "Upload profile picture",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "profilePicture": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Profile picture uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/taskers/{userId}": {
       "get": {
         "tags": ["Taskers"],
