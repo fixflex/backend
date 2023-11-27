@@ -19,12 +19,11 @@ class TaskerController {
   });
 
   getTaskerProfile = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
-    let userId: string;
-    if (req.params.id) userId = req.params.id;
-    else userId = req.user?._id!;
-    let user = await this.taskerService.getTaskerProfile(userId!);
-    if (!user) return next(new HttpException(400, 'Something went wrong, please try again later'));
-    res.status(200).json(customResponse<ITasker>({ data: user, success: true, status: 200, message: 'User updated', error: false }));
+    let taskerId: string;
+    if (req.params.id) taskerId = req.params.id;
+    let tasker = await this.taskerService.getTaskerProfile(taskerId!);
+    if (!tasker) return next(new HttpException(401, "The tasker you're looking for doesn't exist"));
+    res.status(200).json(customResponse<ITasker>({ data: tasker, success: true, status: 200, message: 'User updated', error: false }));
   });
 
   getListOfTaskers = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {

@@ -22,8 +22,8 @@ class TaskerService {
     return await this.taskerDao.create(tasker);
   }
 
-  async getTaskerProfile(userId: string) {
-    return await this.taskerDao.getOneById(userId);
+  async getTaskerProfile(taskerId: string) {
+    return await this.taskerDao.getOneById(taskerId);
   }
 
   async getListOfTaskers(reqQuery: any) {
