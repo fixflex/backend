@@ -13,13 +13,8 @@ const checkTokenExists = (req: Request, next: NextFunction) => {
   if (!req.headers.authorization?.startsWith('Bearer')) {
     return next(new HttpException(401, `You are not authorized, you must login to get access this route`));
   }
-
   const token = req.headers.authorization.split(' ')[1];
-
-  if (!token) {
-    return next(new HttpException(401, `You are not authorized, you must login to get access this route`));
-  }
-
+  if (!token) return;
   return token;
 };
 
@@ -33,6 +28,10 @@ const checkUserExists = async (userId: string, next: NextFunction) => {
 
 const authenticateUser = asyncHandler(async (req: AuthRequest, _res: Response, next: NextFunction) => {
   const token = checkTokenExists(req, next);
+  if (!token) {
+    // throw next(new HttpException(500, 'Auth Failed (Invalid Credentials)'));
+    return;
+  }
   const decoded = jwt.verify(token!, env.JWT_SECRET_KEY) as JwtPayload;
   const user = await checkUserExists(decoded.userId, next);
   req.user = user!;

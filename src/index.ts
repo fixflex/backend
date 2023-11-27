@@ -32,8 +32,8 @@ let server = createServer(client);
 let socket = new Socket(server);
 socket.initializeSocket();
 
-server.listen(8080).on('listening', () => {
-  logger.info(`🚀 App listening in ${process.env.NODE_ENV} mode on the port ${env.PORT}`);
+server.listen(env.PORT).on('listening', () => {
+  logger.info(`🚀 App listening in ${env.NODE_ENV} mode on the port ${env.PORT}`);
 });
 
 export { server, client };
