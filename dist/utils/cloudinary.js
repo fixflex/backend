@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cloudinaryDeleteImage = exports.cloudinaryUploadImage = void 0;
 const cloudinary_1 = require("cloudinary");
-const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
 // import logger from '../log';
 const validateEnv_1 = __importDefault(require("../config/validateEnv"));
+const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
 cloudinary_1.v2.config({
     cloud_name: validateEnv_1.default.CLOUDINARY_CLOUD_NAME,
     api_key: validateEnv_1.default.CLOUDINARY_API_KEY,

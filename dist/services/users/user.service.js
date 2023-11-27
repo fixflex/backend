@@ -1,4 +1,13 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -6,11 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const fs_1 = __importDefault(require("fs"));
+const tsyringe_1 = require("tsyringe");
 const user_dao_1 = __importDefault(require("../../DB/dao/user.dao"));
 const HttpException_1 = __importDefault(require("../../exceptions/HttpException"));
 const apiFeatures_1 = __importDefault(require("../../utils/apiFeatures"));
 const cloudinary_1 = require("../../utils/cloudinary");
-class UserService {
+let UserService = class UserService {
+    constructor(userDao) {
+        this.userDao = userDao;
+    }
     async getUsers(reqQuery) {
         let apiFeatures = new apiFeatures_1.default(reqQuery);
         let query = apiFeatures.filter();
@@ -21,53 +34,57 @@ class UserService {
         // if (reqQuery.keyword) {
         //   query = { ...query, bio: { $regex: reqQuery.keyword, $options: 'i' } };
         // }
-        let users = await user_dao_1.default.listUsers(query, paginate, sort, fields);
+        let users = await this.userDao.listUsers(query, paginate, sort, fields);
         if (users)
             paginate = apiFeatures.paginate(users.length); // update the pagination object with the total documents
         return { users, paginate };
     }
     async getUser(userId) {
-        return await user_dao_1.default.getUserById(userId);
+        return await this.userDao.getOneById(userId);
     }
     async createUser(user) {
         // check if the user already exists
-        let isEmailExists = await user_dao_1.default.getUserByEmail(user.email);
+        let isEmailExists = await this.userDao.getUserByEmail(user.email);
         if (isEmailExists) {
             throw new HttpException_1.default(409, `E-Mail address ${user.email} is already exists, please pick a different one.`);
         }
         // hash the password
         user.password = await bcrypt_1.default.hash(user.password, 10);
-        let newUser = await user_dao_1.default.create(user);
+        let newUser = await this.userDao.create(user);
         return newUser;
     }
     async updateUser(userId, user) {
-        let isUserExists = await user_dao_1.default.getUserById(userId);
+        let isUserExists = await this.userDao.getOneById(userId);
         if (!isUserExists)
             throw new HttpException_1.default(404, 'No user found');
-        return await user_dao_1.default.update(userId, user);
+        return await this.userDao.updateOneById(userId, user);
     }
     async deleteUser(userId) {
-        let isUserExists = await user_dao_1.default.getUserById(userId);
+        let isUserExists = await this.userDao.getOneById(userId);
         if (!isUserExists)
             throw new HttpException_1.default(404, 'No user found');
         // TODO: delete all the posts and comments that belong to this user
-        return await user_dao_1.default.delete(userId);
+        return await this.userDao.deleteOneById(userId);
     }
     async updateProfileImage(userId, file) {
         const filePath = `${file.path}`;
         const result = await (0, cloudinary_1.cloudinaryUploadImage)(filePath);
-        // update the user with the image url and public id
-        let user = await user_dao_1.default.getUserById(userId);
+        // updateOneById the user with the image url and public id
+        let user = await this.userDao.getOneById(userId);
         if (!user)
             throw new HttpException_1.default(404, 'No user found');
         // delete the old image from cloudinary if exists
         if (user.profilePicture.publicId)
             await (0, cloudinary_1.cloudinaryDeleteImage)(user.profilePicture.publicId);
         // Change the profilePhoto field in the DB
-        user = await user_dao_1.default.update(userId, { profilePicture: { url: result.secure_url, publicId: result.public_id } });
+        user = await this.userDao.updateOneById(userId, { profilePicture: { url: result.secure_url, publicId: result.public_id } });
         // remove the file from the server
         fs_1.default.unlinkSync(filePath);
         return user;
     }
-}
+};
 exports.UserService = UserService;
+exports.UserService = UserService = __decorate([
+    (0, tsyringe_1.autoInjectable)(),
+    __metadata("design:paramtypes", [user_dao_1.default])
+], UserService);

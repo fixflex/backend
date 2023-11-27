@@ -17,6 +17,7 @@ const express_async_handler_1 = __importDefault(require("express-async-handler")
 const tsyringe_1 = require("tsyringe");
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
 const service_service_1 = require("../services/service.service");
+const customResponse_1 = __importDefault(require("../utils/customResponse"));
 let ServiceController = class ServiceController {
     constructor(serviceService) {
         this.serviceService = serviceService;
@@ -25,11 +26,11 @@ let ServiceController = class ServiceController {
             let service = await this.serviceService.getService(req.params.id);
             if (!service)
                 throw new HttpException_1.default(404, 'No service found');
-            res.status(200).json({ data: service });
+            res.status(200).json((0, customResponse_1.default)({ data: service, success: true, status: 200, message: 'Service found', error: false }));
         });
         this.getServices = (0, express_async_handler_1.default)(async (req, res) => {
             let { services, paginate } = await this.serviceService.getServices(req.query);
-            res.status(200).json({ data: services, paginate });
+            res.status(200).json(Object.assign((0, customResponse_1.default)({ data: services, success: true, status: 200, message: 'Services found', error: false }), { paginate }));
         });
         // authenticated routes
         this.createService = (0, express_async_handler_1.default)(async (req, res, next) => {

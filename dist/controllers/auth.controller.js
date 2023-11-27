@@ -15,7 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const tsyringe_1 = require("tsyringe");
+// import { IUser } from '../interfaces/user.interface';
 const auth_service_1 = require("../services/auth.service");
+const customResponse_1 = __importDefault(require("../utils/customResponse"));
 // TODO: use passport.js for authentication
 // TODO: refresh token and logout routes
 let AuthController = exports.AuthController = class AuthController {
@@ -24,13 +26,13 @@ let AuthController = exports.AuthController = class AuthController {
         this.signup = (0, express_async_handler_1.default)(async (req, res) => {
             let { user, token } = await this.authService.signup(req.body);
             const userData = { _id: user._id, email: user.email, fullName: user.firstName + ' ' + user.lastName };
-            res.status(201).json({ data: userData, token });
+            res.status(201).json(Object.assign((0, customResponse_1.default)({ data: userData, success: true, status: 201, message: 'User created', error: false }), { token }));
         });
         this.login = (0, express_async_handler_1.default)(async (req, res) => {
             let { email, password } = req.body;
             let { user, token } = await this.authService.login(email, password);
             const userData = { _id: user._id, email: user.email, fullName: user.firstName + ' ' + user.lastName, profilePicture: user.profilePicture };
-            res.status(200).json({ data: userData, token });
+            res.status(200).json(Object.assign((0, customResponse_1.default)({ data: userData, success: true, status: 200, message: 'User logged in', error: false }), { token }));
         });
     }
 };
