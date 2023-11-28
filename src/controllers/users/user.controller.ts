@@ -39,7 +39,7 @@ class UserController {
 
   public deleteMe = asyncHandler(async (req: AuthRequest, res: Response) => {
     await this.userService.deleteUser(req.user?._id!);
-    res.sendStatus(204).json(customResponse({ data: null, success: true, status: 204, message: 'User deleted', error: false }));
+    res.status(204).json(customResponse({ data: null, success: true, status: 204, message: 'User deleted', error: false }));
   });
 
   public updateMyProfileImage = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
