@@ -17,7 +17,7 @@
       "variables": {
         "serverUrl": {
           "default": "https://khidma.onrender.com",
-          "enum": ["https://khidma.onrender.com", "http://localhost:8080"]
+          "enum": ["https://tasksRunner.onrender.com", "https://khidma.onrender.com", "http://localhost:8080"]
         },
         "apiVersion": {
           "default": "v1"
@@ -344,6 +344,85 @@
         }
       }
     },
+    "/taskers/me": {
+      "get": {
+        "tags": ["Taskers"],
+        "summary": "Get logged-in tasker profile",
+        "responses": {
+          "200": {
+            "description": "Tasker details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tasker"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": ["Taskers"],
+        "summary": "Update logged-in tasker profile",
+        "requestBody": {
+          "description": "Update logged-in tasker profile",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskerUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Tasker updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tasker"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Taskers"],
+        "summary": "Delete logged-in tasker",
+        "responses": {
+          "204": {
+            "description": "Tasker deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+
     "/taskers": {
       "get": {
         "tags": ["Taskers"],
