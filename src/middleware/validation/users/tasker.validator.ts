@@ -45,6 +45,6 @@ export const updateTaskerValidator = [
   check('bio').optional().isString().withMessage('Bio must be a string'),
   check('rating').isEmpty().withMessage('Rating is not allowed'),
   check('completedTasks').isEmpty().withMessage('Completed tasks is not allowed'),
-
+  check('phoneNumber').optional().isMobilePhone('ar-EG').withMessage('Invalid phone number'),
   validatorMiddleware,
 ];

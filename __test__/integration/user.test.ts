@@ -58,7 +58,7 @@ describe('user', () => {
       const response = await request(server)
         .patch('/api/v1/users/me/profile-picture-upload')
         .set('Authorization', `Bearer ${token}`)
-        .attach('profilePicture', '__test__/integration/testFiles/testImage.jpg');
+        .attach('profilePicture', '__test__/testFiles/testImage.jpg');
       await cloudinaryDeleteImage(response.body.data.profilePicture.publicId);
       expect(response.status).toBe(200);
       expect(response.body.data).toBeDefined();

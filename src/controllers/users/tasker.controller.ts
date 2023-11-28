@@ -15,14 +15,14 @@ class TaskerController {
     let userId = req.user?._id;
     let user = await this.taskerService.createTasker(userId!, req.body);
     if (!user) return next(new HttpException(400, 'Something went wrong, please try again later'));
-    res.status(200).json(customResponse<ITasker>({ data: user, success: true, status: 200, message: 'User updated', error: false }));
+    res.status(201).json(customResponse<ITasker>({ data: user, success: true, status: 200, message: 'User updated', error: false }));
   });
 
   getTaskerProfile = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
     let taskerId: string;
     if (req.params.id) taskerId = req.params.id;
     let tasker = await this.taskerService.getTaskerProfile(taskerId!);
-    if (!tasker) return next(new HttpException(401, "The tasker you're looking for doesn't exist"));
+    if (!tasker) return next(new HttpException(404, `The tasker with id ${taskerId!} ddoesn't exist`));
     res.status(200).json(customResponse<ITasker>({ data: tasker, success: true, status: 200, message: 'User updated', error: false }));
   });
 
@@ -42,7 +42,7 @@ class TaskerController {
   });
 
   deleteMyTaskerProfile = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
-    let userId = req.user?._id;
+    let userId = req.user?._id; // fix this later , you should  pass taskerId
     let user = await this.taskerService.deleteMyTaskerProfile(userId!);
     if (!user) return next(new HttpException(400, 'Something went wrong, please try again later'));
     res.status(204).json(customResponse({ data: null, success: true, error: false, message: 'User deleted', status: 204 }));

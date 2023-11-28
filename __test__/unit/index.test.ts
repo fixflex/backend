@@ -15,7 +15,7 @@ describe('utils', () => {
   describe('cloudinary', () => {
     let publicId: string;
     it('should return an object with image url', async () => {
-      const result = await cloudinaryUploadImage('__test__/integration/testFiles/testImage.jpg');
+      const result = await cloudinaryUploadImage('__test__/testFiles/testImage.jpg');
       publicId = result.public_id;
       expect(result).toHaveProperty('url');
       expect(result).toHaveProperty('public_id');
