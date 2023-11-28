@@ -26,7 +26,7 @@ let TaskerController = class TaskerController {
             let user = await this.taskerService.createTasker(userId, req.body);
             if (!user)
                 return next(new HttpException_1.default(400, 'Something went wrong, please try again later'));
-            res.status(200).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: 'User updated', error: false }));
+            res.status(201).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: 'User updated', error: false }));
         });
         this.getTaskerProfile = (0, express_async_handler_1.default)(async (req, res, next) => {
             let taskerId;
@@ -34,7 +34,7 @@ let TaskerController = class TaskerController {
                 taskerId = req.params.id;
             let tasker = await this.taskerService.getTaskerProfile(taskerId);
             if (!tasker)
-                return next(new HttpException_1.default(401, "The tasker you're looking for doesn't exist"));
+                return next(new HttpException_1.default(404, `The tasker with id ${taskerId} ddoesn't exist`));
             res.status(200).json((0, customResponse_1.default)({ data: tasker, success: true, status: 200, message: 'User updated', error: false }));
         });
         this.getListOfTaskers = (0, express_async_handler_1.default)(async (req, res, next) => {
@@ -53,7 +53,7 @@ let TaskerController = class TaskerController {
             res.status(200).json((0, customResponse_1.default)({ data: user, success: true, error: false, message: 'User updated', status: 200 }));
         });
         this.deleteMyTaskerProfile = (0, express_async_handler_1.default)(async (req, res, next) => {
-            let userId = req.user?._id;
+            let userId = req.user?._id; // fix this later , you should  pass taskerId
             let user = await this.taskerService.deleteMyTaskerProfile(userId);
             if (!user)
                 return next(new HttpException_1.default(400, 'Something went wrong, please try again later'));

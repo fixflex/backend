@@ -46,7 +46,7 @@ let UserController = class UserController {
         });
         this.deleteMe = (0, express_async_handler_1.default)(async (req, res) => {
             await this.userService.deleteUser(req.user?._id);
-            res.sendStatus(204).json((0, customResponse_1.default)({ data: null, success: true, status: 204, message: 'User deleted', error: false }));
+            res.status(204).json((0, customResponse_1.default)({ data: null, success: true, status: 204, message: 'User deleted', error: false }));
         });
         this.updateMyProfileImage = (0, express_async_handler_1.default)(async (req, res, next) => {
             let userId = req.user?._id;
