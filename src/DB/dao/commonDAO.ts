@@ -9,7 +9,11 @@ export default abstract class CommonDAO<T> {
   }
 
   async getOneById(id: string | ObjectId, useLean: boolean = true) {
-    return await this.model.findById(id).select('-password -__v -role').lean(useLean);
+    return await this.model.findById(id).lean(useLean);
+  }
+
+  async getOne(filter: FilterQuery<T> = {}, useLean: boolean = true) {
+    return await this.model.findOne(filter).lean(useLean);
   }
 
   async getMany(filter: FilterQuery<T> = {}, useLean: boolean = true) {
@@ -17,7 +21,11 @@ export default abstract class CommonDAO<T> {
   }
 
   async updateOneById(id: string | ObjectId, payload: UpdateQuery<T>) {
-    return await this.model.findByIdAndUpdate(id, payload, { new: true }).select('-password -__v -role').lean();
+    return await this.model.findByIdAndUpdate(id, payload, { new: true }).lean();
+  }
+
+  async updateOne(filter: FilterQuery<T>, payload: UpdateQuery<T>) {
+    return await this.model.updateOne(filter, payload, { new: true }).lean();
   }
 
   async updateMany(filter: FilterQuery<T>, payload: UpdateQuery<T>) {
@@ -29,7 +37,11 @@ export default abstract class CommonDAO<T> {
     return await this.model.findByIdAndDelete(id).lean();
   }
 
-  //   async deleteMany(filter: FilterQuery<T>) {
-  //     return await this.model.deleteMany(filter).lean();
-  //   }
+  async deleteOne(filter: FilterQuery<T>) {
+    return await this.model.deleteOne(filter).lean();
+  }
+
+  async deleteMany(filter: FilterQuery<T>) {
+    return await this.model.deleteMany(filter).lean();
+  }
 }

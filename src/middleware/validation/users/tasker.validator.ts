@@ -40,8 +40,9 @@ export const createTaskerValidator = [
 ];
 
 export const updateTaskerValidator = [
-  check('services').optional().isArray().withMessage('Services must be an array').isLength({ min: 1 }).withMessage('Services must have at least one service'),
-  check('services.*').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
+  check('services').isEmpty().withMessage('Services is not allowed to be updated in this route'),
+  // check('services').optional().isArray().withMessage('Services must be an array').isLength({ min: 1 }).withMessage('Services must have at least one service'),
+  // check('services.*').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
   check('bio').optional().isString().withMessage('Bio must be a string'),
   check('rating').isEmpty().withMessage('Rating is not allowed'),
   check('completedTasks').isEmpty().withMessage('Completed tasks is not allowed'),

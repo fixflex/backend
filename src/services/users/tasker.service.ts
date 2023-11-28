@@ -26,6 +26,9 @@ class TaskerService {
     return await this.taskerDao.getOneById(taskerId);
   }
 
+  async getMyProfile(userId: string) {
+    return await this.taskerDao.getOne({ userId });
+  }
   async getListOfTaskers(reqQuery: any) {
     if (reqQuery.services) {
       // check if service is exists in DB
@@ -46,11 +49,11 @@ class TaskerService {
         })
       );
 
-    return await this.taskerDao.updateOneById(userId, tasker);
+    return await this.taskerDao.updateOne({ userId }, tasker);
   }
 
   async deleteMyTaskerProfile(userId: string) {
-    return await this.taskerDao.deleteOneById(userId);
+    return await this.taskerDao.deleteOne({ userId });
   }
 }
 
