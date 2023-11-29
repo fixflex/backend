@@ -30,7 +30,7 @@ let taskSchema: Schema<ITask> = new Schema(
       type: String,
       required: true,
       trim: true,
-      maxlength: 6000,
+      maxlength: 8000,
     },
     images: [
       {
