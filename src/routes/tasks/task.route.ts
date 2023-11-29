@@ -7,7 +7,7 @@ import { authenticateUser } from '../../middleware/auth.middleware';
 
 @autoInjectable()
 class TaskRoute implements Routes {
-  public path = '/task';
+  public path = '/tasks';
   public router = Router();
 
   constructor(private readonly taskController: TaskController) {
@@ -27,7 +27,7 @@ class TaskRoute implements Routes {
   }
 }
 
-export default TaskRoute;
+export { TaskRoute };
 
 // this.router.get(`${this.path}/:id/images`, this.taskController.getTaskImages);
 // this.router.get(`${this.path}/:id/owner`, this.taskController.getTaskOwner);

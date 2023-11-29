@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
+import { autoInjectable } from 'tsyringe';
 
 import { TaskService } from '../../services/tasks/task.service';
 import customResponse from '../../utils/customResponse';
 
+@autoInjectable()
 class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
