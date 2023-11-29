@@ -14,6 +14,10 @@ export interface ITask {
   };
   title: string;
   details: string;
+  images: {
+    url: string;
+    publicId: string | null;
+  }[];
   service: string;
   status: TaskStatus;
   location: {
@@ -23,6 +27,7 @@ export interface ITask {
     };
     coordinates: [number, number];
   };
+  city: string;
   budget: number;
   offer: string;
   createdAt?: string;
