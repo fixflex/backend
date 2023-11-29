@@ -30,13 +30,13 @@ class TaskController {
   });
 
   updateTask = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const task = await this.taskService.updateTask(req.params.id, req.body);
+    const task = await this.taskService.updateTask(req.params.id, req.body, req.user?._id);
     if (!task) return next(new HttpException(404, `Task with id ${req.params.id} not found`));
     res.status(200).json(customResponse({ data: task, success: true, status: 200, message: 'Task updated', error: false }));
   });
 
   deleteTask = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const task = await this.taskService.deleteTask(req.params.id);
+    const task = await this.taskService.deleteTask(req.params.id, req.user?._id);
     if (!task) return next(new HttpException(404, `Task with id ${req.params.id} not found`));
     res.status(200).json(customResponse({ data: null, success: true, status: 204, message: 'Task deleted', error: false }));
   });

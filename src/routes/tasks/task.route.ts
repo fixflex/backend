@@ -5,7 +5,7 @@ import { TaskController } from '../../controllers/tasks/task.controller';
 import { Routes } from '../../interfaces';
 import { authenticateUser } from '../../middleware/auth.middleware';
 import { isMongoId } from '../../middleware/validation/isMongoID.validator';
-import { createTaskValidator } from '../../middleware/validation/tasks/tasks.validator';
+import { createTaskValidator, updateTaskValidator } from '../../middleware/validation/tasks/tasks.validator';
 
 @autoInjectable()
 class TaskRoute implements Routes {
@@ -23,8 +23,8 @@ class TaskRoute implements Routes {
     //### tasks routes that require authentication
     this.router.use(`${this.path}`, authenticateUser);
     this.router.post(`${this.path}`, createTaskValidator, this.taskController.createTask);
-    this.router.put(`${this.path}/:id`, this.taskController.updateTask);
-    this.router.delete(`${this.path}/:id`, this.taskController.deleteTask);
+    this.router.patch(`${this.path}/:id`, isMongoId, updateTaskValidator, this.taskController.updateTask);
+    this.router.delete(`${this.path}/:id`, isMongoId, this.taskController.deleteTask);
   }
 }
 
