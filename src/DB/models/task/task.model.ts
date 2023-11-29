@@ -1,4 +1,3 @@
-// task model implement the ITask interface
 import { Schema, model } from 'mongoose';
 
 import { ITask, TaskStatus } from '../../../interfaces';
