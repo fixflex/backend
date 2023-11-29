@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { autoInjectable } from 'tsyringe';
 
 import { UserController } from '../../controllers/users/user.controller';
-import { Routes } from '../../interfaces/routes.interface';
+import { Routes } from '../../interfaces';
 import { authenticateUser } from '../../middleware/auth.middleware';
 import { imageUpload } from '../../middleware/uploadImages.middleware';
 import { getUserValidator, updateLoggedUserValidator } from '../../middleware/validation';
