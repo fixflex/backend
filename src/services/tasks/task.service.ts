@@ -1,7 +1,6 @@
 import { autoInjectable } from 'tsyringe';
 
 import { TaskDao } from '../../DB/dao/task.dao';
-import HttpException from '../../exceptions/HttpException';
 import { ITask } from '../../interfaces';
 
 @autoInjectable()
@@ -18,10 +17,9 @@ class TaskService {
     return task;
   };
 
-  createTask = async (task: ITask, userId: string | undefined) => {
-    // check if the owner is the same as the logged in user
-    if (task.ownerId != userId) throw new HttpException(403, 'You are not allowed to create a task for another user');
+  createTask = async (task: ITask) => {
     const newTask = await this.taskDao.create(task);
+
     return newTask;
   };
 

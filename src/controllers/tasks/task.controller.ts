@@ -12,7 +12,8 @@ class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   createTask = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const task = await this.taskService.createTask(req.body, req.user?._id);
+    req.body.ownerId = req.user?._id;
+    const task = await this.taskService.createTask(req.body);
     if (!task) return next(new HttpException(400, 'Something went wrong, please try again later'));
     res.status(201).json(customResponse({ data: task, success: true, status: 201, message: 'Task created', error: false }));
   });

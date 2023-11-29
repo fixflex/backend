@@ -5,8 +5,9 @@ import validatorMiddleware from '../../errors/validation.middleware';
 export const createTaskValidator = [
   check('ownerId').notEmpty().withMessage('Owner ID is required').isMongoId().withMessage('Owner ID must be a valid mongo ID'),
 
-  check('dueDate.start').optional().isDate().withMessage('Start date must be a valid date'),
-  check('dueDate.end').optional().isDate().withMessage('End date must be a valid date'),
+  // TODO: check if the date is valid / fix the error message
+  // check('dueDate.start').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Start date must be a valid date'), // some thing like this: 2021-12-31
+  // check('dueDate.end').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('End date must be a valid date'),
   check('dueDate.flexible').optional().isBoolean().withMessage('Flexible must be a boolean'),
   check('title')
     .notEmpty()
@@ -38,5 +39,7 @@ export const createTaskValidator = [
   check('budget').notEmpty().withMessage('Budget is required').isNumeric().withMessage('Budget must be a number'),
   check('status').isEmpty().withMessage('Status is not allowed to be updated in this route'),
   check('offers').isEmpty().withMessage('Offers is not allowed to be updated in this route'),
+  check('createdAt').isEmpty().withMessage('createdAt is not allowed to be updated in this route'),
+  check('updatedAt').isEmpty().withMessage('updatedAt is not allowed to be updated in this route'),
   validatorMiddleware,
 ];
