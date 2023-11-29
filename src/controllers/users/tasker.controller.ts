@@ -42,7 +42,6 @@ class TaskerController {
   updateMyTaskerProfile = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
     let userId = req.user?._id;
     let updatedTasker = await this.taskerService.updateMyTaskerProfile(userId!, req.body);
-    console.log(updatedTasker);
     if (updatedTasker.modifiedCount == 0) return next(new HttpException(404, `You don't have a tasker profile`));
     res.status(200).json(customResponse({ data: null, success: true, error: false, message: 'Tasker updated', status: 200 }));
   });
@@ -50,7 +49,7 @@ class TaskerController {
   deleteMyTaskerProfile = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
     let userId = req.user?._id; //
     let user = await this.taskerService.deleteMyTaskerProfile(userId!);
-    if (!user) return next(new HttpException(400, 'Something went wrong, please try again later'));
+    if (user.deletedCount == 0) return next(new HttpException(404, `You don't have a tasker profile`));
     res.status(204).json(customResponse({ data: null, success: true, error: false, message: 'User deleted', status: 204 }));
   });
 }

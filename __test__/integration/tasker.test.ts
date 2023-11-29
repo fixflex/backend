@@ -36,7 +36,7 @@ beforeAll(async () => {
 // });
 
 describe('tasker', () => {
-  describe('POST /api/v1/taskers', () => {
+  describe('POST /api/v1/become-tasker', () => {
     it('should create a new tasker', async () => {
       const response = await request(server)
         .post('/api/v1/taskers/become-tasker')
@@ -107,16 +107,27 @@ describe('tasker', () => {
       expect(response.body.data).toHaveLength(1);
     });
   });
+  // TODO: test filtering by service, location, rating, price
 
-  //   describe('PATCH /api/v1/taskers/me', () => {
-  //     it('should update tasker data', async () => {
-  //       const response = await request(server).patch('/api/v1/taskers/me').set('Authorization', `Bearer ${token}`).send({ phoneNumber: '01066032844' });
-  //       console.log(response);
-  //       expect(response.status).toBe(200);
-  //       expect(response.body.data).toBeDefined();
-  //       expect(response.body.data.phoneNumber).toBe('01066032844');
-  //     });
-  //   });
+  describe('PATCH /api/v1/taskers/me', () => {
+    it('should update tasker data', async () => {
+      const response = await request(server).patch('/api/v1/taskers/me').set('Authorization', `Bearer ${token}`).send({ phoneNumber: '01066032844' });
+      console.log(response.body);
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeDefined();
+    });
+  });
+
+  describe('DELETE /api/v1/taskers/me', () => {
+    it('should delete tasker', async () => {
+      const response = await request(server).delete('/api/v1/taskers/me').set('Authorization', `Bearer ${token}`);
+      expect(response.status).toBe(204);
+    });
+    it('should return 404 there is no tasker with this user id', async () => {
+      const response = await request(server).delete('/api/v1/taskers/me').set('Authorization', `Bearer ${token}`);
+      expect(response.status).toBe(404);
+    });
+  });
 });
 
 // ##############################################################################################################
