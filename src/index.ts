@@ -9,6 +9,7 @@ import { AuthRoute } from './routes';
 import { ServiceRoute } from './routes';
 import { ChatRoute } from './routes/chat.route';
 import HealthzRoute from './routes/healthz.route';
+import { OfferRoute } from './routes/tasks/offer.route';
 import { TaskRoute } from './routes/tasks/task.route';
 import { TaskerRoute } from './routes/users/tasker.route';
 import Socket from './sockets/socket';
@@ -22,9 +23,10 @@ let taskerRoute = container.resolve(TaskerRoute);
 let healthzRoute = container.resolve(HealthzRoute);
 let chatRoute = container.resolve(ChatRoute);
 let taskRoute = container.resolve(TaskRoute);
+let offerRoute = container.resolve(OfferRoute);
 
 // Setup app
-let app = new App([healthzRoute, authRoute, userRoute, taskerRoute, serviseRoute, chatRoute, taskRoute]);
+let app = new App([healthzRoute, authRoute, userRoute, taskerRoute, serviseRoute, chatRoute, taskRoute, offerRoute]);
 
 // Setup http server
 let client = app.getServer();
