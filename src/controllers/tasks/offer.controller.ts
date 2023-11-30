@@ -18,8 +18,9 @@ class OfferController {
     res.status(201).json(customResponse({ data: offer, success: true, status: 201, message: 'Offer created', error: false }));
   });
 
-  getOffers = asyncHandler(async (_req: AuthRequest, res: Response) => {
-    const offers = await this.offerService.getOffers();
+  getOffersByTaskId = asyncHandler(async (req: AuthRequest, res: Response) => {
+    const offers = await this.offerService.getOffers(req.query.taskId as string);
+
     res.status(200).json(customResponse({ data: offers, success: true, status: 200, message: null, error: false }));
   });
 

@@ -4,6 +4,7 @@ import { OfferDao } from '../../DB/dao/offer.dao';
 import { TaskDao } from '../../DB/dao/task.dao';
 import TaskerDao from '../../DB/dao/tasker.dao';
 import HttpException from '../../exceptions/HttpException';
+import { IOffer } from '../../interfaces';
 import { TaskStatus } from '../../interfaces/task.interface';
 
 @autoInjectable()
@@ -26,22 +27,28 @@ class OfferService {
     return await this.offerDao.getOneById(id);
   }
 
-  async getOffers() {
+  async getOffers(taskId: any) {
+    if (taskId) return await this.offerDao.getMany({ taskId });
     return await this.offerDao.getMany();
   }
 
-  async updateOffer(id: string, offer: any, userId: string | undefined) {
-    // check if this user is a tasker
+  async updateOffer(id: string, payload: IOffer, userId: string | undefined) {
+    // check if this offer belongs to this tasker
     let tasker = await this.taskerDao.getOne({ userId });
     if (!tasker) throw new HttpException(400, 'You are not a tasker');
-    offer.taskerId = tasker._id;
-    return await this.offerDao.updateOneById(id, offer);
+    let offer = await this.offerDao.getOneById(id);
+    if (!offer) throw new HttpException(404, 'Offer not found');
+    if (offer.taskerId.toString() !== tasker._id.toString()) throw new HttpException(400, 'This offer is not yours');
+    return await this.offerDao.updateOneById(id, payload);
   }
 
   async deleteOffer(id: string, userId: string | undefined) {
-    // check if this user is a tasker
+    //check if this offer belongs to this tasker
     let tasker = await this.taskerDao.getOne({ userId });
     if (!tasker) throw new HttpException(400, 'You are not a tasker');
+    let offer = await this.offerDao.getOneById(id);
+    if (!offer) throw new HttpException(404, 'Offer not found');
+    if (offer.taskerId.toString() !== tasker._id.toString()) throw new HttpException(400, 'This offer is not yours');
     return await this.offerDao.deleteOneById(id);
   }
 }
