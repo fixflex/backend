@@ -14,6 +14,10 @@ export interface ITask {
   };
   title: string;
   details: string;
+  imageCover: {
+    url: string;
+    publicId: string | null;
+  };
   images: {
     url: string;
     publicId: string | null;

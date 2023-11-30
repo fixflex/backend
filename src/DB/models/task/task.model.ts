@@ -32,6 +32,10 @@ let taskSchema: Schema<ITask> = new Schema(
       trim: true,
       maxlength: 8000,
     },
+    imageCover: {
+      url: String,
+      publicId: String,
+    },
     images: [
       {
         url: String,

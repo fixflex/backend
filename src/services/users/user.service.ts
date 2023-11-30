@@ -6,8 +6,11 @@ import UserDao from '../../DB/dao/user.dao';
 import HttpException from '../../exceptions/HttpException';
 import { IPagination } from '../../interfaces/respons.interface';
 import { IUser } from '../../interfaces/user.interface';
+import { uploadSingleFile } from '../../middleware/uploadImages.middleware';
 import APIFeatures from '../../utils/apiFeatures';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../../utils/cloudinary';
+
+export const uploadProfileImage = uploadSingleFile('image');
 
 @autoInjectable()
 class UserService {

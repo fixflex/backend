@@ -5,9 +5,11 @@ import ServiceDao from '../DB/dao/service.dao';
 import HttpException from '../exceptions/HttpException';
 import { IPagination } from '../interfaces/respons.interface';
 import { IService } from '../interfaces/services.interface';
+import { uploadSingleFile } from '../middleware/uploadImages.middleware';
 import APIFeatures from '../utils/apiFeatures';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../utils/cloudinary';
 
+export const uploadServiceImage = uploadSingleFile('image');
 @autoInjectable()
 class ServiceService {
   constructor(private readonly serviceDao: ServiceDao) {}
