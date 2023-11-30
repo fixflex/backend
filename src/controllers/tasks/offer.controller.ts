@@ -13,6 +13,7 @@ class OfferController {
 
   createOffer = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
     const offer = await this.offerService.createOffer(req.body, req.user?._id);
+
     if (!offer) return next(new HttpException(400, 'Something went wrong, please try again later'));
     res.status(201).json(customResponse({ data: offer, success: true, status: 201, message: 'Offer created', error: false }));
   });
