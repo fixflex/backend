@@ -9,13 +9,19 @@ class CommonDAO {
         return await this.model.create(entity);
     }
     async getOneById(id, useLean = true) {
-        return await this.model.findById(id).select('-password -__v -role').lean(useLean);
+        return await this.model.findById(id).lean(useLean);
+    }
+    async getOne(filter = {}, useLean = true) {
+        return await this.model.findOne(filter).lean(useLean);
     }
     async getMany(filter = {}, useLean = true) {
         return await this.model.find(filter).lean(useLean);
     }
     async updateOneById(id, payload) {
-        return await this.model.findByIdAndUpdate(id, payload, { new: true }).select('-password -__v -role').lean();
+        return await this.model.findByIdAndUpdate(id, payload, { new: true }).lean();
+    }
+    async updateOne(filter, payload) {
+        return await this.model.updateOne(filter, payload, { new: true }).lean();
     }
     async updateMany(filter, payload) {
         await this.model.updateMany(filter, payload); // updateMany don't return the updated documents
@@ -23,6 +29,12 @@ class CommonDAO {
     }
     async deleteOneById(id) {
         return await this.model.findByIdAndDelete(id).lean();
+    }
+    async deleteOne(filter) {
+        return await this.model.deleteOne(filter).lean();
+    }
+    async deleteMany(filter) {
+        return await this.model.deleteMany(filter).lean();
     }
 }
 exports.default = CommonDAO;

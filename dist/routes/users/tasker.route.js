@@ -27,11 +27,11 @@ let TaskerRoute = class TaskerRoute {
     insitializeRoutes() {
         //  Logged in user routes (authenticated)
         this.router.post(`${this.path}/become-tasker`, auth_middleware_1.authenticateUser, tasker_validator_1.createTaskerValidator, this.taskerController.becomeTasker);
-        this.router.get(`${this.path}/me`, auth_middleware_1.authenticateUser, this.taskerController.getTaskerProfile);
+        this.router.get(`${this.path}/me`, auth_middleware_1.authenticateUser, this.taskerController.getMe);
         this.router.patch(`${this.path}/me`, auth_middleware_1.authenticateUser, tasker_validator_1.updateTaskerValidator, this.taskerController.updateMyTaskerProfile);
         this.router.delete(`${this.path}/me`, auth_middleware_1.authenticateUser, this.taskerController.deleteMyTaskerProfile);
         // Public routes
-        this.router.get(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.taskerController.getTaskerProfile);
+        this.router.get(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.taskerController.getTaskerPublicProfile);
         // get list of taskers by location and service (optional)
         // the api for this route is like this: /taskers?longitude=32.1617485&latitude=26.0524745&services=5f9d5f6b0f0a7e2a3c9d3b1a
         this.router.get(`${this.path}`, this.taskerController.getListOfTaskers);

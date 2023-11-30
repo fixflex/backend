@@ -36,6 +36,9 @@ let TaskerService = class TaskerService {
     async getTaskerProfile(taskerId) {
         return await this.taskerDao.getOneById(taskerId);
     }
+    async getMyProfile(userId) {
+        return await this.taskerDao.getOne({ userId });
+    }
     async getListOfTaskers(reqQuery) {
         if (reqQuery.services) {
             // check if service is exists in DB
@@ -54,10 +57,10 @@ let TaskerService = class TaskerService {
                     throw new HttpException_1.default(404, `Service ID ${service} doesn't exist in DB`);
                 return service;
             }));
-        return await this.taskerDao.updateOneById(userId, tasker);
+        return await this.taskerDao.updateOne({ userId }, tasker);
     }
     async deleteMyTaskerProfile(userId) {
-        return await this.taskerDao.deleteOneById(userId);
+        return await this.taskerDao.deleteOne({ userId });
     }
 };
 exports.TaskerService = TaskerService;

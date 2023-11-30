@@ -14,6 +14,8 @@ const routes_2 = require("./routes");
 const routes_3 = require("./routes");
 const chat_route_1 = require("./routes/chat.route");
 const healthz_route_1 = __importDefault(require("./routes/healthz.route"));
+const offer_route_1 = require("./routes/tasks/offer.route");
+const task_route_1 = require("./routes/tasks/task.route");
 const tasker_route_1 = require("./routes/users/tasker.route");
 const socket_1 = __importDefault(require("./sockets/socket"));
 const log_1 = __importDefault(require("./utils/log"));
@@ -24,8 +26,10 @@ let serviseRoute = tsyringe_1.container.resolve(routes_3.ServiceRoute);
 let taskerRoute = tsyringe_1.container.resolve(tasker_route_1.TaskerRoute);
 let healthzRoute = tsyringe_1.container.resolve(healthz_route_1.default);
 let chatRoute = tsyringe_1.container.resolve(chat_route_1.ChatRoute);
+let taskRoute = tsyringe_1.container.resolve(task_route_1.TaskRoute);
+let offerRoute = tsyringe_1.container.resolve(offer_route_1.OfferRoute);
 // Setup app
-let app = new app_1.default([healthzRoute, authRoute, userRoute, taskerRoute, serviseRoute, chatRoute]);
+let app = new app_1.default([healthzRoute, authRoute, userRoute, taskerRoute, serviseRoute, chatRoute, taskRoute, offerRoute]);
 // Setup http server
 let client = app.getServer();
 exports.client = client;

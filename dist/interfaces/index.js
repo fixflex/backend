@@ -16,3 +16,9 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./errorResponse.interface"), exports);
 __exportStar(require("./messageResponse.interface"), exports);
+__exportStar(require("./task.interface"), exports);
+__exportStar(require("./user.interface"), exports);
+__exportStar(require("./offer.interface"), exports);
+__exportStar(require("./chat.interface"), exports);
+// export * from './notification.interface';
+__exportStar(require("./routes.interface"), exports);

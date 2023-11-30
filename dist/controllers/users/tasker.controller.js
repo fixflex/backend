@@ -28,35 +28,40 @@ let TaskerController = class TaskerController {
                 return next(new HttpException_1.default(400, 'Something went wrong, please try again later'));
             res.status(201).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: 'User updated', error: false }));
         });
-        this.getTaskerProfile = (0, express_async_handler_1.default)(async (req, res, next) => {
+        this.getTaskerPublicProfile = (0, express_async_handler_1.default)(async (req, res, next) => {
             let taskerId;
-            if (req.params.id)
-                taskerId = req.params.id;
+            taskerId = req.params.id;
             let tasker = await this.taskerService.getTaskerProfile(taskerId);
             if (!tasker)
-                return next(new HttpException_1.default(404, `The tasker with id ${taskerId} ddoesn't exist`));
-            res.status(200).json((0, customResponse_1.default)({ data: tasker, success: true, status: 200, message: 'User updated', error: false }));
+                return next(new HttpException_1.default(404, `The tasker with id ${taskerId} doesn't exist`));
+            res.status(200).json((0, customResponse_1.default)({ data: tasker, success: true, status: 200, message: null, error: false }));
+        });
+        // get tasker profile by user id
+        this.getMe = (0, express_async_handler_1.default)(async (req, res, next) => {
+            let userId = req.user?._id;
+            let tasker = await this.taskerService.getMyProfile(userId);
+            if (!tasker)
+                return next(new HttpException_1.default(404, `You don't have a tasker profile`));
+            res.status(200).json((0, customResponse_1.default)({ data: tasker, success: true, status: 200, message: null, error: false }));
         });
         this.getListOfTaskers = (0, express_async_handler_1.default)(async (req, res, next) => {
             let taskers = await this.taskerService.getListOfTaskers(req.query);
             if (!taskers)
                 return next(new HttpException_1.default(400, 'Something went wrong, please try again later'));
-            res
-                .status(200)
-                .json(Object.assign({ results: taskers.length }, (0, customResponse_1.default)({ data: taskers, success: true, status: 200, message: 'User updated', error: false })));
+            res.status(200).json(Object.assign({ results: taskers.length }, (0, customResponse_1.default)({ data: taskers, success: true, status: 200, message: null, error: false })));
         });
         this.updateMyTaskerProfile = (0, express_async_handler_1.default)(async (req, res, next) => {
             let userId = req.user?._id;
-            let user = await this.taskerService.updateMyTaskerProfile(userId, req.body);
-            if (!user)
-                return next(new HttpException_1.default(400, 'Something went wrong, please try again later'));
-            res.status(200).json((0, customResponse_1.default)({ data: user, success: true, error: false, message: 'User updated', status: 200 }));
+            let updatedTasker = await this.taskerService.updateMyTaskerProfile(userId, req.body);
+            if (updatedTasker.modifiedCount == 0)
+                return next(new HttpException_1.default(404, `You don't have a tasker profile`));
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, error: false, message: 'Tasker updated', status: 200 }));
         });
         this.deleteMyTaskerProfile = (0, express_async_handler_1.default)(async (req, res, next) => {
-            let userId = req.user?._id; // fix this later , you should  pass taskerId
+            let userId = req.user?._id; //
             let user = await this.taskerService.deleteMyTaskerProfile(userId);
-            if (!user)
-                return next(new HttpException_1.default(400, 'Something went wrong, please try again later'));
+            if (user.deletedCount == 0)
+                return next(new HttpException_1.default(404, `You don't have a tasker profile`));
             res.status(204).json((0, customResponse_1.default)({ data: null, success: true, error: false, message: 'User deleted', status: 204 }));
         });
     }

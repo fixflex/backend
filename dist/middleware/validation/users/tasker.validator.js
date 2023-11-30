@@ -39,8 +39,9 @@ exports.createTaskerValidator = [
     validation_middleware_1.default,
 ];
 exports.updateTaskerValidator = [
-    (0, express_validator_1.check)('services').optional().isArray().withMessage('Services must be an array').isLength({ min: 1 }).withMessage('Services must have at least one service'),
-    (0, express_validator_1.check)('services.*').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
+    (0, express_validator_1.check)('services').isEmpty().withMessage('Services is not allowed to be updated in this route'),
+    // check('services').optional().isArray().withMessage('Services must be an array').isLength({ min: 1 }).withMessage('Services must have at least one service'),
+    // check('services.*').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
     (0, express_validator_1.check)('bio').optional().isString().withMessage('Bio must be a string'),
     (0, express_validator_1.check)('rating').isEmpty().withMessage('Rating is not allowed'),
     (0, express_validator_1.check)('completedTasks').isEmpty().withMessage('Completed tasks is not allowed'),
