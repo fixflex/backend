@@ -12,14 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserService = void 0;
+exports.UserService = exports.uploadProfileImage = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const fs_1 = __importDefault(require("fs"));
 const tsyringe_1 = require("tsyringe");
 const user_dao_1 = __importDefault(require("../../DB/dao/user.dao"));
 const HttpException_1 = __importDefault(require("../../exceptions/HttpException"));
+const uploadImages_middleware_1 = require("../../middleware/uploadImages.middleware");
 const apiFeatures_1 = __importDefault(require("../../utils/apiFeatures"));
 const cloudinary_1 = require("../../utils/cloudinary");
+exports.uploadProfileImage = (0, uploadImages_middleware_1.uploadSingleFile)('image');
 let UserService = class UserService {
     constructor(userDao) {
         this.userDao = userDao;

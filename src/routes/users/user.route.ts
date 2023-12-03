@@ -5,7 +5,6 @@ import { UserController } from '../../controllers/users/user.controller';
 import { Routes } from '../../interfaces';
 import { authenticateUser } from '../../middleware/auth.middleware';
 import { getUserValidator, updateLoggedUserValidator } from '../../middleware/validation';
-import { uploadProfileImage } from '../../services/users/user.service';
 
 @autoInjectable()
 class UserRoute implements Routes {
@@ -25,7 +24,7 @@ class UserRoute implements Routes {
       .patch(authenticateUser, updateLoggedUserValidator, this.userController.updateMe)
       .delete(authenticateUser, this.userController.deleteMe);
 
-    this.router.route(`${this.path}/me/profile-picture-upload`).patch(authenticateUser, uploadProfileImage, this.userController.updateMyProfileImage);
+    this.router.route(`${this.path}/me/profile-picture-upload`).patch(authenticateUser, this.userController.uploadProfileImage, this.userController.updateMyProfileImage);
 
     // Public routes
     this.router.get(`${this.path}/:id`, getUserValidator, this.userController.getUser);

@@ -35,6 +35,29 @@ class TaskService {
     return updatedTask;
   };
 
+  uploadTaskImages = async (_id: string, _files: any, _userId: string | undefined) => {
+    // // check if the user is the owner of the task
+    // const task = await this.taskDao.getOneById(id);
+    // if (!task) throw new HttpException(404, 'Task not found');
+    // if (task.ownerId !== userId?.toString()) throw new HttpException(403, 'You are not allowed to update this task');
+
+    // // upload the images to cloudinary
+    // let images = [];
+    // if (files.imageCover) {
+    //   let imageCover = await this.uploadImage(files.imageCover[0]);
+    //   images.push(imageCover);
+    // }
+    // if (files.taskImages) {
+    //   for (let image of files.taskImages) {
+    //     let taskImage = await this.uploadImage(image);
+    //     images.push(taskImage);
+    //   }
+    // }
+    // // add the images to the task
+    // const updatedTask = await this.taskDao.updateOneById(id, { images });
+    return 'updatedTask';
+  };
+
   deleteTask = async (id: string, userId: string | undefined) => {
     const task = await this.taskDao.getOneById(id);
     if (!task) throw new HttpException(404, 'Task not found');

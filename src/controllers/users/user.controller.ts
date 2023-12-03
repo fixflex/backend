@@ -5,6 +5,7 @@ import { autoInjectable } from 'tsyringe';
 import HttpException from '../../exceptions/HttpException';
 import { AuthRequest } from '../../interfaces/auth.interface';
 import { IUser } from '../../interfaces/user.interface';
+import { uploadSingleFile } from '../../middleware/uploadImages.middleware';
 import { UserService } from '../../services/users/user.service';
 import customResponse from '../../utils/customResponse';
 
@@ -13,6 +14,9 @@ class UserController {
   constructor(private readonly userService: UserService) {}
 
   // public Routes
+
+  uploadProfileImage = uploadSingleFile('image');
+
   public getUser = asyncHandler(async (req: Request, res: Response) => {
     let user = await this.userService.getUser(req.params.id);
     if (!user) throw new HttpException(404, 'No user found');
