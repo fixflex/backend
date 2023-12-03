@@ -17,7 +17,7 @@
       "variables": {
         "serverUrl": {
           "default": "https://fixflex.onrender.com",
-          "enum": ["https://fixflex.onrender.com", "http://localhost:8080"]
+          "enum": ["https://fixflex.onrender.com", "https://khidma.onrender.com", "http://localhost:8080"]
         },
         "apiVersion": {
           "default": "v1"
@@ -811,6 +811,62 @@
         ]
       }
     },
+
+    "/tasks/{taskId}/images": {
+      "patch": {
+        "tags": ["Tasks"],
+        "summary": "Upload task images",
+        "description": "Upload task images for the logged-in user. \n\n**Note:** This endpoint requires the user to be authenticated.",
+        "requestBody": {
+          "description": "Upload task images",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "imageCover": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "image": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Task images uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+
     "/offers/{offerId}": {
       "get": {
         "tags": ["Offers"],
