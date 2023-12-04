@@ -34,12 +34,18 @@ let taskSchema: Schema<ITask> = new Schema(
     },
     imageCover: {
       url: String,
-      publicId: String,
+      publicId: {
+        type: String,
+        default: null,
+      },
     },
     images: [
       {
         url: String,
-        publicId: String,
+        publicId: {
+          type: String,
+          default: null,
+        },
       },
     ],
     service: {

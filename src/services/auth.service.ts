@@ -23,7 +23,7 @@ export class AuthServie {
       throw new HttpException(409, `E-Mail address ${user.email} is already exists, please pick a different one.`);
     }
     // hash the password
-    user.password = await bcrypt.hash(user.password, 10);
+    user.password = await bcrypt.hash(user.password, 10); // TODO: add salt rounds to the .env file
     let newUser = await this.userDao.create(user);
     let token = createToken(newUser._id!);
 

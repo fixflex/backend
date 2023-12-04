@@ -42,9 +42,9 @@ class TaskController {
   });
 
   uploadTaskImages = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
-    // log the files
-    console.log(req.files);
-    const task = await this.taskService.uploadTaskImages(req.params.id, req.files, req.user?._id);
+    if (!req.files) return next(new HttpException(400, 'Please upload files'));
+    const task = await this.taskService.uploadTaskImages(req.params.id, req.files, req.user?._id); // TODO: fix the type
+
     if (!task) return next(new HttpException(404, `Task with id ${req.params.id} not found`));
     res.status(200).json(customResponse({ data: task, success: true, status: 200, message: 'Task images uploaded', error: false }));
   });
