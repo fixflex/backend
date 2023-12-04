@@ -271,6 +271,40 @@
         ]
       }
     },
+
+    "/users/me/change-password": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Change logged-in user password",
+        "requestBody": {
+          "description": "Change logged-in user password",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/users/me/profile-picture-upload": {
       "patch": {
         "tags": ["Users"],
@@ -1603,7 +1637,18 @@
         },
         "required": []
       },
-
+      "ChangePasswordInput": {
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string"
+          }
+        },
+        "required": ["oldPassword", "newPassword"]
+      },
       "Chat": {
         "type": "object",
         "properties": {
