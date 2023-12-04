@@ -1547,6 +1547,17 @@
           "name": {
             "type": "string"
           },
+          "image": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "publicId": {
+                "type": "string"
+              }
+            }
+          },
           "description": {
             "type": "string"
           }
