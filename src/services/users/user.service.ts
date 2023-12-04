@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { autoInjectable } from 'tsyringe';
 
 import UserDao from '../../DB/dao/user.dao';
+import env from '../../config/validateEnv';
 import HttpException from '../../exceptions/HttpException';
 import { IPagination } from '../../interfaces/respons.interface';
 import { IUser } from '../../interfaces/user.interface';
@@ -43,7 +44,7 @@ class UserService {
       throw new HttpException(409, `E-Mail address ${user.email} is already exists, please pick a different one.`);
     }
     // hash the password
-    user.password = await bcrypt.hash(user.password, 10);
+    user.password = await bcrypt.hash(user.password, env.SALT_ROUNDS);
     let newUser = await this.userDao.create(user);
     return newUser;
   }
@@ -52,6 +53,18 @@ class UserService {
     let isUserExists = await this.userDao.getOneById(userId);
     if (!isUserExists) throw new HttpException(404, 'No user found');
     return await this.userDao.updateOneById(userId, user);
+  }
+
+  async changePassword(payload: { oldPassword: string; newPassword: string }, user: IUser) {
+    // 1- check if the password === user.password
+    let isPasswordCorrect = await bcrypt.compare(payload.oldPassword, user.password);
+    if (!isPasswordCorrect) throw new HttpException(401, 'Incorrect password');
+    // 2- hash the new password
+    let newPassword = await bcrypt.hash(payload.newPassword, env.SALT_ROUNDS);
+    // 3- update the user with the new password
+    let updatedUser = await this.userDao.updateOneById(user._id!, { password: newPassword } as IUser);
+    // 4- return the updated user
+    return updatedUser;
   }
 
   async deleteUser(userId: string) {

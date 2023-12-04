@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import { cleanEnv, port, str, url } from 'envalid';
+import { cleanEnv, num, port, str, url } from 'envalid';
 
 if (process.env.NODE_ENV === 'testing') {
   config({ path: '.env.test' });
@@ -17,6 +17,7 @@ const validateEnv = cleanEnv(process.env, {
   CLOUDINARY_API_SECRET: str(),
   CLOUDINARY_API_KEY: str(),
   CLOUDINARY_CLOUD_NAME: str(),
+  SALT_ROUNDS: num(),
 });
 
 export default validateEnv;

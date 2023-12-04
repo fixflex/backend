@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { autoInjectable } from 'tsyringe';
 
 import UserDao from '../DB/dao/user.dao';
+import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import { IUser } from '../interfaces/user.interface';
 import { createToken } from '../utils/createToken';
@@ -23,7 +24,7 @@ export class AuthServie {
       throw new HttpException(409, `E-Mail address ${user.email} is already exists, please pick a different one.`);
     }
     // hash the password
-    user.password = await bcrypt.hash(user.password, 10); // TODO: add salt rounds to the .env file
+    user.password = await bcrypt.hash(user.password, env.SALT_ROUNDS);
     let newUser = await this.userDao.create(user);
     let token = createToken(newUser._id!);
 

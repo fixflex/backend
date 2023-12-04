@@ -4,7 +4,7 @@ import { autoInjectable } from 'tsyringe';
 import { UserController } from '../../controllers/users/user.controller';
 import { Routes } from '../../interfaces';
 import { authenticateUser } from '../../middleware/auth.middleware';
-import { getUserValidator, updateLoggedUserValidator } from '../../middleware/validation';
+import { changePasswordValidator, getUserValidator, updateLoggedUserValidator } from '../../middleware/validation';
 
 @autoInjectable()
 class UserRoute implements Routes {
@@ -16,18 +16,13 @@ class UserRoute implements Routes {
   }
 
   private insitializeRoutes() {
-    //  Logged in user routes (authenticated)
-
-    this.router
-      .route(`${this.path}/me`)
-      .get(authenticateUser, this.userController.getMe)
-      .patch(authenticateUser, updateLoggedUserValidator, this.userController.updateMe)
-      .delete(authenticateUser, this.userController.deleteMe);
-
-    this.router.route(`${this.path}/me/profile-picture-upload`).patch(authenticateUser, this.userController.uploadProfileImage, this.userController.updateMyProfileImage);
-
     // Public routes
     this.router.get(`${this.path}/:id`, getUserValidator, this.userController.getUser);
+    //  Logged in user routes (authenticated)
+    this.router.use(`${this.path}`, authenticateUser);
+    this.router.route(`${this.path}/me`).get(this.userController.getMe).patch(updateLoggedUserValidator, this.userController.updateMe).delete(this.userController.deleteMe);
+    this.router.patch(`${this.path}/me/change-password`, changePasswordValidator, this.userController.changePassword);
+    this.router.route(`${this.path}/me/profile-picture-upload`).patch(this.userController.uploadProfileImage, this.userController.updateMyProfileImage);
   }
 }
 

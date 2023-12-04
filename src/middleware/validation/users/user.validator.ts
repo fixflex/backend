@@ -31,13 +31,16 @@ export const updateLoggedUserValidator = [
   validatorMiddleware,
 ];
 
-export const getUserValidator = [
-  check('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '),
+export const getUserValidator = [check('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '), validatorMiddleware];
+export const deleteUserValidator = [check('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '), validatorMiddleware];
 
-  validatorMiddleware,
-];
-export const deleteUserValidator = [
-  check('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '),
+export const changePasswordValidator = [
+  check('oldPassword')
+    .notEmpty()
+    .withMessage('Old password is required')
+    .custom((oldPassword, { req }) => req.body.newPassword !== oldPassword)
+    .withMessage('New password must be different from old password'),
+  check('newPassword').notEmpty().withMessage('User newPassword is required').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
 
   validatorMiddleware,
 ];
