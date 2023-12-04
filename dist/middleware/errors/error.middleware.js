@@ -27,6 +27,9 @@ const errorMiddleware = (err, _req, res, _next) => {
             err = handleJwtInvalidSignture();
         if (err.name === 'TokenEpiredError')
             err = handleJwtExpired();
+        // MulterError
+        if (err.name === 'MulterError')
+            err = handleMulterError(err);
         sendForProd(err, res);
     }
 };
@@ -47,6 +50,20 @@ const handelValidationErrorDB = (err) => {
 };
 const handleJwtInvalidSignture = () => new HttpException_1.default(401, 'Invalid token, please login again..');
 const handleJwtExpired = () => new HttpException_1.default(401, 'Expired token, please login again..');
+const handleMulterError = (err) => {
+    let message = '';
+    if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+        message = `Too many files uploaded.`;
+    }
+    else if (err.code === 'LIMIT_FILE_SIZE') {
+        message = `File too large.`;
+    }
+    else {
+        message = err.message;
+    }
+    return new HttpException_1.default(400, message);
+};
+//################### send error response ###################//
 const sendForDev = (err, res) => {
     res.status(err.statusCode).json({
         data: null,
@@ -55,6 +72,7 @@ const sendForDev = (err, res) => {
         message: err.message,
         status: err.status,
         stack: err.stack,
+        err,
     });
 };
 const sendForProd = (err, res) => {

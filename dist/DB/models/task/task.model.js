@@ -31,10 +31,21 @@ let taskSchema = new mongoose_1.Schema({
         trim: true,
         maxlength: 8000,
     },
+    imageCover: {
+        url: String,
+        publicId: {
+            type: String,
+            default: null,
+        },
+    },
+    // TODO: check the max length of the images array should't be more than 5
     images: [
         {
             url: String,
-            publicId: String,
+            publicId: {
+                type: String,
+                default: null,
+            },
         },
     ],
     service: {

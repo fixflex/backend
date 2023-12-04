@@ -16,12 +16,14 @@ exports.UserController = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const tsyringe_1 = require("tsyringe");
 const HttpException_1 = __importDefault(require("../../exceptions/HttpException"));
+const uploadImages_middleware_1 = require("../../middleware/uploadImages.middleware");
 const user_service_1 = require("../../services/users/user.service");
 const customResponse_1 = __importDefault(require("../../utils/customResponse"));
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
         // public Routes
+        this.uploadProfileImage = (0, uploadImages_middleware_1.uploadSingleFile)('image');
         this.getUser = (0, express_async_handler_1.default)(async (req, res) => {
             let user = await this.userService.getUser(req.params.id);
             if (!user)
@@ -52,6 +54,7 @@ let UserController = class UserController {
             let userId = req.user?._id;
             if (!req.file)
                 return next(new HttpException_1.default(400, 'Please upload a file'));
+            // console.log(req.file);
             let user = await this.userService.updateProfileImage(userId, req.file);
             if (!user)
                 return next(new HttpException_1.default(404, 'No user found'));

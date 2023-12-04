@@ -17,7 +17,7 @@
             "variables": {
                 "serverUrl": {
                     "default": "https://fixflex.onrender.com",
-                    "enum": ["https://fixflex.onrender.com", "http://localhost:8080"]
+                    "enum": ["https://fixflex.onrender.com", "https://khidma.onrender.com", "http://localhost:8080"]
                 },
                 "apiVersion": {
                     "default": "v1"
@@ -804,6 +804,71 @@
                 ]
             }
         },
+        "/tasks/{taskId}/images": {
+            "patch": {
+                "tags": ["Tasks"],
+                "summary": "Upload task images",
+                "description": "Upload task images for the logged-in user. \n\n**Note:** This endpoint requires the user to be authenticated.",
+                "parameters": [
+                    {
+                        "name": "taskId",
+                        "in": "path",
+                        "description": "Task ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Upload task images",
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "imageCover": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "image": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task images uploaded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Task"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/offers/{offerId}": {
             "get": {
                 "tags": ["Offers"],
@@ -959,6 +1024,64 @@
                 "responses": {
                     "201": {
                         "description": "Service created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Service"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/services/upload-service-image/{servicId}": {
+            "patch": {
+                "tags": ["Services"],
+                "summary": "Upload service image",
+                "description": "Upload service image for the logged-in user. \n\n**Note:** This endpoint only for admin user.",
+                "parameters": [
+                    {
+                        "name": "servicId",
+                        "in": "path",
+                        "description": "Service ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Upload service image",
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Service image uploaded successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1409,6 +1532,17 @@
                     },
                     "name": {
                         "type": "string"
+                    },
+                    "image": {
+                        "type": "object",
+                        "properties": {
+                            "url": {
+                                "type": "string"
+                            },
+                            "publicId": {
+                                "type": "string"
+                            }
+                        }
                     },
                     "description": {
                         "type": "string"

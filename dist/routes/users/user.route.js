@@ -14,7 +14,6 @@ const express_1 = require("express");
 const tsyringe_1 = require("tsyringe");
 const user_controller_1 = require("../../controllers/users/user.controller");
 const auth_middleware_1 = require("../../middleware/auth.middleware");
-const uploadImages_middleware_1 = require("../../middleware/uploadImages.middleware");
 const validation_1 = require("../../middleware/validation");
 let UserRoute = class UserRoute {
     constructor(userController) {
@@ -30,7 +29,7 @@ let UserRoute = class UserRoute {
             .get(auth_middleware_1.authenticateUser, this.userController.getMe)
             .patch(auth_middleware_1.authenticateUser, validation_1.updateLoggedUserValidator, this.userController.updateMe)
             .delete(auth_middleware_1.authenticateUser, this.userController.deleteMe);
-        this.router.route(`${this.path}/me/profile-picture-upload`).patch(auth_middleware_1.authenticateUser, uploadImages_middleware_1.imageUpload.single('profilePicture'), this.userController.updateMyProfileImage);
+        this.router.route(`${this.path}/me/profile-picture-upload`).patch(auth_middleware_1.authenticateUser, this.userController.uploadProfileImage, this.userController.updateMyProfileImage);
         // Public routes
         this.router.get(`${this.path}/:id`, validation_1.getUserValidator, this.userController.getUser);
     }

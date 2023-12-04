@@ -18,7 +18,7 @@ exports.createTaskValidator = [
         .isString()
         .withMessage('Title must be a string')
         .isLength({ max: 200, min: 10 })
-        .withMessage('Title must be less than 50 characters'),
+        .withMessage('Title must be less than 10 characters'),
     (0, express_validator_1.check)('details')
         .notEmpty()
         .withMessage('Details is required')
@@ -51,7 +51,7 @@ exports.updateTaskValidator = [
     // check('dueDate.start').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Start date must be a valid date'), // some thing like this: 2021-12-31
     // check('dueDate.end').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('End date must be a valid date'),
     (0, express_validator_1.check)('dueDate.flexible').optional().isBoolean().withMessage('Flexible must be a boolean'),
-    (0, express_validator_1.check)('title').optional().isString().withMessage('Title must be a string').isLength({ max: 200, min: 10 }).withMessage('Title must be less than 50 characters'),
+    (0, express_validator_1.check)('title').optional().isString().withMessage('Title must be a string').isLength({ max: 200, min: 10 }).withMessage('Title must be less than 10 characters'),
     (0, express_validator_1.check)('details').optional().isString().withMessage('Details must be a string').isLength({ max: 8000, min: 24 }).withMessage('Details must be less than 8000 characters'),
     (0, express_validator_1.check)('service').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
     (0, express_validator_1.check)('location')

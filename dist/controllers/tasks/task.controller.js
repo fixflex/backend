@@ -16,11 +16,16 @@ exports.TaskController = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const tsyringe_1 = require("tsyringe");
 const HttpException_1 = __importDefault(require("../../exceptions/HttpException"));
+const uploadImages_middleware_1 = require("../../middleware/uploadImages.middleware");
 const task_service_1 = require("../../services/tasks/task.service");
 const customResponse_1 = __importDefault(require("../../utils/customResponse"));
 let TaskController = class TaskController {
     constructor(taskService) {
         this.taskService = taskService;
+        this.taskImages = (0, uploadImages_middleware_1.uploadMixFiles)([
+            { name: 'imageCover', maxCount: 1 },
+            { name: 'image', maxCount: 5 },
+        ]);
         this.createTask = (0, express_async_handler_1.default)(async (req, res, next) => {
             req.body.ownerId = req.user?._id;
             const task = await this.taskService.createTask(req.body);
@@ -43,6 +48,14 @@ let TaskController = class TaskController {
             if (!task)
                 return next(new HttpException_1.default(404, `Task with id ${req.params.id} not found`));
             res.status(200).json((0, customResponse_1.default)({ data: task, success: true, status: 200, message: 'Task updated', error: false }));
+        });
+        this.uploadTaskImages = (0, express_async_handler_1.default)(async (req, res, next) => {
+            if (!req.files)
+                return next(new HttpException_1.default(400, 'Please upload files'));
+            const task = await this.taskService.uploadTaskImages(req.params.id, req.files, req.user?._id); // TODO: fix the type
+            if (!task)
+                return next(new HttpException_1.default(404, `Task with id ${req.params.id} not found`));
+            res.status(200).json((0, customResponse_1.default)({ data: task, success: true, status: 200, message: 'Task images uploaded', error: false }));
         });
         this.deleteTask = (0, express_async_handler_1.default)(async (req, res, next) => {
             const task = await this.taskService.deleteTask(req.params.id, req.user?._id);

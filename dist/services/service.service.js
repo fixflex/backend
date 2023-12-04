@@ -12,13 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ServiceService = void 0;
-const fs_1 = __importDefault(require("fs"));
+exports.ServiceService = exports.uploadServiceImage = void 0;
 const tsyringe_1 = require("tsyringe");
 const service_dao_1 = __importDefault(require("../DB/dao/service.dao"));
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
+const uploadImages_middleware_1 = require("../middleware/uploadImages.middleware");
 const apiFeatures_1 = __importDefault(require("../utils/apiFeatures"));
 const cloudinary_1 = require("../utils/cloudinary");
+exports.uploadServiceImage = (0, uploadImages_middleware_1.uploadSingleFile)('image');
 let ServiceService = class ServiceService {
     constructor(serviceDao) {
         this.serviceDao = serviceDao;
@@ -52,8 +53,7 @@ let ServiceService = class ServiceService {
         return await this.serviceDao.updateOneById(serviceId, service);
     }
     async uploadServiceImage(serviceId, file) {
-        const filePath = `${file.path}`;
-        const result = await (0, cloudinary_1.cloudinaryUploadImage)(filePath);
+        const result = await (0, cloudinary_1.cloudinaryUploadImage)(file.buffer, 'service-image');
         // update the service with the image url and public id
         let service = await this.serviceDao.getOneById(serviceId);
         if (!service)
@@ -63,8 +63,6 @@ let ServiceService = class ServiceService {
             await (0, cloudinary_1.cloudinaryDeleteImage)(service.image.publicId);
         // update the image field in the DB with the new image url and public id
         service = await this.serviceDao.updateOneById(serviceId, { image: { url: result.secure_url, publicId: result.public_id } });
-        // remove the file from the server
-        fs_1.default.unlinkSync(filePath);
         return service;
     }
     async deleteService(serviceId) {

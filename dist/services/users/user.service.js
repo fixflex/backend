@@ -12,16 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserService = exports.uploadProfileImage = void 0;
+exports.UserService = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const fs_1 = __importDefault(require("fs"));
 const tsyringe_1 = require("tsyringe");
 const user_dao_1 = __importDefault(require("../../DB/dao/user.dao"));
 const HttpException_1 = __importDefault(require("../../exceptions/HttpException"));
-const uploadImages_middleware_1 = require("../../middleware/uploadImages.middleware");
 const apiFeatures_1 = __importDefault(require("../../utils/apiFeatures"));
 const cloudinary_1 = require("../../utils/cloudinary");
-exports.uploadProfileImage = (0, uploadImages_middleware_1.uploadSingleFile)('image');
 let UserService = class UserService {
     constructor(userDao) {
         this.userDao = userDao;
@@ -69,8 +66,7 @@ let UserService = class UserService {
         return await this.userDao.deleteOneById(userId);
     }
     async updateProfileImage(userId, file) {
-        const filePath = `${file.path}`;
-        const result = await (0, cloudinary_1.cloudinaryUploadImage)(filePath);
+        const result = await (0, cloudinary_1.cloudinaryUploadImage)(file.buffer, 'user-profile-image');
         // updateOneById the user with the image url and public id
         let user = await this.userDao.getOneById(userId);
         if (!user)
@@ -80,8 +76,6 @@ let UserService = class UserService {
             await (0, cloudinary_1.cloudinaryDeleteImage)(user.profilePicture.publicId);
         // Change the profilePhoto field in the DB
         user = await this.userDao.updateOneById(userId, { profilePicture: { url: result.secure_url, publicId: result.public_id } });
-        // remove the file from the server
-        fs_1.default.unlinkSync(filePath);
         return user;
     }
 };

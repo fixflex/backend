@@ -8,7 +8,13 @@ const serviceSchema = new mongoose_1.Schema({
         required: true,
     },
     description: String,
-    image: String,
+    image: {
+        url: String,
+        publicId: {
+            type: String,
+            default: null,
+        },
+    },
 });
 // Create the Service model
 const Service = (0, mongoose_1.model)('Service', serviceSchema);

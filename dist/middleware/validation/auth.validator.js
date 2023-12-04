@@ -17,6 +17,6 @@ exports.signupValidator = [
 ];
 exports.loginValidator = [
     (0, express_validator_1.check)('email').notEmpty().withMessage('User email is required').isEmail().withMessage('Email is invalid'),
-    (0, express_validator_1.check)('password').notEmpty().withMessage('User password is required').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
+    (0, express_validator_1.check)('password').notEmpty().withMessage('User password is required').isLength({ min: 8 }).withMessage('invalid password'),
     validation_middleware_1.default,
 ];
