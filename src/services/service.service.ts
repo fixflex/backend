@@ -49,6 +49,7 @@ class ServiceService {
 
   async uploadServiceImage(serviceId: string, file: Express.Multer.File) {
     const result = await cloudinaryUploadImage(file.buffer, 'service-image');
+    console.log(result);
     // update the service with the image url and public id
     let service = await this.serviceDao.getOneById(serviceId);
     if (!service) throw new HttpException(404, 'No service found');

@@ -39,6 +39,7 @@ let taskSchema: Schema<ITask> = new Schema(
         default: null,
       },
     },
+    // TODO: check the max length of the images array should't be more than 5
     images: [
       {
         url: String,
