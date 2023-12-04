@@ -1,4 +1,3 @@
-import fs from 'fs';
 import { autoInjectable } from 'tsyringe';
 
 import ServiceDao from '../DB/dao/service.dao';
@@ -49,8 +48,7 @@ class ServiceService {
   }
 
   async uploadServiceImage(serviceId: string, file: Express.Multer.File) {
-    const filePath = `${file.path}`;
-    const result = await cloudinaryUploadImage(filePath);
+    const result = await cloudinaryUploadImage(file.buffer, 'service-image');
     // update the service with the image url and public id
     let service = await this.serviceDao.getOneById(serviceId);
     if (!service) throw new HttpException(404, 'No service found');
@@ -59,8 +57,6 @@ class ServiceService {
     // update the image field in the DB with the new image url and public id
     service = await this.serviceDao.updateOneById(serviceId, { image: { url: result.secure_url, publicId: result.public_id } } as IService);
 
-    // remove the file from the server
-    fs.unlinkSync(filePath);
     return service;
   }
 

@@ -26,7 +26,7 @@ export class ServiceRoute implements Routes {
     this.router.use(`${this.path}`, authenticateUser, allowedTo(UserType.ADMIN));
     this.router.post(`${this.path}`, createServiceValidator, this.serviceController.createService);
 
-    this.router.route(`${this.path}/upload-service-image/:id`).patch(uploadServiceImage, this.serviceController.uploadServiceImage);
+    this.router.route(`${this.path}/upload-service-image/:id`).patch(isMongoId, uploadServiceImage, this.serviceController.uploadServiceImage);
     this.router.patch(`${this.path}/:id`, isMongoId, this.serviceController.updateService);
     this.router.delete(`${this.path}/:id`, isMongoId, this.serviceController.deleteService);
   }

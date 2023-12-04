@@ -9,7 +9,13 @@ const serviceSchema: Schema<IService> = new Schema({
     required: true,
   },
   description: String,
-  image: String,
+  image: {
+    url: String,
+    publicId: {
+      type: String,
+      default: null,
+    },
+  },
 });
 
 // Create the Service model
