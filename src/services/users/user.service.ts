@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import fs from 'fs';
 import { autoInjectable } from 'tsyringe';
 
 import UserDao from '../../DB/dao/user.dao';
@@ -63,8 +62,7 @@ class UserService {
   }
 
   async updateProfileImage(userId: string, file: Express.Multer.File) {
-    const filePath = `${file.path}`;
-    const result = await cloudinaryUploadImage(filePath);
+    const result = await cloudinaryUploadImage(file.buffer, 'user-profile-image');
     // updateOneById the user with the image url and public id
     let user = await this.userDao.getOneById(userId);
     if (!user) throw new HttpException(404, 'No user found');
@@ -73,8 +71,6 @@ class UserService {
     // Change the profilePhoto field in the DB
     user = await this.userDao.updateOneById(userId, { profilePicture: { url: result.secure_url, publicId: result.public_id } } as IUser);
 
-    // remove the file from the server
-    fs.unlinkSync(filePath);
     return user;
   }
 }
