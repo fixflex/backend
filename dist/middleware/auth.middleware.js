@@ -40,10 +40,8 @@ const authenticateUser = (0, express_async_handler_1.default)(async (req, _res, 
     if (!token) {
         return next(new HttpException_1.default(401, `You are not authorized, you must login to get access this route`));
     }
-    console.log('before verify', token);
     // 2- check if the token is valid
     const decoded = jsonwebtoken_1.default.verify(token, validateEnv_1.default.JWT_SECRET_KEY);
-    console.log(decoded);
     // 3- check if the user still exists
     const user = await checkUserExists(decoded.userId);
     if (!user) {

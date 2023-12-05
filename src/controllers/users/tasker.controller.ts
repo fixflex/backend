@@ -15,7 +15,7 @@ class TaskerController {
     let userId = req.user?._id;
     let user = await this.taskerService.createTasker(userId!, req.body);
     if (!user) return next(new HttpException(400, 'Something went wrong, please try again later'));
-    res.status(201).json(customResponse<ITasker>({ data: user, success: true, status: 200, message: 'User updated', error: false }));
+    res.status(201).json(customResponse<ITasker>({ data: user, success: true, status: 200, message: 'tasker created', error: false }));
   });
 
   getTaskerPublicProfile = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {

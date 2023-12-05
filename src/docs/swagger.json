@@ -5,7 +5,7 @@
     "description": "API for khidma Application",
     "contact": {
       "name": "khidma",
-      "url": "https://khidma.onrender.com/api/v1",
+      "url": "https://khidma.websites.co.in",
       "email": "ahmed.elasiriy@gmail.com"
     },
     "version": "1.0.0"
@@ -16,8 +16,8 @@
       "url": "{serverUrl}/api/{apiVersion}",
       "variables": {
         "serverUrl": {
-          "default": "https://khidma.websites.co.in/",
-          "enum": ["https://khidma.onrender.com", "https://khidma.onrender.com", "http://localhost:8080"]
+          "default": "https://khidma.onrender.com",
+          "enum": ["https://khidma.onrender.com", "http://localhost:8080"]
         },
         "apiVersion": {
           "default": "v1"

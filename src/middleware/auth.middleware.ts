@@ -42,10 +42,8 @@ const authenticateUser = asyncHandler(async (req: AuthRequest, _res: Response, n
   if (!token) {
     return next(new HttpException(401, `You are not authorized, you must login to get access this route`));
   }
-  console.log('before verify', token);
   // 2- check if the token is valid
   const decoded = jwt.verify(token!, env.JWT_SECRET_KEY) as JwtPayload;
-  console.log(decoded);
 
   // 3- check if the user still exists
   const user = await checkUserExists(decoded.userId);
