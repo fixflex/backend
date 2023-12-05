@@ -61,8 +61,8 @@ class UserService {
     if (!isPasswordCorrect) throw new HttpException(401, 'Incorrect password');
     // 2- hash the new password
     let newPassword = await bcrypt.hash(payload.newPassword, env.SALT_ROUNDS);
-    // 3- update the user with the new password
-    let updatedUser = await this.userDao.updateOneById(user._id!, { password: newPassword } as IUser);
+    // 3- update the user with the new password and update the passwordChangedAt field
+    let updatedUser = await this.userDao.updateOneById(user._id!, { password: newPassword, passwordChangedAt: Date.now() });
     // 4- return the updated user
     return updatedUser;
   }

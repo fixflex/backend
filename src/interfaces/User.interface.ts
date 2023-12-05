@@ -9,6 +9,7 @@ export interface IUser {
   lastName: string;
   email: string;
   password: string;
+  passwordChangedAt: Date;
   role: UserType;
   profilePicture: {
     url: string;
@@ -20,7 +21,6 @@ export interface IUser {
   createdAt?: string;
   updatedAt?: string;
 }
-
 
 export interface IClient {
   _id?: string; // client id

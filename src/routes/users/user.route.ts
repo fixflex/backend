@@ -16,13 +16,18 @@ class UserRoute implements Routes {
   }
 
   private insitializeRoutes() {
+    // Logged in user routes (authenticated)
+    this.router
+      .route(`${this.path}/me`)
+      .get(authenticateUser, this.userController.getMe)
+      .patch(updateLoggedUserValidator, authenticateUser, this.userController.updateMe)
+      .delete(authenticateUser, this.userController.deleteMe);
+    this.router.patch(`${this.path}/me/change-password`, changePasswordValidator, authenticateUser, this.userController.changePassword);
+    this.router
+      .route(`${this.path}/me/profile-picture-upload`)
+      .patch(authenticateUser, this.userController.uploadProfileImage, authenticateUser, this.userController.updateMyProfileImage);
     // Public routes
     this.router.get(`${this.path}/:id`, getUserValidator, this.userController.getUser);
-    //  Logged in user routes (authenticated)
-    this.router.use(`${this.path}`, authenticateUser);
-    this.router.route(`${this.path}/me`).get(this.userController.getMe).patch(updateLoggedUserValidator, this.userController.updateMe).delete(this.userController.deleteMe);
-    this.router.patch(`${this.path}/me/change-password`, changePasswordValidator, this.userController.changePassword);
-    this.router.route(`${this.path}/me/profile-picture-upload`).patch(this.userController.uploadProfileImage, this.userController.updateMyProfileImage);
   }
 }
 
