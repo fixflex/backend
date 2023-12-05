@@ -18,5 +18,6 @@ const validateEnv = (0, envalid_1.cleanEnv)(process.env, {
     CLOUDINARY_API_SECRET: (0, envalid_1.str)(),
     CLOUDINARY_API_KEY: (0, envalid_1.str)(),
     CLOUDINARY_CLOUD_NAME: (0, envalid_1.str)(),
+    SALT_ROUNDS: (0, envalid_1.num)(),
 });
 exports.default = validateEnv;

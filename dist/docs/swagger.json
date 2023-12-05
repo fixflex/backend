@@ -1,11 +1,11 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "fixflex API",
-        "description": "API for fixflex Application",
+        "title": "khidma API",
+        "description": "API for khidma Application",
         "contact": {
-            "name": "fixflex",
-            "url": "https://fixflex.onrender.com/api/v1",
+            "name": "khidma",
+            "url": "https://khidma.onrender.com/api/v1",
             "email": "ahmed.elasiriy@gmail.com"
         },
         "version": "1.0.0"
@@ -16,8 +16,8 @@
             "url": "{serverUrl}/api/{apiVersion}",
             "variables": {
                 "serverUrl": {
-                    "default": "https://fixflex.onrender.com",
-                    "enum": ["https://fixflex.onrender.com", "https://khidma.onrender.com", "http://localhost:8080"]
+                    "default": "https://khidma.websites.co.in/",
+                    "enum": ["https://khidma.onrender.com", "https://khidma.onrender.com", "http://localhost:8080"]
                 },
                 "apiVersion": {
                     "default": "v1"
@@ -255,6 +255,39 @@
                 "responses": {
                     "204": {
                         "description": "User deleted successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/users/me/change-password": {
+            "patch": {
+                "tags": ["Users"],
+                "summary": "Change logged-in user password",
+                "requestBody": {
+                    "description": "Change logged-in user password",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChangePasswordInput"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password changed successfully"
+                    },
+                    "400": {
+                        "description": "Invalid request"
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -1588,6 +1621,18 @@
                 },
                 "required": []
             },
+            "ChangePasswordInput": {
+                "type": "object",
+                "properties": {
+                    "oldPassword": {
+                        "type": "string"
+                    },
+                    "newPassword": {
+                        "type": "string"
+                    }
+                },
+                "required": ["oldPassword", "newPassword"]
+            },
             "Chat": {
                 "type": "object",
                 "properties": {
@@ -1620,7 +1665,7 @@
                 "in": "header",
                 "flows": {
                     "implicit": {
-                        "authorizationUrl": "https://fixflex.onrender.com/auth/login"
+                        "authorizationUrl": "https://khidma.onrender.com/auth/login"
                     }
                 }
             }

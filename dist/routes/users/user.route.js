@@ -23,13 +23,16 @@ let UserRoute = class UserRoute {
         this.insitializeRoutes();
     }
     insitializeRoutes() {
-        //  Logged in user routes (authenticated)
+        // Logged in user routes (authenticated)
         this.router
             .route(`${this.path}/me`)
             .get(auth_middleware_1.authenticateUser, this.userController.getMe)
-            .patch(auth_middleware_1.authenticateUser, validation_1.updateLoggedUserValidator, this.userController.updateMe)
+            .patch(validation_1.updateLoggedUserValidator, auth_middleware_1.authenticateUser, this.userController.updateMe)
             .delete(auth_middleware_1.authenticateUser, this.userController.deleteMe);
-        this.router.route(`${this.path}/me/profile-picture-upload`).patch(auth_middleware_1.authenticateUser, this.userController.uploadProfileImage, this.userController.updateMyProfileImage);
+        this.router.patch(`${this.path}/me/change-password`, validation_1.changePasswordValidator, auth_middleware_1.authenticateUser, this.userController.changePassword);
+        this.router
+            .route(`${this.path}/me/profile-picture-upload`)
+            .patch(auth_middleware_1.authenticateUser, this.userController.uploadProfileImage, auth_middleware_1.authenticateUser, this.userController.updateMyProfileImage);
         // Public routes
         this.router.get(`${this.path}/:id`, validation_1.getUserValidator, this.userController.getUser);
     }

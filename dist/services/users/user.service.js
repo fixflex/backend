@@ -16,6 +16,7 @@ exports.UserService = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const tsyringe_1 = require("tsyringe");
 const user_dao_1 = __importDefault(require("../../DB/dao/user.dao"));
+const validateEnv_1 = __importDefault(require("../../config/validateEnv"));
 const HttpException_1 = __importDefault(require("../../exceptions/HttpException"));
 const apiFeatures_1 = __importDefault(require("../../utils/apiFeatures"));
 const cloudinary_1 = require("../../utils/cloudinary");
@@ -48,7 +49,7 @@ let UserService = class UserService {
             throw new HttpException_1.default(409, `E-Mail address ${user.email} is already exists, please pick a different one.`);
         }
         // hash the password
-        user.password = await bcrypt_1.default.hash(user.password, 10);
+        user.password = await bcrypt_1.default.hash(user.password, validateEnv_1.default.SALT_ROUNDS);
         let newUser = await this.userDao.create(user);
         return newUser;
     }
@@ -57,6 +58,18 @@ let UserService = class UserService {
         if (!isUserExists)
             throw new HttpException_1.default(404, 'No user found');
         return await this.userDao.updateOneById(userId, user);
+    }
+    async changePassword(payload, user) {
+        // 1- check if the password === user.password
+        let isPasswordCorrect = await bcrypt_1.default.compare(payload.oldPassword, user.password);
+        if (!isPasswordCorrect)
+            throw new HttpException_1.default(401, 'Incorrect password');
+        // 2- hash the new password
+        let newPassword = await bcrypt_1.default.hash(payload.newPassword, validateEnv_1.default.SALT_ROUNDS);
+        // 3- update the user with the new password and update the passwordChangedAt field
+        let updatedUser = await this.userDao.updateOneById(user._id, { password: newPassword, passwordChangedAt: Date.now() });
+        // 4- return the updated user
+        return updatedUser;
     }
     async deleteUser(userId) {
         let isUserExists = await this.userDao.getOneById(userId);

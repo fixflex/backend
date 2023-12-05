@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserValidator = exports.getUserValidator = exports.updateLoggedUserValidator = void 0;
+exports.changePasswordValidator = exports.deleteUserValidator = exports.getUserValidator = exports.updateLoggedUserValidator = void 0;
 const express_validator_1 = require("express-validator");
 const validation_middleware_1 = __importDefault(require("../../errors/validation.middleware"));
 exports.updateLoggedUserValidator = [
@@ -31,12 +31,15 @@ exports.updateLoggedUserValidator = [
     (0, express_validator_1.check)('_id').isEmpty().withMessage('_id is not allowed'),
     validation_middleware_1.default,
 ];
-exports.getUserValidator = [
-    (0, express_validator_1.check)('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '),
-    validation_middleware_1.default,
-];
-exports.deleteUserValidator = [
-    (0, express_validator_1.check)('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '),
+exports.getUserValidator = [(0, express_validator_1.check)('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '), validation_middleware_1.default];
+exports.deleteUserValidator = [(0, express_validator_1.check)('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '), validation_middleware_1.default];
+exports.changePasswordValidator = [
+    (0, express_validator_1.check)('oldPassword')
+        .notEmpty()
+        .withMessage('Old password is required')
+        .custom((oldPassword, { req }) => req.body.newPassword !== oldPassword)
+        .withMessage('New password must be different from old password'),
+    (0, express_validator_1.check)('newPassword').notEmpty().withMessage('User newPassword is required').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
     validation_middleware_1.default,
 ];
 // ===================  =====================

@@ -9,30 +9,52 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_model_1 = __importDefault(require("../DB/models/user/user.model"));
 const validateEnv_1 = __importDefault(require("../config/validateEnv"));
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
-const checkTokenExists = (req, next) => {
+const checkTokenExists = (req) => {
     if (!req.headers.authorization?.startsWith('Bearer')) {
-        return next(new HttpException_1.default(401, `You are not authorized, you must login to get access this route`));
+        return;
     }
     const token = req.headers.authorization.split(' ')[1];
     if (!token)
         return;
     return token;
 };
-const checkUserExists = async (userId, next) => {
+const checkUserExists = async (userId) => {
     const user = await user_model_1.default.findById(userId);
     if (!user) {
-        return next(new HttpException_1.default(401, 'The user that belongs to this token no longer exists'));
+        return;
     }
     return user;
 };
-const authenticateUser = (0, express_async_handler_1.default)(async (req, _res, next) => {
-    const token = checkTokenExists(req, next);
-    if (!token) {
-        // throw next(new HttpException(500, 'Auth Failed (Invalid Credentials)'));
-        return;
+const isPasswordChanged = (passwordChangedAt, tokenIssuedAt) => {
+    if (passwordChangedAt) {
+        const changedAt = passwordChangedAt.getTime() / 1000;
+        if (changedAt > tokenIssuedAt) {
+            return true;
+        }
     }
+    return false;
+};
+const authenticateUser = (0, express_async_handler_1.default)(async (req, _res, next) => {
+    // 1- check if the token exists
+    const token = checkTokenExists(req);
+    if (!token) {
+        return next(new HttpException_1.default(401, `You are not authorized, you must login to get access this route`));
+    }
+    console.log('before verify', token);
+    // 2- check if the token is valid
     const decoded = jsonwebtoken_1.default.verify(token, validateEnv_1.default.JWT_SECRET_KEY);
-    const user = await checkUserExists(decoded.userId, next);
+    console.log(decoded);
+    // 3- check if the user still exists
+    const user = await checkUserExists(decoded.userId);
+    if (!user) {
+        return next(new HttpException_1.default(401, 'The user that belongs to this token no longer exists'));
+    }
+    // 4- check if the user changed his password after the token was issued
+    // TODO: make this check in the user model instead of here
+    if (isPasswordChanged(user.passwordChangedAt, decoded.iat)) {
+        // iat is the time the token was issued
+        return next(new HttpException_1.default(401, 'User recently changed password! Please log in again'));
+    }
     req.user = user;
     next();
 });

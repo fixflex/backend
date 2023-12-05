@@ -53,7 +53,9 @@ const authenticateUser = asyncHandler(async (req: AuthRequest, _res: Response, n
     return next(new HttpException(401, 'The user that belongs to this token no longer exists'));
   }
   // 4- check if the user changed his password after the token was issued
+  // TODO: make this check in the user model instead of here
   if (isPasswordChanged(user.passwordChangedAt, decoded.iat!)) {
+    // iat is the time the token was issued
     return next(new HttpException(401, 'User recently changed password! Please log in again'));
   }
 

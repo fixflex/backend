@@ -32,6 +32,7 @@ let userSchema = new mongoose_1.Schema({
         minlength: [6, 'Password must be more than 6 characters'],
         required: true,
     },
+    passwordChangedAt: Date,
     profilePicture: {
         type: Object,
         default: {

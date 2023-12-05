@@ -32,19 +32,19 @@ let UserController = class UserController {
         });
         // user profile routes (authenticated)
         this.getMe = (0, express_async_handler_1.default)(async (req, res) => {
-            let userData = {
-                _id: req.user?._id,
-                fullName: req.user?.firstName + ' ' + req.user?.lastName,
-                email: req.user?.email,
-                profilePicture: req.user?.profilePicture,
-            };
-            res.status(200).json((0, customResponse_1.default)({ data: userData, success: true, status: 200, message: 'User found', error: false }));
+            res.status(200).json((0, customResponse_1.default)({ data: req.user, success: true, status: 200, message: 'User found', error: false }));
         });
         this.updateMe = (0, express_async_handler_1.default)(async (req, res) => {
             let user = await this.userService.updateUser(req.user?._id, req.body);
             if (!user)
                 throw new HttpException_1.default(404, 'No user found');
             res.status(200).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: 'User updated', error: false }));
+        });
+        this.changePassword = (0, express_async_handler_1.default)(async (req, res) => {
+            let user = await this.userService.changePassword(req.body, req.user);
+            if (!user)
+                throw new HttpException_1.default(404, 'No user found');
+            res.status(200).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: 'Password changed', error: false }));
         });
         this.deleteMe = (0, express_async_handler_1.default)(async (req, res) => {
             await this.userService.deleteUser(req.user?._id);

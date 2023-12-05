@@ -16,6 +16,7 @@ exports.AuthServie = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const tsyringe_1 = require("tsyringe");
 const user_dao_1 = __importDefault(require("../DB/dao/user.dao"));
+const validateEnv_1 = __importDefault(require("../config/validateEnv"));
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
 const createToken_1 = require("../utils/createToken");
 let AuthServie = exports.AuthServie = class AuthServie {
@@ -35,7 +36,7 @@ let AuthServie = exports.AuthServie = class AuthServie {
             throw new HttpException_1.default(409, `E-Mail address ${user.email} is already exists, please pick a different one.`);
         }
         // hash the password
-        user.password = await bcrypt_1.default.hash(user.password, 10); // TODO: add salt rounds to the .env file
+        user.password = await bcrypt_1.default.hash(user.password, validateEnv_1.default.SALT_ROUNDS);
         let newUser = await this.userDao.create(user);
         let token = (0, createToken_1.createToken)(newUser._id);
         return { user: newUser, token };
