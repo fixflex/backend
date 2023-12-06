@@ -10,6 +10,9 @@ export interface IUser {
   email: string;
   password: string;
   passwordChangedAt: Date;
+  passwordResetCode: string;
+  passwordResetCodeExpiration: number;
+  passwordResetVerified: boolean;
   role: UserType;
   profilePicture: {
     url: string;

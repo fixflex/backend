@@ -35,7 +35,12 @@ let userSchema: Schema<IUser> = new Schema(
       minlength: [6, 'Password must be more than 6 characters'],
       required: true,
     },
+
     passwordChangedAt: Date, // used to check if the user changed his password after the token was issued
+    passwordResetCode: String, // used to reset the password
+    passwordResetCodeExpiration: Date, // used to check if the reset code is expired or not
+    passwordResetVerified: Boolean, // used to check if the reset code is verified or not
+
     profilePicture: {
       type: Object,
       default: {
