@@ -24,4 +24,12 @@ export class AuthController {
 
     res.status(200).json(Object.assign(customResponse({ data: user, success: true, status: 200, message: 'User logged in', error: false }), { token }));
   });
+
+  public forgotPassword = asyncHandler(async (req: Request, res: Response) => {
+    let { email } = req.body;
+
+    await this.authService.forgotPassword(email);
+
+    res.status(200).json(customResponse({ data: null, success: true, status: 200, message: 'Password reset code sent to email!, please check your email inbox', error: false }));
+  });
 }

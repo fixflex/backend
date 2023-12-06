@@ -7,8 +7,9 @@ class UserDao extends CommonDAO<IUser> {
     super(UserModel);
   }
 
-  async getUserByEmail(emailOrUsername: string): Promise<IUser | null> {
-    return await UserModel.findOne({ email: emailOrUsername }).lean();
+  async getUserByEmail(email: string, useLean: boolean = true) {
+    useLean;
+    return await UserModel.findOne({ email: email });
   }
 
   async listUsers(query: any = {}, paginate: { skip: number; limit: number }, sort: any = {}, select: any = '-__v'): Promise<IUser[]> {
