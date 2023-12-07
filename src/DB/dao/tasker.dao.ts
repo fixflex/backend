@@ -22,12 +22,18 @@ class TaskerDao extends CommonDAO<ITasker> {
         },
         // where services = service
         services: { $eq: services },
-      }).lean();
+      })
+        .populate('userId', 'firstName lastName email  profilePicture')
+        .populate('services', 'name')
+        .lean();
     } else if (services) {
       taskers = await TaskerModel.find({
         // where services = service
         services: { $eq: services },
-      }).lean();
+      })
+        .populate('userId', 'firstName lastName email  profilePicture')
+        .populate('services', 'name')
+        .lean();
     } else if (latitude && longitude) {
       taskers = await TaskerModel.find({
         location: {
@@ -39,7 +45,10 @@ class TaskerDao extends CommonDAO<ITasker> {
             },
           },
         },
-      }).lean();
+      })
+        .populate('userId', 'firstName lastName email  profilePicture')
+        .populate('services', 'name')
+        .lean();
     } else taskers = await TaskerModel.find({}).lean();
 
     return taskers;
@@ -47,7 +56,7 @@ class TaskerDao extends CommonDAO<ITasker> {
 
   // get tasker profile with user data and services data
   async getTaskerProfile(taskerId: string): Promise<ITasker | null> {
-    let tasker = await TaskerModel.findById(taskerId).populate('userId', 'firstName lastName email phoneNumber').populate('services', '_id name description').lean();
+    let tasker = await TaskerModel.findById(taskerId).populate('userId', 'firstName lastName email profilePicture').populate('services', '_id name description').lean();
     return tasker;
   }
 }
