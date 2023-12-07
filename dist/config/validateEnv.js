@@ -19,5 +19,10 @@ const validateEnv = (0, envalid_1.cleanEnv)(process.env, {
     CLOUDINARY_API_KEY: (0, envalid_1.str)(),
     CLOUDINARY_CLOUD_NAME: (0, envalid_1.str)(),
     SALT_ROUNDS: (0, envalid_1.num)(),
+    SMTP_NAME: (0, envalid_1.str)(),
+    SMTP_USERNAME: (0, envalid_1.str)(),
+    SMTP_PASSWORD: (0, envalid_1.str)(),
+    SMTP_HOST: (0, envalid_1.str)(),
+    SMTP_PORT: (0, envalid_1.str)(),
 });
 exports.default = validateEnv;

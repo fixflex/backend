@@ -25,13 +25,19 @@ class TaskerDao extends commonDAO_1.default {
                 },
                 // where services = service
                 services: { $eq: services },
-            }).lean();
+            })
+                .populate('userId', 'firstName lastName email  profilePicture')
+                .populate('services', 'name')
+                .lean();
         }
         else if (services) {
             taskers = await tasker_model_1.default.find({
                 // where services = service
                 services: { $eq: services },
-            }).lean();
+            })
+                .populate('userId', 'firstName lastName email  profilePicture')
+                .populate('services', 'name')
+                .lean();
         }
         else if (latitude && longitude) {
             taskers = await tasker_model_1.default.find({
@@ -44,7 +50,10 @@ class TaskerDao extends commonDAO_1.default {
                         },
                     },
                 },
-            }).lean();
+            })
+                .populate('userId', 'firstName lastName email  profilePicture')
+                .populate('services', 'name')
+                .lean();
         }
         else
             taskers = await tasker_model_1.default.find({}).lean();
@@ -52,7 +61,7 @@ class TaskerDao extends commonDAO_1.default {
     }
     // get tasker profile with user data and services data
     async getTaskerProfile(taskerId) {
-        let tasker = await tasker_model_1.default.findById(taskerId).populate('userId', 'firstName lastName email phoneNumber').populate('services', '_id name description').lean();
+        let tasker = await tasker_model_1.default.findById(taskerId).populate('userId', 'firstName lastName email profilePicture').populate('services', '_id name description').lean();
         return tasker;
     }
 }

@@ -41,13 +41,13 @@ let UserController = class UserController {
             res.status(200).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: 'User updated', error: false }));
         });
         this.changePassword = (0, express_async_handler_1.default)(async (req, res) => {
-            let user = await this.userService.changePassword(req.body, req.user);
-            if (!user)
+            let { updatedUser, token } = await this.userService.changePassword(req.body, req.user);
+            if (!updatedUser)
                 throw new HttpException_1.default(404, 'No user found');
-            res.status(200).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: 'Password changed', error: false }));
+            res.status(200).json(Object.assign((0, customResponse_1.default)({ data: updatedUser, success: true, status: 200, message: 'Password changed', error: false }), { token }));
         });
         this.deleteMe = (0, express_async_handler_1.default)(async (req, res) => {
-            await this.userService.deleteUser(req.user?._id);
+            await this.userService.updateUser(req.user?._id, { active: false });
             res.status(204).json((0, customResponse_1.default)({ data: null, success: true, status: 204, message: 'User deleted', error: false }));
         });
         this.updateMyProfileImage = (0, express_async_handler_1.default)(async (req, res, next) => {

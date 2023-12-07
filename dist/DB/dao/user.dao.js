@@ -9,8 +9,7 @@ class UserDao extends commonDAO_1.default {
     constructor() {
         super(user_model_1.default);
     }
-    async getUserByEmail(email, useLean = true) {
-        useLean;
+    async getUserByEmail(email) {
         return await user_model_1.default.findOne({ email: email });
     }
     async listUsers(query = {}, paginate, sort = {}, select = '-__v') {

@@ -20,6 +20,7 @@ const validateEnv_1 = __importDefault(require("../../config/validateEnv"));
 const HttpException_1 = __importDefault(require("../../exceptions/HttpException"));
 const apiFeatures_1 = __importDefault(require("../../utils/apiFeatures"));
 const cloudinary_1 = require("../../utils/cloudinary");
+const createToken_1 = require("../../utils/createToken");
 let UserService = class UserService {
     constructor(userDao) {
         this.userDao = userDao;
@@ -68,8 +69,9 @@ let UserService = class UserService {
         let newPassword = await bcrypt_1.default.hash(payload.newPassword, validateEnv_1.default.SALT_ROUNDS);
         // 3- update the user with the new password and update the passwordChangedAt field
         let updatedUser = await this.userDao.updateOneById(user._id, { password: newPassword, passwordChangedAt: Date.now() });
-        // 4- return the updated user
-        return updatedUser;
+        // 4- generate a new token
+        let token = (0, createToken_1.createToken)(user._id);
+        return { updatedUser, token };
     }
     async deleteUser(userId) {
         let isUserExists = await this.userDao.getOneById(userId);

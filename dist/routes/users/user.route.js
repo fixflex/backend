@@ -28,6 +28,7 @@ let UserRoute = class UserRoute {
             .route(`${this.path}/me`)
             .get(auth_middleware_1.authenticateUser, this.userController.getMe)
             .patch(validation_1.updateLoggedUserValidator, auth_middleware_1.authenticateUser, this.userController.updateMe)
+            // deactivate user
             .delete(auth_middleware_1.authenticateUser, this.userController.deleteMe);
         this.router.patch(`${this.path}/me/change-password`, validation_1.changePasswordValidator, auth_middleware_1.authenticateUser, this.userController.changePassword);
         this.router

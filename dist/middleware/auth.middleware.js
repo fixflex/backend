@@ -53,6 +53,10 @@ const authenticateUser = (0, express_async_handler_1.default)(async (req, _res, 
         // iat is the time the token was issued
         return next(new HttpException_1.default(401, 'User recently changed password! Please log in again'));
     }
+    //  // 5- check if the user is active
+    if (!user.active) {
+        return next(new HttpException_1.default(401, 'This user is no longer active'));
+    }
     req.user = user;
     next();
 });

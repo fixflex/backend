@@ -25,8 +25,8 @@ let AuthRoute = exports.AuthRoute = class AuthRoute {
         this.router.post(`${this.path}/signup`, validation_1.signupValidator, this.authController.signup);
         this.router.post(`${this.path}/login`, validation_1.loginValidator, this.authController.login);
         this.router.post(`${this.path}/forgotPassword`, this.authController.forgotPassword);
-        // // reset password
-        // this.router.patch(`${this.path}/resetPassword`, this.authController.resetPassword);
+        this.router.post(`${this.path}/verifyResetCode`, this.authController.verifyPassResetCode);
+        this.router.patch(`${this.path}/resetPassword`, this.authController.resetPassword);
     }
 };
 exports.AuthRoute = AuthRoute = __decorate([

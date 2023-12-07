@@ -35,7 +35,17 @@ let AuthController = exports.AuthController = class AuthController {
         this.forgotPassword = (0, express_async_handler_1.default)(async (req, res) => {
             let { email } = req.body;
             await this.authService.forgotPassword(email);
-            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: 'Password reset code sent to email!, please check your email inbox', error: false }));
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: 'Password reset done sent to email!, please check your email inbox', error: false }));
+        });
+        this.verifyPassResetCode = (0, express_async_handler_1.default)(async (req, res) => {
+            let { resetCode } = req.body;
+            await this.authService.verifyPassResetCode(resetCode);
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: 'Password reset code verified', error: false }));
+        });
+        this.resetPassword = (0, express_async_handler_1.default)(async (req, res) => {
+            let { email, newPassword } = req.body;
+            let results = await this.authService.resetPassword(email, newPassword);
+            res.status(200).json(Object.assign((0, customResponse_1.default)({ data: results.user, success: true, status: 200, message: 'Password reset done', error: false }), { token: results.token }));
         });
     }
 };

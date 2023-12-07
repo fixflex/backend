@@ -20,6 +20,7 @@ const validateEnv_1 = __importDefault(require("../config/validateEnv"));
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
 const createToken_1 = require("../utils/createToken");
 const hashing_1 = require("../utils/hashing");
+const nodemailer_1 = require("../utils/nodemailer");
 let AuthServie = exports.AuthServie = class AuthServie {
     constructor(userDao) {
         this.userDao = userDao;
@@ -57,7 +58,7 @@ let AuthServie = exports.AuthServie = class AuthServie {
     async forgotPassword(email) {
         // comments in details for the reset password route
         // 1- check if the user exists by email
-        let user = await this.userDao.getUserByEmail(email, false);
+        let user = await this.userDao.getUserByEmail(email);
         if (!user) {
             throw new HttpException_1.default(404, 'User not found');
         }
@@ -72,9 +73,55 @@ let AuthServie = exports.AuthServie = class AuthServie {
         // 5- update the user document with the hashed reset code and the reset code expiration the passwordResetVerified
         await user.save();
         // 5- send the reset code to the user email address using nodemailer
+        // 3- Send the reset code via email (the code will be expired after 10 minutes)
+        const message = `Hi ${user.firstName}, \nwe received a request to reset the password on your Khidma Account.
+        ${resetCode} \nEnter this code to complete the reset (the code will be expired after 10 minutes).\nThanks for helping us keep your account secure.`;
+        try {
+            await (0, nodemailer_1.sendMailer)(user.email, 'Reset Password', message);
+        }
+        catch (err) {
+            user.passwordResetCode = undefined;
+            user.passwordResetCodeExpiration = undefined;
+            user.passwordResetVerified = false;
+            await user.save();
+            return new HttpException_1.default(500, 'There is an error in sending email');
+        }
         // 6- return the reset code to the user
-        return resetCode;
+        return true;
         // TODO: log the user out from all devices (delete all the refresh tokens from the database for this user id and set the passwordChangedAt to now so all the refresh tokens will be invalid)
+    }
+    async verifyPassResetCode(resetCode) {
+        // 1- check if the user exists
+        let user = await this.userDao.getOne({ passwordResetCode: (0, hashing_1.hashCode)(resetCode), passwordResetCodeExpiration: { $gt: Date.now() } }, false);
+        if (!user) {
+            throw new HttpException_1.default(400, 'Invalid reset code or the code is expired');
+        }
+        // 3- set the passwordResetVerified to true
+        user.passwordResetVerified = true;
+        // 4- update the user document with the passwordResetVerified
+        await user.save();
+        return;
+    }
+    async resetPassword(email, newPassword) {
+        // 1- check if the user exists by email
+        let user = await this.userDao.getUserByEmail(email);
+        if (!user) {
+            throw new HttpException_1.default(404, 'User not found');
+        }
+        // 2- check if the reset code is verified
+        if (!user.passwordResetVerified) {
+            throw new HttpException_1.default(400, 'Please verify your reset code first');
+        }
+        // 3- hash the new password
+        user.password = await bcrypt_1.default.hash(newPassword, validateEnv_1.default.SALT_ROUNDS);
+        user.passwordResetVerified = false;
+        user.passwordResetCode = undefined;
+        user.passwordResetCodeExpiration = undefined;
+        await user.save();
+        // 4- generate a new token
+        let token = (0, createToken_1.createToken)(user._id);
+        // 5- return the user and the token
+        return { user, token };
     }
 };
 exports.AuthServie = AuthServie = __decorate([
