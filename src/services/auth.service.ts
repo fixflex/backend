@@ -7,6 +7,7 @@ import HttpException from '../exceptions/HttpException';
 import { IUser } from '../interfaces/user.interface';
 import { createToken } from '../utils/createToken';
 import { hashCode } from '../utils/hashing';
+import { sendMailer } from '../utils/nodemailer';
 
 @autoInjectable()
 export class AuthServie {
@@ -68,8 +69,22 @@ export class AuthServie {
     // 5- update the user document with the hashed reset code and the reset code expiration the passwordResetVerified
     await user.save();
     // 5- send the reset code to the user email address using nodemailer
+    // 3- Send the reset code via email
+    const message = `Hi ${user.firstName}, \nwe received a request to reset the password on your Khidma Account.
+        ${resetCode} \nEnter this code to complete the reset.\nThanks for helping us keep your account secure.`;
+    try {
+      await sendMailer(user.email, 'Reset Password', message);
+    } catch (err) {
+      user.passwordResetCode = undefined;
+      user.passwordResetCodeExpiration = undefined;
+      user.passwordResetVerified = undefined;
+
+      await user.save();
+      return new HttpException(500, 'There is an error in sending email');
+    }
+
     // 6- return the reset code to the user
-    return resetCode;
+    return true;
     // TODO: log the user out from all devices (delete all the refresh tokens from the database for this user id and set the passwordChangedAt to now so all the refresh tokens will be invalid)
   }
 }
