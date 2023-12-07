@@ -170,7 +170,7 @@
         }
       }
     },
-    "/forgotPassword": {
+    "/auth/forgotPassword": {
       "post": {
         "tags": ["Auth"],
         "summary": "Forgot password",
@@ -206,7 +206,7 @@
         }
       }
     },
-    "/verifyResetCode": {
+    "/auth/verifyResetCode": {
       "post": {
         "tags": ["Auth"],
         "summary": "Verify reset code",
@@ -243,7 +243,7 @@
       }
     },
 
-    "/resetPassword": {
+    "/auth/resetPassword": {
       "patch": {
         "tags": ["Auth"],
         "summary": "Reset password",
