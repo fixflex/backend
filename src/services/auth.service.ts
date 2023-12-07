@@ -69,9 +69,10 @@ export class AuthServie {
     // 5- update the user document with the hashed reset code and the reset code expiration the passwordResetVerified
     await user.save();
     // 5- send the reset code to the user email address using nodemailer
-    // 3- Send the reset code via email
+    // 3- Send the reset code via email (the code will be expired after 10 minutes)
+
     const message = `Hi ${user.firstName}, \nwe received a request to reset the password on your Khidma Account.
-        ${resetCode} \nEnter this code to complete the reset.\nThanks for helping us keep your account secure.`;
+        ${resetCode} \nEnter this code to complete the reset (the code will be expired after 10 minutes).\nThanks for helping us keep your account secure.`;
     try {
       await sendMailer(user.email, 'Reset Password', message);
     } catch (err) {
@@ -86,5 +87,23 @@ export class AuthServie {
     // 6- return the reset code to the user
     return true;
     // TODO: log the user out from all devices (delete all the refresh tokens from the database for this user id and set the passwordChangedAt to now so all the refresh tokens will be invalid)
+  }
+
+  async verifyPassResetCode(email: string, resetCode: string) {
+    // 1- check if the user exists by email
+    let user = await this.userDao.getUserByEmail(email, false);
+    if (!user) {
+      throw new HttpException(404, 'User not found');
+    }
+    // 2- check if the reset code is valid and not expired (the reset code is valid if the reset code is equal to the hashed reset code) and the reset code expiration is greater than now
+    if (user.passwordResetCode !== hashCode(resetCode) || user.passwordResetCodeExpiration! < Date.now()) {
+      throw new HttpException(400, 'Invalid or expired reset code');
+    }
+    // 3- set the passwordResetVerified to true
+    user.passwordResetVerified = true;
+    // 4- update the user document with the passwordResetVerified
+    await user.save();
+    // 5- return the user
+    return true;
   }
 }

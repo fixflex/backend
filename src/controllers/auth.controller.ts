@@ -30,4 +30,10 @@ export class AuthController {
     await this.authService.forgotPassword(email);
     res.status(200).json(customResponse({ data: null, success: true, status: 200, message: 'Password reset done sent to email!, please check your email inbox', error: false }));
   });
+
+  public verifyPassResetCode = asyncHandler(async (req: Request, res: Response) => {
+    let { email, resetCode } = req.body;
+    await this.authService.verifyPassResetCode(email, resetCode);
+    res.status(200).json(customResponse({ data: null, success: true, status: 200, message: 'Password reset code verified', error: false }));
+  });
 }
