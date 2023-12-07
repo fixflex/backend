@@ -34,7 +34,7 @@ let TaskerService = class TaskerService {
         return await this.taskerDao.create(tasker);
     }
     async getTaskerProfile(taskerId) {
-        return await this.taskerDao.getOneById(taskerId);
+        return await this.taskerDao.getTaskerProfile(taskerId);
     }
     async getMyProfile(userId) {
         return await this.taskerDao.getOne({ userId });

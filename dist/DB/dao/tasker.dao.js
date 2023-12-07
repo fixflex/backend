@@ -50,5 +50,10 @@ class TaskerDao extends commonDAO_1.default {
             taskers = await tasker_model_1.default.find({}).lean();
         return taskers;
     }
+    // get tasker profile with user data and services data
+    async getTaskerProfile(taskerId) {
+        let tasker = await tasker_model_1.default.findById(taskerId).populate('userId', 'firstName lastName email phoneNumber').populate('services', '_id name description').lean();
+        return tasker;
+    }
 }
 exports.default = TaskerDao;

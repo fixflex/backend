@@ -23,7 +23,7 @@ class TaskerService {
   }
 
   async getTaskerProfile(taskerId: string) {
-    return await this.taskerDao.getOneById(taskerId);
+    return await this.taskerDao.getTaskerProfile(taskerId);
   }
 
   async getMyProfile(userId: string) {

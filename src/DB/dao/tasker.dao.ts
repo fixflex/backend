@@ -44,6 +44,12 @@ class TaskerDao extends CommonDAO<ITasker> {
 
     return taskers;
   }
+
+  // get tasker profile with user data and services data
+  async getTaskerProfile(taskerId: string): Promise<ITasker | null> {
+    let tasker = await TaskerModel.findById(taskerId).populate('userId', 'firstName lastName email phoneNumber').populate('services', '_id name description').lean();
+    return tasker;
+  }
 }
 
 export default TaskerDao;
