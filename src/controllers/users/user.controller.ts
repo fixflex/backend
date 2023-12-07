@@ -35,9 +35,9 @@ class UserController {
   });
 
   public changePassword = asyncHandler(async (req: AuthRequest, res: Response) => {
-    let user = await this.userService.changePassword(req.body, req.user!);
-    if (!user) throw new HttpException(404, 'No user found');
-    res.status(200).json(customResponse<IUser>({ data: user, success: true, status: 200, message: 'Password changed', error: false }));
+    let { updatedUser, token } = await this.userService.changePassword(req.body, req.user!);
+    if (!updatedUser) throw new HttpException(404, 'No user found');
+    res.status(200).json(Object.assign(customResponse({ data: updatedUser, success: true, status: 200, message: 'Password changed', error: false }), { token }));
   });
 
   public deleteMe = asyncHandler(async (req: AuthRequest, res: Response) => {
