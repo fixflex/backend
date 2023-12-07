@@ -32,8 +32,14 @@ export class AuthController {
   });
 
   public verifyPassResetCode = asyncHandler(async (req: Request, res: Response) => {
-    let { email, resetCode } = req.body;
-    await this.authService.verifyPassResetCode(email, resetCode);
+    let { resetCode } = req.body;
+    await this.authService.verifyPassResetCode(resetCode);
     res.status(200).json(customResponse({ data: null, success: true, status: 200, message: 'Password reset code verified', error: false }));
+  });
+
+  public resetPassword = asyncHandler(async (req: Request, res: Response) => {
+    let { email, newPassword } = req.body;
+    let results = await this.authService.resetPassword(email, newPassword);
+    res.status(200).json(Object.assign(customResponse({ data: results.user, success: true, status: 200, message: 'Password reset done', error: false }), { token: results.token }));
   });
 }

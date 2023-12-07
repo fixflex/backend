@@ -54,7 +54,7 @@ export class AuthServie {
     // comments in details for the reset password route
 
     // 1- check if the user exists by email
-    let user = await this.userDao.getUserByEmail(email, false);
+    let user = await this.userDao.getUserByEmail(email);
     if (!user) {
       throw new HttpException(404, 'User not found');
     }
@@ -78,7 +78,7 @@ export class AuthServie {
     } catch (err) {
       user.passwordResetCode = undefined;
       user.passwordResetCodeExpiration = undefined;
-      user.passwordResetVerified = undefined;
+      user.passwordResetVerified = false;
 
       await user.save();
       return new HttpException(500, 'There is an error in sending email');
@@ -89,21 +89,40 @@ export class AuthServie {
     // TODO: log the user out from all devices (delete all the refresh tokens from the database for this user id and set the passwordChangedAt to now so all the refresh tokens will be invalid)
   }
 
-  async verifyPassResetCode(email: string, resetCode: string) {
-    // 1- check if the user exists by email
-    let user = await this.userDao.getUserByEmail(email, false);
+  async verifyPassResetCode(resetCode: string) {
+    // 1- check if the user exists
+    let user: any = await this.userDao.getOne({ passwordResetCode: hashCode(resetCode), passwordResetCodeExpiration: { $gt: Date.now() } }, false);
     if (!user) {
-      throw new HttpException(404, 'User not found');
-    }
-    // 2- check if the reset code is valid and not expired (the reset code is valid if the reset code is equal to the hashed reset code) and the reset code expiration is greater than now
-    if (user.passwordResetCode !== hashCode(resetCode) || user.passwordResetCodeExpiration! < Date.now()) {
-      throw new HttpException(400, 'Invalid or expired reset code');
+      throw new HttpException(400, 'Invalid reset code or the code is expired');
     }
     // 3- set the passwordResetVerified to true
     user.passwordResetVerified = true;
     // 4- update the user document with the passwordResetVerified
     await user.save();
-    // 5- return the user
-    return true;
+    return;
+  }
+
+  async resetPassword(email: string, newPassword: string) {
+    // 1- check if the user exists by email
+    let user: any = await this.userDao.getUserByEmail(email);
+    if (!user) {
+      throw new HttpException(404, 'User not found');
+    }
+    // 2- check if the reset code is verified
+    if (!user.passwordResetVerified) {
+      throw new HttpException(400, 'Please verify your reset code first');
+    }
+    // 3- hash the new password
+    user.password = await bcrypt.hash(newPassword, env.SALT_ROUNDS);
+
+    user.passwordResetVerified = false;
+    user.passwordResetCode = undefined;
+    user.passwordResetCodeExpiration = undefined;
+
+    await user.save();
+    // 4- generate a new token
+    let token = createToken(user._id!);
+    // 5- return the user and the token
+    return { user, token };
   }
 }

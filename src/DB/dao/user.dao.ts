@@ -7,8 +7,7 @@ class UserDao extends CommonDAO<IUser> {
     super(UserModel);
   }
 
-  async getUserByEmail(email: string, useLean: boolean = true) {
-    useLean;
+  async getUserByEmail(email: string) {
     return await UserModel.findOne({ email: email });
   }
 

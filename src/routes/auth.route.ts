@@ -19,6 +19,6 @@ export class AuthRoute implements Routes {
     this.router.post(`${this.path}/login`, loginValidator, this.authController.login);
     this.router.post(`${this.path}/forgotPassword`, this.authController.forgotPassword);
     this.router.post(`${this.path}/verifyResetCode`, this.authController.verifyPassResetCode);
-    // this.router.patch(`${this.path}/resetPassword`, this.authController.resetPassword);
+    this.router.patch(`${this.path}/resetPassword`, this.authController.resetPassword);
   }
 }
