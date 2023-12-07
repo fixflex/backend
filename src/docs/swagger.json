@@ -317,7 +317,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "profilePicture": {
+                  "image": {
                     "type": "string",
                     "format": "binary"
                   }

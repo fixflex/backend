@@ -15,7 +15,7 @@ export interface IUser {
   passwordResetVerified: boolean;
   role: UserType;
   profilePicture: {
-    url: string;
+    url: string | null;
     publicId: string | null;
   };
   active: boolean;

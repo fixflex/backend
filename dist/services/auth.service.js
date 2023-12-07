@@ -19,6 +19,7 @@ const user_dao_1 = __importDefault(require("../DB/dao/user.dao"));
 const validateEnv_1 = __importDefault(require("../config/validateEnv"));
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
 const createToken_1 = require("../utils/createToken");
+const hashing_1 = require("../utils/hashing");
 let AuthServie = exports.AuthServie = class AuthServie {
     constructor(userDao) {
         this.userDao = userDao;
@@ -52,6 +53,28 @@ let AuthServie = exports.AuthServie = class AuthServie {
         }
         let token = (0, createToken_1.createToken)(user._id);
         return { user, token };
+    }
+    async forgotPassword(email) {
+        // comments in details for the reset password route
+        // 1- check if the user exists by email
+        let user = await this.userDao.getUserByEmail(email, false);
+        if (!user) {
+            throw new HttpException_1.default(404, 'User not found');
+        }
+        // 2- generate a reset code
+        const resetCode = Math.floor(100000 + Math.random() * 90000).toString();
+        // 3- hash the reset code via crypto
+        user.passwordResetCode = (0, hashing_1.hashCode)(resetCode);
+        // 3- set the reset code expiration to 10 minutes
+        user.passwordResetCodeExpiration = Date.now() + 10 * 60 * 1000; // 10 minutes
+        // 4- set the passwordResetVerified to false
+        user.passwordResetVerified = false;
+        // 5- update the user document with the hashed reset code and the reset code expiration the passwordResetVerified
+        await user.save();
+        // 5- send the reset code to the user email address using nodemailer
+        // 6- return the reset code to the user
+        return resetCode;
+        // TODO: log the user out from all devices (delete all the refresh tokens from the database for this user id and set the passwordChangedAt to now so all the refresh tokens will be invalid)
     }
 };
 exports.AuthServie = AuthServie = __decorate([

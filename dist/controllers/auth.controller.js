@@ -32,6 +32,11 @@ let AuthController = exports.AuthController = class AuthController {
             let { user, token } = await this.authService.login(email, password);
             res.status(200).json(Object.assign((0, customResponse_1.default)({ data: user, success: true, status: 200, message: 'User logged in', error: false }), { token }));
         });
+        this.forgotPassword = (0, express_async_handler_1.default)(async (req, res) => {
+            let { email } = req.body;
+            await this.authService.forgotPassword(email);
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: 'Password reset code sent to email!, please check your email inbox', error: false }));
+        });
     }
 };
 exports.AuthController = AuthController = __decorate([
