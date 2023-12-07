@@ -50,7 +50,7 @@ class UserService {
     return newUser;
   }
 
-  async updateUser(userId: string, user: IUser) {
+  async updateUser(userId: string, user: Partial<IUser>) {
     let isUserExists = await this.userDao.getOneById(userId);
     if (!isUserExists) throw new HttpException(404, 'No user found');
     return await this.userDao.updateOneById(userId, user);
