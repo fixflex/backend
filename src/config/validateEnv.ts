@@ -18,6 +18,11 @@ const validateEnv = cleanEnv(process.env, {
   CLOUDINARY_API_KEY: str(),
   CLOUDINARY_CLOUD_NAME: str(),
   SALT_ROUNDS: num(),
+  SMTP_NAME: str(),
+  SMTP_USERNAME: str(),
+  SMTP_PASSWORD: str(),
+  SMTP_HOST: str(),
+  SMTP_PORT: str(),
 });
 
 export default validateEnv;
