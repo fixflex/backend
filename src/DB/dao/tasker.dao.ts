@@ -49,14 +49,14 @@ class TaskerDao extends CommonDAO<ITasker> {
         .populate('userId', 'firstName lastName email  profilePicture')
         .populate('services', 'name')
         .lean();
-    } else taskers = await TaskerModel.find({}).lean();
+    } else taskers = await TaskerModel.find({}).populate('userId', 'firstName lastName email  profilePicture').populate('services', 'name').lean();
 
     return taskers;
   }
 
   // get tasker profile with user data and services data
   async getTaskerProfile(taskerId: string): Promise<ITasker | null> {
-    let tasker = await TaskerModel.findById(taskerId).populate('userId', 'firstName lastName email profilePicture').populate('services', '_id name description').lean();
+    let tasker = await TaskerModel.findById(taskerId).populate('userId', 'firstName lastName email profilePicture').populate('services', '_id name').lean();
     return tasker;
   }
 }
