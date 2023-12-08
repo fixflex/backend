@@ -56,12 +56,12 @@ class TaskerDao extends commonDAO_1.default {
                 .lean();
         }
         else
-            taskers = await tasker_model_1.default.find({}).lean();
+            taskers = await tasker_model_1.default.find({}).populate('userId', 'firstName lastName email  profilePicture').populate('services', 'name').lean();
         return taskers;
     }
     // get tasker profile with user data and services data
     async getTaskerProfile(taskerId) {
-        let tasker = await tasker_model_1.default.findById(taskerId).populate('userId', 'firstName lastName email profilePicture').populate('services', '_id name description').lean();
+        let tasker = await tasker_model_1.default.findById(taskerId).populate('userId', 'firstName lastName email profilePicture').populate('services', '_id name').lean();
         return tasker;
     }
 }
