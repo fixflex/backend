@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
+import { UserDto } from '../dtos/dto.user';
 // import { IUser } from '../interfaces/user.interface';
 import { AuthServie } from '../services/auth.service';
 import customResponse from '../utils/customResponse';
@@ -14,7 +15,7 @@ export class AuthController {
 
   public signup = asyncHandler(async (req: Request, res: Response) => {
     let { user, token } = await this.authService.signup(req.body);
-    res.status(201).json(Object.assign(customResponse({ data: user, success: true, status: 201, message: 'User created', error: false }), { token }));
+    res.status(201).json(Object.assign(customResponse({ data: new UserDto(user), success: true, status: 201, message: 'User created', error: false }), { token }));
   });
 
   public login = asyncHandler(async (req: Request, res: Response) => {
@@ -22,7 +23,7 @@ export class AuthController {
 
     let { user, token } = await this.authService.login(email, password);
 
-    res.status(200).json(Object.assign(customResponse({ data: user, success: true, status: 200, message: 'User logged in', error: false }), { token }));
+    res.status(200).json(Object.assign(customResponse({ data: new UserDto(user), success: true, status: 200, message: 'User logged in', error: false }), { token }));
   });
 
   public forgotPassword = asyncHandler(async (req: Request, res: Response) => {
@@ -40,6 +41,8 @@ export class AuthController {
   public resetPassword = asyncHandler(async (req: Request, res: Response) => {
     let { email, newPassword } = req.body;
     let results = await this.authService.resetPassword(email, newPassword);
-    res.status(200).json(Object.assign(customResponse({ data: results.user, success: true, status: 200, message: 'Password reset done', error: false }), { token: results.token }));
+    res
+      .status(200)
+      .json(Object.assign(customResponse({ data: new UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false }), { token: results.token }));
   });
 }
