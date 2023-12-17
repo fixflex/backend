@@ -15,7 +15,16 @@ export class AuthController {
 
   public signup = asyncHandler(async (req: Request, res: Response) => {
     let { user, token } = await this.authService.signup(req.body);
-    res.status(201).json(Object.assign(customResponse({ data: new UserDto(user), success: true, status: 201, message: 'User created', error: false }), { token }));
+
+    // Set cookies
+    res.cookie('accessToken', token, {
+      httpOnly: true, // client side js cannot access the cookie
+      maxAge: 24 * 60 * 60 * 1000, // one days
+      secure: process.env.NODE_ENV === 'production', // cookie only works in https
+      sameSite: 'none', // cross-site access allowed
+    });
+
+    res.status(201).json({ data: new UserDto(user), success: true, status: 201, message: 'User created', error: false });
   });
 
   public login = asyncHandler(async (req: Request, res: Response) => {
@@ -23,7 +32,15 @@ export class AuthController {
 
     let { user, token } = await this.authService.login(email, password);
 
-    res.status(200).json(Object.assign(customResponse({ data: new UserDto(user), success: true, status: 200, message: 'User logged in', error: false }), { token }));
+    // Set cookies
+    res.cookie('accessToken', token, {
+      httpOnly: true, // client side js cannot access the cookie
+      maxAge: 24 * 60 * 60 * 1000, // one days
+      secure: process.env.NODE_ENV === 'production', // cookie only works in https
+      sameSite: 'none', // cross-site access allowed
+    });
+
+    res.status(200).json({ data: new UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
   });
 
   public forgotPassword = asyncHandler(async (req: Request, res: Response) => {
@@ -41,8 +58,15 @@ export class AuthController {
   public resetPassword = asyncHandler(async (req: Request, res: Response) => {
     let { email, newPassword } = req.body;
     let results = await this.authService.resetPassword(email, newPassword);
-    res
-      .status(200)
-      .json(Object.assign(customResponse({ data: new UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false }), { token: results.token }));
+
+    // Set cookies
+    res.cookie('accessToken', results.token, {
+      httpOnly: true, // client side js cannot access the cookie
+      maxAge: 24 * 60 * 60 * 1000, // one days
+      secure: process.env.NODE_ENV === 'production', // cookie only works in https
+      sameSite: 'none', // cross-site access allowed
+    });
+
+    res.status(200).json({ data: new UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false });
   });
 }

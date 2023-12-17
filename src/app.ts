@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
@@ -43,6 +44,8 @@ class App {
     }
     this.app.use(cors());
     this.app.use(express.json());
+    // this.app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+    this.app.use(cookieParser());
   }
 
   private initializeRoutes(routes: Routes[]) {

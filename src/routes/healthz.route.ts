@@ -17,6 +17,8 @@ class HealthzRoute implements Routes {
     });
 
     this.router.get('/', (_req: Request, res: Response) => {
+      // log request cookies
+      console.log('Cookies: ', _req.cookies);
       res.status(200).json(customResponse({ data: null, success: true, status: 200, message: 'Welcome to Rest API - 👋🌎🌍🌏', error: false }));
     });
   }
