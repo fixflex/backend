@@ -10,11 +10,11 @@ import { AuthRequest } from '../interfaces/auth.interface';
 import { UserType } from '../interfaces/user.interface';
 
 const checkTokenExists = (req: Request) => {
-  if (!req.headers.authorization?.startsWith('Bearer')) {
+  // check cookies first then check headers for the token (for the swagger docs)
+  let token = req.cookies.accessToken || req.headers.authorization?.split(' ')[1];
+  if (!token) {
     return;
   }
-  const token = req.headers.authorization.split(' ')[1];
-  if (!token) return;
   return token;
 };
 
