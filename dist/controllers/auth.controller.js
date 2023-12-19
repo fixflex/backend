@@ -33,6 +33,7 @@ let AuthController = exports.AuthController = class AuthController {
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'none', // cross-site access allowed
             });
+            // refresh token cookie
             res.status(201).json({ data: new dto_user_1.UserDto(user), success: true, status: 201, message: 'User created', error: false });
         });
         this.login = (0, express_async_handler_1.default)(async (req, res) => {

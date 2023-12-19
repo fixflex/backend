@@ -24,6 +24,8 @@ export class AuthController {
       sameSite: 'none', // cross-site access allowed
     });
 
+    // refresh token cookie
+
     res.status(201).json({ data: new UserDto(user), success: true, status: 201, message: 'User created', error: false });
   });
 
