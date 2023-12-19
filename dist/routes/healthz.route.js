@@ -16,6 +16,8 @@ class HealthzRoute {
             res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: 'Welcome to Rest API - 👋🌎🌍🌏', error: false }));
         });
         this.router.get('/', (_req, res) => {
+            // log request cookies
+            console.log('Cookies: ', _req.cookies);
             res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: 'Welcome to Rest API - 👋🌎🌍🌏', error: false }));
         });
     }

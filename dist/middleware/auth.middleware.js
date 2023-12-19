@@ -10,12 +10,11 @@ const user_model_1 = __importDefault(require("../DB/models/user/user.model"));
 const validateEnv_1 = __importDefault(require("../config/validateEnv"));
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
 const checkTokenExists = (req) => {
-    if (!req.headers.authorization?.startsWith('Bearer')) {
+    // check cookies first then check headers for the token (for the swagger docs)
+    let token = req.cookies.accessToken || req.headers.authorization?.split(' ')[1];
+    if (!token) {
         return;
     }
-    const token = req.headers.authorization.split(' ')[1];
-    if (!token)
-        return;
     return token;
 };
 const checkUserExists = async (userId) => {

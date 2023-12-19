@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
@@ -37,6 +38,8 @@ class App {
         }
         this.app.use((0, cors_1.default)());
         this.app.use(express_1.default.json());
+        // this.app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+        this.app.use((0, cookie_parser_1.default)());
     }
     initializeRoutes(routes) {
         routes.forEach(route => {
