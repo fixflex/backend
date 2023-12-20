@@ -21,7 +21,7 @@ export class AuthController {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 24 * 60 * 60 * 1000, // one days
       secure: process.env.NODE_ENV === 'production', // cookie only works in https
-      sameSite: 'lax', // cross-site access allowed
+      sameSite: 'none', // cross-site access allowed
     });
 
     // refresh token cookie
@@ -39,7 +39,7 @@ export class AuthController {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 24 * 60 * 60 * 1000, // one days
       secure: process.env.NODE_ENV === 'production', // cookie only works in https
-      sameSite: 'lax', //
+      sameSite: 'none', //
     });
 
     res.status(200).json({ data: new UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
@@ -66,7 +66,7 @@ export class AuthController {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 24 * 60 * 60 * 1000, // one days
       secure: process.env.NODE_ENV === 'production', // cookie only works in https
-      sameSite: 'lax', //
+      sameSite: 'none', //
     });
 
     res.status(200).json({ data: new UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false });
