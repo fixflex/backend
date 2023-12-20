@@ -26,7 +26,7 @@ class HealthzRoute implements Routes {
       //   // privent cross-site access to the cookie (only allow same site access)
       //   sameSite: 'strict', // cross-site access not allowed
       // });
-      res.cookie('accessToken', 'token', {
+      res.cookie('healthz', 'token', {
         httpOnly: true, // client side js cannot access the cookie
         maxAge: 24 * 60 * 60 * 1000, // one days
         secure: process.env.NODE_ENV === 'production', // cookie only works in https

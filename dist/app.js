@@ -36,7 +36,10 @@ class App {
         if (this.env === 'development') {
             this.app.use((0, morgan_1.default)('dev'));
         }
-        this.app.use((0, cors_1.default)());
+        this.app.use((0, cors_1.default)({ origin: true, credentials: true, exposedHeaders: ['set-cookie'] })); // for cross origin request (CORS) (for development) - allow all origins
+        // this.app.use(cors({ origin: env.CLIENT_URL, credentials: true })); // for cross origin request (CORS) (for production) - allow specific origins
+        // this.app.use(cors({ origin: env.CLIENT_URL, credentials: true, exposedHeaders: ['set-cookie'] })); // for cross origin request (CORS) (for production) - allow specific origins
+        //  exposedHeaders: ['set-cookie']  means that the server can set the cookie in the response header and the client can read it from the response header
         this.app.use(express_1.default.json());
         // this.app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
         this.app.use((0, cookie_parser_1.default)());
