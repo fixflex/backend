@@ -31,7 +31,7 @@ let AuthController = exports.AuthController = class AuthController {
                 httpOnly: true,
                 maxAge: 24 * 60 * 60 * 1000,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict', // cross-site access not allowed
+                sameSite: 'lax', // cross-site access allowed
             });
             // refresh token cookie
             res.status(201).json({ data: new dto_user_1.UserDto(user), success: true, status: 201, message: 'User created', error: false });
@@ -44,7 +44,7 @@ let AuthController = exports.AuthController = class AuthController {
                 httpOnly: true,
                 maxAge: 24 * 60 * 60 * 1000,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict', // cross-site access not allowed
+                sameSite: 'lax', //
             });
             res.status(200).json({ data: new dto_user_1.UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
         });
@@ -66,7 +66,7 @@ let AuthController = exports.AuthController = class AuthController {
                 httpOnly: true,
                 maxAge: 24 * 60 * 60 * 1000,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict', // cross-site access not allowed
+                sameSite: 'lax', //
             });
             res.status(200).json({ data: new dto_user_1.UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false });
         });

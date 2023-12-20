@@ -26,6 +26,12 @@ class HealthzRoute implements Routes {
       //   // privent cross-site access to the cookie (only allow same site access)
       //   sameSite: 'strict', // cross-site access not allowed
       // });
+      res.cookie('accessToken', 'token', {
+        httpOnly: true, // client side js cannot access the cookie
+        maxAge: 24 * 60 * 60 * 1000, // one days
+        secure: process.env.NODE_ENV === 'production', // cookie only works in https
+        sameSite: 'lax', // cross-site access not allowed
+      });
       res.status(200).json(customResponse({ data: null, success: true, status: 200, message: 'Welcome to Rest API - 👋🌎🌍🌏', error: false }));
     });
   }

@@ -25,6 +25,12 @@ class HealthzRoute {
             //   // privent cross-site access to the cookie (only allow same site access)
             //   sameSite: 'strict', // cross-site access not allowed
             // });
+            res.cookie('accessToken', 'token', {
+                httpOnly: true,
+                maxAge: 24 * 60 * 60 * 1000,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax', // cross-site access not allowed
+            });
             res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: 'Welcome to Rest API - 👋🌎🌍🌏', error: false }));
         });
     }
