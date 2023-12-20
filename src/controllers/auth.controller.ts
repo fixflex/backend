@@ -20,7 +20,8 @@ export class AuthController {
     res.cookie('accessToken', token, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 24 * 60 * 60 * 1000, // one days
-      secure: process.env.NODE_ENV === 'production', // cookie only works in https
+      secure: true,
+      // secure: process.env.NODE_ENV === 'production', // cookie only works in https
       sameSite: 'none', // cross-site access allowed
     });
 
@@ -38,7 +39,8 @@ export class AuthController {
     res.cookie('accessToken', token, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 24 * 60 * 60 * 1000, // one days
-      secure: process.env.NODE_ENV === 'production', // cookie only works in https
+      secure: true,
+      // secure: process.env.NODE_ENV === 'production', // cookie only works in https
       sameSite: 'none', //
     });
 
@@ -65,7 +67,8 @@ export class AuthController {
     res.cookie('accessToken', results.token, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 24 * 60 * 60 * 1000, // one days
-      secure: process.env.NODE_ENV === 'production', // cookie only works in https
+      secure: true,
+      // secure: process.env.NODE_ENV === 'production', // cookie only works in https
       sameSite: 'none', //
     });
 
