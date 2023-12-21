@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthServie = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const tsyringe_1 = require("tsyringe");
 const user_dao_1 = __importDefault(require("../DB/dao/user.dao"));
 const validateEnv_1 = __importDefault(require("../config/validateEnv"));
@@ -40,8 +41,9 @@ let AuthServie = exports.AuthServie = class AuthServie {
         // hash the password
         user.password = await bcrypt_1.default.hash(user.password, validateEnv_1.default.SALT_ROUNDS);
         let newUser = await this.userDao.create(user);
-        let token = (0, createToken_1.createToken)(newUser._id);
-        return { user: newUser, token };
+        let accessToken = (0, createToken_1.createAccessToken)(newUser._id);
+        let refreshToken = (0, createToken_1.createAccessToken)(newUser._id);
+        return { user: newUser, accessToken, refreshToken };
     }
     async login(email, password) {
         let user;
@@ -52,8 +54,25 @@ let AuthServie = exports.AuthServie = class AuthServie {
         if (!user || !(await bcrypt_1.default.compare(password, user.password))) {
             throw new HttpException_1.default(401, 'Incorrect email or password');
         }
-        let token = (0, createToken_1.createToken)(user._id);
-        return { user, token };
+        let accessToken = (0, createToken_1.createAccessToken)(user._id);
+        let refreshToken = (0, createToken_1.createAccessToken)(user._id);
+        return { user, accessToken, refreshToken };
+    }
+    async refreshToken(refreshToken) {
+        const decoded = jsonwebtoken_1.default.verify(refreshToken, validateEnv_1.default.REFRESH_TOKEN_SECRET_KEY);
+        // 3- check if the user still exists
+        const user = await this.userDao.getOneById(decoded.userId);
+        // 4- check if the user changed his password after the token was issued
+        // TODO: make this check in the user model instead of here
+        if (user.passwordChangedAt && user.passwordChangedAt.getTime() / 1000 > decoded.iat) {
+            throw new HttpException_1.default(401, 'User recently changed password! Please log in again');
+        }
+        //  // 5- check if the user is active
+        if (!user.active) {
+            throw new HttpException_1.default(401, 'This user is no longer active');
+        }
+        let accessToken = (0, createToken_1.createAccessToken)(user._id);
+        return { accessToken };
     }
     async forgotPassword(email) {
         // comments in details for the reset password route
@@ -119,9 +138,10 @@ let AuthServie = exports.AuthServie = class AuthServie {
         user.passwordResetCodeExpiration = undefined;
         await user.save();
         // 4- generate a new token
-        let token = (0, createToken_1.createToken)(user._id);
+        let accessToken = (0, createToken_1.createAccessToken)(user._id);
+        let refreshToken = (0, createToken_1.createAccessToken)(user._id);
         // 5- return the user and the token
-        return { user, token };
+        return { user, accessToken, refreshToken };
     }
 };
 exports.AuthServie = AuthServie = __decorate([

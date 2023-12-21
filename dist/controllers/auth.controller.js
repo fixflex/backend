@@ -25,30 +25,63 @@ let AuthController = exports.AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
         this.signup = (0, express_async_handler_1.default)(async (req, res) => {
-            let { user, token } = await this.authService.signup(req.body);
-            // Set cookies
-            res.cookie('accessToken', token, {
+            let { user, accessToken, refreshToken } = await this.authService.signup(req.body);
+            // Set access_token cookie
+            res.cookie('access_token', accessToken, {
                 httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000,
-                secure: true,
-                // secure: process.env.NODE_ENV === 'production', // cookie only works in https
-                sameSite: 'none', // cross-site access allowed
+                maxAge: 30 * 24 * 60 * 60 * 1000,
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: 'none', // cross-site access allowed,
             });
-            // refresh token cookie
+            // Set refresh_token cookie
+            res.cookie('refresh_token', refreshToken, {
+                httpOnly: true,
+                maxAge: 6 * 30 * 24 * 60 * 60 * 1000,
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: 'none',
+                path: '/api/v1/auth/refresh_token',
+            });
             res.status(201).json({ data: new dto_user_1.UserDto(user), success: true, status: 201, message: 'User created', error: false });
         });
         this.login = (0, express_async_handler_1.default)(async (req, res) => {
             let { email, password } = req.body;
-            let { user, token } = await this.authService.login(email, password);
-            // Set cookies
-            res.cookie('accessToken', token, {
+            let { user, accessToken, refreshToken } = await this.authService.login(email, password);
+            // Set access_token cookie
+            res.cookie('access_token', accessToken, {
                 httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000,
-                secure: true,
-                // secure: process.env.NODE_ENV === 'production', // cookie only works in https
-                sameSite: 'none', //
+                maxAge: 30 * 24 * 60 * 60 * 1000,
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: 'none', // cross-site access allowed,
+            });
+            // Set refresh_token cookie
+            res.cookie('refresh_token', refreshToken, {
+                httpOnly: true,
+                maxAge: 6 * 30 * 24 * 60 * 60 * 1000,
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: 'none',
+                path: '/api/v1/auth/refresh_token',
             });
             res.status(200).json({ data: new dto_user_1.UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
+        });
+        this.refreshToken = (0, express_async_handler_1.default)(async (req, res) => {
+            // get refresh_token from cookies
+            let refreshToken = req.cookies.refresh_token;
+            let accessToken_ = req.cookies.access_token;
+            console.log(accessToken_);
+            console.log(refreshToken);
+            if (!refreshToken) {
+                res.status(401).json((0, customResponse_1.default)({ data: null, success: false, status: 401, message: 'You are not authorized', error: true }));
+                return;
+            }
+            let { accessToken } = await this.authService.refreshToken(refreshToken);
+            // Set access_token cookie
+            res.cookie('access_token', accessToken, {
+                httpOnly: true,
+                maxAge: 30 * 24 * 60 * 60 * 1000,
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: 'none', // cross-site access allowed,
+            });
+            res.status(200).json({ data: null, success: true, status: 200, message: 'Access token refreshed', error: false });
         });
         this.forgotPassword = (0, express_async_handler_1.default)(async (req, res) => {
             let { email } = req.body;
@@ -64,12 +97,20 @@ let AuthController = exports.AuthController = class AuthController {
             let { email, newPassword } = req.body;
             let results = await this.authService.resetPassword(email, newPassword);
             // Set cookies
-            res.cookie('accessToken', results.token, {
+            // Set access_token cookie
+            res.cookie('access_token', results.accessToken, {
                 httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000,
-                secure: true,
-                // secure: process.env.NODE_ENV === 'production', // cookie only works in https
-                sameSite: 'none', //
+                maxAge: 30 * 24 * 60 * 60 * 1000,
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: 'none', // cross-site access allowed,
+            });
+            // Set refresh_token cookie
+            res.cookie('refresh_token', results.refreshToken, {
+                httpOnly: true,
+                maxAge: 6 * 30 * 24 * 60 * 60 * 1000,
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: 'none',
+                path: '/api/v1/auth/refresh_token',
             });
             res.status(200).json({ data: new dto_user_1.UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false });
         });

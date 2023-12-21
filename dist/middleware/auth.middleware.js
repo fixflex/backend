@@ -9,9 +9,9 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_model_1 = __importDefault(require("../DB/models/user/user.model"));
 const validateEnv_1 = __importDefault(require("../config/validateEnv"));
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
-const checkTokenExists = (req) => {
+const checkAccessTokenExists = (req) => {
     // check cookies first then check headers for the token (for the swagger docs)
-    let token = req.cookies.accessToken || req.headers.authorization?.split(' ')[1];
+    let token = req.cookies.access_token || req.headers.authorization?.split(' ')[1];
     if (!token) {
         return;
     }
@@ -35,12 +35,12 @@ const isPasswordChanged = (passwordChangedAt, tokenIssuedAt) => {
 };
 const authenticateUser = (0, express_async_handler_1.default)(async (req, _res, next) => {
     // 1- check if the token exists
-    const token = checkTokenExists(req);
+    const token = checkAccessTokenExists(req);
     if (!token) {
         return next(new HttpException_1.default(401, `You are not authorized, you must login to get access this route`));
     }
     // 2- check if the token is valid
-    const decoded = jsonwebtoken_1.default.verify(token, validateEnv_1.default.JWT_SECRET_KEY);
+    const decoded = jsonwebtoken_1.default.verify(token, validateEnv_1.default.ACCESS_TOKEN_SECRET_KEY);
     // 3- check if the user still exists
     const user = await checkUserExists(decoded.userId);
     if (!user) {

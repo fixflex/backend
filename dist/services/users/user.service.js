@@ -70,7 +70,7 @@ let UserService = class UserService {
         // 3- update the user with the new password and update the passwordChangedAt field
         let updatedUser = await this.userDao.updateOneById(user._id, { password: newPassword, passwordChangedAt: Date.now() });
         // 4- generate a new token
-        let token = (0, createToken_1.createToken)(user._id);
+        let token = (0, createToken_1.createAccessToken)(user._id);
         return { updatedUser, token };
     }
     async deleteUser(userId) {
