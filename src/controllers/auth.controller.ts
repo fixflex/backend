@@ -30,7 +30,7 @@ export class AuthController {
       maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
       secure: process.env.NODE_ENV !== 'development', // cookie only works in https
       sameSite: 'none', // cross-site access allowed,
-      path: '/refresh_token',
+      path: '/api/v1/auth/refresh_token',
     });
 
     res.status(201).json({ data: new UserDto(user), success: true, status: 201, message: 'User created', error: false });
@@ -55,7 +55,7 @@ export class AuthController {
       maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
       secure: process.env.NODE_ENV !== 'development', // cookie only works in https
       sameSite: 'none', // cross-site access allowed,
-      path: '/refresh_token',
+      path: '/api/v1/auth/refresh_token',
     });
 
     res.status(200).json({ data: new UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
@@ -64,6 +64,9 @@ export class AuthController {
   public refreshToken = asyncHandler(async (req: Request, res: Response) => {
     // get refresh_token from cookies
     let refreshToken = req.cookies.refresh_token;
+    let accessToken_ = req.cookies.access_token;
+    console.log(accessToken_);
+    console.log(refreshToken);
     if (!refreshToken) {
       res.status(401).json(customResponse({ data: null, success: false, status: 401, message: 'You are not authorized', error: true }));
       return;
@@ -112,7 +115,7 @@ export class AuthController {
       maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
       secure: process.env.NODE_ENV !== 'development', // cookie only works in https
       sameSite: 'none', // cross-site access allowed,
-      path: '/refresh_token',
+      path: '/api/v1/auth/refresh_token',
     });
 
     res.status(200).json({ data: new UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false });

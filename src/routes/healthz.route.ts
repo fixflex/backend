@@ -13,6 +13,7 @@ class HealthzRoute implements Routes {
   }
   private initializerRoutes() {
     this.router.get(`${this.path}`, (_req: Request, res: Response) => {
+      // console.log(_req.cookies.healthz);
       res.status(200).json(customResponse({ data: null, success: true, status: 200, message: 'Welcome to Rest API - 👋🌎🌍🌏', error: false }));
     });
 
@@ -26,13 +27,16 @@ class HealthzRoute implements Routes {
       //   // privent cross-site access to the cookie (only allow same site access)
       //   sameSite: 'strict', // cross-site access not allowed
       // });
-      res.cookie('healthz', 'token', {
-        httpOnly: true, // client side js cannot access the cookie
-        maxAge: 24 * 60 * 60 * 1000, // one days
-        // secure: process.env.NODE_ENV === 'production', // cookie only works in https
-        secure: true, // cookie only works in https
-        sameSite: 'lax', // cross-site access not allowed
-      });
+      // console.log(_req.cookies.healthz);
+
+      // res.cookie('healthz', 'token_healthz', {
+      //   // httpOnly: true, // client side js cannot access the cookie
+      //   // maxAge: 24 * 60 * 60 * 1000, // one days
+      //   // secure: process.env.NODE_ENV === 'production', // cookie only works in https
+      //   secure: false, // cookie only works in https
+      //   // sameSite: 'lax', // cross-site access not allowed
+      //   path: '/api/v1/healthz',
+      // });
       res.status(200).json(customResponse({ data: null, success: true, status: 200, message: 'Welcome to Rest API - 👋🌎🌍🌏', error: false }));
     });
   }
