@@ -9,9 +9,9 @@ import HttpException from '../exceptions/HttpException';
 import { AuthRequest } from '../interfaces/auth.interface';
 import { UserType } from '../interfaces/user.interface';
 
-const checkTokenExists = (req: Request) => {
+const checkAccessTokenExists = (req: Request) => {
   // check cookies first then check headers for the token (for the swagger docs)
-  let token = req.cookies.accessToken || req.headers.authorization?.split(' ')[1];
+  let token = req.cookies.access_token || req.headers.authorization?.split(' ')[1];
   if (!token) {
     return;
   }
@@ -38,7 +38,7 @@ const isPasswordChanged = (passwordChangedAt: Date, tokenIssuedAt: number) => {
 
 const authenticateUser = asyncHandler(async (req: AuthRequest, _res: Response, next: NextFunction) => {
   // 1- check if the token exists
-  const token = checkTokenExists(req);
+  const token = checkAccessTokenExists(req);
   if (!token) {
     return next(new HttpException(401, `You are not authorized, you must login to get access this route`));
   }

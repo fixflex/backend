@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { autoInjectable } from 'tsyringe';
 
 import UserDao from '../DB/dao/user.dao';
@@ -49,6 +50,25 @@ export class AuthServie {
     let accessToken = createAccessToken(user._id!);
     let refreshToken = createAccessToken(user._id!);
     return { user, accessToken, refreshToken };
+  }
+
+  async refreshToken(refreshToken: string) {
+    const decoded = jwt.verify(refreshToken!, env.REFRESH_TOKEN_SECRET_KEY) as JwtPayload;
+
+    // 3- check if the user still exists
+    const user = await this.userDao.getOneById(decoded.userId);
+    // 4- check if the user changed his password after the token was issued
+    // TODO: make this check in the user model instead of here
+    if (user!.passwordChangedAt && user!.passwordChangedAt.getTime() / 1000 > decoded.iat!) {
+      throw new HttpException(401, 'User recently changed password! Please log in again');
+    }
+    //  // 5- check if the user is active
+    if (!user!.active) {
+      throw new HttpException(401, 'This user is no longer active');
+    }
+
+    let accessToken = createAccessToken(user!._id!);
+    return { accessToken };
   }
 
   async forgotPassword(email: string) {
