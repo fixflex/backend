@@ -8,7 +8,7 @@ import { IPagination } from '../../interfaces/respons.interface';
 import { IUser } from '../../interfaces/user.interface';
 import APIFeatures from '../../utils/apiFeatures';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../../utils/cloudinary';
-import { createToken } from '../../utils/createToken';
+import { createAccessToken } from '../../utils/createToken';
 
 @autoInjectable()
 class UserService {
@@ -65,7 +65,7 @@ class UserService {
     // 3- update the user with the new password and update the passwordChangedAt field
     let updatedUser = await this.userDao.updateOneById(user._id!, { password: newPassword, passwordChangedAt: Date.now() });
     // 4- generate a new token
-    let token = createToken(user._id!);
+    let token = createAccessToken(user._id!);
     return { updatedUser, token };
   }
 
