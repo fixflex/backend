@@ -5,7 +5,7 @@ import UserDao from '../DB/dao/user.dao';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import { IUser } from '../interfaces/user.interface';
-import { createToken } from '../utils/createToken';
+import { createAccessToken } from '../utils/createToken';
 import { hashCode } from '../utils/hashing';
 import { sendMailer } from '../utils/nodemailer';
 
@@ -18,7 +18,7 @@ export class AuthServie {
    * @returns An object containing the newly created user and a token
    * @throws HttpException if the email or username already exists
    */
-  async signup(user: IUser): Promise<{ user: IUser; token: string }> {
+  async signup(user: IUser) {
     // check if the user already exists
     let isEmailExists = await this.userDao.getUserByEmail(user.email);
 
@@ -28,9 +28,10 @@ export class AuthServie {
     // hash the password
     user.password = await bcrypt.hash(user.password, env.SALT_ROUNDS);
     let newUser = await this.userDao.create(user);
-    let token = createToken(newUser._id!);
+    let accessToken = createAccessToken(newUser._id!);
+    let refreshToken = createAccessToken(newUser._id!);
 
-    return { user: newUser, token };
+    return { user: newUser, accessToken, refreshToken };
   }
 
   async login(email: string, password: string) {
@@ -45,9 +46,9 @@ export class AuthServie {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new HttpException(401, 'Incorrect email or password');
     }
-
-    let token = createToken(user._id!);
-    return { user, token };
+    let accessToken = createAccessToken(user._id!);
+    let refreshToken = createAccessToken(user._id!);
+    return { user, accessToken, refreshToken };
   }
 
   async forgotPassword(email: string) {
@@ -121,8 +122,9 @@ export class AuthServie {
 
     await user.save();
     // 4- generate a new token
-    let token = createToken(user._id!);
+    let accessToken = createAccessToken(user._id!);
+    let refreshToken = createAccessToken(user._id!);
     // 5- return the user and the token
-    return { user, token };
+    return { user, accessToken, refreshToken };
   }
 }

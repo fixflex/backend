@@ -14,10 +14,10 @@ export class AuthController {
   constructor(private readonly authService: AuthServie) {}
 
   public signup = asyncHandler(async (req: Request, res: Response) => {
-    let { user, token } = await this.authService.signup(req.body);
+    let { user, accessToken, refreshToken } = await this.authService.signup(req.body);
 
     // Set access_token cookie
-    res.cookie('access_token', token, {
+    res.cookie('access_token', accessToken, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 30 * 24 * 60 * 60 * 1000, // one month
       secure: process.env.NODE_ENV === 'development', // cookie only works in https
@@ -25,7 +25,7 @@ export class AuthController {
     });
 
     // Set refresh_token cookie
-    res.cookie('refresh_token', token, {
+    res.cookie('refresh_token', refreshToken, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
       secure: process.env.NODE_ENV === 'development', // cookie only works in https
@@ -39,10 +39,10 @@ export class AuthController {
   public login = asyncHandler(async (req: Request, res: Response) => {
     let { email, password } = req.body;
 
-    let { user, token } = await this.authService.login(email, password);
+    let { user, accessToken, refreshToken } = await this.authService.login(email, password);
 
     // Set access_token cookie
-    res.cookie('access_token', token, {
+    res.cookie('access_token', accessToken, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 30 * 24 * 60 * 60 * 1000, // one month
       secure: process.env.NODE_ENV === 'development', // cookie only works in https
@@ -50,7 +50,7 @@ export class AuthController {
     });
 
     // Set refresh_token cookie
-    res.cookie('refresh_token', token, {
+    res.cookie('refresh_token', refreshToken, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
       secure: process.env.NODE_ENV === 'development', // cookie only works in https
@@ -79,7 +79,7 @@ export class AuthController {
 
     // Set cookies
     // Set access_token cookie
-    res.cookie('access_token', results.token, {
+    res.cookie('access_token', results.accessToken, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 30 * 24 * 60 * 60 * 1000, // one month
       secure: process.env.NODE_ENV === 'development', // cookie only works in https
@@ -87,7 +87,7 @@ export class AuthController {
     });
 
     // Set refresh_token cookie
-    res.cookie('refresh_token', results.token, {
+    res.cookie('refresh_token', results.refreshToken, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
       secure: process.env.NODE_ENV === 'development', // cookie only works in https
