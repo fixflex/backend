@@ -16,16 +16,22 @@ export class AuthController {
   public signup = asyncHandler(async (req: Request, res: Response) => {
     let { user, token } = await this.authService.signup(req.body);
 
-    // Set cookies
-    res.cookie('accessToken', token, {
+    // Set access_token cookie
+    res.cookie('access_token', token, {
       httpOnly: true, // client side js cannot access the cookie
-      maxAge: 24 * 60 * 60 * 1000, // one days
-      secure: true,
-      // secure: process.env.NODE_ENV === 'production', // cookie only works in https
-      sameSite: 'none', // cross-site access allowed
+      maxAge: 30 * 24 * 60 * 60 * 1000, // one month
+      secure: process.env.NODE_ENV === 'development', // cookie only works in https
+      sameSite: 'none', // cross-site access allowed,
     });
 
-    // refresh token cookie
+    // Set refresh_token cookie
+    res.cookie('refresh_token', token, {
+      httpOnly: true, // client side js cannot access the cookie
+      maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+      secure: process.env.NODE_ENV === 'development', // cookie only works in https
+      sameSite: 'none', // cross-site access allowed,
+      path: '/refresh_token',
+    });
 
     res.status(201).json({ data: new UserDto(user), success: true, status: 201, message: 'User created', error: false });
   });
@@ -35,13 +41,21 @@ export class AuthController {
 
     let { user, token } = await this.authService.login(email, password);
 
-    // Set cookies
-    res.cookie('accessToken', token, {
+    // Set access_token cookie
+    res.cookie('access_token', token, {
       httpOnly: true, // client side js cannot access the cookie
-      maxAge: 24 * 60 * 60 * 1000, // one days
-      secure: true,
-      // secure: process.env.NODE_ENV === 'production', // cookie only works in https
-      sameSite: 'none', //
+      maxAge: 30 * 24 * 60 * 60 * 1000, // one month
+      secure: process.env.NODE_ENV === 'development', // cookie only works in https
+      sameSite: 'none', // cross-site access allowed,
+    });
+
+    // Set refresh_token cookie
+    res.cookie('refresh_token', token, {
+      httpOnly: true, // client side js cannot access the cookie
+      maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+      secure: process.env.NODE_ENV === 'development', // cookie only works in https
+      sameSite: 'none', // cross-site access allowed,
+      path: '/refresh_token',
     });
 
     res.status(200).json({ data: new UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
@@ -64,12 +78,21 @@ export class AuthController {
     let results = await this.authService.resetPassword(email, newPassword);
 
     // Set cookies
-    res.cookie('accessToken', results.token, {
+    // Set access_token cookie
+    res.cookie('access_token', results.token, {
       httpOnly: true, // client side js cannot access the cookie
-      maxAge: 24 * 60 * 60 * 1000, // one days
-      secure: true,
-      // secure: process.env.NODE_ENV === 'production', // cookie only works in https
-      sameSite: 'none', //
+      maxAge: 30 * 24 * 60 * 60 * 1000, // one month
+      secure: process.env.NODE_ENV === 'development', // cookie only works in https
+      sameSite: 'none', // cross-site access allowed,
+    });
+
+    // Set refresh_token cookie
+    res.cookie('refresh_token', results.token, {
+      httpOnly: true, // client side js cannot access the cookie
+      maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+      secure: process.env.NODE_ENV === 'development', // cookie only works in https
+      sameSite: 'none', // cross-site access allowed,
+      path: '/refresh_token',
     });
 
     res.status(200).json({ data: new UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false });
