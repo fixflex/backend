@@ -63,6 +63,31 @@ let AuthController = exports.AuthController = class AuthController {
             });
             res.status(200).json({ data: new dto_user_1.UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
         });
+        this.logout = (0, express_async_handler_1.default)(async (_req, res) => {
+            res.clearCookie('refresh_token');
+            res.clearCookie('access_token');
+            res.status(200).json({ data: null, success: true, status: 200, message: 'User logged out', error: false });
+        });
+        this.googleLogin = (0, express_async_handler_1.default)(async (req, res) => {
+            let { credential } = req.body;
+            let { user, accessToken, refreshToken } = await this.authService.googleLogin(credential);
+            // Set access_token cookie
+            res.cookie('access_token', accessToken, {
+                httpOnly: true,
+                maxAge: 30 * 24 * 60 * 60 * 1000,
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: 'none', // cross-site access allowed,
+            });
+            // Set refresh_token cookie
+            res.cookie('refresh_token', refreshToken, {
+                httpOnly: true,
+                maxAge: 6 * 30 * 24 * 60 * 60 * 1000,
+                secure: process.env.NODE_ENV !== 'development',
+                sameSite: 'none',
+                path: '/api/v1/auth/refresh_token',
+            });
+            res.status(200).json({ data: new dto_user_1.UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
+        });
         this.refreshToken = (0, express_async_handler_1.default)(async (req, res) => {
             // get refresh_token from cookies
             let refreshToken = req.cookies.refresh_token;

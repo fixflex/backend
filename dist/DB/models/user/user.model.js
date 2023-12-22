@@ -26,11 +26,14 @@ let userSchema = new mongoose_1.Schema({
         maxLength: [128, "Email can't be greater than 128 characters"],
         trim: true,
     },
+    emailVerified: {
+        type: Boolean,
+        default: false,
+    },
     password: {
         type: String,
         trim: true,
         minlength: [6, 'Password must be more than 6 characters'],
-        required: true,
     },
     passwordChangedAt: Date,
     passwordResetCode: String,

@@ -31,7 +31,12 @@
             "description": "Health check endpoint"
         },
         {
-            "name": "Auth"
+            "name": "Auth",
+            "description": "Operations about authentication"
+        },
+        {
+            "name": "OAuth",
+            "description": "Operations about OAuth"
         },
         {
             "name": "Users",
@@ -138,6 +143,68 @@
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/UserLogin"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "User logged in successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "User logout",
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/auth/google": {
+            "post": {
+                "tags": ["OAuth"],
+                "summary": "Google login",
+                "requestBody": {
+                    "description": "Google login",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "credential": {
+                                        "type": "string"
+                                    }
+                                }
                             }
                         }
                     },
@@ -293,7 +360,10 @@
                                         "_id": {
                                             "type": "string"
                                         },
-                                        "fullName": {
+                                        "firstName": {
+                                            "type": "string"
+                                        },
+                                        "lastName": {
                                             "type": "string"
                                         },
                                         "email": {
@@ -1446,11 +1516,14 @@
                             "email": {
                                 "type": "string"
                             },
-                            "fullName": {
+                            "firstName": {
+                                "type": "string"
+                            },
+                            "lastName": {
                                 "type": "string"
                             }
                         },
-                        "required": ["_id", "email", "fullName"]
+                        "required": ["_id", "email", "firstName", "lastName"]
                     },
                     "token": {
                         "type": "string"
