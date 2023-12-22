@@ -52,6 +52,35 @@ export class AuthServie {
     return { user, accessToken, refreshToken };
   }
 
+  async googleLogin(authorizationCode: string) {
+    // 1. get the user data using jwt
+    const decoded = jwt.decode(authorizationCode) as JwtPayload;
+    // 2. check if the user exists
+    let user = await this.userDao.getUserByEmail(decoded.email);
+    // 3. if the user exists, return the user and the token (login)
+    if (user) {
+      let accessToken = createAccessToken(user._id!);
+      let refreshToken = createAccessToken(user._id!);
+      return { user, accessToken, refreshToken };
+    }
+    // 4. if the user does not exist, create a new user and return the user and the token (signup)
+    let newUser = await this.userDao.create({
+      email: decoded.email,
+      emailVerified: decoded.email_verified,
+      firstName: decoded.given_name,
+      lastName: decoded.family_name,
+      profilePicture: { url: decoded.picture, publicId: null },
+    } as IUser);
+
+    if (!newUser) {
+      throw new HttpException(500, 'Something went wrong');
+    }
+    let accessToken = createAccessToken(newUser._id!);
+    let refreshToken = createAccessToken(newUser._id!);
+
+    return { user: newUser, accessToken, refreshToken };
+  }
+
   async refreshToken(refreshToken: string) {
     const decoded = jwt.verify(refreshToken!, env.REFRESH_TOKEN_SECRET_KEY) as JwtPayload;
 

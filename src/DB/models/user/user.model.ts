@@ -28,12 +28,15 @@ let userSchema: Schema<IUser> = new Schema(
       maxLength: [128, "Email can't be greater than 128 characters"],
       trim: true,
     },
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
 
     password: {
       type: String,
       trim: true,
       minlength: [6, 'Password must be more than 6 characters'],
-      required: true,
     },
 
     passwordChangedAt: Date, // used to check if the user changed his password after the token was issued

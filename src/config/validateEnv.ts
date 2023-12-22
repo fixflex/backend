@@ -16,6 +16,8 @@ const validateEnv = cleanEnv(process.env, {
   REFRESH_TOKEN_SECRET_KEY: str(),
   ACCESS_TOKEN_KEY_EXPIRE_TIME: str(),
   REFRESH_TOKEN_KEY_EXPIRE_TIME: str(),
+  GOOGLE_CLIENT_ID: str(),
+  GOOGLE_CLIENT_SECRET: str(),
   CLOUDINARY_API_SECRET: str(),
   CLOUDINARY_API_KEY: str(),
   CLOUDINARY_CLOUD_NAME: str(),
