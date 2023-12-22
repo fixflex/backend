@@ -1,11 +1,11 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "khidma API",
+    "title": "fixflex API",
     "description": "API for khidam Application",
     "contact": {
-      "name": "khidma",
-      "url": "https://khidma.websites.co.in",
+      "name": "fixflex",
+      "url": "https://fixflex.websites.co.in",
       "email": "ahmed.elasiriy@gmail.com"
     },
     "version": "1.0.0"
@@ -16,8 +16,8 @@
       "url": "{serverUrl}/api/{apiVersion}",
       "variables": {
         "serverUrl": {
-          "default": "https://khidma.onrender.com",
-          "enum": ["https://khidma.onrender.com", "http://localhost:8080"]
+          "default": "https://fixflex.onrender.com",
+          "enum": ["https://fixflex.onrender.com", "http://localhost:8080"]
         },
         "apiVersion": {
           "default": "v1"
