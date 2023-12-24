@@ -12,9 +12,10 @@ const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
 const checkAccessTokenExists = (req) => {
     // check cookies first then check headers for the token (for the swagger docs)
     let token = req.cookies.access_token || req.headers.authorization?.split(' ')[1];
-    if (!token) {
+    if (!token || token === 'null') {
         return;
     }
+    console.log(token);
     return token;
 };
 const checkUserExists = async (userId) => {
