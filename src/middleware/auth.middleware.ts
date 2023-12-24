@@ -15,7 +15,6 @@ const checkAccessTokenExists = (req: Request) => {
   if (!token || token === 'null') {
     return;
   }
-  console.log(token);
   return token;
 };
 

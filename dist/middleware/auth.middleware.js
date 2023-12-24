@@ -15,7 +15,6 @@ const checkAccessTokenExists = (req) => {
     if (!token || token === 'null') {
         return;
     }
-    console.log(token);
     return token;
 };
 const checkUserExists = async (userId) => {

@@ -1566,12 +1566,9 @@
               }
             },
             "required": ["_id", "email", "firstName", "lastName"]
-          },
-          "token": {
-            "type": "string"
           }
         },
-        "required": ["data", "token"]
+        "required": ["data"]
       },
       "Tasker": {
         "type": "object",
