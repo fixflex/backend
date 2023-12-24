@@ -23,7 +23,7 @@ export const errorMiddleware = (err: HttpException, _req: Request, res: Response
     }
 
     if (err.name === 'JsonWebTokenError') err = handleJwtInvalidSignture();
-    if (err.name === 'TokenEpiredError') err = handleJwtExpired();
+    if (err.name === 'TokenExpiredError') err = handleJwtExpired();
 
     // MulterError
     if (err.name === 'MulterError') err = handleMulterError(err);
@@ -50,7 +50,7 @@ const handelValidationErrorDB = (err: HttpException) => {
 
 const handleJwtInvalidSignture = () => new HttpException(401, 'Invalid token, please login again..');
 
-const handleJwtExpired = () => new HttpException(401, 'Expired token, please login again..');
+const handleJwtExpired = () => new HttpException(401, 'Expired token');
 
 const handleMulterError = (err: HttpException) => {
   let message = '';

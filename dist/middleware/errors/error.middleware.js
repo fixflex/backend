@@ -25,7 +25,7 @@ const errorMiddleware = (err, _req, res, _next) => {
         }
         if (err.name === 'JsonWebTokenError')
             err = handleJwtInvalidSignture();
-        if (err.name === 'TokenEpiredError')
+        if (err.name === 'TokenExpiredError')
             err = handleJwtExpired();
         // MulterError
         if (err.name === 'MulterError')
@@ -49,7 +49,7 @@ const handelValidationErrorDB = (err) => {
     return new HttpException_1.default(400, message);
 };
 const handleJwtInvalidSignture = () => new HttpException_1.default(401, 'Invalid token, please login again..');
-const handleJwtExpired = () => new HttpException_1.default(401, 'Expired token, please login again..');
+const handleJwtExpired = () => new HttpException_1.default(401, 'Expired token');
 const handleMulterError = (err) => {
     let message = '';
     if (err.code === 'LIMIT_UNEXPECTED_FILE') {
