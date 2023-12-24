@@ -20,10 +20,10 @@ export class AuthRoute implements Routes {
     this.router.post(`${this.path}/logout`, this.authController.logout);
     // OAuth Routes - Google - Facebook
     this.router.post(`${this.path}/google`, this.authController.googleLogin);
-    this.router.get(`${this.path}/refresh_token`, this.authController.refreshToken);
+    this.router.get(`${this.path}/refresh-token`, this.authController.refreshToken);
     // this.router.post(`${this.path}/activate`, this.authController.activateAccount);
-    this.router.post(`${this.path}/forgotPassword`, this.authController.forgotPassword);
-    this.router.post(`${this.path}/verifyResetCode`, this.authController.verifyPassResetCode);
-    this.router.patch(`${this.path}/resetPassword`, this.authController.resetPassword);
+    this.router.post(`${this.path}/forgot-password`, this.authController.forgotPassword);
+    this.router.post(`${this.path}/verify-reset-code`, this.authController.verifyPassResetCode);
+    this.router.patch(`${this.path}/reset-password`, this.authController.resetPassword);
   }
 }

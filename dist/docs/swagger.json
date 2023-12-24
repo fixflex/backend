@@ -1,11 +1,11 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "fixflex API",
+        "title": "khidma API",
         "description": "API for khidam Application",
         "contact": {
-            "name": "fixflex",
-            "url": "https://fixflex.websites.co.in",
+            "name": "khidma",
+            "url": "https://khidma.websites.co.in",
             "email": "ahmed.elasiriy@gmail.com"
         },
         "version": "1.0.0"
@@ -16,8 +16,8 @@
             "url": "{serverUrl}/api/{apiVersion}",
             "variables": {
                 "serverUrl": {
-                    "default": "https://fixflex.onrender.com",
-                    "enum": ["https://fixflex.onrender.com", "http://localhost:8080"]
+                    "default": "https://khidma.onrender.com",
+                    "enum": ["https://khidma.onrender.com", "http://localhost:8080"]
                 },
                 "apiVersion": {
                     "default": "v1"
@@ -190,6 +190,143 @@
                 ]
             }
         },
+        "/auth/refresh-token": {
+            "get": {
+                "tags": ["Auth"],
+                "summary": "Refresh token",
+                "description": "Refresh token",
+                "responses": {
+                    "200": {
+                        "description": "Token refreshed successfully"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/auth/forgot-password": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "Forgot password",
+                "requestBody": {
+                    "description": "Forgot password",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Email sent successfully"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/auth/verify-reset-code": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "Verify reset code",
+                "requestBody": {
+                    "description": "Verify reset code",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "resetCode": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Code verified successfully"
+                    },
+                    "400": {
+                        "description": "Invalid reset code or the code is expired"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/auth/reset-password": {
+            "patch": {
+                "tags": ["Auth"],
+                "summary": "Reset password",
+                "requestBody": {
+                    "description": "Reset password",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "newPassword": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password reset successfully"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
         "/auth/google": {
             "post": {
                 "tags": ["OAuth"],
@@ -226,117 +363,6 @@
                     },
                     "401": {
                         "description": "Unauthorized"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
-                    }
-                }
-            }
-        },
-        "/auth/forgotPassword": {
-            "post": {
-                "tags": ["Auth"],
-                "summary": "Forgot password",
-                "requestBody": {
-                    "description": "Forgot password",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "email": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "required": true
-                },
-                "responses": {
-                    "200": {
-                        "description": "Email sent successfully"
-                    },
-                    "400": {
-                        "description": "Invalid request"
-                    },
-                    "404": {
-                        "description": "User not found"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
-                    }
-                }
-            }
-        },
-        "/auth/verifyResetCode": {
-            "post": {
-                "tags": ["Auth"],
-                "summary": "Verify reset code",
-                "requestBody": {
-                    "description": "Verify reset code",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "resetCode": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "required": true
-                },
-                "responses": {
-                    "200": {
-                        "description": "Code verified successfully"
-                    },
-                    "400": {
-                        "description": "Invalid reset code or the code is expired"
-                    },
-                    "404": {
-                        "description": "User not found"
-                    },
-                    "500": {
-                        "description": "Internal Server Error"
-                    }
-                }
-            }
-        },
-        "/auth/resetPassword": {
-            "patch": {
-                "tags": ["Auth"],
-                "summary": "Reset password",
-                "requestBody": {
-                    "description": "Reset password",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "email": {
-                                        "type": "string"
-                                    },
-                                    "newPassword": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "required": true
-                },
-                "responses": {
-                    "200": {
-                        "description": "Password reset successfully"
-                    },
-                    "400": {
-                        "description": "Invalid request"
-                    },
-                    "404": {
-                        "description": "User not found"
                     },
                     "500": {
                         "description": "Internal Server Error"
