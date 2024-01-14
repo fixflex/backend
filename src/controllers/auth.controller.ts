@@ -1,102 +1,71 @@
-import { Request, Response } from 'express';
+import { CookieOptions, Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
+import env from '../config/validateEnv';
 import { UserDto } from '../dtos/dto.user';
 // import { IUser } from '../interfaces/user.interface';
 import { AuthServie } from '../services/auth.service';
 import customResponse from '../utils/customResponse';
 
 // TODO: use passport.js for authentication
-// TODO: refresh token and logout routes
 @autoInjectable()
 export class AuthController {
   constructor(private readonly authService: AuthServie) {}
 
+  private accessTokenCookieOptions: CookieOptions = {
+    httpOnly: true, // client side js cannot access the cookie
+    maxAge: 30 * 24 * 60 * 60 * 1000, // one month
+    secure: env.NODE_ENV !== 'development', // cookie only works in https
+    sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax', // sameSite is none if secure is true and lax if secure is false because we are using cors and we are not using csrf protection
+  };
+
+  private refreshTokenCookieOptions: CookieOptions = {
+    httpOnly: true, // client side js cannot access the cookie
+    maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+    secure: env.NODE_ENV !== 'development', // cookie only works in https
+    sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax', // sameSite is none if NODE_ENV is production and lax if NODE_ENV is development because we are using cors and we are not using csrf protection
+    path: '/api/v1/auth/refresh-token',
+  };
+
   public signup = asyncHandler(async (req: Request, res: Response) => {
     let { user, accessToken, refreshToken } = await this.authService.signup(req.body);
 
-    // Set accesstoken cookie
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true, // client side js cannot access the cookie
-      maxAge: 30 * 24 * 60 * 60 * 1000, // one month
-      secure: process.env.NODE_ENV !== 'development', // cookie only works in https
-      sameSite: 'none', // cross-site access allowed,
-    });
-
-    // Set refresh_token cookie
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true, // client side js cannot access the cookie
-      maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
-      secure: process.env.NODE_ENV !== 'development', // cookie only works in https
-      sameSite: 'none', // cross-site access allowed,
-      path: '/api/v1/auth/refresh-token',
-    });
+    res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
+    res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
 
     res.status(201).json({ data: new UserDto(user), success: true, status: 201, message: 'User created', error: false });
   });
 
   public login = asyncHandler(async (req: Request, res: Response) => {
     let { email, password } = req.body;
-    // log the access token and refresh token
-    console.log(req.cookies);
     let { user, accessToken, refreshToken } = await this.authService.login(email, password);
 
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      secure: process.env.NODE_ENV !== 'development',
-      sameSite: 'none',
-    });
-
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      maxAge: 6 * 30 * 24 * 60 * 60 * 1000,
-      secure: process.env.NODE_ENV !== 'development', // cookie only works in https
-      sameSite: 'none',
-      path: '/api/v1/auth/refresh-token',
-    });
+    res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
+    res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
 
     res.status(200).json({ data: new UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
   });
 
   public logout = asyncHandler(async (_req: Request, res: Response) => {
-    res.clearCookie('refreshToken');
-    res.clearCookie('accesstoken');
+    res.clearCookie('refresh_token');
+    res.clearCookie('access_token');
+
     res.status(200).json({ data: null, success: true, status: 200, message: 'User logged out', error: false });
   });
 
   public googleLogin = asyncHandler(async (req: Request, res: Response) => {
     let { credential } = req.body;
-
     let { user, accessToken, refreshToken } = await this.authService.googleLogin(credential);
 
-    // Set accesstoken cookie
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true, // client side js cannot access the cookie
-      maxAge: 30 * 24 * 60 * 60 * 1000, // one month
-      secure: process.env.NODE_ENV !== 'development', // cookie only works in https
-      sameSite: 'none', // cross-site access allowed,
-    });
-
-    // Set refresh_token cookie
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true, // client side js cannot access the cookie
-      maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
-      secure: process.env.NODE_ENV !== 'development', // cookie only works in https
-      sameSite: 'none', // cross-site access allowed,
-      path: '/api/v1/auth/refresh-token',
-    });
+    res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
+    res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
 
     res.status(200).json({ data: new UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
   });
 
   public refreshToken = asyncHandler(async (req: Request, res: Response) => {
-    // get refresh_token from cookies
     let refreshToken = req.cookies.refreshToken;
-    let accessToken_ = req.cookies.accessToken;
-    console.log(refreshToken);
-    console.log(accessToken_);
 
     if (!refreshToken) {
       res.status(401).json(customResponse({ data: null, success: false, status: 401, message: 'You are not authorized, you must login to get access this route', error: true }));
@@ -104,13 +73,7 @@ export class AuthController {
     }
     let { accessToken } = await this.authService.refreshToken(refreshToken);
 
-    // Set accesstoken cookie
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true, // client side js cannot access the cookie
-      maxAge: 30 * 24 * 60 * 60 * 1000, // one month
-      secure: process.env.NODE_ENV !== 'development', // cookie only works in https
-      sameSite: 'none', // cross-site access allowed,
-    });
+    res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
 
     res.status(200).json({ data: null, success: true, status: 200, message: 'Access token refreshed', error: false });
   });
@@ -131,23 +94,8 @@ export class AuthController {
     let { email, newPassword } = req.body;
     let results = await this.authService.resetPassword(email, newPassword);
 
-    // Set cookies
-    // Set accesstoken cookie
-    res.cookie('accessToken', results.accessToken, {
-      httpOnly: true, // client side js cannot access the cookie
-      maxAge: 30 * 24 * 60 * 60 * 1000, // one month
-      secure: process.env.NODE_ENV !== 'development', // cookie only works in https
-      sameSite: 'none', // cross-site access allowed,
-    });
-
-    // Set refresh_token cookie
-    res.cookie('refreshToken', results.refreshToken, {
-      httpOnly: true, // client side js cannot access the cookie
-      maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
-      secure: process.env.NODE_ENV !== 'development', // cookie only works in https
-      sameSite: 'none', // cross-site access allowed,
-      path: '/api/v1/auth/refresh-token',
-    });
+    res.cookie('access_token', results.accessToken, this.accessTokenCookieOptions);
+    res.cookie('refresh_token', results.refreshToken, this.refreshTokenCookieOptions);
 
     res.status(200).json({ data: new UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false });
   });
