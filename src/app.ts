@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 
 import dbConnection from './DB';
 import env from './config/validateEnv';
+// Documentation
 import swaggerDocument from './docs/swagger.json';
 import { notFound } from './exceptions/notFound';
 import './exceptions/shutdownHandler';

@@ -11,7 +11,7 @@ import { UserType } from '../interfaces/user.interface';
 
 const checkAccessTokenExists = (req: Request) => {
   // check cookies first then check headers for the token (for the swagger docs)
-  let token = req.cookies.access_token || req.headers.authorization?.split(' ')[1];
+  let token = req.cookies.accessToken || req.headers.authorization?.split(' ')[1];
   if (!token || token === 'null') {
     return;
   }

@@ -11,6 +11,7 @@ require("reflect-metadata");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const DB_1 = __importDefault(require("./DB"));
 const validateEnv_1 = __importDefault(require("./config/validateEnv"));
+// Documentation
 const swagger_json_1 = __importDefault(require("./docs/swagger.json"));
 const notFound_1 = require("./exceptions/notFound");
 require("./exceptions/shutdownHandler");

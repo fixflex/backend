@@ -17,7 +17,7 @@ export class AuthController {
     let { user, accessToken, refreshToken } = await this.authService.signup(req.body);
 
     // Set accesstoken cookie
-    res.cookie('access_token', accessToken, {
+    res.cookie('accessToken', accessToken, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 30 * 24 * 60 * 60 * 1000, // one month
       secure: process.env.NODE_ENV !== 'development', // cookie only works in https
@@ -25,7 +25,7 @@ export class AuthController {
     });
 
     // Set refresh_token cookie
-    res.cookie('refresh_token', refreshToken, {
+    res.cookie('refreshToken', refreshToken, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
       secure: process.env.NODE_ENV !== 'development', // cookie only works in https
@@ -38,23 +38,22 @@ export class AuthController {
 
   public login = asyncHandler(async (req: Request, res: Response) => {
     let { email, password } = req.body;
-
+    // log the access token and refresh token
+    console.log(req.cookies);
     let { user, accessToken, refreshToken } = await this.authService.login(email, password);
 
-    // Set accesstoken cookie
-    res.cookie('access_token', accessToken, {
-      httpOnly: true, // client side js cannot access the cookie
-      maxAge: 30 * 24 * 60 * 60 * 1000, // one month
-      secure: process.env.NODE_ENV !== 'development', // cookie only works in https
-      sameSite: 'none', // cross-site access allowed,
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      secure: process.env.NODE_ENV !== 'development',
+      sameSite: 'none',
     });
 
-    // Set refresh_token cookie
-    res.cookie('refresh_token', refreshToken, {
-      httpOnly: true, // client side js cannot access the cookie
-      maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      maxAge: 6 * 30 * 24 * 60 * 60 * 1000,
       secure: process.env.NODE_ENV !== 'development', // cookie only works in https
-      sameSite: 'none', // cross-site access allowed,
+      sameSite: 'none',
       path: '/api/v1/auth/refresh-token',
     });
 
@@ -62,7 +61,7 @@ export class AuthController {
   });
 
   public logout = asyncHandler(async (_req: Request, res: Response) => {
-    res.clearCookie('refresh_token');
+    res.clearCookie('refreshToken');
     res.clearCookie('accesstoken');
     res.status(200).json({ data: null, success: true, status: 200, message: 'User logged out', error: false });
   });
@@ -73,7 +72,7 @@ export class AuthController {
     let { user, accessToken, refreshToken } = await this.authService.googleLogin(credential);
 
     // Set accesstoken cookie
-    res.cookie('access_token', accessToken, {
+    res.cookie('accessToken', accessToken, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 30 * 24 * 60 * 60 * 1000, // one month
       secure: process.env.NODE_ENV !== 'development', // cookie only works in https
@@ -81,7 +80,7 @@ export class AuthController {
     });
 
     // Set refresh_token cookie
-    res.cookie('refresh_token', refreshToken, {
+    res.cookie('refreshToken', refreshToken, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
       secure: process.env.NODE_ENV !== 'development', // cookie only works in https
@@ -94,8 +93,10 @@ export class AuthController {
 
   public refreshToken = asyncHandler(async (req: Request, res: Response) => {
     // get refresh_token from cookies
-    let refreshToken = req.cookies.refresh_token;
-    // let accessToken_ = req.cookies.access_token;
+    let refreshToken = req.cookies.refreshToken;
+    let accessToken_ = req.cookies.accessToken;
+    console.log(refreshToken);
+    console.log(accessToken_);
 
     if (!refreshToken) {
       res.status(401).json(customResponse({ data: null, success: false, status: 401, message: 'You are not authorized, you must login to get access this route', error: true }));
@@ -104,7 +105,7 @@ export class AuthController {
     let { accessToken } = await this.authService.refreshToken(refreshToken);
 
     // Set accesstoken cookie
-    res.cookie('access_token', accessToken, {
+    res.cookie('accessToken', accessToken, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 30 * 24 * 60 * 60 * 1000, // one month
       secure: process.env.NODE_ENV !== 'development', // cookie only works in https
@@ -132,7 +133,7 @@ export class AuthController {
 
     // Set cookies
     // Set accesstoken cookie
-    res.cookie('access_token', results.accessToken, {
+    res.cookie('accessToken', results.accessToken, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 30 * 24 * 60 * 60 * 1000, // one month
       secure: process.env.NODE_ENV !== 'development', // cookie only works in https
@@ -140,7 +141,7 @@ export class AuthController {
     });
 
     // Set refresh_token cookie
-    res.cookie('refresh_token', results.refreshToken, {
+    res.cookie('refreshToken', results.refreshToken, {
       httpOnly: true, // client side js cannot access the cookie
       maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
       secure: process.env.NODE_ENV !== 'development', // cookie only works in https
