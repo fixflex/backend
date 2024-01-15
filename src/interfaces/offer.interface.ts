@@ -1,3 +1,7 @@
+import { NextFunction } from 'express';
+
+import { Request, Response } from '../helpers/helper.generic';
+
 export interface IOffer {
   _id?: string;
   taskerId: string;
@@ -14,6 +18,23 @@ export interface IOffer {
   }[];
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface IOfferController {
+  getOffersByTaskId(req: Request, res: Response, next: NextFunction): void;
+  getOfferById(req: Request, res: Response, next: NextFunction): void;
+  createOffer(req: Request, res: Response, next: NextFunction): void;
+  updateOffer(req: Request, res: Response, next: NextFunction): void;
+  deleteOffer(req: Request, res: Response, next: NextFunction): void;
+}
+
+export interface IOfferService {
+  // getOffers(taskId: string | undefined): Promise<IOffer[] | null>;
+  getOfferById(offerId: string): Promise<IOffer | null>;
+
+  createOffer(offer: IOffer, userId: string | undefined): Promise<IOffer>;
+  updateOffer(offerId: string, offer: Partial<IOffer>, userId: string | undefined): Promise<IOffer | null>;
+  deleteOffer(offerId: string, userId: string | undefined): Promise<IOffer | null>;
 }
 
 // the offer should be like this :

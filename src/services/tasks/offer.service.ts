@@ -4,11 +4,11 @@ import { OfferDao } from '../../DB/dao/offer.dao';
 import { TaskDao } from '../../DB/dao/task.dao';
 import TaskerDao from '../../DB/dao/tasker.dao';
 import HttpException from '../../exceptions/HttpException';
-import { IOffer } from '../../interfaces';
+import { IOffer, IOfferService } from '../../interfaces';
 import { TaskStatus } from '../../interfaces/task.interface';
 
 @autoInjectable()
-class OfferService {
+class OfferService implements IOfferService {
   constructor(private offerDao: OfferDao, private taskerDao: TaskerDao, private taskDao: TaskDao) {}
 
   async createOffer(offer: any, userId: string | undefined) {
@@ -32,7 +32,7 @@ class OfferService {
     return await this.offerDao.getMany();
   }
 
-  async updateOffer(id: string, payload: IOffer, userId: string | undefined) {
+  async updateOffer(id: string, payload: Partial<IOffer>, userId: string | undefined) {
     // check if this offer belongs to this tasker
     let tasker = await this.taskerDao.getOne({ userId });
     if (!tasker) throw new HttpException(400, 'You are not a tasker');

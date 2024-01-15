@@ -4,11 +4,12 @@ import { autoInjectable } from 'tsyringe';
 
 import HttpException from '../../exceptions/HttpException';
 import customResponse from '../../helpers/customResponse';
+import { IOfferController } from '../../interfaces';
 import { AuthRequest } from '../../interfaces/auth.interface';
 import { OfferService } from '../../services/tasks/offer.service';
 
 @autoInjectable()
-class OfferController {
+class OfferController implements IOfferController {
   constructor(private readonly offerService: OfferService) {}
 
   createOffer = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
