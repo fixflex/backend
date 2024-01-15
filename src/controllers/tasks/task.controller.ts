@@ -4,12 +4,13 @@ import { autoInjectable } from 'tsyringe';
 
 import HttpException from '../../exceptions/HttpException';
 import customResponse from '../../helpers/customResponse';
+import { ITaskController } from '../../interfaces';
 import { AuthRequest } from '../../interfaces/auth.interface';
 import { uploadMixFiles } from '../../middleware/uploadImages.middleware';
 import { TaskService } from '../../services/tasks/task.service';
 
 @autoInjectable()
-class TaskController {
+class TaskController implements ITaskController {
   constructor(private readonly taskService: TaskService) {}
 
   taskImages = uploadMixFiles([

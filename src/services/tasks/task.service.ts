@@ -3,10 +3,10 @@ import { autoInjectable } from 'tsyringe';
 import { TaskDao } from '../../DB/dao/task.dao';
 import HttpException from '../../exceptions/HttpException';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../../helpers/cloudinary';
-import { ITask } from '../../interfaces';
+import { ITask, ITaskService } from '../../interfaces';
 
 @autoInjectable()
-class TaskService {
+class TaskService implements ITaskService {
   constructor(private readonly taskDao: TaskDao) {}
 
   getTasks = async () => {
