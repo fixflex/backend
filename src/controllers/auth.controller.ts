@@ -1,15 +1,18 @@
-import { CookieOptions, Request, Response } from 'express';
+import { CookieOptions } from 'express';
 import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
 import env from '../config/validateEnv';
 import { UserDto } from '../dtos/dto.user';
 import customResponse from '../helpers/customResponse';
+import { Request, Response } from '../helpers/helper.generic';
+import { IUser } from '../interfaces';
+import { IAuthController } from '../interfaces/auth.interface';
 import { AuthServie } from '../services/auth.service';
 
 // TODO: use passport.js for authentication
 @autoInjectable()
-export class AuthController {
+export class AuthController implements IAuthController {
   constructor(private readonly authService: AuthServie) {}
 
   private accessTokenCookieOptions: CookieOptions = {
@@ -28,7 +31,7 @@ export class AuthController {
   };
 
   public signup = asyncHandler(async (req: Request, res: Response) => {
-    let { user, accessToken, refreshToken } = await this.authService.signup(req.body);
+    let { user, accessToken, refreshToken } = await this.authService.signup(req.body as IUser);
 
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
     res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
