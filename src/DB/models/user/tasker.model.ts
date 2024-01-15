@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-import { ITasker } from '../../../interfaces/user.interface';
+import { ITasker } from '../../../interfaces/interface.tasker';
 
 let taskerSchema: Schema<ITasker> = new Schema(
   {

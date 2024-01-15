@@ -3,7 +3,7 @@ import { autoInjectable } from 'tsyringe';
 import ServiceDao from '../../DB/dao/service.dao';
 import TaskerDao from '../../DB/dao/tasker.dao';
 import HttpException from '../../exceptions/HttpException';
-import { ITasker } from '../../interfaces/user.interface';
+import { ITasker } from '../../interfaces/interface.tasker';
 
 @autoInjectable()
 class TaskerService {

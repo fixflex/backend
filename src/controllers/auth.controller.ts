@@ -30,8 +30,8 @@ export class AuthController implements IAuthController {
     path: '/api/v1/auth/refresh-token',
   };
 
-  public signup = asyncHandler(async (req: Request, res: Response) => {
-    let { user, accessToken, refreshToken } = await this.authService.signup(req.body as IUser);
+  public signup = asyncHandler(async (req: Request<IUser>, res: Response) => {
+    let { user, accessToken, refreshToken } = await this.authService.signup(req.body);
 
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
     res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);

@@ -1,4 +1,4 @@
-import { ITasker } from '../../interfaces/user.interface';
+import { ITasker } from '../../interfaces/interface.tasker';
 import TaskerModel from '../models/user/tasker.model';
 import CommonDAO from './commonDAO';
 

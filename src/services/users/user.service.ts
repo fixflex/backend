@@ -8,10 +8,10 @@ import APIFeatures from '../../helpers/apiFeatures';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../../helpers/cloudinary';
 import { createAccessToken } from '../../helpers/createToken';
 import { IPagination } from '../../interfaces/respons.interface';
-import { IUser } from '../../interfaces/user.interface';
+import { IUser, IUserService } from '../../interfaces/user.interface';
 
 @autoInjectable()
-class UserService {
+class UserService implements IUserService {
   constructor(private readonly userDao: UserDao) {}
 
   async getUsers(reqQuery: any): Promise<{

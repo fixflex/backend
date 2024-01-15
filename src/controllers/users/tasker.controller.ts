@@ -5,7 +5,7 @@ import { autoInjectable } from 'tsyringe';
 import HttpException from '../../exceptions/HttpException';
 import customResponse from '../../helpers/customResponse';
 import { AuthRequest } from '../../interfaces/auth.interface';
-import { ITasker } from '../../interfaces/user.interface';
+import { ITasker } from '../../interfaces/interface.tasker';
 import { TaskerService } from '../../services/users/tasker.service';
 
 @autoInjectable()

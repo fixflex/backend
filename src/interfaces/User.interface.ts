@@ -1,3 +1,7 @@
+import { NextFunction } from 'express';
+
+import { Request, Response } from '../helpers/helper.generic';
+
 export enum UserType {
   USER = 'USER',
   ADMIN = 'ADMIN',
@@ -26,34 +30,20 @@ export interface IUser {
   updatedAt?: string;
 }
 
-export interface IClient {
-  _id?: string; // client id
-  userId: string; // user id
-  location: {
-    type: {
-      enum: ['Point'];
-      default: 'Point';
-    };
-    coordinates: [number, number];
-  };
+export interface IUserController {
+  getUser(req: Request, res: Response, next: NextFunction): void;
+  getMe(req: Request, res: Response, next: NextFunction): void;
+  updateMe(req: Request, res: Response, next: NextFunction): void;
+  changePassword(req: Request, res: Response, next: NextFunction): void;
+  deleteMe(req: Request, res: Response, next: NextFunction): void;
+  updateMyProfileImage(req: Request, res: Response, next: NextFunction): void;
 }
 
-export interface ITasker {
-  _id?: string; // tasker id
-  userId: string; // user id
-  rating: number; // average of reviews
-  bio: string;
-  completedTasks: number;
-  services: string[];
-  phoneNumber: string;
-  location: {
-    type: {
-      type: string;
-      enum: ['Point'];
-      default: 'Point';
-    };
-    coordinates: [number, number];
-  };
+export interface IUserService {
+  getUser(userId: string): Promise<IUser | null>;
+  createUser(user: IUser): Promise<IUser>;
+  updateUser(userId: string, user: Partial<IUser>): Promise<IUser | null>;
+  changePassword(payload: { oldPassword: string; newPassword: string }, user: IUser): Promise<{ updatedUser: any; token: string }>;
+  deleteUser(userId: string): Promise<IUser | null>;
+  updateProfileImage(userId: string, file: Express.Multer.File): Promise<IUser | null>;
 }
-
-// export interface IUserRole {}
