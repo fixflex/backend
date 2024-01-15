@@ -3,10 +3,10 @@ import { autoInjectable } from 'tsyringe';
 import ServiceDao from '../../DB/dao/service.dao';
 import TaskerDao from '../../DB/dao/tasker.dao';
 import HttpException from '../../exceptions/HttpException';
-import { ITasker } from '../../interfaces/interface.tasker';
+import { ITasker, ITaskerService } from '../../interfaces/interface.tasker';
 
 @autoInjectable()
-class TaskerService {
+class TaskerService implements ITaskerService {
   constructor(private readonly serviceDao: ServiceDao, private readonly taskerDao: TaskerDao) {}
   async createTasker(userId: string, tasker: ITasker) {
     // check if service is exists in DB
@@ -22,14 +22,14 @@ class TaskerService {
     return await this.taskerDao.create(tasker);
   }
 
-  async getTaskerProfile(taskerId: string) {
+  async getTasker(taskerId: string) {
     return await this.taskerDao.getTaskerProfile(taskerId);
   }
 
   async getMyProfile(userId: string) {
     return await this.taskerDao.getOne({ userId });
   }
-  async getListOfTaskers(reqQuery: any) {
+  async getTaskers(reqQuery: any) {
     if (reqQuery.services) {
       // check if service is exists in DB
       let isServiceExists = await this.serviceDao.getOneById(reqQuery.services);
@@ -39,7 +39,7 @@ class TaskerService {
     return taskers;
   }
 
-  async updateMyTaskerProfile(userId: string, tasker: ITasker) {
+  async updateTasker(userId: string, tasker: Partial<ITasker>) {
     if (tasker.services)
       await Promise.all(
         tasker.services.map(async service => {
@@ -52,7 +52,7 @@ class TaskerService {
     return await this.taskerDao.updateOne({ userId }, tasker);
   }
 
-  async deleteMyTaskerProfile(userId: string) {
+  async deleteTasker(userId: string) {
     return await this.taskerDao.deleteOne({ userId });
   }
 }
