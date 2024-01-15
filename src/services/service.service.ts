@@ -5,12 +5,12 @@ import HttpException from '../exceptions/HttpException';
 import APIFeatures from '../helpers/apiFeatures';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { IPagination } from '../interfaces/respons.interface';
-import { IService } from '../interfaces/services.interface';
+import { IService, IServiceService } from '../interfaces/services.interface';
 import { uploadSingleFile } from '../middleware/uploadImages.middleware';
 
 export const uploadServiceImage = uploadSingleFile('image');
 @autoInjectable()
-class ServiceService {
+class ServiceService implements IServiceService {
   constructor(private readonly serviceDao: ServiceDao) {}
   async getServices(reqQuery: any): Promise<{
     services: IService[] | null;

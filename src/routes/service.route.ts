@@ -20,7 +20,7 @@ export class ServiceRoute implements Routes {
   private initializeRoutes() {
     // Public routes
     this.router.get(`${this.path}`, this.serviceController.getServices);
-    this.router.get(`${this.path}/:id`, isMongoId, this.serviceController.getService);
+    this.router.get(`${this.path}/:id`, isMongoId, this.serviceController.getServiceById);
 
     // Admin routes
     this.router.use(`${this.path}`, authenticateUser, allowedTo(UserType.ADMIN));

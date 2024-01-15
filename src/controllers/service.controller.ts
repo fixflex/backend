@@ -4,15 +4,15 @@ import { autoInjectable } from 'tsyringe';
 
 import HttpException from '../exceptions/HttpException';
 import customResponse from '../helpers/customResponse';
-import { IService } from '../interfaces/services.interface';
+import { IService, IServiceController } from '../interfaces/services.interface';
 import { ServiceService } from '../services/service.service';
 
 @autoInjectable()
-class ServiceController {
+class ServiceController implements IServiceController {
   constructor(private readonly serviceService: ServiceService) {}
 
   // public Routes
-  public getService = asyncHandler(async (req: Request, res: Response) => {
+  public getServiceById = asyncHandler(async (req: Request, res: Response) => {
     let service = await this.serviceService.getService(req.params.id);
     if (!service) throw new HttpException(404, 'No service found');
     res.status(200).json(customResponse<IService>({ data: service, success: true, status: 200, message: 'Service found', error: false }));
