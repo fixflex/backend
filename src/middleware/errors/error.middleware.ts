@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 
 import HttpException from '../../exceptions/HttpException';
+import logger from '../../helpers/log';
 import { ErrorResponse } from '../../interfaces';
-import logger from '../../utils/log';
 
 export const errorMiddleware = (err: HttpException, _req: Request, res: Response<ErrorResponse>, _next: NextFunction) => {
   err.statusCode = err.statusCode || 500;

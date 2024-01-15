@@ -5,10 +5,10 @@ import { autoInjectable } from 'tsyringe';
 import UserDao from '../DB/dao/user.dao';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
+import { createAccessToken } from '../helpers/createToken';
+import { hashCode } from '../helpers/hashing';
+import { sendMailer } from '../helpers/nodemailer';
 import { IUser } from '../interfaces/user.interface';
-import { createAccessToken } from '../utils/createToken';
-import { hashCode } from '../utils/hashing';
-import { sendMailer } from '../utils/nodemailer';
 
 @autoInjectable()
 export class AuthServie {

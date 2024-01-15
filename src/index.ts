@@ -4,6 +4,7 @@ import { container } from 'tsyringe';
 
 import App from './app';
 import env from './config/validateEnv';
+import logger from './helpers/log';
 import { UserRoute } from './routes';
 import { AuthRoute } from './routes';
 import { ServiceRoute } from './routes';
@@ -13,7 +14,6 @@ import { OfferRoute } from './routes/tasks/offer.route';
 import { TaskRoute } from './routes/tasks/task.route';
 import { TaskerRoute } from './routes/users/tasker.route';
 import Socket from './sockets/socket';
-import logger from './utils/log';
 
 // Setup routes
 let authRoute = container.resolve(AuthRoute);

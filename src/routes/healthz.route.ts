@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { Request, Response } from 'express';
 
+import customResponse from '../helpers/customResponse';
 import { Routes } from '../interfaces/routes.interface';
-import customResponse from '../utils/customResponse';
 
 class HealthzRoute implements Routes {
   public path = '/healthz';

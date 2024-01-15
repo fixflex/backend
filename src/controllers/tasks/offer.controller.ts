@@ -3,9 +3,9 @@ import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
 import HttpException from '../../exceptions/HttpException';
+import customResponse from '../../helpers/customResponse';
 import { AuthRequest } from '../../interfaces/auth.interface';
 import { OfferService } from '../../services/tasks/offer.service';
-import customResponse from '../../utils/customResponse';
 
 @autoInjectable()
 class OfferController {

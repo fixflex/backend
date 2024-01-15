@@ -2,8 +2,8 @@ import { autoInjectable } from 'tsyringe';
 
 import { TaskDao } from '../../DB/dao/task.dao';
 import HttpException from '../../exceptions/HttpException';
+import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../../helpers/cloudinary';
 import { ITask } from '../../interfaces';
-import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../../utils/cloudinary';
 
 @autoInjectable()
 class TaskService {

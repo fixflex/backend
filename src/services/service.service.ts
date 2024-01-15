@@ -2,11 +2,11 @@ import { autoInjectable } from 'tsyringe';
 
 import ServiceDao from '../DB/dao/service.dao';
 import HttpException from '../exceptions/HttpException';
+import APIFeatures from '../helpers/apiFeatures';
+import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { IPagination } from '../interfaces/respons.interface';
 import { IService } from '../interfaces/services.interface';
 import { uploadSingleFile } from '../middleware/uploadImages.middleware';
-import APIFeatures from '../utils/apiFeatures';
-import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../utils/cloudinary';
 
 export const uploadServiceImage = uploadSingleFile('image');
 @autoInjectable()

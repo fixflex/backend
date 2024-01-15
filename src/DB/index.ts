@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 import env from '../config/validateEnv';
-import logger from '../utils/log';
+import logger from '../helpers/log';
 
 // const options = {
 //   useNewUrlParser: true,

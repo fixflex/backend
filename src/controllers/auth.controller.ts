@@ -4,9 +4,8 @@ import { autoInjectable } from 'tsyringe';
 
 import env from '../config/validateEnv';
 import { UserDto } from '../dtos/dto.user';
-// import { IUser } from '../interfaces/user.interface';
+import customResponse from '../helpers/customResponse';
 import { AuthServie } from '../services/auth.service';
-import customResponse from '../utils/customResponse';
 
 // TODO: use passport.js for authentication
 @autoInjectable()

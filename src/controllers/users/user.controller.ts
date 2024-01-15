@@ -3,11 +3,11 @@ import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
 import HttpException from '../../exceptions/HttpException';
+import customResponse from '../../helpers/customResponse';
 import { AuthRequest } from '../../interfaces/auth.interface';
 import { IUser } from '../../interfaces/user.interface';
 import { uploadSingleFile } from '../../middleware/uploadImages.middleware';
 import { UserService } from '../../services/users/user.service';
-import customResponse from '../../utils/customResponse';
 
 @autoInjectable()
 class UserController {

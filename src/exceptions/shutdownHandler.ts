@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 import { server } from '..';
-import logger from '../utils/log';
+import logger from '../helpers/log';
 
 // Graceful shutdown //
 

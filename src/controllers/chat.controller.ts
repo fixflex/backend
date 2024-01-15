@@ -3,10 +3,10 @@ import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
 import HttpException from '../exceptions/HttpException';
+import customResponse from '../helpers/customResponse';
 import { AuthRequest } from '../interfaces/auth.interface';
 import { IChat } from '../interfaces/chat.interface';
 import { ChatService } from '../services/chat.service';
-import customResponse from '../utils/customResponse';
 
 @autoInjectable()
 class ChatController {

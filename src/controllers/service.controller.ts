@@ -3,9 +3,9 @@ import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
 import HttpException from '../exceptions/HttpException';
+import customResponse from '../helpers/customResponse';
 import { IService } from '../interfaces/services.interface';
 import { ServiceService } from '../services/service.service';
-import customResponse from '../utils/customResponse';
 
 @autoInjectable()
 class ServiceController {
