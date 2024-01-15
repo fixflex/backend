@@ -5,11 +5,11 @@ import { autoInjectable } from 'tsyringe';
 import HttpException from '../exceptions/HttpException';
 import customResponse from '../helpers/customResponse';
 import { AuthRequest } from '../interfaces/auth.interface';
-import { IChat } from '../interfaces/chat.interface';
+import { IChat, IChatController } from '../interfaces/chat.interface';
 import { ChatService } from '../services/chat.service';
 
 @autoInjectable()
-class ChatController {
+class ChatController implements IChatController {
   constructor(private readonly chatService: ChatService) {}
 
   getChatById = asyncHandler(async (req: AuthRequest, res: Response) => {

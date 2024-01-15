@@ -1,6 +1,7 @@
 import { ChatDao } from '../DB/dao/chat.dao';
+import { IChatService } from '../interfaces';
 
-class ChatService {
+class ChatService implements IChatService {
   async getChatById(id: string) {
     return await ChatDao.getChatById(id);
   }
