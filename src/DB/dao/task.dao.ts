@@ -1,5 +1,5 @@
 import { ITask } from '../../interfaces';
-import TaskModel from '../models/task/task.model';
+import TaskModel from '../models/task.model';
 import CommonDAO from './commonDAO';
 
 class TaskDao extends CommonDAO<ITask> {

@@ -1,5 +1,5 @@
 import { IUser } from '../../interfaces/user.interface';
-import UserModel from '../models/user/user.model';
+import UserModel from '../models/user.model';
 import CommonDAO from './commonDAO';
 
 class UserDao extends CommonDAO<IUser> {

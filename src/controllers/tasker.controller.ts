@@ -2,11 +2,11 @@ import { NextFunction } from 'express';
 import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
-import HttpException from '../../exceptions/HttpException';
-import customResponse from '../../helpers/customResponse';
-import { Request, Response } from '../../helpers/helper.generic';
-import { ITasker, ITaskerController } from '../../interfaces/interface.tasker';
-import { TaskerService } from '../../services/users/tasker.service';
+import HttpException from '../exceptions/HttpException';
+import customResponse from '../helpers/customResponse';
+import { Request, Response } from '../helpers/generic';
+import { ITasker, ITaskerController } from '../interfaces/tasker.interface';
+import { TaskerService } from '../services/tasker.service';
 
 @autoInjectable()
 class TaskerController implements ITaskerController {

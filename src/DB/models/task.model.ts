@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-import { ITask, TaskStatus } from '../../../interfaces';
+import { ITask, TaskStatus } from '../../interfaces';
 
 let taskSchema: Schema<ITask> = new Schema(
   {

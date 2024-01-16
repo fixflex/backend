@@ -1,6 +1,6 @@
 import { NextFunction } from 'express';
 
-import { Request, Response } from '../helpers/helper.generic';
+import { Request, Response } from '../helpers/generic';
 
 export enum TaskStatus {
   OPEN = 'OPEN',

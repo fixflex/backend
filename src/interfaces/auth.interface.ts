@@ -1,6 +1,6 @@
 import { Request as ExpressRequest, NextFunction } from 'express';
 
-import { Request, Response } from '../helpers/helper.generic';
+import { Request, Response } from '../helpers/generic';
 import { IUser } from './user.interface';
 
 export interface AuthRequest extends ExpressRequest {

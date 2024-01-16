@@ -1,9 +1,9 @@
 import { autoInjectable } from 'tsyringe';
 
-import ServiceDao from '../../DB/dao/service.dao';
-import TaskerDao from '../../DB/dao/tasker.dao';
-import HttpException from '../../exceptions/HttpException';
-import { ITasker, ITaskerService } from '../../interfaces/interface.tasker';
+import ServiceDao from '../DB/dao/service.dao';
+import TaskerDao from '../DB/dao/tasker.dao';
+import HttpException from '../exceptions/HttpException';
+import { ITasker, ITaskerService } from '../interfaces/tasker.interface';
 
 @autoInjectable()
 class TaskerService implements ITaskerService {

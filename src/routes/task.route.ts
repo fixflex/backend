@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { autoInjectable } from 'tsyringe';
 
-import { TaskController } from '../../controllers/tasks/task.controller';
-import { Routes } from '../../interfaces';
-import { authenticateUser } from '../../middleware/auth.middleware';
-import { isMongoId } from '../../middleware/validation/isMongoID.validator';
-import { createTaskValidator, updateTaskValidator } from '../../middleware/validation/tasks/tasks.validator';
+import { TaskController } from '../controllers/task.controller';
+import { Routes } from '../interfaces';
+import { authenticateUser } from '../middleware/auth.middleware';
+import { isMongoId } from '../middleware/validation/isMongoID.validator';
+import { createTaskValidator, updateTaskValidator } from '../middleware/validation/tasks/tasks.validator';
 
 @autoInjectable()
 class TaskRoute implements Routes {

@@ -1,7 +1,6 @@
 import { NextFunction } from 'express';
 
-import { Request, Response } from '../helpers/helper.generic';
-import { uploadServiceImage } from './../services/service.service';
+import { Request, Response } from '../helpers/generic';
 import { IPagination } from './respons.interface';
 
 export interface IService {

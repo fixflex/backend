@@ -3,9 +3,9 @@ import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
 import env from '../config/validateEnv';
-import { UserDto } from '../dtos/dto.user';
+import { UserDto } from '../dtos/user.dto';
 import customResponse from '../helpers/customResponse';
-import { Request, Response } from '../helpers/helper.generic';
+import { Request, Response } from '../helpers/generic';
 import { IUser } from '../interfaces';
 import { IAuthController } from '../interfaces/auth.interface';
 import { AuthServie } from '../services/auth.service';

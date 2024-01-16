@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { autoInjectable } from 'tsyringe';
 
-import { TaskerController } from '../../controllers/users/tasker.controller';
-import { Routes } from '../../interfaces/routes.interface';
+import { TaskerController } from '../controllers/tasker.controller';
+import { Routes } from '../interfaces/routes.interface';
 // import { UserType } from '../../interfaces/user.interface';
-import { authenticateUser } from '../../middleware/auth.middleware';
-import { isMongoId } from '../../middleware/validation/isMongoID.validator';
-import { createTaskerValidator, updateTaskerValidator } from '../../middleware/validation/users/tasker.validator';
+import { authenticateUser } from '../middleware/auth.middleware';
+import { isMongoId } from '../middleware/validation/isMongoID.validator';
+import { createTaskerValidator, updateTaskerValidator } from '../middleware/validation/users/tasker.validator';
 
 @autoInjectable()
 class TaskerRoute implements Routes {

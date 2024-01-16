@@ -198,7 +198,7 @@
       "get": {
         "tags": ["Auth"],
         "summary": "Refresh token",
-        "description": "Refresh token",
+        "description": "This route allow the user with a refresh token to regenerate tokens when the access token expires",
         "responses": {
           "200": {
             "description": "Token refreshed successfully"

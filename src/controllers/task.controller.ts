@@ -2,12 +2,12 @@ import { NextFunction, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
-import HttpException from '../../exceptions/HttpException';
-import customResponse from '../../helpers/customResponse';
-import { ITaskController } from '../../interfaces';
-import { AuthRequest } from '../../interfaces/auth.interface';
-import { uploadMixFiles } from '../../middleware/uploadImages.middleware';
-import { TaskService } from '../../services/tasks/task.service';
+import HttpException from '../exceptions/HttpException';
+import customResponse from '../helpers/customResponse';
+import { ITaskController } from '../interfaces';
+import { AuthRequest } from '../interfaces/auth.interface';
+import { uploadMixFiles } from '../middleware/uploadImages.middleware';
+import { TaskService } from '../services/task.service';
 
 @autoInjectable()
 class TaskController implements ITaskController {

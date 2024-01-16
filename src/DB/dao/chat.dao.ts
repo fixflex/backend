@@ -1,4 +1,4 @@
-import { ChatModel } from '../models/chat/chat.model';
+import { ChatModel } from '../models/chat.model';
 
 class ChatDao {
   static async getChatById(id: string) {

@@ -1,6 +1,6 @@
 import { Document, Schema, model } from 'mongoose';
 
-import { IMessage } from '../../../interfaces/message.interface';
+import { IMessage } from '../../interfaces/message.interface';
 
 const messageSchema = new Schema<IMessage & Document>({
   sender: { type: String, ref: 'User' },

@@ -9,7 +9,7 @@ import dbConnection from './DB';
 import env from './config/validateEnv';
 // Documentation
 import swaggerDocument from './docs/swagger.json';
-import { notFound } from './exceptions/notFound';
+import { notFound } from './exceptions/notFoundException';
 import './exceptions/shutdownHandler';
 import { Routes } from './interfaces/routes.interface';
 import { errorMiddleware } from './middleware/errors';

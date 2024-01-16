@@ -10,9 +10,9 @@ import { AuthRoute } from './routes';
 import { ServiceRoute } from './routes';
 import { ChatRoute } from './routes/chat.route';
 import HealthzRoute from './routes/healthz.route';
-import { OfferRoute } from './routes/tasks/offer.route';
-import { TaskRoute } from './routes/tasks/task.route';
-import { TaskerRoute } from './routes/users/tasker.route';
+import { OfferRoute } from './routes/offer.route';
+import { TaskRoute } from './routes/task.route';
+import { TaskerRoute } from './routes/tasker.route';
 import Socket from './sockets/socket';
 
 // Setup routes

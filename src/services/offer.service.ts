@@ -1,11 +1,11 @@
 import { autoInjectable } from 'tsyringe';
 
-import { OfferDao } from '../../DB/dao/offer.dao';
-import { TaskDao } from '../../DB/dao/task.dao';
-import TaskerDao from '../../DB/dao/tasker.dao';
-import HttpException from '../../exceptions/HttpException';
-import { IOffer, IOfferService } from '../../interfaces';
-import { TaskStatus } from '../../interfaces/task.interface';
+import { OfferDao } from '../DB/dao/offer.dao';
+import { TaskDao } from '../DB/dao/task.dao';
+import TaskerDao from '../DB/dao/tasker.dao';
+import HttpException from '../exceptions/HttpException';
+import { IOffer, IOfferService } from '../interfaces';
+import { TaskStatus } from '../interfaces/task.interface';
 
 @autoInjectable()
 class OfferService implements IOfferService {

@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { autoInjectable } from 'tsyringe';
 
-import { UserController } from '../../controllers/users/user.controller';
-import { Routes } from '../../interfaces';
-import { authenticateUser } from '../../middleware/auth.middleware';
-import { changePasswordValidator, getUserValidator, updateLoggedUserValidator } from '../../middleware/validation';
+import { UserController } from '../controllers/user.controller';
+import { Routes } from '../interfaces';
+import { authenticateUser } from '../middleware/auth.middleware';
+import { changePasswordValidator, getUserValidator, updateLoggedUserValidator } from '../middleware/validation';
 
 @autoInjectable()
 class UserRoute implements Routes {

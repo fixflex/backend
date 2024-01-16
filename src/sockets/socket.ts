@@ -2,8 +2,8 @@ import http from 'http';
 // import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Server } from 'socket.io';
 
-import { ChatModel } from '../DB/models/chat/chat.model';
-import { MessageModel } from '../DB/models/chat/message.model';
+import { ChatModel } from '../DB/models/chat.model';
+import { MessageModel } from '../DB/models/message.model';
 import { IMessage } from '../interfaces/message.interface';
 // import { ChatModel } from '../DB/models/chat/chat.model';
 // import { MessageModel } from '../DB/models/chat/message.model';
