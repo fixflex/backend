@@ -1,4 +1,4 @@
-import { googleSignIn, login, logout, signup } from './auth.swagger';
+import { forgotPassword, googleSignIn, login, logout, refreshToken, signup } from './auth.swagger';
 
 const swaggerDocument = {
   openapi: '3.0.3',
@@ -54,6 +54,12 @@ const swaggerDocument = {
     },
     '/auth/google': {
       post: googleSignIn,
+    },
+    '/auth/refresh-token': {
+      get: refreshToken,
+    },
+    'forgot-password': {
+      post: forgotPassword,
     },
   },
 };

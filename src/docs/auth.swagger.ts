@@ -376,14 +376,23 @@ export const logout = {
   tags: ['Auth'],
   description: 'Logout route to invalidate access and refresh tokens',
   operationId: 'logout',
-  // parameters: [
-  //   {
-  //     in: 'header',
-  //     name: 'Accept-Language',
-  //     type: 'string',
-  //     example: 'en_MX',
-  //   },
-  // ],
+
+  parameters: [
+    // {
+    //   in: 'header',
+    //   name: 'Accept-Language',
+    //   type: 'string',
+    //   example: 'en_MX',
+    // },
+    {
+      in: 'cookie',
+      name: 'access_token',
+      type: 'string',
+      // description: 'Access token obtained from the cookie',
+      required: true,
+      example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (access token here)',
+    },
+  ],
   responses: {
     200: {
       description: 'Logout successful',
@@ -586,3 +595,109 @@ export const googleSignIn = {
     },
   },
 };
+
+export const refreshToken = {
+  security: {
+    jwt_refresh: [], // Assuming you have a separate security definition for refresh tokens
+  },
+  tags: ['Auth'],
+  description: 'Refresh access token using a valid refresh token',
+  operationId: 'refreshToken',
+  // parameters: [
+  //   {
+  //     in: 'header',
+  //     name: 'Authorization',
+  //     type: 'string',
+  //     description: 'Bearer token containing the refresh token',
+  //     required: true,
+  //     example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (refresh token here)',
+  //   },
+  // ],
+  parameters: [
+    {
+      in: 'cookie',
+      name: 'access_token',
+      type: 'string',
+      // description: 'Access token obtained from the cookie',
+      required: true,
+      example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (access token here)',
+    },
+    {
+      in: 'cookie',
+      name: 'refresh_token',
+      type: 'string',
+      required: true,
+      example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (refresh token here)',
+    },
+  ],
+  responses: {
+    200: {
+      description: 'Access token refreshed successfully',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: true,
+              },
+              error: {
+                type: 'boolean',
+                example: false,
+              },
+              status: {
+                type: 'number',
+                example: 200,
+              },
+              message: {
+                type: 'string',
+                example: 'Access token refreshed successfully.',
+              },
+              data: {
+                type: 'object',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+      headers: {
+        'Set-Cookie': {
+          // description: 'access and refresh tokens',
+          schema: {
+            type: 'string',
+            example: 'access_token=<access_token_value>; Path=/; Secure; HttpOnly; Expires=Fri, 12 Jul 2024 05:32:29 GMT',
+          },
+        },
+      },
+    },
+    401: {
+      description: 'Unauthorized - Invalid or expired refresh token',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: false,
+              },
+              status: {
+                type: 'number',
+                example: 401,
+              },
+              message: {
+                type: 'string',
+                example: 'Unauthorized. Invalid or expired refresh token.',
+              },
+            },
+          },
+        },
+      },
+    },
+    // Add more response codes as needed...
+  },
+};
+
+export const forgotPassword = {};

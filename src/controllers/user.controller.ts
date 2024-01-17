@@ -25,6 +25,7 @@ class UserController implements IUserController {
 
   // user profile routes (authenticated)
   public getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
+    // console.log(req.headers);
     res.status(200).json(customResponse({ data: req.user, success: true, status: 200, message: 'User found', error: false }));
   });
 
