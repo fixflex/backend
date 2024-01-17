@@ -1,6 +1,6 @@
 import { check } from 'express-validator';
 
-import validatorMiddleware from '../../errors/validation.middleware';
+import validatorMiddleware from '../errors/validation.middleware';
 
 export const createTaskValidator = [
   check('ownerId').notEmpty().withMessage('Owner ID is required').isMongoId().withMessage('Owner ID must be a valid mongo ID'),

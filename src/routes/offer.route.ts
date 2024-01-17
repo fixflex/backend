@@ -5,7 +5,7 @@ import { OfferController } from '../controllers/offer.controller';
 import { Routes } from '../interfaces';
 import { authenticateUser } from '../middleware/auth.middleware';
 import { isMongoId } from '../middleware/validation/isMongoID.validator';
-import { createOfferValidator, updateOfferValidator } from '../middleware/validation/tasks/offer.validator';
+import { createOfferValidator, updateOfferValidator } from '../middleware/validation/offer.validator';
 
 @autoInjectable()
 class OfferRoute implements Routes {

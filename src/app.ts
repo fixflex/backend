@@ -8,7 +8,7 @@ import swaggerUi from 'swagger-ui-express';
 import dbConnection from './DB';
 import env from './config/validateEnv';
 // Documentation
-import swaggerDocument from './docs/swagger.json';
+import swaggerDocument from './docs/swagger';
 import { notFound } from './exceptions/notFoundException';
 import './exceptions/shutdownHandler';
 import { Routes } from './interfaces/routes.interface';

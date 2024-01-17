@@ -1,6 +1,6 @@
 import { check } from 'express-validator';
 
-import validatorMiddleware from '../../errors/validation.middleware';
+import validatorMiddleware from '../errors/validation.middleware';
 
 export const getTaskersValidator = [
   check('longitude').optional().isNumeric().withMessage('Longitude must be a number'),

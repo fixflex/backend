@@ -58,6 +58,10 @@ export class AuthController implements IAuthController {
 
   public googleLogin = asyncHandler(async (req: Request, res: Response) => {
     let { credential } = req.body;
+    if (!credential) {
+      res.status(400).json(customResponse({ data: null, success: false, status: 400, message: 'Bad Request.', error: true }));
+      return;
+    }
     let { user, accessToken, refreshToken } = await this.authService.googleLogin(credential);
 
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);

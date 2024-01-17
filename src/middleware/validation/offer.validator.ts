@@ -1,6 +1,6 @@
 import { check } from 'express-validator';
 
-import validatorMiddleware from '../../errors/validation.middleware';
+import validatorMiddleware from '../errors/validation.middleware';
 
 export const createOfferValidator = [
   check('taskId').notEmpty().withMessage('Task ID is required').isMongoId().withMessage('Task ID must be a valid mongo ID'),

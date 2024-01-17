@@ -6,7 +6,7 @@ import { Routes } from '../interfaces/routes.interface';
 // import { UserType } from '../../interfaces/user.interface';
 import { authenticateUser } from '../middleware/auth.middleware';
 import { isMongoId } from '../middleware/validation/isMongoID.validator';
-import { createTaskerValidator, updateTaskerValidator } from '../middleware/validation/users/tasker.validator';
+import { createTaskerValidator, updateTaskerValidator } from '../middleware/validation/tasker.validator';
 
 @autoInjectable()
 class TaskerRoute implements Routes {

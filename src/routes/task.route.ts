@@ -5,7 +5,7 @@ import { TaskController } from '../controllers/task.controller';
 import { Routes } from '../interfaces';
 import { authenticateUser } from '../middleware/auth.middleware';
 import { isMongoId } from '../middleware/validation/isMongoID.validator';
-import { createTaskValidator, updateTaskValidator } from '../middleware/validation/tasks/tasks.validator';
+import { createTaskValidator, updateTaskValidator } from '../middleware/validation/tasks.validator';
 
 @autoInjectable()
 class TaskRoute implements Routes {
