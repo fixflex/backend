@@ -700,4 +700,427 @@ export const refreshToken = {
   },
 };
 
-export const forgotPassword = {};
+export const forgotPassword = {
+  security: {
+    jwt: [],
+  },
+  tags: ['Auth'],
+  description: 'This route allow you to send reset password link to your email',
+  opeationId: 'forgotPassword',
+  //   parameters: [
+  //     {
+  //       in: 'header',
+  //       name: 'Accept-Language',
+  //       type: 'string',
+  //       example: 'ar_MX',
+  //     },
+  //   ],
+  requestBody: {
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            email: {
+              type: 'string',
+              required: true,
+            },
+          },
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'User data',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: true,
+              },
+              error: {
+                type: 'boolean',
+                example: false,
+              },
+              status: {
+                type: 'number',
+                example: 200,
+              },
+              message: {
+                type: 'string',
+                example: 'Password reset done sent to email!, please check your email inbox',
+              },
+              data: {
+                type: 'object',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+    404: {
+      description: 'Error: 404',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: false,
+              },
+              error: {
+                type: 'boolean',
+                example: true,
+              },
+              status: {
+                type: 'number',
+                example: 404,
+              },
+              message: {
+                type: 'string',
+                example: 'Email not found.',
+              },
+              data: {
+                type: 'object',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+export const verifyResetCode = {
+  security: {
+    jwt: [],
+  },
+  tags: ['Auth'],
+  description: 'This route allow you to verify reset code sent to your email',
+  opeationId: 'verifyResetCode',
+  //   parameters: [
+  //     {
+  //       in: 'header',
+  //       name: 'Accept-Language',
+  //       type: 'string',
+  //       example: 'ar_MX',
+  //     },
+  //   ],
+  requestBody: {
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            email: {
+              type: 'string',
+              required: true,
+              example: 'user@gmail.com',
+            },
+            resetCode: {
+              type: 'string',
+              required: true,
+              example: '123456',
+            },
+          },
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'User data',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: true,
+              },
+              error: {
+                type: 'boolean',
+                example: false,
+              },
+              status: {
+                type: 'number',
+                example: 200,
+              },
+
+              message: {
+                type: 'string',
+                example: 'Password reset code verified',
+              },
+              data: {
+                type: 'object',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+    404: {
+      description: 'Error: 404',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: false,
+              },
+              error: {
+                type: 'boolean',
+                example: true,
+              },
+              status: {
+                type: 'number',
+                example: 404,
+              },
+              message: {
+                type: 'string',
+                example: 'Email not found.',
+              },
+              data: {
+                type: 'object',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+    400: {
+      description: 'Error: 400',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: false,
+              },
+              error: {
+                type: 'boolean',
+                example: true,
+              },
+              status: {
+                type: 'number',
+                example: 400,
+              },
+              message: {
+                type: 'string',
+                example: 'Invalid reset code or expired.',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+export const resetPassword = {
+  security: {
+    jwt: [],
+  },
+  tags: ['Auth'],
+  description: 'This route allow you to reset password',
+  opeationId: 'resetPassword',
+  //   parameters: [
+  //     {
+  //       in: 'header',
+  //       name: 'Accept-Language',
+  //       type: 'string',
+  //       example: 'ar_MX',
+  //     },
+  //   ],
+  requestBody: {
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            email: {
+              type: 'string',
+              required: true,
+              example: 'user@gmail.com',
+            },
+            // resetCode: {
+            //   type: 'string',
+            //   required: true,
+            //   example: '123456',
+            // },
+            newPassword: {
+              type: 'string',
+              required: true,
+              example: '123456',
+            },
+          },
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'User data',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: true,
+              },
+              status: {
+                type: 'number',
+                example: 200,
+              },
+              message: {
+                type: 'string',
+                example: 'User logged in successfully.',
+              },
+              error: {
+                type: 'boolean',
+                example: false,
+              },
+
+              data: {
+                type: 'object',
+                properties: {
+                  _id: {
+                    type: 'string',
+                    example: '611d08a62fc210a30ecfb75b',
+                  },
+
+                  firstName: {
+                    type: 'string',
+                    example: 'Ahmed',
+                  },
+
+                  lastName: {
+                    type: 'string',
+                    example: 'Elasiriy',
+                  },
+
+                  email: {
+                    type: 'string',
+                    example: 'user@gmail.com',
+                  },
+
+                  profileImage: {
+                    type: 'string',
+                    example1: null,
+                    example: 'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+
+      headers: {
+        'Set-Cookie': {
+          // description: 'access and refresh tokens',
+          schema: {
+            type: 'string',
+            example: [
+              'access_token=<access_token_value>; Path=/; Secure; HttpOnly; Expires=Fri, 12 Jul 2024 05:32:29 GMT',
+              'refresh_token=<refresh_token_value>; Path=/api/v1/auth/refresh-token; Secure; HttpOnly; Expires=Fri, 12 Jul 2024 05:32:29 GMT',
+            ],
+          },
+        },
+      },
+    },
+    404: {
+      description: 'Error: 404',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+
+                example: false,
+              },
+
+              error: {
+                type: 'boolean',
+                example: true,
+              },
+
+              status: {
+                type: 'number',
+                example: 404,
+              },
+
+              message: {
+                type: 'string',
+                example: 'Email not found.',
+              },
+
+              data: {
+                type: 'object',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+    400: {
+      description: 'Error: 400',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+
+            properties: {
+              success: {
+                type: 'boolean',
+                example: false,
+              },
+
+              error: {
+                type: 'boolean',
+                example: true,
+              },
+
+              status: {
+                type: 'number',
+                example: 400,
+              },
+
+              message: {
+                type: 'string',
+                example: 'Invalid reset code or expired.',
+              },
+
+              data: {
+                type: 'object',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
