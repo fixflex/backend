@@ -1,7 +1,9 @@
 export const signup = {
-  security: {
-    jwt: [],
-  },
+  // security: [
+  //   {
+  //     bearerAuth: [], // Use the new bearerAuth scheme for security
+  //   },
+  // ],
   tags: ['Auth'],
   description: 'This route allow you to sign up into the api',
   opeationId: 'signup',
@@ -191,9 +193,14 @@ export const signup = {
 };
 
 export const login = {
-  security: {
-    jwt: [],
-  },
+  // security: [
+  //   {
+  //     cookieAuth: [], // Use the new cookieAuth scheme for security
+  //   },
+  // ],
+  // security: {
+  //   jwt: [],
+  // },
   tags: ['Auth'],
   description: 'This route allow you to login into the api',
   opeationId: 'login',
@@ -370,29 +377,27 @@ export const login = {
 };
 
 export const logout = {
-  security: {
-    jwt: [], // Assuming you don't need authentication for logout
-  },
+  security: [{ bearerAuth: [] }],
   tags: ['Auth'],
   description: 'Logout route to invalidate access and refresh tokens',
   operationId: 'logout',
 
-  parameters: [
-    // {
-    //   in: 'header',
-    //   name: 'Accept-Language',
-    //   type: 'string',
-    //   example: 'en_MX',
-    // },
-    {
-      in: 'cookie',
-      name: 'access_token',
-      type: 'string',
-      // description: 'Access token obtained from the cookie',
-      required: true,
-      example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (access token here)',
-    },
-  ],
+  // parameters: [
+  //   // {
+  //   //   in: 'header',
+  //   //   name: 'Accept-Language',
+  //   //   type: 'string',
+  //   //   example: 'en_MX',
+  //   // },
+  //   {
+  //     in: 'cookie',
+  //     name: 'access_token',
+  //     type: 'string',
+  //     // description: 'Access token obtained from the cookie',
+  //     required: true,
+  //     example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (access token here)',
+  //   },
+  // ],
   responses: {
     200: {
       description: 'Logout successful',
@@ -462,9 +467,9 @@ export const logout = {
 };
 
 export const googleSignIn = {
-  security: {
-    jwt: [],
-  },
+  // security: {
+  //   jwt: [],
+  // },
   tags: ['Auth'],
   description: 'This route allow you to login into the api using google auth',
   opeationId: 'googleSignIn',
@@ -598,7 +603,7 @@ export const googleSignIn = {
 
 export const refreshToken = {
   security: {
-    jwt_refresh: [], // Assuming you have a separate security definition for refresh tokens
+    bearerAuth: [], // Assuming you have a separate security definition for refresh tokens
   },
   tags: ['Auth'],
   description: 'Refresh access token using a valid refresh token',
@@ -613,23 +618,23 @@ export const refreshToken = {
   //     example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (refresh token here)',
   //   },
   // ],
-  parameters: [
-    {
-      in: 'cookie',
-      name: 'access_token',
-      type: 'string',
-      // description: 'Access token obtained from the cookie',
-      required: true,
-      example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (access token here)',
-    },
-    {
-      in: 'cookie',
-      name: 'refresh_token',
-      type: 'string',
-      required: true,
-      example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (refresh token here)',
-    },
-  ],
+  // parameters: [
+  //   {
+  //     in: 'cookie',
+  //     name: 'access_token',
+  //     type: 'string',
+  //     // description: 'Access token obtained from the cookie',
+  //     required: true,
+  //     example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (access token here)',
+  //   },
+  //   {
+  //     in: 'cookie',
+  //     name: 'refresh_token',
+  //     type: 'string',
+  //     required: true,
+  //     example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (refresh token here)',
+  //   },
+  // ],
   responses: {
     200: {
       description: 'Access token refreshed successfully',
@@ -701,9 +706,9 @@ export const refreshToken = {
 };
 
 export const forgotPassword = {
-  security: {
-    jwt: [],
-  },
+  // security: {
+  //   jwt: [],
+  // },
   tags: ['Auth'],
   description: 'This route allow you to send reset password link to your email',
   opeationId: 'forgotPassword',
@@ -800,9 +805,9 @@ export const forgotPassword = {
 };
 
 export const verifyResetCode = {
-  security: {
-    jwt: [],
-  },
+  // security: {
+  //   jwt: [],
+  // },
   tags: ['Auth'],
   description: 'This route allow you to verify reset code sent to your email',
   opeationId: 'verifyResetCode',
@@ -934,9 +939,9 @@ export const verifyResetCode = {
 };
 
 export const resetPassword = {
-  security: {
-    jwt: [],
-  },
+  // security: {
+  //   jwt: [],
+  // },
   tags: ['Auth'],
   description: 'This route allow you to reset password',
   opeationId: 'resetPassword',
@@ -1111,6 +1116,82 @@ export const resetPassword = {
               message: {
                 type: 'string',
                 example: 'Invalid reset code or expired.',
+              },
+
+              data: {
+                type: 'object',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+export const changePassword = {
+  security: [{ bearerAuth: [] }],
+  tags: ['Auth'],
+  description: 'This route allow you to change password',
+  operationId: 'changePassword',
+  // parameters: [
+  //   {
+  //     in: 'header',
+  //     name: 'Accept-Language',
+  //     type: 'string',
+  //     example: 'ar_MX',
+  //   },
+  // ],
+  requestBody: {
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            oldPassword: {
+              type: 'string',
+              required: true,
+              example: 'oldPassword',
+            },
+            newPassword: {
+              type: 'string',
+              required: true,
+              example: 'newPassword',
+            },
+          },
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'User data',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+
+            properties: {
+              success: {
+                type: 'boolean',
+                example: true,
+              },
+
+              status: {
+                type: 'number',
+                example: 200,
+              },
+
+              message: {
+                type: 'string',
+                example: 'Password changed successfully.',
+              },
+
+              error: {
+                type: 'boolean',
+                example: false,
               },
 
               data: {
