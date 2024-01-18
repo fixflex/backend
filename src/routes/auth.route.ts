@@ -3,7 +3,7 @@ import { autoInjectable } from 'tsyringe';
 
 import { AuthController } from '../controllers';
 import { Routes } from '../interfaces';
-import { loginValidator, signupValidator } from '../middleware/validation';
+import { changePasswordValidator, loginValidator, signupValidator } from '../middleware/validation';
 
 @autoInjectable()
 export class AuthRoute implements Routes {
@@ -32,5 +32,7 @@ export class AuthRoute implements Routes {
     this.router.post(`${this.path}/verify-reset-code`, this.authController.verifyPassResetCode);
 
     this.router.patch(`${this.path}/reset-password`, this.authController.resetPassword);
+
+    this.router.patch(`${this.path}/change-password`, changePasswordValidator, this.authController.changePassword);
   }
 }

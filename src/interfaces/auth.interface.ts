@@ -16,6 +16,7 @@ export interface IAuthController {
   forgotPassword(req: Request, res: Response, next: NextFunction): void;
   verifyPassResetCode(req: Request, res: Response, next: NextFunction): void;
   resetPassword(req: Request, res: Response, next: NextFunction): void;
+  changePassword(req: Request, res: Response, next: NextFunction): void;
 }
 
 export interface IAuthService {
@@ -26,4 +27,5 @@ export interface IAuthService {
   forgotPassword(email: string): Promise<any>;
   verifyPassResetCode(resetCode: string): Promise<any>;
   resetPassword(resetCode: string, password: string): Promise<any>;
+  changePassword(payload: { oldPassword: string; newPassword: string }, user: IUser): Promise<{ token: string }>;
 }

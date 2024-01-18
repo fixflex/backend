@@ -5,7 +5,7 @@ import { autoInjectable } from 'tsyringe';
 import UserDao from '../DB/dao/user.dao';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
-import { createAccessToken } from '../helpers/createToken';
+import { createAccessToken, createRefreshToken } from '../helpers/createToken';
 import { hashCode } from '../helpers/hashing';
 import { sendMailer } from '../helpers/nodemailer';
 import { IAuthService } from '../interfaces/auth.interface';
@@ -49,7 +49,7 @@ export class AuthServie implements IAuthService {
       throw new HttpException(401, 'Incorrect email or password');
     }
     let accessToken = createAccessToken(user._id!);
-    let refreshToken = createAccessToken(user._id!);
+    let refreshToken = createRefreshToken(user._id!);
     return { user, accessToken, refreshToken };
   }
 
@@ -61,7 +61,7 @@ export class AuthServie implements IAuthService {
     // 3. if the user exists, return the user and the token (login)
     if (user) {
       let accessToken = createAccessToken(user._id!);
-      let refreshToken = createAccessToken(user._id!);
+      let refreshToken = createRefreshToken(user._id!);
       return { user, accessToken, refreshToken };
     }
     // 4. if the user does not exist, create a new user and return the user and the token (signup)
@@ -173,8 +173,22 @@ export class AuthServie implements IAuthService {
     await user.save();
     // 4- generate a new token
     let accessToken = createAccessToken(user._id!);
-    let refreshToken = createAccessToken(user._id!);
+    let refreshToken = createRefreshToken(user._id!);
     // 5- return the user and the token
     return { user, accessToken, refreshToken };
+  }
+
+  async changePassword(payload: { oldPassword: string; newPassword: string }, user: IUser) {
+    // 1- check if the password === user.password
+    let isPasswordCorrect = await bcrypt.compare(payload.oldPassword, user.password);
+    if (!isPasswordCorrect) throw new HttpException(401, 'Incorrect password');
+    // 2- hash the new password
+    let newPassword = await bcrypt.hash(payload.newPassword, env.SALT_ROUNDS);
+    // 3- update the user with the new password and update the passwordChangedAt field
+    let updatedUser = await this.userDao.updateOneById(user._id!, { password: newPassword, passwordChangedAt: Date.now() });
+    if (!updatedUser) throw new HttpException(500, 'Something went wrong');
+    // 4- generate a new token
+    let token = createAccessToken(user._id!);
+    return { token };
   }
 }

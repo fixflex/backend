@@ -4,7 +4,7 @@ import { autoInjectable } from 'tsyringe';
 import { UserController } from '../controllers/user.controller';
 import { Routes } from '../interfaces';
 import { authenticateUser } from '../middleware/auth.middleware';
-import { changePasswordValidator, getUserValidator, updateLoggedUserValidator } from '../middleware/validation';
+import { getUserValidator, updateLoggedUserValidator } from '../middleware/validation';
 
 @autoInjectable()
 class UserRoute implements Routes {
@@ -24,9 +24,8 @@ class UserRoute implements Routes {
       // deactivate user
       .delete(authenticateUser, this.userController.deleteMe);
 
-    this.router.patch(`${this.path}/me/change-password`, changePasswordValidator, authenticateUser, this.userController.changePassword);
     this.router
-      .route(`${this.path}/me/profile-picture-upload`)
+      .route(`${this.path}/me/profile-picture`)
       .patch(authenticateUser, this.userController.uploadProfileImage, authenticateUser, this.userController.updateMyProfileImage);
     // Public routes
     this.router.get(`${this.path}/:id`, getUserValidator, this.userController.getUser);
