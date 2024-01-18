@@ -35,12 +35,6 @@ class UserController implements IUserController {
     res.status(200).json(customResponse<IUser>({ data: user, success: true, status: 200, message: 'User updated', error: false }));
   });
 
-  public changePassword = asyncHandler(async (req: AuthRequest, res: Response) => {
-    let { updatedUser, token } = await this.userService.changePassword(req.body, req.user!);
-    if (!updatedUser) throw new HttpException(404, 'No user found');
-    res.status(200).json(Object.assign(customResponse({ data: updatedUser, success: true, status: 200, message: 'Password changed', error: false }), { token }));
-  });
-
   public deleteMe = asyncHandler(async (req: AuthRequest, res: Response) => {
     await this.userService.updateUser(req.user?._id!, { active: false });
     res.status(204).json(customResponse({ data: null, success: true, status: 204, message: 'User deleted', error: false }));

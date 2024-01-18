@@ -49,7 +49,12 @@ export class AuthController implements IAuthController {
     res.status(200).json({ data: new UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
   });
 
-  public logout = asyncHandler(async (_req: Request, res: Response) => {
+  public logout = asyncHandler(async (req: Request, res: Response) => {
+    console.log(req.cookies);
+    if (!req.cookies.access_token) {
+      res.status(401).json(customResponse({ data: null, success: false, status: 401, message: 'You are not authorized, you must login to get access this route', error: true }));
+      return;
+    }
     res.clearCookie('refresh_token');
     res.clearCookie('access_token');
 
@@ -71,13 +76,11 @@ export class AuthController implements IAuthController {
   });
 
   public refreshToken = asyncHandler(async (req: Request, res: Response) => {
-    let refreshToken = req.cookies.refreshToken;
-
-    if (!refreshToken) {
+    if (!req.cookies.refresh_token || !req.cookies.access_token) {
       res.status(401).json(customResponse({ data: null, success: false, status: 401, message: 'You are not authorized, you must login to get access this route', error: true }));
       return;
     }
-    let { accessToken } = await this.authService.refreshToken(refreshToken);
+    let { accessToken } = await this.authService.refreshToken(req.cookies.refresh_token);
 
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
 
@@ -103,6 +106,13 @@ export class AuthController implements IAuthController {
     res.cookie('access_token', results.accessToken, this.accessTokenCookieOptions);
     res.cookie('refresh_token', results.refreshToken, this.refreshTokenCookieOptions);
 
-    res.status(200).json({ data: new UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false });
+    res.status(200).json(customResponse({ data: new UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false }));
+  });
+
+  public changePassword = asyncHandler(async (req: Request, res: Response) => {
+    let { token } = await this.authService.changePassword(req.body as { oldPassword: string; newPassword: string }, req.user!);
+    res.cookie('access_token', token, this.accessTokenCookieOptions);
+
+    res.status(200).json(customResponse({ data: null, success: true, status: 200, message: 'Password changed', error: false }));
   });
 }
