@@ -1,4 +1,6 @@
-import { forgotPassword, googleSignIn, login, logout, refreshToken, resetPassword, signup, verifyResetCode } from './auth.swagger';
+import { changePassword, forgotPassword, googleSignIn, login, logout, refreshToken, resetPassword, signup, verifyResetCode } from './auth.swagger';
+import { healthz } from './health.swagger';
+import { getMe, updateMe, updateProfileImage } from './users.swagger';
 
 const swaggerDocument = {
   openapi: '3.0.3',
@@ -18,7 +20,7 @@ const swaggerDocument = {
       url: '{serverUrl}/api/{apiVersion}',
       variables: {
         serverUrl: {
-          default: 'https://khidma.onrender.com',
+          default: 'http://localhost:8080',
           enum: ['https://khidma.onrender.com', 'http://localhost:8080'],
         },
         apiVersion: {
@@ -27,22 +29,57 @@ const swaggerDocument = {
       },
     },
   ],
+
   components: {
     securitySchemes: {
+      // cookieAuth: {
+      //   type: 'apiKey', // type is apiKey since we use a cookie
+      //   in: 'cookie',
+      //   name: 'access_token', // Update the cookie name if needed
+      // },
       bearerAuth: {
         type: 'http',
         scheme: 'bearer',
         in: 'header',
         bearerFormat: 'JWT',
+        description:
+          'Optional. You can provide access token either through the Bearer Authorization header or cookies. Upon login or signup, the access_token and refresh_token will be set automatically and sent with each request.',
       },
     },
+    security: [
+      // {
+      //   cookieAuth: [], // Use the new cookieAuth scheme for security
+      // },
+      {
+        bearerAuth: [],
+      },
+    ],
   },
-  security: [
-    {
-      jwt: [],
-    },
-  ],
+
+  // components: {
+  //   securitySchemes: {
+  // bearerAuth: {
+  //   type: 'http',
+  //   scheme: 'bearer',
+  //   in: 'header',
+  //   bearerFormat: 'JWT',
+  // },
+  //   },
+  // },
+  // security: [
+  //   {
+  //     jwt: [],
+  //   },
+  // ],
   paths: {
+    // *************** Health *************** //
+
+    '/healthz': {
+      get: healthz,
+    },
+
+    // *************** Auth *************** //
+
     '/auth/signup': {
       post: signup,
     },
@@ -67,6 +104,29 @@ const swaggerDocument = {
     '/auth/reset-password': {
       post: resetPassword,
     },
+    '/auth/change-password': {
+      patch: changePassword,
+    },
+
+    // *************** Users *************** //
+
+    '/users/me': {
+      get: getMe,
+      patch: updateMe,
+      // delete: {},
+    },
+    '/users/me/profile-picture': {
+      patch: updateProfileImage,
+    },
+
+    // *************** Categories *************** //
+    // *************** Services *************** //
+    // *************** Orders *************** //
+    // *************** Reviews *************** //
+    // *************** Payments *************** //
+    // *************** Notifications *************** //
+    // *************** Settings *************** //
+    // *************** Admin *************** //
   },
 };
 
