@@ -28,7 +28,7 @@ let ServiceRoute = exports.ServiceRoute = class ServiceRoute {
     initializeRoutes() {
         // Public routes
         this.router.get(`${this.path}`, this.serviceController.getServices);
-        this.router.get(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.serviceController.getService);
+        this.router.get(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.serviceController.getServiceById);
         // Admin routes
         this.router.use(`${this.path}`, auth_middleware_1.authenticateUser, (0, auth_middleware_1.allowedTo)(user_interface_1.UserType.ADMIN));
         this.router.post(`${this.path}`, serviceValidator_1.createServiceValidator, this.serviceController.createService);

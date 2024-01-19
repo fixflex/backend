@@ -14,7 +14,12 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./users/user.route"), exports);
 __exportStar(require("./auth.route"), exports);
+__exportStar(require("./chat.route"), exports);
+__exportStar(require("./healthz.route"), exports);
+__exportStar(require("./offer.route"), exports);
 __exportStar(require("./service.route"), exports);
+__exportStar(require("./task.route"), exports);
+__exportStar(require("./tasker.route"), exports);
+__exportStar(require("./user.route"), exports);
 // export * from './admin.route';

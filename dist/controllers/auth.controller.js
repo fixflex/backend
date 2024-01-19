@@ -15,97 +15,68 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const tsyringe_1 = require("tsyringe");
-const dto_user_1 = require("../dtos/dto.user");
-// import { IUser } from '../interfaces/user.interface';
+const validateEnv_1 = __importDefault(require("../config/validateEnv"));
+const user_dto_1 = require("../dtos/user.dto");
+const customResponse_1 = __importDefault(require("../helpers/customResponse"));
 const auth_service_1 = require("../services/auth.service");
-const customResponse_1 = __importDefault(require("../utils/customResponse"));
 // TODO: use passport.js for authentication
-// TODO: refresh token and logout routes
 let AuthController = exports.AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
+        this.accessTokenCookieOptions = {
+            httpOnly: true,
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            secure: validateEnv_1.default.NODE_ENV !== 'development',
+            sameSite: validateEnv_1.default.NODE_ENV === 'production' ? 'none' : 'lax', // sameSite is none if secure is true and lax if secure is false because we are using cors and we are not using csrf protection
+        };
+        this.refreshTokenCookieOptions = {
+            httpOnly: true,
+            maxAge: 6 * 30 * 24 * 60 * 60 * 1000,
+            secure: validateEnv_1.default.NODE_ENV !== 'development',
+            sameSite: validateEnv_1.default.NODE_ENV === 'production' ? 'none' : 'lax',
+            path: '/api/v1/auth/refresh-token',
+        };
         this.signup = (0, express_async_handler_1.default)(async (req, res) => {
             let { user, accessToken, refreshToken } = await this.authService.signup(req.body);
-            // Set accesstoken cookie
-            res.cookie('accessToken', accessToken, {
-                httpOnly: true,
-                maxAge: 30 * 24 * 60 * 60 * 1000,
-                secure: process.env.NODE_ENV !== 'development',
-                sameSite: 'none', // cross-site access allowed,
-            });
-            // Set refresh_token cookie
-            res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                maxAge: 6 * 30 * 24 * 60 * 60 * 1000,
-                secure: process.env.NODE_ENV !== 'development',
-                sameSite: 'none',
-                path: '/api/v1/auth/refresh-token',
-            });
-            res.status(201).json({ data: new dto_user_1.UserDto(user), success: true, status: 201, message: 'User created', error: false });
+            res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
+            res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
+            res.status(201).json({ data: new user_dto_1.UserDto(user), success: true, status: 201, message: 'User created', error: false });
         });
         this.login = (0, express_async_handler_1.default)(async (req, res) => {
             let { email, password } = req.body;
-            // log the access token and refresh token
-            console.log(req.cookies);
             let { user, accessToken, refreshToken } = await this.authService.login(email, password);
-            res.cookie('accessToken', accessToken, {
-                httpOnly: true,
-                maxAge: 30 * 24 * 60 * 60 * 1000,
-                secure: process.env.NODE_ENV !== 'development',
-                sameSite: 'none',
-            });
-            res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                maxAge: 6 * 30 * 24 * 60 * 60 * 1000,
-                secure: process.env.NODE_ENV !== 'development',
-                sameSite: 'none',
-                path: '/api/v1/auth/refresh-token',
-            });
-            res.status(200).json({ data: new dto_user_1.UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
+            res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
+            res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
+            res.status(200).json({ data: new user_dto_1.UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
         });
-        this.logout = (0, express_async_handler_1.default)(async (_req, res) => {
-            res.clearCookie('refreshToken');
-            res.clearCookie('accesstoken');
+        this.logout = (0, express_async_handler_1.default)(async (req, res) => {
+            console.log(req.cookies);
+            if (!req.cookies.access_token) {
+                res.status(401).json((0, customResponse_1.default)({ data: null, success: false, status: 401, message: 'You are not authorized, you must login to get access this route', error: true }));
+                return;
+            }
+            res.clearCookie('refresh_token');
+            res.clearCookie('access_token');
             res.status(200).json({ data: null, success: true, status: 200, message: 'User logged out', error: false });
         });
         this.googleLogin = (0, express_async_handler_1.default)(async (req, res) => {
             let { credential } = req.body;
+            if (!credential) {
+                res.status(400).json((0, customResponse_1.default)({ data: null, success: false, status: 400, message: 'Bad Request.', error: true }));
+                return;
+            }
             let { user, accessToken, refreshToken } = await this.authService.googleLogin(credential);
-            // Set accesstoken cookie
-            res.cookie('accessToken', accessToken, {
-                httpOnly: true,
-                maxAge: 30 * 24 * 60 * 60 * 1000,
-                secure: process.env.NODE_ENV !== 'development',
-                sameSite: 'none', // cross-site access allowed,
-            });
-            // Set refresh_token cookie
-            res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                maxAge: 6 * 30 * 24 * 60 * 60 * 1000,
-                secure: process.env.NODE_ENV !== 'development',
-                sameSite: 'none',
-                path: '/api/v1/auth/refresh-token',
-            });
-            res.status(200).json({ data: new dto_user_1.UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
+            res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
+            res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
+            res.status(200).json({ data: new user_dto_1.UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
         });
         this.refreshToken = (0, express_async_handler_1.default)(async (req, res) => {
-            // get refresh_token from cookies
-            let refreshToken = req.cookies.refreshToken;
-            let accessToken_ = req.cookies.accessToken;
-            console.log(refreshToken);
-            console.log(accessToken_);
-            if (!refreshToken) {
+            if (!req.cookies.refresh_token || !req.cookies.access_token) {
                 res.status(401).json((0, customResponse_1.default)({ data: null, success: false, status: 401, message: 'You are not authorized, you must login to get access this route', error: true }));
                 return;
             }
-            let { accessToken } = await this.authService.refreshToken(refreshToken);
-            // Set accesstoken cookie
-            res.cookie('accessToken', accessToken, {
-                httpOnly: true,
-                maxAge: 30 * 24 * 60 * 60 * 1000,
-                secure: process.env.NODE_ENV !== 'development',
-                sameSite: 'none', // cross-site access allowed,
-            });
+            let { accessToken } = await this.authService.refreshToken(req.cookies.refresh_token);
+            res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
             res.status(200).json({ data: null, success: true, status: 200, message: 'Access token refreshed', error: false });
         });
         this.forgotPassword = (0, express_async_handler_1.default)(async (req, res) => {
@@ -121,23 +92,14 @@ let AuthController = exports.AuthController = class AuthController {
         this.resetPassword = (0, express_async_handler_1.default)(async (req, res) => {
             let { email, newPassword } = req.body;
             let results = await this.authService.resetPassword(email, newPassword);
-            // Set cookies
-            // Set accesstoken cookie
-            res.cookie('accessToken', results.accessToken, {
-                httpOnly: true,
-                maxAge: 30 * 24 * 60 * 60 * 1000,
-                secure: process.env.NODE_ENV !== 'development',
-                sameSite: 'none', // cross-site access allowed,
-            });
-            // Set refresh_token cookie
-            res.cookie('refreshToken', results.refreshToken, {
-                httpOnly: true,
-                maxAge: 6 * 30 * 24 * 60 * 60 * 1000,
-                secure: process.env.NODE_ENV !== 'development',
-                sameSite: 'none',
-                path: '/api/v1/auth/refresh-token',
-            });
-            res.status(200).json({ data: new dto_user_1.UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false });
+            res.cookie('access_token', results.accessToken, this.accessTokenCookieOptions);
+            res.cookie('refresh_token', results.refreshToken, this.refreshTokenCookieOptions);
+            res.status(200).json((0, customResponse_1.default)({ data: new user_dto_1.UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false }));
+        });
+        this.changePassword = (0, express_async_handler_1.default)(async (req, res) => {
+            let { token } = await this.authService.changePassword(req.body, req.user);
+            res.cookie('access_token', token, this.accessTokenCookieOptions);
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: 'Password changed', error: false }));
         });
     }
 };

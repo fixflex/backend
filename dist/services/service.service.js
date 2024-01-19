@@ -16,9 +16,9 @@ exports.ServiceService = exports.uploadServiceImage = void 0;
 const tsyringe_1 = require("tsyringe");
 const service_dao_1 = __importDefault(require("../DB/dao/service.dao"));
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
+const apiFeatures_1 = __importDefault(require("../helpers/apiFeatures"));
+const cloudinary_1 = require("../helpers/cloudinary");
 const uploadImages_middleware_1 = require("../middleware/uploadImages.middleware");
-const apiFeatures_1 = __importDefault(require("../utils/apiFeatures"));
-const cloudinary_1 = require("../utils/cloudinary");
 exports.uploadServiceImage = (0, uploadImages_middleware_1.uploadSingleFile)('image');
 let ServiceService = class ServiceService {
     constructor(serviceDao) {

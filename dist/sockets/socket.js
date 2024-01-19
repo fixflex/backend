@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 // import jwt, { JwtPayload } from 'jsonwebtoken';
 const socket_io_1 = require("socket.io");
-const chat_model_1 = require("../DB/models/chat/chat.model");
-const message_model_1 = require("../DB/models/chat/message.model");
+const chat_model_1 = require("../DB/models/chat.model");
+const message_model_1 = require("../DB/models/message.model");
 class SocketService {
     constructor(httpServer) {
         this.httpServer = httpServer;

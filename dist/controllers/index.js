@@ -15,4 +15,9 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./auth.controller"), exports);
-__exportStar(require("./users/user.controller"), exports);
+__exportStar(require("./chat.controller"), exports);
+__exportStar(require("./offer.controller"), exports);
+__exportStar(require("./service.controller"), exports);
+__exportStar(require("./task.controller"), exports);
+__exportStar(require("./tasker.controller"), exports);
+__exportStar(require("./user.controller"), exports);

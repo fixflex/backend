@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChatDao = void 0;
-const chat_model_1 = require("../models/chat/chat.model");
+const chat_model_1 = require("../models/chat.model");
 class ChatDao {
     static async getChatById(id) {
         return await chat_model_1.ChatModel.findById(id).populate('messages');

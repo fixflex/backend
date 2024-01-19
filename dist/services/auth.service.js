@@ -19,9 +19,9 @@ const tsyringe_1 = require("tsyringe");
 const user_dao_1 = __importDefault(require("../DB/dao/user.dao"));
 const validateEnv_1 = __importDefault(require("../config/validateEnv"));
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
-const createToken_1 = require("../utils/createToken");
-const hashing_1 = require("../utils/hashing");
-const nodemailer_1 = require("../utils/nodemailer");
+const createToken_1 = require("../helpers/createToken");
+const hashing_1 = require("../helpers/hashing");
+const nodemailer_1 = require("../helpers/nodemailer");
 let AuthServie = exports.AuthServie = class AuthServie {
     constructor(userDao) {
         this.userDao = userDao;
@@ -55,7 +55,7 @@ let AuthServie = exports.AuthServie = class AuthServie {
             throw new HttpException_1.default(401, 'Incorrect email or password');
         }
         let accessToken = (0, createToken_1.createAccessToken)(user._id);
-        let refreshToken = (0, createToken_1.createAccessToken)(user._id);
+        let refreshToken = (0, createToken_1.createRefreshToken)(user._id);
         return { user, accessToken, refreshToken };
     }
     async googleLogin(authorizationCode) {
@@ -66,7 +66,7 @@ let AuthServie = exports.AuthServie = class AuthServie {
         // 3. if the user exists, return the user and the token (login)
         if (user) {
             let accessToken = (0, createToken_1.createAccessToken)(user._id);
-            let refreshToken = (0, createToken_1.createAccessToken)(user._id);
+            let refreshToken = (0, createToken_1.createRefreshToken)(user._id);
             return { user, accessToken, refreshToken };
         }
         // 4. if the user does not exist, create a new user and return the user and the token (signup)
@@ -165,9 +165,24 @@ let AuthServie = exports.AuthServie = class AuthServie {
         await user.save();
         // 4- generate a new token
         let accessToken = (0, createToken_1.createAccessToken)(user._id);
-        let refreshToken = (0, createToken_1.createAccessToken)(user._id);
+        let refreshToken = (0, createToken_1.createRefreshToken)(user._id);
         // 5- return the user and the token
         return { user, accessToken, refreshToken };
+    }
+    async changePassword(payload, user) {
+        // 1- check if the password === user.password
+        let isPasswordCorrect = await bcrypt_1.default.compare(payload.oldPassword, user.password);
+        if (!isPasswordCorrect)
+            throw new HttpException_1.default(401, 'Incorrect password');
+        // 2- hash the new password
+        let newPassword = await bcrypt_1.default.hash(payload.newPassword, validateEnv_1.default.SALT_ROUNDS);
+        // 3- update the user with the new password and update the passwordChangedAt field
+        let updatedUser = await this.userDao.updateOneById(user._id, { password: newPassword, passwordChangedAt: Date.now() });
+        if (!updatedUser)
+            throw new HttpException_1.default(500, 'Something went wrong');
+        // 4- generate a new token
+        let token = (0, createToken_1.createAccessToken)(user._id);
+        return { token };
     }
 };
 exports.AuthServie = AuthServie = __decorate([

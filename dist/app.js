@@ -12,8 +12,8 @@ const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const DB_1 = __importDefault(require("./DB"));
 const validateEnv_1 = __importDefault(require("./config/validateEnv"));
 // Documentation
-const swagger_json_1 = __importDefault(require("./docs/swagger.json"));
-const notFound_1 = require("./exceptions/notFound");
+const swagger_1 = __importDefault(require("./docs/swagger"));
+const notFoundException_1 = require("./exceptions/notFoundException");
 require("./exceptions/shutdownHandler");
 const errors_1 = require("./middleware/errors");
 class App {
@@ -52,11 +52,11 @@ class App {
     }
     initializeSwagger() {
         if (this.env !== 'production') {
-            this.app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_json_1.default));
+            this.app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
         }
     }
     initializeErrorHandling() {
-        this.app.use(notFound_1.notFound);
+        this.app.use(notFoundException_1.notFound);
         this.app.use(errors_1.errorMiddleware);
     }
 }

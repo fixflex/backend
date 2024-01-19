@@ -25,13 +25,14 @@ let AuthRoute = exports.AuthRoute = class AuthRoute {
         this.router.post(`${this.path}/signup`, validation_1.signupValidator, this.authController.signup);
         this.router.post(`${this.path}/login`, validation_1.loginValidator, this.authController.login);
         this.router.post(`${this.path}/logout`, this.authController.logout);
+        this.router.get(`${this.path}/refresh-token`, this.authController.refreshToken);
         // OAuth Routes - Google - Facebook
         this.router.post(`${this.path}/google`, this.authController.googleLogin);
-        this.router.get(`${this.path}/refresh-token`, this.authController.refreshToken);
         // this.router.post(`${this.path}/activate`, this.authController.activateAccount);
         this.router.post(`${this.path}/forgot-password`, this.authController.forgotPassword);
         this.router.post(`${this.path}/verify-reset-code`, this.authController.verifyPassResetCode);
         this.router.patch(`${this.path}/reset-password`, this.authController.resetPassword);
+        this.router.patch(`${this.path}/change-password`, validation_1.changePasswordValidator, this.authController.changePassword);
     }
 };
 exports.AuthRoute = AuthRoute = __decorate([

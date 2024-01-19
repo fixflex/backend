@@ -6,4 +6,3 @@ var UserType;
     UserType["USER"] = "USER";
     UserType["ADMIN"] = "ADMIN";
 })(UserType || (exports.UserType = UserType = {}));
-// export interface IUserRole {}

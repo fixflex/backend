@@ -6,12 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.allowedTo = exports.authenticateUser = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_model_1 = __importDefault(require("../DB/models/user/user.model"));
+const user_model_1 = __importDefault(require("../DB/models/user.model"));
 const validateEnv_1 = __importDefault(require("../config/validateEnv"));
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
 const checkAccessTokenExists = (req) => {
     // check cookies first then check headers for the token (for the swagger docs)
-    let token = req.cookies.accessToken || req.headers.authorization?.split(' ')[1];
+    let token = req.cookies.access_token || req.headers.authorization?.split(' ')[1];
     if (!token || token === 'null') {
         return;
     }

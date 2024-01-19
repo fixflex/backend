@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const __1 = require("..");
-const log_1 = __importDefault(require("../utils/log"));
+const log_1 = __importDefault(require("../helpers/log"));
 // Graceful shutdown //
 // Handle process kill signal
 // Stop new requests from client

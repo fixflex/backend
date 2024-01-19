@@ -16,8 +16,8 @@ exports.ChatController = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const tsyringe_1 = require("tsyringe");
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
+const customResponse_1 = __importDefault(require("../helpers/customResponse"));
 const chat_service_1 = require("../services/chat.service");
-const customResponse_1 = __importDefault(require("../utils/customResponse"));
 let ChatController = class ChatController {
     constructor(chatService) {
         this.chatService = chatService;

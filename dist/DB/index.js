@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const validateEnv_1 = __importDefault(require("../config/validateEnv"));
-const log_1 = __importDefault(require("../utils/log"));
+const log_1 = __importDefault(require("../helpers/log"));
 // const options = {
 //   useNewUrlParser: true,
 //   useCreateIndex: true,

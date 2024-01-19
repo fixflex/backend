@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.errorMiddleware = void 0;
 const HttpException_1 = __importDefault(require("../../exceptions/HttpException"));
-const log_1 = __importDefault(require("../../utils/log"));
+const log_1 = __importDefault(require("../../helpers/log"));
 const errorMiddleware = (err, _req, res, _next) => {
     err.statusCode = err.statusCode || 500;
     err.message = err.message || 'Something went wrong';
@@ -52,16 +52,18 @@ const handleJwtInvalidSignture = () => new HttpException_1.default(401, 'Invalid
 const handleJwtExpired = () => new HttpException_1.default(401, 'Expired token');
 const handleMulterError = (err) => {
     let message = '';
+    let statusCode = 400;
     if (err.code === 'LIMIT_UNEXPECTED_FILE') {
         message = `Too many files uploaded.`;
     }
     else if (err.code === 'LIMIT_FILE_SIZE') {
         message = `File too large.`;
+        statusCode = 413; // Payload Too Large
     }
     else {
         message = err.message;
     }
-    return new HttpException_1.default(400, message);
+    return new HttpException_1.default(statusCode, message);
 };
 //################### send error response ###################//
 const sendForDev = (err, res) => {

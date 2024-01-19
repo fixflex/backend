@@ -16,13 +16,13 @@ exports.ServiceController = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const tsyringe_1 = require("tsyringe");
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
+const customResponse_1 = __importDefault(require("../helpers/customResponse"));
 const service_service_1 = require("../services/service.service");
-const customResponse_1 = __importDefault(require("../utils/customResponse"));
 let ServiceController = class ServiceController {
     constructor(serviceService) {
         this.serviceService = serviceService;
         // public Routes
-        this.getService = (0, express_async_handler_1.default)(async (req, res) => {
+        this.getServiceById = (0, express_async_handler_1.default)(async (req, res) => {
             let service = await this.serviceService.getService(req.params.id);
             if (!service)
                 throw new HttpException_1.default(404, 'No service found');
