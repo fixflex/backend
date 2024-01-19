@@ -60,7 +60,7 @@ export const getMe = {
                     type: 'string',
                     example: 'user@gmail.com',
                   },
-                  profileImage: {
+                  profilePicture: {
                     type: 'string',
                     example1: null,
                     example: 'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
@@ -208,7 +208,7 @@ export const updateMe = {
                     example: 'user@gmail.com',
                   },
 
-                  profileImage: {
+                  profilePicture: {
                     type: 'string',
                     example1: null,
                     example: 'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
@@ -348,7 +348,7 @@ export const updateProfileImage = {
         schema: {
           type: 'object',
           properties: {
-            profileImage: {
+            profilePicture: {
               type: 'string',
               format: 'binary',
             },
@@ -401,7 +401,7 @@ export const updateProfileImage = {
                     type: 'string',
                     example: 'user@gmail.com',
                   },
-                  profileImage: {
+                  profilePicture: {
                     type: 'string',
                     example1: null,
                     example: 'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
