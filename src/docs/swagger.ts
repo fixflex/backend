@@ -1,5 +1,6 @@
 import { changePassword, forgotPassword, googleSignIn, login, logout, refreshToken, resetPassword, signup, verifyResetCode } from './auth.swagger';
 import { healthz } from './health.swagger';
+import { becomeTasker, getMyTaskerProfile, getTasker, getTaskers, updateMyTaskerProfile } from './taskers.swagger';
 import { getMe, updateMe, updateProfileImage } from './users.swagger';
 
 const swaggerDocument = {
@@ -118,7 +119,29 @@ const swaggerDocument = {
     '/users/me/profile-picture': {
       patch: updateProfileImage,
     },
+    // *************** Tasker *************** //
 
+    '/taskers/{userId}': {
+      get: getTasker,
+    },
+
+    '/taskers': {
+      get: getTaskers,
+    },
+
+    '/taskers/become-tasker': {
+      post: becomeTasker,
+    },
+
+    '/taskers/me': {
+      get: getMyTaskerProfile,
+      patch: updateMyTaskerProfile,
+      // delete: {},
+    },
+
+    // *************** Tasks *************** //
+    // *************** Locations *************** //
+    // *************** Reviews *************** //
     // *************** Categories *************** //
     // *************** Services *************** //
     // *************** Orders *************** //

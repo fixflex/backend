@@ -23,7 +23,7 @@ class TaskerController implements ITaskerController {
     taskerId = req.params.id;
     let tasker = await this.taskerService.getTasker(taskerId!);
     if (!tasker) return next(new HttpException(404, `The tasker with id ${taskerId!} doesn't exist`));
-    res.status(200).json(customResponse<ITasker>({ data: tasker, success: true, status: 200, message: null, error: false }));
+    res.status(200).json(customResponse<ITasker>({ data: tasker, success: true, status: 200, message: 'tasker found', error: false }));
   });
 
   // get tasker profile by user id
@@ -39,9 +39,10 @@ class TaskerController implements ITaskerController {
     res.status(200).json(Object.assign({ results: taskers.length }, customResponse<ITasker[]>({ data: taskers, success: true, status: 200, message: null, error: false })));
   });
 
-  updateTasker = asyncHandler(async (req: Request<ITasker>, res: Response, next: NextFunction) => {
+  updateMe = asyncHandler(async (req: Request<ITasker>, res: Response, next: NextFunction) => {
     let userId = req.user?._id;
     let updatedTasker = await this.taskerService.updateTasker(userId!, req.body);
+    console.log(updatedTasker);
     if (updatedTasker.modifiedCount == 0) return next(new HttpException(404, `You don't have a tasker profile`));
     res.status(200).json(customResponse({ data: null, success: true, error: false, message: 'Tasker updated', status: 200 }));
   });
