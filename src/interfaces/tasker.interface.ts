@@ -18,13 +18,70 @@ export interface ITasker {
     };
     coordinates: [number, number];
   };
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+  };
+  isActive: boolean;
+  isVerified: boolean;
+
+  // hours: {
+  //   monday: IHours;
+  //   tuesday: IHours;
+  //   wednesday: IHours;
+  //   thursday: IHours;
+  //   friday: IHours;
+  //   saturday: IHours;
+  //   sunday: IHours;
+  // };
+  // availability: {
+  //   monday: boolean;
+  //   tuesday: boolean;
+  //   wednesday: boolean;
+  //   thursday: boolean;
+  //   friday: boolean;
+  //   saturday: boolean;
+  //   sunday: boolean;
+  // };
+
+  // serviceArea: {
+  //   radius: number;
+  //   coordinates: [number, number];
+  // };
+  // serviceRadius: number;
+  // serviceArea: {
+  //   type: {
+  //     type: string;
+  //     enum: ['Point'];
+  //     default: 'Point';
+  //   };
+  //   coordinates: [number, number];
+  // };
+  // serviceAreaRadius: number;
+  // serviceArea: {
+  //   type: string;
+  //   coordinates: [number, number];
+  //   radius: number;
+  // };
+  // serviceArea: {
+  //   type: {
+  //     type: string;
+  //     enum: ['Point'];
+  //     default: 'Point';
+  //   };
+  //   coordinates: [number, number];
+  //   radius: number;
+  // };
 }
 
 export interface ITaskerController {
   getTaskerPublicProfile(req: Request, res: Response, next: NextFunction): void;
   getTaskers(req: Request, res: Response, next: NextFunction): void;
   createTasker(req: Request, res: Response, next: NextFunction): void;
-  updateTasker(req: Request, res: Response, next: NextFunction): void;
+  updateMe(req: Request, res: Response, next: NextFunction): void;
   deleteTasker(req: Request, res: Response, next: NextFunction): void;
 }
 
