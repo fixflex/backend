@@ -3,20 +3,14 @@ export const getMe = {
   tags: ['User'],
   description: "Get the current user's data",
   opeationId: 'getMe',
-  //   parameters: [
-  //     {
-  //       in: 'header',
-  //       name: 'Accept-Language',
-  //       type: 'string',
-  //       example: 'ar_MX',
-  //     },
-  //     {
-  //       in: 'path',
-  //       name: 'id',
-  //       type: 'integer',
-  //       description: 'User ID',
-  //     },
-  //   ],
+  parameters: [
+    {
+      in: 'header',
+      name: 'Accept-Language',
+      type: 'string',
+      example: 'ar_MX',
+    },
+  ],
   responses: {
     200: {
       description: 'Get User',
@@ -128,14 +122,14 @@ export const updateMe = {
   tags: ['User'],
   description: 'This route allow logged in user to update his own profile details',
   opeationId: 'updateUserDetails',
-  // parameters: [
-  //   {
-  //     in: 'header',
-  //     name: 'Accept-Language',
-  //     type: 'string',
-  //     example: 'ar_MX'
-  //   }
-  // ],
+  parameters: [
+    {
+      in: 'header',
+      name: 'Accept-Language',
+      type: 'string',
+      example: 'ar_MX',
+    },
+  ],
   requestBody: {
     required: true,
     content: {
@@ -333,14 +327,14 @@ export const updateProfileImage = {
   tags: ['User'],
   description: 'This route allow logged in user to update his own profile image',
   opeationId: 'updateProfileImage',
-  // parameters: [
-  //   {
-  //     in: 'header',
-  //     name: 'Accept-Language',
-  //     type: 'string',
-  //     example: 'ar_MX'
-  //   }
-  // ],
+  parameters: [
+    {
+      in: 'header',
+      name: 'Accept-Language',
+      type: 'string',
+      example: 'ar_MX',
+    },
+  ],
   requestBody: {
     required: true,
     content: {

@@ -12,6 +12,12 @@ export const getTasker = {
         type: 'string',
       },
     },
+    {
+      in: 'header',
+      name: 'Accept-Language',
+      type: 'string',
+      example: 'ar_MX',
+    },
   ],
   responses: {
     200: {
@@ -173,6 +179,12 @@ export const getTaskers = {
   operationId: 'getTaskers',
   parameters: [
     {
+      in: 'header',
+      name: 'Accept-Language',
+      type: 'string',
+      example: 'ar_MX',
+    },
+    {
       name: 'services',
       in: 'query',
       description: 'Service ID',
@@ -320,6 +332,14 @@ export const becomeTasker = {
   // summary: 'Become a tasker',
   description: 'Register a new taskers. The user must be authenticated.',
   operationId: 'becomeTasker',
+  parameters: [
+    {
+      in: 'header',
+      name: 'Accept-Language',
+      type: 'string',
+      example: 'ar_MX',
+    },
+  ],
   requestBody: {
     content: {
       'application/json': {
@@ -550,6 +570,14 @@ export const getMyTaskerProfile = {
   tags: ['Taskers'],
   description: 'Get My Tasker Profile',
   operationId: 'getMyTaskerProfile',
+  parameters: [
+    {
+      in: 'header',
+      name: 'Accept-Language',
+      type: 'string',
+      example: 'ar_MX',
+    },
+  ],
   responses: {
     200: {
       description: 'Tasker',
@@ -708,6 +736,14 @@ export const updateMyTaskerProfile = {
   tags: ['Taskers'],
   description: 'Update My Tasker Profile',
   operationId: 'updateMyTaskerProfile',
+  parameters: [
+    {
+      in: 'header',
+      name: 'Accept-Language',
+      type: 'string',
+      example: 'ar_MX',
+    },
+  ],
   requestBody: {
     content: {
       'application/json': {
