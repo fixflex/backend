@@ -1,18 +1,18 @@
 import { autoInjectable } from 'tsyringe';
 
-import ServiceDao from '../DB/dao/service.dao';
+import { CategoryDao } from '../DB/dao';
 import TaskerDao from '../DB/dao/tasker.dao';
 import HttpException from '../exceptions/HttpException';
 import { ITasker, ITaskerService } from '../interfaces/tasker.interface';
 
 @autoInjectable()
 class TaskerService implements ITaskerService {
-  constructor(private readonly serviceDao: ServiceDao, private readonly taskerDao: TaskerDao) {}
+  constructor(private readonly categoryDao: CategoryDao, private readonly taskerDao: TaskerDao) {}
   async createTasker(userId: string, tasker: ITasker) {
     // check if service is exists in DB
     await Promise.all(
       tasker.services.map(async service => {
-        let serviceExists = await this.serviceDao.getOneById(service);
+        let serviceExists = await this.categoryDao.getOneById(service);
         if (!serviceExists) throw new HttpException(404, `Service ID ${service} doesn't exist in DB`);
         return service;
       })
@@ -32,7 +32,7 @@ class TaskerService implements ITaskerService {
   async getTaskers(reqQuery: any) {
     if (reqQuery.services) {
       // check if service is exists in DB
-      let isServiceExists = await this.serviceDao.getOneById(reqQuery.services);
+      let isServiceExists = await this.categoryDao.getOneById(reqQuery.services);
       if (!isServiceExists) throw new HttpException(404, `Service ID ${reqQuery.services} doesn't exist in DB`);
     }
     let taskers = await this.taskerDao.listTaskers(reqQuery.longitude, reqQuery.latitude, reqQuery.services, reqQuery.maxDistance);
@@ -43,7 +43,7 @@ class TaskerService implements ITaskerService {
     if (tasker.services)
       await Promise.all(
         tasker.services.map(async service => {
-          let serviceExists = await this.serviceDao.getOneById(service);
+          let serviceExists = await this.categoryDao.getOneById(service);
           if (!serviceExists) throw new HttpException(404, `Service ID ${service} doesn't exist in DB`);
           return service;
         })

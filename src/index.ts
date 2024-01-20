@@ -7,7 +7,7 @@ import env from './config/validateEnv';
 import logger from './helpers/log';
 import { UserRoute } from './routes';
 import { AuthRoute } from './routes';
-import { ServiceRoute } from './routes';
+import { CategoryRoute } from './routes';
 import { ChatRoute } from './routes/chat.route';
 import HealthzRoute from './routes/healthz.route';
 import { OfferRoute } from './routes/offer.route';
@@ -18,7 +18,7 @@ import Socket from './sockets/socket';
 // Setup routes
 let authRoute = container.resolve(AuthRoute);
 let userRoute = container.resolve(UserRoute);
-let serviseRoute = container.resolve(ServiceRoute);
+let categoryRoute = container.resolve(CategoryRoute);
 let taskerRoute = container.resolve(TaskerRoute);
 let healthzRoute = container.resolve(HealthzRoute);
 let chatRoute = container.resolve(ChatRoute);
@@ -26,7 +26,7 @@ let taskRoute = container.resolve(TaskRoute);
 let offerRoute = container.resolve(OfferRoute);
 
 // Setup app
-let app = new App([healthzRoute, authRoute, userRoute, taskerRoute, serviseRoute, chatRoute, taskRoute, offerRoute]);
+let app = new App([healthzRoute, authRoute, userRoute, taskerRoute, categoryRoute, chatRoute, taskRoute, offerRoute]);
 
 // Setup http server
 let client = app.getServer();
