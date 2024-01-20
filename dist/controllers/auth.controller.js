@@ -16,9 +16,9 @@ exports.AuthController = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const tsyringe_1 = require("tsyringe");
 const validateEnv_1 = __importDefault(require("../config/validateEnv"));
-const user_dto_1 = require("../dtos/user.dto");
-const customResponse_1 = __importDefault(require("../helpers/customResponse"));
-const auth_service_1 = require("../services/auth.service");
+const dtos_1 = require("../dtos");
+const helpers_1 = require("../helpers");
+const services_1 = require("../services");
 // TODO: use passport.js for authentication
 let AuthController = exports.AuthController = class AuthController {
     constructor(authService) {
@@ -40,19 +40,19 @@ let AuthController = exports.AuthController = class AuthController {
             let { user, accessToken, refreshToken } = await this.authService.signup(req.body);
             res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
             res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
-            res.status(201).json({ data: new user_dto_1.UserDto(user), success: true, status: 201, message: 'User created', error: false });
+            res.status(201).json({ data: new dtos_1.UserDto(user), success: true, status: 201, message: 'User created', error: false });
         });
         this.login = (0, express_async_handler_1.default)(async (req, res) => {
             let { email, password } = req.body;
             let { user, accessToken, refreshToken } = await this.authService.login(email, password);
             res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
             res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
-            res.status(200).json({ data: new user_dto_1.UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
+            res.status(200).json({ data: new dtos_1.UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
         });
         this.logout = (0, express_async_handler_1.default)(async (req, res) => {
             console.log(req.cookies);
             if (!req.cookies.access_token) {
-                res.status(401).json((0, customResponse_1.default)({ data: null, success: false, status: 401, message: 'You are not authorized, you must login to get access this route', error: true }));
+                res.status(401).json((0, helpers_1.customResponse)({ data: null, success: false, status: 401, message: 'You are not authorized, you must login to get access this route', error: true }));
                 return;
             }
             res.clearCookie('refresh_token');
@@ -62,17 +62,17 @@ let AuthController = exports.AuthController = class AuthController {
         this.googleLogin = (0, express_async_handler_1.default)(async (req, res) => {
             let { credential } = req.body;
             if (!credential) {
-                res.status(400).json((0, customResponse_1.default)({ data: null, success: false, status: 400, message: 'Bad Request.', error: true }));
+                res.status(400).json((0, helpers_1.customResponse)({ data: null, success: false, status: 400, message: 'Bad Request.', error: true }));
                 return;
             }
             let { user, accessToken, refreshToken } = await this.authService.googleLogin(credential);
             res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
             res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
-            res.status(200).json({ data: new user_dto_1.UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
+            res.status(200).json({ data: new dtos_1.UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
         });
         this.refreshToken = (0, express_async_handler_1.default)(async (req, res) => {
             if (!req.cookies.refresh_token || !req.cookies.access_token) {
-                res.status(401).json((0, customResponse_1.default)({ data: null, success: false, status: 401, message: 'You are not authorized, you must login to get access this route', error: true }));
+                res.status(401).json((0, helpers_1.customResponse)({ data: null, success: false, status: 401, message: 'You are not authorized, you must login to get access this route', error: true }));
                 return;
             }
             let { accessToken } = await this.authService.refreshToken(req.cookies.refresh_token);
@@ -82,28 +82,28 @@ let AuthController = exports.AuthController = class AuthController {
         this.forgotPassword = (0, express_async_handler_1.default)(async (req, res) => {
             let { email } = req.body;
             await this.authService.forgotPassword(email);
-            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: 'Password reset done sent to email!, please check your email inbox', error: false }));
+            res.status(200).json((0, helpers_1.customResponse)({ data: null, success: true, status: 200, message: 'Password reset done sent to email!, please check your email inbox', error: false }));
         });
         this.verifyPassResetCode = (0, express_async_handler_1.default)(async (req, res) => {
             let { resetCode } = req.body;
             await this.authService.verifyPassResetCode(resetCode);
-            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: 'Password reset code verified', error: false }));
+            res.status(200).json((0, helpers_1.customResponse)({ data: null, success: true, status: 200, message: 'Password reset code verified', error: false }));
         });
         this.resetPassword = (0, express_async_handler_1.default)(async (req, res) => {
             let { email, newPassword } = req.body;
             let results = await this.authService.resetPassword(email, newPassword);
             res.cookie('access_token', results.accessToken, this.accessTokenCookieOptions);
             res.cookie('refresh_token', results.refreshToken, this.refreshTokenCookieOptions);
-            res.status(200).json((0, customResponse_1.default)({ data: new user_dto_1.UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false }));
+            res.status(200).json((0, helpers_1.customResponse)({ data: new dtos_1.UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false }));
         });
         this.changePassword = (0, express_async_handler_1.default)(async (req, res) => {
             let { token } = await this.authService.changePassword(req.body, req.user);
             res.cookie('access_token', token, this.accessTokenCookieOptions);
-            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: 'Password changed', error: false }));
+            res.status(200).json((0, helpers_1.customResponse)({ data: null, success: true, status: 200, message: 'Password changed', error: false }));
         });
     }
 };
 exports.AuthController = AuthController = __decorate([
     (0, tsyringe_1.autoInjectable)(),
-    __metadata("design:paramtypes", [auth_service_1.AuthServie])
+    __metadata("design:paramtypes", [services_1.AuthServie])
 ], AuthController);

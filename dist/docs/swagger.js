@@ -7,7 +7,7 @@ const users_swagger_1 = require("./users.swagger");
 const swaggerDocument = {
     openapi: '3.0.3',
     info: {
-        title: 'fixflex API',
+        title: 'khidma API',
         description: 'API for khidam Application',
         contact: {
             name: 'Ahmed Mostafa',
@@ -22,8 +22,8 @@ const swaggerDocument = {
             url: '{serverUrl}/api/{apiVersion}',
             variables: {
                 serverUrl: {
-                    default: 'https://fixflex.onrender.com',
-                    enum: ['https://fixflex.onrender.com', 'http://localhost:8080'],
+                    default: 'https://khidma.onrender.com',
+                    enum: ['https://khidma.onrender.com', 'http://localhost:8080'],
                 },
                 apiVersion: {
                     default: 'v1',

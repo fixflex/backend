@@ -6,6 +6,14 @@ exports.healthz = {
     summary: 'Health check endpoint',
     description: 'Check if the server is running',
     operationId: 'healthz',
+    parameters: [
+        {
+            in: 'header',
+            name: 'Accept-Language',
+            type: 'string',
+            example: 'ar_MX',
+        },
+    ],
     responses: {
         '200': {
             description: 'OK',

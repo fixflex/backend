@@ -3,12 +3,12 @@ import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
 import env from '../config/validateEnv';
-import { UserDto } from '../dtos/user.dto';
-import customResponse from '../helpers/customResponse';
-import { Request, Response } from '../helpers/generic';
+import { UserDto } from '../dtos';
+import { customResponse } from '../helpers';
+import { Request, Response } from '../helpers';
 import { IUser } from '../interfaces';
-import { IAuthController } from '../interfaces/auth.interface';
-import { AuthServie } from '../services/auth.service';
+import { IAuthController } from '../interfaces';
+import { AuthServie } from '../services';
 
 // TODO: use passport.js for authentication
 @autoInjectable()

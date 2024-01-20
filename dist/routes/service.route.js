@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ServiceRoute = void 0;
 const express_1 = require("express");
 const tsyringe_1 = require("tsyringe");
-const service_controller_1 = require("../controllers/service.controller");
-const user_interface_1 = require("../interfaces/user.interface");
+const controllers_1 = require("../controllers");
+const interfaces_1 = require("../interfaces");
 const auth_middleware_1 = require("../middleware/auth.middleware");
 const isMongoID_validator_1 = require("../middleware/validation/isMongoID.validator");
 const serviceValidator_1 = require("../middleware/validation/serviceValidator");
@@ -30,7 +30,7 @@ let ServiceRoute = exports.ServiceRoute = class ServiceRoute {
         this.router.get(`${this.path}`, this.serviceController.getServices);
         this.router.get(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.serviceController.getServiceById);
         // Admin routes
-        this.router.use(`${this.path}`, auth_middleware_1.authenticateUser, (0, auth_middleware_1.allowedTo)(user_interface_1.UserType.ADMIN));
+        this.router.use(`${this.path}`, auth_middleware_1.authenticateUser, (0, auth_middleware_1.allowedTo)(interfaces_1.UserType.ADMIN));
         this.router.post(`${this.path}`, serviceValidator_1.createServiceValidator, this.serviceController.createService);
         this.router.route(`${this.path}/upload-service-image/:id`).patch(isMongoID_validator_1.isMongoId, service_service_1.uploadServiceImage, this.serviceController.uploadServiceImage);
         this.router.patch(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.serviceController.updateService);
@@ -39,5 +39,5 @@ let ServiceRoute = exports.ServiceRoute = class ServiceRoute {
 };
 exports.ServiceRoute = ServiceRoute = __decorate([
     (0, tsyringe_1.autoInjectable)(),
-    __metadata("design:paramtypes", [service_controller_1.ServiceController])
+    __metadata("design:paramtypes", [controllers_1.ServiceController])
 ], ServiceRoute);

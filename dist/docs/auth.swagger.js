@@ -2,22 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.changePassword = exports.resetPassword = exports.verifyResetCode = exports.forgotPassword = exports.refreshToken = exports.googleSignIn = exports.logout = exports.login = exports.signup = void 0;
 exports.signup = {
-    // security: [
-    //   {
-    //     bearerAuth: [], // Use the new bearerAuth scheme for security
-    //   },
-    // ],
     tags: ['Auth'],
     description: 'This route allow you to sign up into the api',
     opeationId: 'signup',
-    //   parameters: [
-    //     {
-    //       in: 'header',
-    //       name: 'Accept-Language',
-    //       type: 'string',
-    //       example: 'en_MX',
-    //     },
-    //   ],
+    parameters: [
+        {
+            in: 'header',
+            name: 'Accept-Language',
+            type: 'string',
+            example: 'en_MX',
+        },
+    ],
     requestBody: {
         required: true,
         content: {
@@ -190,25 +185,17 @@ exports.signup = {
     },
 };
 exports.login = {
-    // security: [
-    //   {
-    //     cookieAuth: [], // Use the new cookieAuth scheme for security
-    //   },
-    // ],
-    // security: {
-    //   jwt: [],
-    // },
     tags: ['Auth'],
     description: 'This route allow you to login into the api',
     opeationId: 'login',
-    //   parameters: [
-    //     {
-    //       in: 'header',
-    //       name: 'Accept-Language',
-    //       type: 'string',
-    //       example: 'ar_MX',
-    //     },
-    //   ],
+    parameters: [
+        {
+            in: 'header',
+            name: 'Accept-Language',
+            type: 'string',
+            example: 'ar_MX',
+        },
+    ],
     requestBody: {
         required: true,
         content: {
@@ -371,22 +358,14 @@ exports.logout = {
     tags: ['Auth'],
     description: 'Logout route to invalidate access and refresh tokens',
     operationId: 'logout',
-    // parameters: [
-    //   // {
-    //   //   in: 'header',
-    //   //   name: 'Accept-Language',
-    //   //   type: 'string',
-    //   //   example: 'en_MX',
-    //   // },
-    //   {
-    //     in: 'cookie',
-    //     name: 'access_token',
-    //     type: 'string',
-    //     // description: 'Access token obtained from the cookie',
-    //     required: true,
-    //     example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (access token here)',
-    //   },
-    // ],
+    parameters: [
+        {
+            in: 'header',
+            name: 'Accept-Language',
+            type: 'string',
+            example: 'en_MX',
+        },
+    ],
     responses: {
         200: {
             description: 'Logout successful',
@@ -455,20 +434,17 @@ exports.logout = {
     },
 };
 exports.googleSignIn = {
-    // security: {
-    //   jwt: [],
-    // },
     tags: ['Auth'],
     description: 'This route allow you to login into the api using google auth',
     opeationId: 'googleSignIn',
-    //   parameters: [
-    //     {
-    //       in: 'header',
-    //       name: 'Accept-Language',
-    //       type: 'string',
-    //       example: 'ar_MX',
-    //     },
-    //   ],
+    parameters: [
+        {
+            in: 'header',
+            name: 'Accept-Language',
+            type: 'string',
+            example: 'ar_MX',
+        },
+    ],
     requestBody: {
         required: true,
         content: {
@@ -589,33 +565,14 @@ exports.refreshToken = {
     tags: ['Auth'],
     description: 'Refresh access token using a valid refresh token',
     operationId: 'refreshToken',
-    // parameters: [
-    //   {
-    //     in: 'header',
-    //     name: 'Authorization',
-    //     type: 'string',
-    //     description: 'Bearer token containing the refresh token',
-    //     required: true,
-    //     example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (refresh token here)',
-    //   },
-    // ],
-    // parameters: [
-    //   {
-    //     in: 'cookie',
-    //     name: 'access_token',
-    //     type: 'string',
-    //     // description: 'Access token obtained from the cookie',
-    //     required: true,
-    //     example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (access token here)',
-    //   },
-    //   {
-    //     in: 'cookie',
-    //     name: 'refresh_token',
-    //     type: 'string',
-    //     required: true,
-    //     example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (refresh token here)',
-    //   },
-    // ],
+    parameters: [
+        {
+            in: 'header',
+            name: 'Accept-Language',
+            type: 'string',
+            example: 'ar_MX',
+        },
+    ],
     responses: {
         200: {
             description: 'Access token refreshed successfully',
@@ -686,20 +643,17 @@ exports.refreshToken = {
     },
 };
 exports.forgotPassword = {
-    // security: {
-    //   jwt: [],
-    // },
     tags: ['Auth'],
     description: 'This route allow you to send reset password link to your email',
     opeationId: 'forgotPassword',
-    //   parameters: [
-    //     {
-    //       in: 'header',
-    //       name: 'Accept-Language',
-    //       type: 'string',
-    //       example: 'ar_MX',
-    //     },
-    //   ],
+    parameters: [
+        {
+            in: 'header',
+            name: 'Accept-Language',
+            type: 'string',
+            example: 'ar_MX',
+        },
+    ],
     requestBody: {
         required: true,
         content: {
@@ -784,20 +738,17 @@ exports.forgotPassword = {
     },
 };
 exports.verifyResetCode = {
-    // security: {
-    //   jwt: [],
-    // },
     tags: ['Auth'],
     description: 'This route allow you to verify reset code sent to your email',
     opeationId: 'verifyResetCode',
-    //   parameters: [
-    //     {
-    //       in: 'header',
-    //       name: 'Accept-Language',
-    //       type: 'string',
-    //       example: 'ar_MX',
-    //     },
-    //   ],
+    parameters: [
+        {
+            in: 'header',
+            name: 'Accept-Language',
+            type: 'string',
+            example: 'ar_MX',
+        },
+    ],
     requestBody: {
         required: true,
         content: {
@@ -916,20 +867,17 @@ exports.verifyResetCode = {
     },
 };
 exports.resetPassword = {
-    // security: {
-    //   jwt: [],
-    // },
     tags: ['Auth'],
     description: 'This route allow you to reset password',
     opeationId: 'resetPassword',
-    //   parameters: [
-    //     {
-    //       in: 'header',
-    //       name: 'Accept-Language',
-    //       type: 'string',
-    //       example: 'ar_MX',
-    //     },
-    //   ],
+    parameters: [
+        {
+            in: 'header',
+            name: 'Accept-Language',
+            type: 'string',
+            example: 'ar_MX',
+        },
+    ],
     requestBody: {
         required: true,
         content: {
@@ -1095,14 +1043,14 @@ exports.changePassword = {
     tags: ['Auth'],
     description: 'This route allow you to change password',
     operationId: 'changePassword',
-    // parameters: [
-    //   {
-    //     in: 'header',
-    //     name: 'Accept-Language',
-    //     type: 'string',
-    //     example: 'ar_MX',
-    //   },
-    // ],
+    parameters: [
+        {
+            in: 'header',
+            name: 'Accept-Language',
+            type: 'string',
+            example: 'ar_MX',
+        },
+    ],
     requestBody: {
         required: true,
         content: {

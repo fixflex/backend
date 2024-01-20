@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { autoInjectable } from 'tsyringe';
 
-import { ServiceController } from '../controllers/service.controller';
+import { ServiceController } from '../controllers';
+import { UserType } from '../interfaces';
 import { Routes } from '../interfaces/routes.interface';
-import { UserType } from '../interfaces/user.interface';
 import { allowedTo, authenticateUser } from '../middleware/auth.middleware';
 import { isMongoId } from '../middleware/validation/isMongoID.validator';
 import { createServiceValidator } from '../middleware/validation/serviceValidator';
