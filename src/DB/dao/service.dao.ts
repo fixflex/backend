@@ -1,5 +1,5 @@
-import { IService } from '../../interfaces/services.interface';
-import ServiceModel from '../models/services.model';
+import { IService } from '../../interfaces/category.interface';
+import ServiceModel from '../models/category.model';
 import CommonDAO from './commonDAO';
 
 class ServiceDao extends CommonDAO<IService> {

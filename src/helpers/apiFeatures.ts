@@ -1,4 +1,4 @@
-import { IPagination } from '../interfaces/respons.interface';
+import { IPagination } from '../interfaces/pagination.interface';
 
 class APIFeatures {
   constructor(private reqQuery: any) {}

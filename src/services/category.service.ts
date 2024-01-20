@@ -4,16 +4,16 @@ import ServiceDao from '../DB/dao/service.dao';
 import HttpException from '../exceptions/HttpException';
 import APIFeatures from '../helpers/apiFeatures';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
-import { IPagination } from '../interfaces/respons.interface';
-import { IService, IServiceService } from '../interfaces/services.interface';
+import { ICategory, ICategoryService } from '../interfaces/category.interface';
+import { IPagination } from '../interfaces/pagination.interface';
 import { uploadSingleFile } from '../middleware/uploadImages.middleware';
 
 export const uploadServiceImage = uploadSingleFile('image');
 @autoInjectable()
-class ServiceService implements IServiceService {
+class CategoryService implements ICategoryService {
   constructor(private readonly serviceDao: ServiceDao) {}
-  async getServices(reqQuery: any): Promise<{
-    services: IService[] | null;
+  async getCategories(reqQuery: any): Promise<{
+    categories: ICategory[] | null;
     paginate: IPagination;
   }> {
     let apiFeatures = new APIFeatures(reqQuery);
@@ -22,17 +22,17 @@ class ServiceService implements IServiceService {
     let sort = apiFeatures.sort();
     let fields = apiFeatures.selectFields();
 
-    let services = await this.serviceDao.listServices(query, paginate, sort, fields);
-    if (services) paginate = apiFeatures.paginate(services.length); // update the pagination object with the total documents
+    let categories = await this.serviceDao.listServices(query, paginate, sort, fields);
+    if (categories) paginate = apiFeatures.paginate(categories.length); // update the pagination object with the total documents
 
-    return { services, paginate };
+    return { categories: categories, paginate };
   }
 
-  async getService(serviceId: string) {
+  async getCategory(serviceId: string) {
     return await this.serviceDao.getOneById(serviceId);
   }
 
-  async createService(service: IService) {
+  async createCategory(service: ICategory) {
     let isServiceExists = await this.serviceDao.getServiceByName(service.name);
     if (isServiceExists) {
       throw new HttpException(409, `Service ${service.name} is already exists, please pick a different one.`);
@@ -41,13 +41,13 @@ class ServiceService implements IServiceService {
     return newService;
   }
 
-  async updateService(serviceId: string, service: IService) {
+  async updateCategory(serviceId: string, service: ICategory) {
     let isServiceExists = await this.serviceDao.getOneById(serviceId);
     if (!isServiceExists) throw new HttpException(404, 'No service found');
     return await this.serviceDao.updateOneById(serviceId, service);
   }
 
-  async uploadServiceImage(serviceId: string, file: Express.Multer.File) {
+  async uploadCategoryImage(serviceId: string, file: Express.Multer.File) {
     const result = await cloudinaryUploadImage(file.buffer, 'service-image');
     // update the service with the image url and public id
     let service = await this.serviceDao.getOneById(serviceId);
@@ -55,16 +55,16 @@ class ServiceService implements IServiceService {
     // delete the old image from cloudinary if exists
     if (service.image.publicId) await cloudinaryDeleteImage(service.image.publicId);
     // update the image field in the DB with the new image url and public id
-    service = await this.serviceDao.updateOneById(serviceId, { image: { url: result.secure_url, publicId: result.public_id } } as IService);
+    service = await this.serviceDao.updateOneById(serviceId, { image: { url: result.secure_url, publicId: result.public_id } } as ICategory);
 
     return service;
   }
 
-  async deleteService(serviceId: string) {
+  async deleteCategory(serviceId: string) {
     let isServiceExists = await this.serviceDao.getOneById(serviceId);
     if (!isServiceExists) throw new HttpException(404, 'No service found');
     return await this.serviceDao.deleteOneById(serviceId);
   }
 }
 
-export { ServiceService };
+export { CategoryService };

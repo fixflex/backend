@@ -6,7 +6,7 @@ import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import APIFeatures from '../helpers/apiFeatures';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
-import { IPagination } from '../interfaces/respons.interface';
+import { IPagination } from '../interfaces/pagination.interface';
 import { IUser, IUserService } from '../interfaces/user.interface';
 
 @autoInjectable()

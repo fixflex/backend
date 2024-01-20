@@ -1,9 +1,9 @@
 import { Schema, model } from 'mongoose';
 
-import { IService } from '../../interfaces/services.interface';
+import { ICategory } from '../../interfaces/category.interface';
 
 // Define the Service schema
-const serviceSchema: Schema<IService> = new Schema({
+const serviceSchema: Schema<ICategory> = new Schema({
   name: {
     type: String,
     required: true,
