@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 import { ICategory } from '../../interfaces/category.interface';
 
 // Define the Service schema
-const serviceSchema: Schema<ICategory> = new Schema({
+const categorySchema: Schema<ICategory> = new Schema({
   name: {
     type: String,
     required: true,
@@ -19,6 +19,6 @@ const serviceSchema: Schema<ICategory> = new Schema({
 });
 
 // Create the Service model
-const Service = model('Service', serviceSchema);
+const Service = model('Category', categorySchema);
 
 export default Service;
