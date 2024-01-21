@@ -3,78 +3,36 @@ import { NextFunction } from 'express';
 import { Request, Response } from '../helpers/generic';
 
 export interface ITasker {
-  _id?: string; // tasker id
-  userId: string; // user id
-  rating: number; // average of reviews
+  _id: string;
+  userId: string;
+  rating: number;
   bio: string;
   completedTasks: number;
-  services: string[];
+  categories: string[];
   phoneNumber: string;
   location: {
-    type: {
-      type: string;
-      enum: ['Point'];
-      default: 'Point';
-    };
+    type: string;
     coordinates: [number, number];
-  };
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
-    country: string;
+    radius: number;
   };
   isActive: boolean;
   isVerified: boolean;
 
-  // hours: {
-  //   monday: IHours;
-  //   tuesday: IHours;
-  //   wednesday: IHours;
-  //   thursday: IHours;
-  //   friday: IHours;
-  //   saturday: IHours;
-  //   sunday: IHours;
-  // };
-  // availability: {
-  //   monday: boolean;
-  //   tuesday: boolean;
-  //   wednesday: boolean;
-  //   thursday: boolean;
-  //   friday: boolean;
-  //   saturday: boolean;
-  //   sunday: boolean;
-  // };
-
-  // serviceArea: {
-  //   radius: number;
-  //   coordinates: [number, number];
-  // };
-  // serviceRadius: number;
-  // serviceArea: {
-  //   type: {
-  //     type: string;
-  //     enum: ['Point'];
-  //     default: 'Point';
-  //   };
-  //   coordinates: [number, number];
-  // };
-  // serviceAreaRadius: number;
-  // serviceArea: {
-  //   type: string;
-  //   coordinates: [number, number];
-  //   radius: number;
-  // };
-  // serviceArea: {
-  //   type: {
-  //     type: string;
-  //     enum: ['Point'];
-  //     default: 'Point';
-  //   };
-  //   coordinates: [number, number];
-  //   radius: number;
-  // };
+  availability: {
+    monday: boolean;
+    tuesday: boolean;
+    wednesday: boolean;
+    thursday: boolean;
+    friday: boolean;
+    saturday: boolean;
+    sunday: boolean;
+  };
+  workingHours: {
+    start: string;
+    end: string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface ITaskerController {
