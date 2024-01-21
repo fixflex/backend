@@ -4,7 +4,7 @@ export * from './chat.interface';
 export * from './errorResponse.interface';
 export * from './tasker.interface';
 export * from './message.interface';
-export * from './messageResponse.interface';
+export * from './response.interface';
 export * from './offer.interface';
 export * from './pagination.interface';
 export * from './routes.interface';

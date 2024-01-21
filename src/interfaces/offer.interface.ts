@@ -7,6 +7,7 @@ export interface IOffer {
   taskerId: string;
   taskId: string;
   message: string;
+  price: number;
   // submessages are the messages that the tasker and the owner of the task send to each other in the offer
   subMessages: {
     sender: string;

@@ -74,10 +74,10 @@ let taskSchema: Schema<ITask> = new Schema(
       trim: true,
       maxlength: 50,
     },
-    budget: {
+    price: {
       type: Number,
       required: true,
-      min: 0,
+      min: 5,
     },
     offer: {
       type: String,

@@ -9,7 +9,7 @@ export enum TaskStatus {
 }
 
 export interface ITask {
-  _id?: number;
+  _id: number;
   ownerId: string;
   dueDate: {
     start: Date;
@@ -36,7 +36,7 @@ export interface ITask {
     coordinates: [number, number];
   };
   city: string;
-  budget: number;
+  price: number;
   offer: string;
   createdAt?: string;
   updatedAt?: string;
