@@ -1,6 +1,6 @@
 import { ICategory } from '../../interfaces/category.interface';
 import CategoryModel from '../models/category.model';
-import CommonDAO from './commonDAO';
+import CommonDAO from './baseDao';
 
 class CategoryDao extends CommonDAO<ICategory> {
   constructor() {

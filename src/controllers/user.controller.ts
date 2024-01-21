@@ -20,6 +20,7 @@ class UserController implements IUserController {
   public getUser = asyncHandler(async (req: Request, res: Response) => {
     let user = await this.userService.getUser(req.params.id);
     if (!user) throw new HttpException(404, 'No user found');
+    // TODO: remove status from customResponse
     res.status(200).json(customResponse<IUser>({ data: user, success: true, status: 200, message: 'User found', error: false }));
   });
 

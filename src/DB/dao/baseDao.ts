@@ -1,7 +1,7 @@
 import { FilterQuery, Model, ObjectId, UpdateQuery } from 'mongoose';
 
-// common DAO
-export default abstract class CommonDAO<T> {
+// Base DAO
+export default abstract class BaseDAO<T> {
   constructor(protected readonly model: Model<T>) {}
 
   async create(entity: T | T[]) {

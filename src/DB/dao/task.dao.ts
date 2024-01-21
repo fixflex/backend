@@ -1,6 +1,6 @@
 import { ITask } from '../../interfaces';
 import TaskModel from '../models/task.model';
-import CommonDAO from './commonDAO';
+import CommonDAO from './baseDao';
 
 class TaskDao extends CommonDAO<ITask> {
   constructor() {

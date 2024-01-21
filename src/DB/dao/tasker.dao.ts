@@ -1,6 +1,6 @@
 import { ITasker } from '../../interfaces/tasker.interface';
 import TaskerModel from '../models/tasker.model';
-import CommonDAO from './commonDAO';
+import CommonDAO from './baseDao';
 
 class TaskerDao extends CommonDAO<ITasker> {
   constructor() {
