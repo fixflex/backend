@@ -25,5 +25,14 @@
   "tasker_updated": "تم تحديث المهمة بنجاح",
   "tasker_deleted": "تم حذف المهمة بنجاح",
   "tasker_not_found": "المهمة غير موجودة",
-  "tasker_found": "المهمة موجودة"
+  "tasker_found": "المهمة موجودة",
+  "category_not_found": "الفئة غير موجودة",
+  "image_required": "الصورة مطلوبة",
+  "password_incorrect": "كلمة المرور غير صحيحة",
+  "reset_code_not_verified": "رمز إعادة التعيين غير متحقق",
+  "invalid_reset_code": "رمز إعادة التعيين غير صالح",
+  "user_not_active": "المستخدم غير نشط",
+  "password_changed_please_login_again": "تم تغيير كلمة المرور بنجاح ، يرجى تسجيل الدخول مرة أخرى",
+  "email_or_password_incorrect": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+  "email_and_password_required": "البريد الإلكتروني وكلمة المرور مطلوبان"
 }

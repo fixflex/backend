@@ -26,5 +26,15 @@
   "tasker_updated": "Tasker updated successfully",
   "tasker_deleted": "Tasker deleted successfully",
   "tasker_not_found": "Tasker not found",
-  "tasker_found": "Tasker found"
+  "tasker_found": "Tasker found",
+
+  "category_not_found": "Category not found",
+  "image_required": "Image is required",
+  "password_incorrect": "Password is incorrect",
+  "reset_code_not_verified": "Reset code not verified",
+  "invalid_reset_code": "Invalid reset code",
+  "user_not_active": "User not active",
+  "password_changed_please_login_again": "Password changed successfully, please login again",
+  "email_or_password_incorrect": "Email or password is incorrect",
+  "email_and_password_required": "Email and password are required"
 }
