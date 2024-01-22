@@ -41,7 +41,7 @@ class UserService implements IUserService {
     // check if the user already exists
     let isEmailExists = await this.userDao.getUserByEmail(user.email);
     if (isEmailExists) {
-      throw new HttpException(409, `E-Mail address ${user.email} is already exists, please pick a different one.`);
+      throw new HttpException(409, 'email_already_exist');
     }
     // hash the password
     user.password = await bcrypt.hash(user.password, env.SALT_ROUNDS);
@@ -51,12 +51,12 @@ class UserService implements IUserService {
 
   async updateUser(userId: string, user: Partial<IUser>) {
     let isUserExists = await this.userDao.getOneById(userId);
-    if (!isUserExists) throw new HttpException(404, 'No user found');
+    if (!isUserExists) throw new HttpException(404, 'user_not_found');
     if (user.email) {
       // check if the user already exists
       let isEmailExists = await this.userDao.getUserByEmail(user.email);
       if (isEmailExists) {
-        throw new HttpException(409, `'This Email Is Already Taken: ${user.email}`);
+        throw new HttpException(409, 'email_already_exist');
       }
     }
     return await this.userDao.updateOneById(userId, user);
@@ -64,7 +64,7 @@ class UserService implements IUserService {
 
   async deleteUser(userId: string) {
     let isUserExists = await this.userDao.getOneById(userId);
-    if (!isUserExists) throw new HttpException(404, 'No user found');
+    if (!isUserExists) throw new HttpException(404, 'user_not_found');
     // TODO: delete all the posts and comments that belong to this user
     return await this.userDao.deleteOneById(userId);
   }
@@ -73,7 +73,7 @@ class UserService implements IUserService {
     const result = await cloudinaryUploadImage(file.buffer, 'user-profile-image');
     // updateOneById the user with the image url and public id
     let user = await this.userDao.getOneById(userId);
-    if (!user) throw new HttpException(404, 'No user found');
+    if (!user) throw new HttpException(404, 'user_not_found');
     // delete the old image from cloudinary if exists
     if (user.profilePicture.publicId) await cloudinaryDeleteImage(user.profilePicture.publicId);
     // Change the profilePhoto field in the DB

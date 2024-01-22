@@ -19,7 +19,7 @@ class UserController implements IUserController {
 
   public getUser = asyncHandler(async (req: Request, res: Response) => {
     let user = await this.userService.getUser(req.params.id);
-    if (!user) throw new HttpException(404, 'No user found');
+    if (!user) throw new HttpException(404, 'user_not_found');
     // TODO: remove status from customResponse
     res.status(200).json(customResponse<IUser>({ data: user, success: true, status: 200, message: req.t('user_found'), error: false }));
   });
@@ -32,7 +32,7 @@ class UserController implements IUserController {
 
   public updateMe = asyncHandler(async (req: AuthRequest, res: Response) => {
     let user = await this.userService.updateUser(req.user?._id!, req.body);
-    if (!user) throw new HttpException(404, 'No user found');
+    if (!user) throw new HttpException(404, 'user_not_found');
     res.status(200).json(customResponse<IUser>({ data: user, success: true, status: 200, message: req.t('user_updated'), error: false }));
   });
 
@@ -43,7 +43,7 @@ class UserController implements IUserController {
 
   public updateMyProfileImage = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
     let userId = req.user?._id;
-    if (!req.file) return next(new HttpException(400, 'Please upload a file'));
+    if (!req.file) return next(new HttpException(400, 'image_required'));
     // console.log(req.file);
     let user = await this.userService.updateProfileImage(userId!, req.file);
     if (!user) return next(new HttpException(404, 'No user found'));

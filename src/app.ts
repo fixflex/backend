@@ -76,6 +76,9 @@ class App {
         },
       });
     this.app.use(i18nextMiddleware.handle(i18next));
+    // to access the translations file you can use req.t('key') or req.t('namespace:key') if you have namespaces in your translations file
+    // the namespace is the file name without the extension for example if you have a file named translation.json the namespace is translation then you can use req.t('translation:key')
+    // to be shure that you use the correct key you can use the i18next editor extension for vscode
   }
 
   private initializeRoutes(routes: Routes[]) {

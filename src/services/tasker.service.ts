@@ -13,7 +13,7 @@ class TaskerService implements ITaskerService {
     await Promise.all(
       tasker.categories.map(async service => {
         let serviceExists = await this.categoryDao.getOneById(service);
-        if (!serviceExists) throw new HttpException(404, `Service ID ${service} doesn't exist in DB`);
+        if (!serviceExists) throw new HttpException(404, 'category_not_found');
         return service;
       })
     );
@@ -33,7 +33,7 @@ class TaskerService implements ITaskerService {
     if (reqQuery.categories) {
       // check if service is exists in DB
       let isServiceExists = await this.categoryDao.getOneById(reqQuery.categories);
-      if (!isServiceExists) throw new HttpException(404, `Service ID ${reqQuery.categories} doesn't exist in DB`);
+      if (!isServiceExists) throw new HttpException(404, 'category_not_found');
     }
     let taskers = await this.taskerDao.listTaskers(reqQuery.longitude, reqQuery.latitude, reqQuery.categories, reqQuery.maxDistance);
     return taskers;
@@ -44,7 +44,7 @@ class TaskerService implements ITaskerService {
       await Promise.all(
         tasker.categories.map(async service => {
           let serviceExists = await this.categoryDao.getOneById(service);
-          if (!serviceExists) throw new HttpException(404, `Service ID ${service} doesn't exist in DB`);
+          if (!serviceExists) throw new HttpException(404, 'category_not_found');
           return service;
         })
       );

@@ -25,7 +25,7 @@ export class AuthServie implements IAuthService {
     let isEmailExists = await this.userDao.getUserByEmail(user.email);
 
     if (isEmailExists) {
-      throw new HttpException(409, `E-Mail address ${user.email} is already exists, please pick a different one.`);
+      throw new HttpException(409, 'email_already_exist');
     }
     // hash the password
     user.password = await bcrypt.hash(user.password, env.SALT_ROUNDS);
@@ -40,13 +40,13 @@ export class AuthServie implements IAuthService {
     let user: IUser | null;
 
     if (!email || !password) {
-      throw new HttpException(400, 'Email and password are required');
+      throw new HttpException(400, 'email_and_password_required');
     }
 
     user = await this.userDao.getUserByEmail(email);
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      throw new HttpException(401, 'Incorrect email or password');
+      throw new HttpException(401, '  email_or_password_incorrect');
     }
     let accessToken = createAccessToken(user._id!);
     let refreshToken = createRefreshToken(user._id!);
@@ -74,7 +74,7 @@ export class AuthServie implements IAuthService {
     } as IUser);
 
     if (!newUser) {
-      throw new HttpException(500, 'Something went wrong');
+      throw new HttpException(500, 'something_went_wrong');
     }
     let accessToken = createAccessToken(newUser._id!);
     let refreshToken = createAccessToken(newUser._id!);
@@ -90,11 +90,11 @@ export class AuthServie implements IAuthService {
     // 4- check if the user changed his password after the token was issued
     // TODO: make this check in the user model instead of here
     if (user!.passwordChangedAt && user!.passwordChangedAt.getTime() / 1000 > decoded.iat!) {
-      throw new HttpException(401, 'User recently changed password! Please log in again');
+      throw new HttpException(401, 'password_changed_please_login_again');
     }
     //  // 5- check if the user is active
     if (!user!.active) {
-      throw new HttpException(401, 'This user is no longer active');
+      throw new HttpException(401, 'user_not_active');
     }
 
     let accessToken = createAccessToken(user!._id!);
@@ -107,7 +107,7 @@ export class AuthServie implements IAuthService {
     // 1- check if the user exists by email
     let user = await this.userDao.getUserByEmail(email);
     if (!user) {
-      throw new HttpException(404, 'User not found');
+      throw new HttpException(404, 'user_not_found');
     }
     // 2- generate a reset code
     const resetCode = Math.floor(100000 + Math.random() * 90000).toString();
@@ -132,7 +132,7 @@ export class AuthServie implements IAuthService {
       user.passwordResetVerified = false;
 
       await user.save();
-      return new HttpException(500, 'There is an error in sending email');
+      return new HttpException(500, 'something_went_wrong');
     }
 
     // 6- return the reset code to the user
@@ -144,7 +144,7 @@ export class AuthServie implements IAuthService {
     // 1- check if the user exists
     let user: any = await this.userDao.getOne({ passwordResetCode: hashCode(resetCode), passwordResetCodeExpiration: { $gt: Date.now() } }, false);
     if (!user) {
-      throw new HttpException(400, 'Invalid reset code or the code is expired');
+      throw new HttpException(400, 'invalid_reset_code');
     }
     // 3- set the passwordResetVerified to true
     user.passwordResetVerified = true;
@@ -157,11 +157,11 @@ export class AuthServie implements IAuthService {
     // 1- check if the user exists by email
     let user: any = await this.userDao.getUserByEmail(email);
     if (!user) {
-      throw new HttpException(404, 'User not found');
+      throw new HttpException(404, 'user_not_found');
     }
     // 2- check if the reset code is verified
     if (!user.passwordResetVerified) {
-      throw new HttpException(400, 'Please verify your reset code first');
+      throw new HttpException(400, 'reset_code_not_verified');
     }
     // 3- hash the new password
     user.password = await bcrypt.hash(newPassword, env.SALT_ROUNDS);
@@ -181,12 +181,12 @@ export class AuthServie implements IAuthService {
   async changePassword(payload: { oldPassword: string; newPassword: string }, user: IUser) {
     // 1- check if the password === user.password
     let isPasswordCorrect = await bcrypt.compare(payload.oldPassword, user.password);
-    if (!isPasswordCorrect) throw new HttpException(401, 'Incorrect password');
+    if (!isPasswordCorrect) throw new HttpException(401, 'password_incorrect');
     // 2- hash the new password
     let newPassword = await bcrypt.hash(payload.newPassword, env.SALT_ROUNDS);
     // 3- update the user with the new password and update the passwordChangedAt field
     let updatedUser = await this.userDao.updateOneById(user._id!, { password: newPassword, passwordChangedAt: Date.now() });
-    if (!updatedUser) throw new HttpException(500, 'Something went wrong');
+    if (!updatedUser) throw new HttpException(500, 'something_went_wrong');
     // 4- generate a new token
     let token = createAccessToken(user._id!);
     return { token };
