@@ -7,7 +7,7 @@ export const signup = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'en_MX',
+      example: 'en',
     },
   ],
   requestBody: {
@@ -196,7 +196,7 @@ export const login = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
   ],
   requestBody: {
@@ -373,7 +373,7 @@ export const logout = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'en_MX',
+      example: 'en',
     },
   ],
   responses: {
@@ -453,7 +453,7 @@ export const googleSignIn = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
   ],
   requestBody: {
@@ -588,7 +588,7 @@ export const refreshToken = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
   ],
   responses: {
@@ -670,7 +670,7 @@ export const forgotPassword = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
   ],
   requestBody: {
@@ -766,7 +766,7 @@ export const verifyResetCode = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
   ],
   requestBody: {
@@ -897,7 +897,7 @@ export const resetPassword = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
   ],
   requestBody: {
@@ -1087,7 +1087,7 @@ export const changePassword = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
   ],
   requestBody: {

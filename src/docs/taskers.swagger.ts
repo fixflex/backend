@@ -16,7 +16,7 @@ export const getTasker = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
   ],
   responses: {
@@ -182,7 +182,7 @@ export const getTaskers = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
     {
       name: 'services',
@@ -337,7 +337,7 @@ export const becomeTasker = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
   ],
   requestBody: {
@@ -575,7 +575,7 @@ export const getMyTaskerProfile = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
   ],
   responses: {
@@ -741,7 +741,7 @@ export const updateMyTaskerProfile = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
   ],
   requestBody: {

@@ -8,7 +8,7 @@ export const getMe = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
   ],
   responses: {
@@ -127,7 +127,7 @@ export const updateMe = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
   ],
   requestBody: {
@@ -332,7 +332,7 @@ export const updateProfileImage = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'ar_MX',
+      example: 'ar',
     },
   ],
   requestBody: {
