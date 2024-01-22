@@ -17,6 +17,8 @@ class HealthzRoute implements Routes {
     });
 
     this.router.get(`${this.path}`, (req: Request, res: Response) => {
+      console.log(req.cookies);
+      console.log(req.headers);
       res.status(200).json(customResponse({ data: null, success: true, status: 200, message: req.t('healthz'), error: false }));
     });
   }

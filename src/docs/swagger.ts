@@ -7,13 +7,14 @@ const swaggerDocument = {
   openapi: '3.0.3',
   info: {
     title: 'fixflex API',
-    description: 'API for fixflex Application',
+    description: 'REST API for fixflex',
     contact: {
       name: 'Ahmed Mostafa',
       // url: 'https://github.com/AhmedElasiriy',
       email: 'ahmed.elasiriy@gmail.com',
     },
     version: '1.0.0',
+    // /**Note*/ that you can pass the accept-language parameter in the header or in the cookie.\n if you don't pass it, it will take the default language which is english.\n if you pass it in the header, the value must be a valid language code like en, ar, fr, etc.\n if you pass it in the cookie, the key must be accept-language and the value must be a valid language code like en, ar .
   },
   schemes: ['http', 'https'],
   servers: [
@@ -44,7 +45,7 @@ const swaggerDocument = {
         in: 'header',
         bearerFormat: 'JWT',
         description:
-          'Optional. You can provide access token either through the Bearer Authorization header or cookies. Upon login or signup, the access_token and refresh_token will be set automatically and sent with each request.',
+          '**Note** You can provide access token either through the Bearer Authorization header or cookies. Upon login or signup, the `access_token` and `refresh_token` will be set automatically and sent with each request.',
       },
     },
     security: [
@@ -72,6 +73,7 @@ const swaggerDocument = {
   //     jwt: [],
   //   },
   // ],
+
   paths: {
     // *************** Health *************** //
 

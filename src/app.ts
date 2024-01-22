@@ -69,9 +69,9 @@ class App {
         saveMissing: true, // send missing keys to endpoint specified in saveMissingTo (for development)
         // debug: env.NODE_ENV === 'development', // sset debug to true to view missing keys in the log file (for development)
         detection: {
-          order: ['cookie', 'header'], // the order of prefered languages (for production)
-          lookupCookie: 'accept-language', // the cookie name (for production)
+          order: ['header', 'cookie'], // the order of prefered languages (for production)
           lookupHeader: 'accept-language', // the header name (for production)
+          lookupCookie: 'accept-language', // the cookie name (for production)
           caches: ['cookie'], // cache the language in a cookie (for production)
         },
       });
