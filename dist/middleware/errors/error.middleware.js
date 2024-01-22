@@ -11,14 +11,14 @@ const errorMiddleware = (err, _req, res, _next) => {
     err.message = err.message || 'Something went wrong';
     err.status = err.status || 'error';
     if (process.env.NODE_ENV === 'development') {
-        sendForDev(err, res);
+        sendForDev(err, res, _req);
     }
     else {
         if (err.name === 'CastError') {
             err = handelCastErrorDB(err);
         }
         if (err.code === 11000) {
-            err = handelDuplicateFieldsDB(err);
+            handelDuplicateFieldsDB(err);
         }
         if (err.name === 'ValidationError') {
             err = handelValidationErrorDB(err);
@@ -30,7 +30,7 @@ const errorMiddleware = (err, _req, res, _next) => {
         // MulterError
         if (err.name === 'MulterError')
             err = handleMulterError(err);
-        sendForProd(err, res);
+        sendForProd(err, res, _req);
     }
 };
 exports.errorMiddleware = errorMiddleware;
@@ -66,33 +66,34 @@ const handleMulterError = (err) => {
     return new HttpException_1.default(statusCode, message);
 };
 //################### send error response ###################//
-const sendForDev = (err, res) => {
+const sendForDev = (err, res, req) => {
     res.status(err.statusCode).json({
         data: null,
         success: false,
         error: true,
-        message: err.message,
+        message: req.t(err.message),
         status: err.status,
         stack: err.stack,
         err,
     });
 };
-const sendForProd = (err, res) => {
+const sendForProd = (err, res, req) => {
     // A) Operational, trusted error: send message to client
     if (err.isOperational) {
         res.status(err.statusCode).json({
             data: null,
             success: false,
             error: true,
-            message: err.message,
+            message: req.t(err.message),
             status: err.status,
         });
     }
     // B) Programming or other unknown error: don't leak error details
     else {
         // 1) Log error
-        log_1.default.error('ERROR 💥', err);
+        log_1.default.error('ERROR 💥 bla bla bla', err);
         // 2) Send generic message
         res.status(500).json({ status: 'error', message: 'Something went wrong!' });
+        // 3) send email to the developer
     }
 };

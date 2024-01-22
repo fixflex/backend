@@ -25,16 +25,16 @@ let TaskerController = class TaskerController {
             let userId = req.user?._id;
             let user = await this.taskerService.createTasker(userId, req.body);
             if (!user)
-                return next(new HttpException_1.default(400, 'Something went wrong, please try again later'));
-            res.status(201).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: 'tasker created', error: false }));
+                return next(new HttpException_1.default(400, req.t('something_went_wrong')));
+            res.status(201).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: req.t('tasker_created'), error: false }));
         });
         this.getTaskerPublicProfile = (0, express_async_handler_1.default)(async (req, res, next) => {
             let taskerId;
             taskerId = req.params.id;
             let tasker = await this.taskerService.getTasker(taskerId);
             if (!tasker)
-                return next(new HttpException_1.default(404, `The tasker with id ${taskerId} doesn't exist`));
-            res.status(200).json((0, customResponse_1.default)({ data: tasker, success: true, status: 200, message: 'tasker found', error: false }));
+                return next(new HttpException_1.default(404, req.t('tasker_not_found')));
+            res.status(200).json((0, customResponse_1.default)({ data: tasker, success: true, status: 200, message: req.t('tasker_found'), error: false }));
         });
         // get tasker profile by user id
         this.getMe = (0, express_async_handler_1.default)(async (req, res, next) => {
@@ -42,12 +42,12 @@ let TaskerController = class TaskerController {
             let tasker = await this.taskerService.getMyProfile(userId);
             if (!tasker)
                 return next(new HttpException_1.default(404, `You don't have a tasker profile`));
-            res.status(200).json((0, customResponse_1.default)({ data: tasker, success: true, status: 200, message: null, error: false }));
+            res.status(200).json((0, customResponse_1.default)({ data: tasker, success: true, status: 200, message: req.t('tasker_found'), error: false }));
         });
         this.getTaskers = (0, express_async_handler_1.default)(async (req, res, next) => {
             let taskers = await this.taskerService.getTaskers(req.query);
             if (!taskers)
-                return next(new HttpException_1.default(400, 'Something went wrong, please try again later'));
+                return next(new HttpException_1.default(400, req.t('something_went_wrong')));
             res.status(200).json(Object.assign({ results: taskers.length }, (0, customResponse_1.default)({ data: taskers, success: true, status: 200, message: null, error: false })));
         });
         this.updateMe = (0, express_async_handler_1.default)(async (req, res, next) => {
@@ -55,15 +55,15 @@ let TaskerController = class TaskerController {
             let updatedTasker = await this.taskerService.updateTasker(userId, req.body);
             console.log(updatedTasker);
             if (updatedTasker.modifiedCount == 0)
-                return next(new HttpException_1.default(404, `You don't have a tasker profile`));
-            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, error: false, message: 'Tasker updated', status: 200 }));
+                return next(new HttpException_1.default(404, req.t('tasker_not_found')));
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, error: false, message: req.t('tasker_updated'), status: 200 }));
         });
         this.deleteTasker = (0, express_async_handler_1.default)(async (req, res, next) => {
             let userId = req.user?._id; //
             let user = await this.taskerService.deleteTasker(userId);
             if (user.deletedCount == 0)
-                return next(new HttpException_1.default(404, `You don't have a tasker profile`));
-            res.status(204).json((0, customResponse_1.default)({ data: null, success: true, error: false, message: 'User deleted', status: 204 }));
+                return next(new HttpException_1.default(404, req.t('tasker_not_found')));
+            res.status(204).json((0, customResponse_1.default)({ data: null, success: true, error: false, message: req.t('tasker_deleted'), status: 204 }));
         });
     }
 };

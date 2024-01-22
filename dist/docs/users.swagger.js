@@ -11,7 +11,7 @@ exports.getMe = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
     ],
     responses: {
@@ -129,7 +129,7 @@ exports.updateMe = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
     ],
     requestBody: {
@@ -327,7 +327,7 @@ exports.updateProfileImage = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
     ],
     requestBody: {

@@ -9,12 +9,12 @@ const validation_middleware_1 = __importDefault(require("../errors/validation.mi
 exports.getTaskersValidator = [
     (0, express_validator_1.check)('longitude').optional().isNumeric().withMessage('Longitude must be a number'),
     (0, express_validator_1.check)('latitude').optional().isNumeric().withMessage('Latitude must be a number'),
-    (0, express_validator_1.check)('services').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
+    (0, express_validator_1.check)('categories').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
     validation_middleware_1.default,
 ];
 exports.createTaskerValidator = [
-    (0, express_validator_1.check)('services').isArray().withMessage('Services must be an array').isLength({ min: 1 }).withMessage('Services must have at least one service'),
-    (0, express_validator_1.check)('services.*').isMongoId().withMessage('Service must be a valid mongo ID'),
+    (0, express_validator_1.check)('categories').isArray().withMessage('Services must be an array').isLength({ min: 1 }).withMessage('Services must have at least one service'),
+    (0, express_validator_1.check)('categories.*').isMongoId().withMessage('Service must be a valid mongo ID'),
     //         "location": {
     // "coordinates": [32.1617485, 26.0524745]
     // }
@@ -39,9 +39,9 @@ exports.createTaskerValidator = [
     validation_middleware_1.default,
 ];
 exports.updateTaskerValidator = [
-    (0, express_validator_1.check)('services').isEmpty().withMessage('Services is not allowed to be updated in this route'),
-    // check('services').optional().isArray().withMessage('Services must be an array').isLength({ min: 1 }).withMessage('Services must have at least one service'),
-    // check('services.*').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
+    (0, express_validator_1.check)('categories').isEmpty().withMessage('Services is not allowed to be updated in this route'),
+    // check('categories').optional().isArray().withMessage('Services must be an array').isLength({ min: 1 }).withMessage('Services must have at least one service'),
+    // check('categories.*').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
     (0, express_validator_1.check)('bio').optional().isString().withMessage('Bio must be a string'),
     (0, express_validator_1.check)('rating').isEmpty().withMessage('Rating is not allowed'),
     (0, express_validator_1.check)('completedTasks').isEmpty().withMessage('Completed tasks is not allowed'),

@@ -18,7 +18,7 @@ __exportStar(require("./auth.route"), exports);
 __exportStar(require("./chat.route"), exports);
 __exportStar(require("./healthz.route"), exports);
 __exportStar(require("./offer.route"), exports);
-__exportStar(require("./service.route"), exports);
+__exportStar(require("./category.route"), exports);
 __exportStar(require("./task.route"), exports);
 __exportStar(require("./tasker.route"), exports);
 __exportStar(require("./user.route"), exports);

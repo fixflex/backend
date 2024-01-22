@@ -28,22 +28,23 @@ let UserController = class UserController {
             let user = await this.userService.getUser(req.params.id);
             if (!user)
                 throw new HttpException_1.default(404, 'No user found');
-            res.status(200).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: 'User found', error: false }));
+            // TODO: remove status from customResponse
+            res.status(200).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: req.t('user_found'), error: false }));
         });
         // user profile routes (authenticated)
         this.getMe = (0, express_async_handler_1.default)(async (req, res) => {
             // console.log(req.headers);
-            res.status(200).json((0, customResponse_1.default)({ data: req.user, success: true, status: 200, message: 'User found', error: false }));
+            res.status(200).json((0, customResponse_1.default)({ data: req.user, success: true, status: 200, message: req.t('user_found'), error: false }));
         });
         this.updateMe = (0, express_async_handler_1.default)(async (req, res) => {
             let user = await this.userService.updateUser(req.user?._id, req.body);
             if (!user)
                 throw new HttpException_1.default(404, 'No user found');
-            res.status(200).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: 'User updated', error: false }));
+            res.status(200).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: req.t('user_updated'), error: false }));
         });
         this.deleteMe = (0, express_async_handler_1.default)(async (req, res) => {
             await this.userService.updateUser(req.user?._id, { active: false });
-            res.status(204).json((0, customResponse_1.default)({ data: null, success: true, status: 204, message: 'User deleted', error: false }));
+            res.status(204).json((0, customResponse_1.default)({ data: null, success: true, status: 204, message: req.t('user_deleted'), error: false }));
         });
         this.updateMyProfileImage = (0, express_async_handler_1.default)(async (req, res, next) => {
             let userId = req.user?._id;
@@ -53,7 +54,7 @@ let UserController = class UserController {
             let user = await this.userService.updateProfileImage(userId, req.file);
             if (!user)
                 return next(new HttpException_1.default(404, 'No user found'));
-            res.status(200).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: 'User updated', error: false }));
+            res.status(200).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: req.t('user_updated'), error: false }));
         });
     }
 };

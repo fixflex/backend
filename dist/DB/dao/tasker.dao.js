@@ -4,15 +4,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const tasker_model_1 = __importDefault(require("../models/tasker.model"));
-const commonDAO_1 = __importDefault(require("./commonDAO"));
-class TaskerDao extends commonDAO_1.default {
+const baseDao_1 = __importDefault(require("./baseDao"));
+class TaskerDao extends baseDao_1.default {
     constructor() {
         super(tasker_model_1.default);
     }
-    async listTaskers(longitude, latitude, services, maxDistance = 60) {
+    async listTaskers(longitude, latitude, categories, maxDistance = 60) {
         let taskers;
-        // /api/v1/taskers?longitude=35.5&latitude=33.5&services=6560fabd6f972e1d74a71242&maxDistance=60
-        if (latitude && longitude && services) {
+        // /api/v1/taskers?longitude=35.5&latitude=33.5&categories=6560fabd6f972e1d74a71242&maxDistance=60
+        if (latitude && longitude && categories) {
             taskers = await tasker_model_1.default.find({
                 location: {
                     $near: {
@@ -23,20 +23,20 @@ class TaskerDao extends commonDAO_1.default {
                         },
                     },
                 },
-                // where services = service
-                services: { $eq: services },
+                // where categories = service
+                categories: { $eq: categories },
             })
                 .populate('userId', 'firstName lastName email  profilePicture')
-                .populate('services', 'name')
+                .populate('categories', 'name')
                 .lean();
         }
-        else if (services) {
+        else if (categories) {
             taskers = await tasker_model_1.default.find({
-                // where services = service
-                services: { $eq: services },
+                // where categories = service
+                categories: { $eq: categories },
             })
                 .populate('userId', 'firstName lastName email  profilePicture')
-                .populate('services', 'name')
+                .populate('categories', 'name')
                 .lean();
         }
         else if (latitude && longitude) {
@@ -52,16 +52,16 @@ class TaskerDao extends commonDAO_1.default {
                 },
             })
                 .populate('userId', 'firstName lastName email  profilePicture')
-                .populate('services', 'name')
+                .populate('categories', 'name')
                 .lean();
         }
         else
-            taskers = await tasker_model_1.default.find({}).populate('userId', 'firstName lastName email  profilePicture').populate('services', 'name').lean();
+            taskers = await tasker_model_1.default.find({}).populate('userId', 'firstName lastName email  profilePicture').populate('categories', 'name').lean();
         return taskers;
     }
-    // get tasker profile with user data and services data
+    // get tasker profile with user data and categories data
     async getTaskerProfile(taskerId) {
-        let tasker = await tasker_model_1.default.findById(taskerId).populate('userId', 'firstName lastName email profilePicture').populate('services', '_id name').lean();
+        let tasker = await tasker_model_1.default.findById(taskerId).populate('userId', 'firstName lastName email profilePicture').populate('categories', '_id name').lean();
         return tasker;
     }
 }

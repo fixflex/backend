@@ -8,10 +8,10 @@ let taskerSchema = new mongoose_1.Schema({
         ref: 'User',
         required: true,
     },
-    services: [
+    categories: [
         {
             type: String,
-            ref: 'Service',
+            ref: 'Category',
         },
     ],
     rating: {
@@ -34,6 +34,10 @@ let taskerSchema = new mongoose_1.Schema({
             // [longitude, latitude] [x, y]
             type: [Number],
             default: [0, 0],
+        },
+        radius: {
+            type: Number,
+            default: 0,
         },
     },
     bio: String,

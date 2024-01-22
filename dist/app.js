@@ -6,7 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
+const i18next_1 = __importDefault(require("i18next"));
+const i18next_fs_backend_1 = __importDefault(require("i18next-fs-backend"));
+const i18next_http_middleware_1 = __importDefault(require("i18next-http-middleware"));
 const morgan_1 = __importDefault(require("morgan"));
+const path_1 = __importDefault(require("path"));
 require("reflect-metadata");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const DB_1 = __importDefault(require("./DB"));
@@ -44,6 +48,28 @@ class App {
         this.app.use(express_1.default.json());
         // this.app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
         this.app.use((0, cookie_parser_1.default)());
+        this.app.use(express_1.default.static(path_1.default.join(__dirname, '../public')));
+        // i18next for internationalization (i18n)  (for multi language support)
+        i18next_1.default
+            .use(i18next_fs_backend_1.default)
+            .use(i18next_http_middleware_1.default.LanguageDetector)
+            .init({
+            backend: {
+                loadPath: path_1.default.join(__dirname, '../locales/{{lng}}/translation.json'),
+                addPath: path_1.default.join(__dirname, '../locales/missing.json'), // this is where we save missing translations on-the-fly means when we use saveMissing: true it will save the missing keys in this file (for development)
+            },
+            fallbackLng: 'en',
+            // preload: ['en', 'ar'], // preload all languages
+            saveMissing: true,
+            // debug: env.NODE_ENV === 'development', // sset debug to true to view missing keys in the log file (for development)
+            detection: {
+                order: ['header', 'cookie'],
+                lookupHeader: 'accept-language',
+                lookupCookie: 'accept-language',
+                caches: ['cookie'], // cache the language in a cookie (for production)
+            },
+        });
+        this.app.use(i18next_http_middleware_1.default.handle(i18next_1.default));
     }
     initializeRoutes(routes) {
         routes.forEach(route => {

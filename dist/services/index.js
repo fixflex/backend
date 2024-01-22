@@ -17,7 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./auth.service"), exports);
 __exportStar(require("./chat.service"), exports);
 __exportStar(require("./offer.service"), exports);
-__exportStar(require("./service.service"), exports);
+__exportStar(require("./category.service"), exports);
 __exportStar(require("./task.service"), exports);
 __exportStar(require("./tasker.service"), exports);
 __exportStar(require("./user.service"), exports);

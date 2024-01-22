@@ -22,14 +22,14 @@ const socket_1 = __importDefault(require("./sockets/socket"));
 // Setup routes
 let authRoute = tsyringe_1.container.resolve(routes_2.AuthRoute);
 let userRoute = tsyringe_1.container.resolve(routes_1.UserRoute);
-let serviseRoute = tsyringe_1.container.resolve(routes_3.ServiceRoute);
+let categoryRoute = tsyringe_1.container.resolve(routes_3.CategoryRoute);
 let taskerRoute = tsyringe_1.container.resolve(tasker_route_1.TaskerRoute);
 let healthzRoute = tsyringe_1.container.resolve(healthz_route_1.default);
 let chatRoute = tsyringe_1.container.resolve(chat_route_1.ChatRoute);
 let taskRoute = tsyringe_1.container.resolve(task_route_1.TaskRoute);
 let offerRoute = tsyringe_1.container.resolve(offer_route_1.OfferRoute);
 // Setup app
-let app = new app_1.default([healthzRoute, authRoute, userRoute, taskerRoute, serviseRoute, chatRoute, taskRoute, offerRoute]);
+let app = new app_1.default([healthzRoute, authRoute, userRoute, taskerRoute, categoryRoute, chatRoute, taskRoute, offerRoute]);
 // Setup http server
 let client = app.getServer();
 exports.client = client;

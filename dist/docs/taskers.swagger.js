@@ -19,7 +19,7 @@ exports.getTasker = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
     ],
     responses: {
@@ -183,7 +183,7 @@ exports.getTaskers = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
         {
             name: 'services',
@@ -336,7 +336,7 @@ exports.becomeTasker = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
     ],
     requestBody: {
@@ -573,7 +573,7 @@ exports.getMyTaskerProfile = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
     ],
     responses: {
@@ -737,7 +737,7 @@ exports.updateMyTaskerProfile = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
     ],
     requestBody: {

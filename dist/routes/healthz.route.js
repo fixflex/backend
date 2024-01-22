@@ -12,30 +12,13 @@ class HealthzRoute {
         this.initializerRoutes();
     }
     initializerRoutes() {
-        this.router.get(`${this.path}`, (_req, res) => {
-            // console.log(_req.cookies.healthz);
-            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: 'Welcome to Rest API - 👋🌎🌍🌏', error: false }));
+        this.router.get('/', (req, res) => {
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: req.t('healthz'), error: false }));
         });
-        this.router.get('/', (_req, res) => {
-            // log request cookies
-            // console.log('Cookies: ', _req.cookies);
-            // res.cookie('TestAccessToken', 'token', {
-            //   httpOnly: true, // client side js cannot access the cookie
-            //   maxAge: 24 * 60 * 60 * 1000, // one days
-            //   secure: process.env.NODE_ENV === 'production', // cookie only works in https
-            //   // privent cross-site access to the cookie (only allow same site access)
-            //   sameSite: 'strict', // cross-site access not allowed
-            // });
-            // console.log(_req.cookies.healthz);
-            // res.cookie('healthz', 'token_healthz', {
-            //   // httpOnly: true, // client side js cannot access the cookie
-            //   // maxAge: 24 * 60 * 60 * 1000, // one days
-            //   // secure: process.env.NODE_ENV === 'production', // cookie only works in https
-            //   secure: false, // cookie only works in https
-            //   // sameSite: 'lax', // cross-site access not allowed
-            //   path: '/api/v1/healthz',
-            // });
-            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: 'Welcome to Rest API - 👋🌎🌍🌏', error: false }));
+        this.router.get(`${this.path}`, (req, res) => {
+            console.log(req.cookies);
+            console.log(req.headers);
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: req.t('healthz'), error: false }));
         });
     }
 }

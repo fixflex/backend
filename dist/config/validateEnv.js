@@ -28,5 +28,6 @@ const validateEnv = (0, envalid_1.cleanEnv)(process.env, {
     SMTP_PASSWORD: (0, envalid_1.str)(),
     SMTP_HOST: (0, envalid_1.str)(),
     SMTP_PORT: (0, envalid_1.str)(),
+    DEVELOPER_EMAIL: (0, envalid_1.str)(),
 });
 exports.default = validateEnv;

@@ -68,15 +68,15 @@ let taskSchema = new mongoose_1.Schema({
             required: true,
         },
     },
-    city: {
-        type: String,
-        trim: true,
-        maxlength: 50,
-    },
-    budget: {
+    // city: {
+    //   type: String,
+    //   trim: true,
+    //   maxlength: 50,
+    // },
+    price: {
         type: Number,
         required: true,
-        min: 0,
+        min: 5,
     },
     offer: {
         type: String,

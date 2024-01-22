@@ -17,7 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./chat.model"), exports);
 __exportStar(require("./message.model"), exports);
 __exportStar(require("./offer.model"), exports);
-__exportStar(require("./services.model"), exports);
+__exportStar(require("./category.model"), exports);
 __exportStar(require("./task.model"), exports);
 __exportStar(require("./tasker.model"), exports);
 __exportStar(require("./user.model"), exports);

@@ -10,7 +10,7 @@ exports.signup = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'en_MX',
+            example: 'en',
         },
     ],
     requestBody: {
@@ -193,7 +193,7 @@ exports.login = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
     ],
     requestBody: {
@@ -363,7 +363,7 @@ exports.logout = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'en_MX',
+            example: 'en',
         },
     ],
     responses: {
@@ -442,7 +442,7 @@ exports.googleSignIn = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
     ],
     requestBody: {
@@ -570,7 +570,7 @@ exports.refreshToken = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
     ],
     responses: {
@@ -651,7 +651,7 @@ exports.forgotPassword = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
     ],
     requestBody: {
@@ -746,7 +746,7 @@ exports.verifyResetCode = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
     ],
     requestBody: {
@@ -875,7 +875,7 @@ exports.resetPassword = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
     ],
     requestBody: {
@@ -1048,7 +1048,7 @@ exports.changePassword = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'ar_MX',
+            example: 'ar',
         },
     ],
     requestBody: {

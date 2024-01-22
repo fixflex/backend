@@ -18,7 +18,7 @@ __exportStar(require("./auth.validator"), exports);
 __exportStar(require("./chat.validator"), exports);
 __exportStar(require("./isMongoID.validator"), exports);
 __exportStar(require("./offer.validator"), exports);
-__exportStar(require("./serviceValidator"), exports);
+__exportStar(require("./category.validator"), exports);
 __exportStar(require("./tasks.validator"), exports);
 __exportStar(require("./user.validator"), exports);
 __exportStar(require("./tasker.validator"), exports);

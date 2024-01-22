@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = __importDefault(require("../models/user.model"));
-const commonDAO_1 = __importDefault(require("./commonDAO"));
-class UserDao extends commonDAO_1.default {
+const baseDao_1 = __importDefault(require("./baseDao"));
+class UserDao extends baseDao_1.default {
     constructor() {
         super(user_model_1.default);
     }
