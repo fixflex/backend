@@ -1,7 +1,11 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
+import i18next from 'i18next';
+import Backend from 'i18next-fs-backend';
+import i18nextMiddleware from 'i18next-http-middleware';
 import morgan from 'morgan';
+import path from 'path';
 import 'reflect-metadata';
 import swaggerUi from 'swagger-ui-express';
 
@@ -50,6 +54,22 @@ class App {
     this.app.use(express.json());
     // this.app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
     this.app.use(cookieParser());
+    this.app.use(express.static(path.join(__dirname, '../public')));
+    // i18next for internationalization (i18n)  (for multi language support)
+    i18next
+      .use(Backend)
+      .use(i18nextMiddleware.LanguageDetector)
+      .init({
+        backend: {
+          loadPath: path.join(__dirname, '../locales/{{lng}}/translation.json'), // this is where we load our translations from and we use {{lng}} and {{ns}} to load the correct language and namespace (for production)
+          addPath: path.join(__dirname, '../locales/missing.json'), // this is where we save missing translations on-the-fly means when we use saveMissing: true it will save the missing keys in this file (for development)
+        },
+        fallbackLng: 'en', // fallback language is english.
+        // preload: ['en', 'ar'], // preload all languages
+        saveMissing: true, // send missing keys to endpoint specified in saveMissingTo (for development)
+        // debug: env.NODE_ENV === 'development', // sset debug to true to view missing keys in the log file (for development)
+      });
+    this.app.use(i18nextMiddleware.handle(i18next));
   }
 
   private initializeRoutes(routes: Routes[]) {

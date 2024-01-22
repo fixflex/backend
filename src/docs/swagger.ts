@@ -21,7 +21,7 @@ const swaggerDocument = {
       url: '{serverUrl}/api/{apiVersion}',
       variables: {
         serverUrl: {
-          default: 'https://fixflex.onrender.com',
+          default: 'http://localhost:8080',
           enum: ['https://fixflex.onrender.com', 'http://localhost:8080'],
         },
         apiVersion: {
