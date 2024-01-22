@@ -12,12 +12,12 @@ class HealthzRoute implements Routes {
     this.initializerRoutes();
   }
   private initializerRoutes() {
-    this.router.get(`${this.path}`, (_req: Request, res: Response) => {
-      res.status(200).json(customResponse({ data: null, success: true, status: 200, message: 'Welcome to Rest API - 👋🌎🌍🌏', error: false }));
+    this.router.get(`${this.path}`, (req: Request, res: Response) => {
+      res.status(200).json(customResponse({ data: null, success: true, status: 200, message: req.t('healthz'), error: false }));
     });
 
-    this.router.get('/', (_req: Request, res: Response) => {
-      res.status(200).json(customResponse({ data: null, success: true, status: 200, message: 'Welcome to Rest API - 👋🌎🌍🌏', error: false }));
+    this.router.get('/', (req: Request, res: Response) => {
+      res.status(200).json(customResponse({ data: null, success: true, status: 200, message: req.t('healthz'), error: false }));
     });
   }
 }

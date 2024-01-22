@@ -36,7 +36,7 @@ export class AuthController implements IAuthController {
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
     res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
 
-    res.status(201).json({ data: new UserDto(user), success: true, status: 201, message: 'User created', error: false });
+    res.status(201).json({ data: new UserDto(user), success: true, status: 201, message: req.t('user_created'), error: false });
   });
 
   public login = asyncHandler(async (req: Request, res: Response) => {
@@ -46,25 +46,25 @@ export class AuthController implements IAuthController {
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
     res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
 
-    res.status(200).json({ data: new UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
+    res.status(200).json({ data: new UserDto(user), success: true, status: 200, message: req.t('user_logged_in'), error: false });
   });
 
   public logout = asyncHandler(async (req: Request, res: Response) => {
     console.log(req.cookies);
     if (!req.cookies.access_token) {
-      res.status(401).json(customResponse({ data: null, success: false, status: 401, message: 'You are not authorized, you must login to get access this route', error: true }));
+      res.status(401).json(customResponse({ data: null, success: false, status: 401, message: req.t('unauthorized'), error: true }));
       return;
     }
     res.clearCookie('refresh_token');
     res.clearCookie('access_token');
 
-    res.status(200).json({ data: null, success: true, status: 200, message: 'User logged out', error: false });
+    res.status(200).json({ data: null, success: true, status: 200, message: req.t('user_logged_out'), error: false });
   });
 
   public googleLogin = asyncHandler(async (req: Request, res: Response) => {
     let { credential } = req.body;
     if (!credential) {
-      res.status(400).json(customResponse({ data: null, success: false, status: 400, message: 'Bad Request.', error: true }));
+      res.status(400).json(customResponse({ data: null, success: false, status: 400, message: req.t('invalid_credentials'), error: true }));
       return;
     }
     let { user, accessToken, refreshToken } = await this.authService.googleLogin(credential);
@@ -72,31 +72,31 @@ export class AuthController implements IAuthController {
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
     res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
 
-    res.status(200).json({ data: new UserDto(user), success: true, status: 200, message: 'User logged in', error: false });
+    res.status(200).json({ data: new UserDto(user), success: true, status: 200, message: req.t('user_logged_in'), error: false });
   });
 
   public refreshToken = asyncHandler(async (req: Request, res: Response) => {
     if (!req.cookies.refresh_token || !req.cookies.access_token) {
-      res.status(401).json(customResponse({ data: null, success: false, status: 401, message: 'You are not authorized, you must login to get access this route', error: true }));
+      res.status(401).json(customResponse({ data: null, success: false, status: 401, message: req.t('unauthorized'), error: true }));
       return;
     }
     let { accessToken } = await this.authService.refreshToken(req.cookies.refresh_token);
 
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
 
-    res.status(200).json({ data: null, success: true, status: 200, message: 'Access token refreshed', error: false });
+    res.status(200).json({ data: null, success: true, status: 200, message: req.t('token_refreshed'), error: false });
   });
 
   public forgotPassword = asyncHandler(async (req: Request, res: Response) => {
     let { email } = req.body;
     await this.authService.forgotPassword(email);
-    res.status(200).json(customResponse({ data: null, success: true, status: 200, message: 'Password reset done sent to email!, please check your email inbox', error: false }));
+    res.status(200).json(customResponse({ data: null, success: true, status: 200, message: req.t('reset_code_sent'), error: false }));
   });
 
   public verifyPassResetCode = asyncHandler(async (req: Request, res: Response) => {
     let { resetCode } = req.body;
     await this.authService.verifyPassResetCode(resetCode);
-    res.status(200).json(customResponse({ data: null, success: true, status: 200, message: 'Password reset code verified', error: false }));
+    res.status(200).json(customResponse({ data: null, success: true, status: 200, message: req.t('reset_code_verified'), error: false }));
   });
 
   public resetPassword = asyncHandler(async (req: Request, res: Response) => {
@@ -106,13 +106,13 @@ export class AuthController implements IAuthController {
     res.cookie('access_token', results.accessToken, this.accessTokenCookieOptions);
     res.cookie('refresh_token', results.refreshToken, this.refreshTokenCookieOptions);
 
-    res.status(200).json(customResponse({ data: new UserDto(results.user), success: true, status: 200, message: 'Password reset done', error: false }));
+    res.status(200).json(customResponse({ data: new UserDto(results.user), success: true, status: 200, message: req.t('password_reset_done'), error: false }));
   });
 
   public changePassword = asyncHandler(async (req: Request, res: Response) => {
     let { token } = await this.authService.changePassword(req.body as { oldPassword: string; newPassword: string }, req.user!);
     res.cookie('access_token', token, this.accessTokenCookieOptions);
 
-    res.status(200).json(customResponse({ data: null, success: true, status: 200, message: 'Password changed', error: false }));
+    res.status(200).json(customResponse({ data: null, success: true, status: 200, message: req.t('password_changed'), error: false }));
   });
 }
