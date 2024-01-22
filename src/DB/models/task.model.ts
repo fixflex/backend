@@ -69,11 +69,11 @@ let taskSchema: Schema<ITask> = new Schema(
         required: true,
       },
     },
-    city: {
-      type: String,
-      trim: true,
-      maxlength: 50,
-    },
+    // city: {
+    //   type: String,
+    //   trim: true,
+    //   maxlength: 50,
+    // },
     price: {
       type: Number,
       required: true,

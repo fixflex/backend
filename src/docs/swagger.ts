@@ -10,7 +10,7 @@ const swaggerDocument = {
     description: 'API for fixflex Application',
     contact: {
       name: 'Ahmed Mostafa',
-      url: 'https://github.com/AhmedElasiriy',
+      // url: 'https://github.com/AhmedElasiriy',
       email: 'ahmed.elasiriy@gmail.com',
     },
     version: '1.0.0',

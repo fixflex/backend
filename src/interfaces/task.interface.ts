@@ -4,10 +4,18 @@ import { Request, Response } from '../helpers/generic';
 
 export enum TaskStatus {
   OPEN = 'OPEN',
-  IN_PROGRESS = 'IN_PROGRESS',
-  DONE = 'DONE',
+  ASSIGNED = 'ASSIGNED',
+  COMPLETED = 'COMPLETED',
+  // DONE = 'DONE',
+  // IN_PROGRESS = 'IN_PROGRESS',
+  // CANCELED = 'CANCELED',
 }
 
+export enum TaskTime {
+  MORNING = 'MORNING',
+  EVENING = 'EVENING',
+  NIGHT = 'NIGHT',
+}
 export interface ITask {
   _id: number;
   ownerId: string;
@@ -16,6 +24,7 @@ export interface ITask {
     end: Date;
     flxible: boolean;
   };
+  time: TaskTime;
   title: string;
   details: string;
   imageCover: {
@@ -35,7 +44,7 @@ export interface ITask {
     };
     coordinates: [number, number];
   };
-  city: string;
+  // city: string;
   price: number;
   offer: string;
   createdAt?: string;
