@@ -1,16 +1,19 @@
+import env from '../../config/validateEnv';
 import { ICategory } from '../../interfaces/category.interface';
 import CategoryModel from '../models/category.model';
 import CommonDAO from './baseDao';
 
 class CategoryDao extends CommonDAO<ICategory> {
+  // private readonly categoryModel = CategoryModel;
+  // inject the reqLanguage to the constructor to be used in the toJSONLocalizedOnly method
   constructor() {
     super(CategoryModel);
   }
-  async getServiceByName(name: string): Promise<ICategory | null> {
-    return await CategoryModel.findOne({ name }).lean();
+  async getCategoryByName(name: string): Promise<ICategory | null> {
+    return await CategoryModel.findOne({ name });
   }
 
-  async listServices(query: any = {}, paginate: { skip: number; limit: number }, sort: any = {}, select: any = '-__v', reqLanguage: string): Promise<ICategory[] | null> {
+  async getCategories(query: any = {}, paginate: { skip: number; limit: number }, sort: any = {}, select: any = '-__v'): Promise<ICategory[] | null> {
     // build the query
     let categories = CategoryModel.find(query);
     if (paginate.skip) categories = categories.skip(paginate.skip);
@@ -19,9 +22,12 @@ class CategoryDao extends CommonDAO<ICategory> {
     // execute the query
     let categoriesList = await categories;
 
-    let localizedCategories = CategoryModel.schema.methods.toJSONLocalizedOnly(categoriesList, reqLanguage);
+    return categoriesList;
+  }
 
-    return localizedCategories;
+  toJSONLocalizedOnly(doc: ICategory | ICategory[], reqLanguage: string = env.defaultLocale): ICategory | ICategory[] {
+    let localizedDoc = CategoryModel.schema.methods.toJSONLocalizedOnly(doc, reqLanguage);
+    return localizedDoc;
   }
 }
 

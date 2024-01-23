@@ -14,7 +14,7 @@ class CategoryController implements ICategoryController {
 
   // public Routes
   public getCategoryById = asyncHandler(async (req: Request, res: Response) => {
-    let service = await this.categoryService.getCategory(req.params.id);
+    let service = await this.categoryService.getCategory(req.params.id, req.language);
     if (!service) throw new HttpException(404, 'No service found');
     res.status(200).json(customResponse<ICategory>({ data: service, success: true, status: 200, message: 'Service found', error: false }));
   });

@@ -30,7 +30,7 @@ export interface ICategoryService {
     categories: ICategory[] | null;
     paginate: IPagination;
   }>;
-  getCategory(categoryId: string): Promise<ICategory | null>;
+  getCategory(categoryId: string, reqLanguage: string): Promise<ICategory>;
   createCategory(category: ICategory): Promise<ICategory>;
   updateCategory(categoryId: string, category: ICategory): Promise<ICategory | null>;
   deleteCategory(categoryId: string): Promise<ICategory | null>;

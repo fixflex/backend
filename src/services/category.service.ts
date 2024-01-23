@@ -25,18 +25,23 @@ class CategoryService implements ICategoryService {
     let sort = apiFeatures.sort();
     let fields = apiFeatures.selectFields();
 
-    let categories = await this.categoryDao.listServices(query, paginate, sort, fields, reqLanguage);
-    if (categories) paginate = apiFeatures.paginate(categories.length); // update the pagination object with the total documents
-
-    return { categories: categories, paginate };
+    let categories = await this.categoryDao.getCategories(query, paginate, sort, fields);
+    let localizedDocs: ICategory[] | null = null;
+    if (categories) {
+      paginate = apiFeatures.paginate(categories.length); // update the pagination object with the total documents
+      localizedDocs = this.categoryDao.toJSONLocalizedOnly(categories, reqLanguage) as ICategory[];
+    }
+    return { categories: localizedDocs, paginate };
   }
 
-  async getCategory(serviceId: string) {
-    return await this.categoryDao.getOneById(serviceId);
+  async getCategory(serviceId: string, reqLanguage: string): Promise<ICategory> {
+    let category = await this.categoryDao.getOneById(serviceId, false);
+    if (!category) throw new HttpException(404, 'No service found');
+    return this.categoryDao.toJSONLocalizedOnly(category, reqLanguage) as ICategory;
   }
 
   async createCategory(service: ICategory) {
-    let isServiceExists = await this.categoryDao.getServiceByName(service.name);
+    let isServiceExists = await this.categoryDao.getCategoryByName(service.name);
     if (isServiceExists) {
       throw new HttpException(409, `Service ${service.name} is already exists, please pick a different one.`);
     }
