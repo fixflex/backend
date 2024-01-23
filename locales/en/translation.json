@@ -78,5 +78,8 @@
   "not_allowed": "This field is not allowed",
   "invalid_password": "Invalid password, must be at least 8 characters",
   "must_be_a_boolean": "This field must be a boolean",
-  "invalid_email": "Invalid email"
+  "invalid_email": "Invalid email",
+
+  "must_be_object": "This field must be an object",
+  "user_logged_in": "User logged in successfully"
 }

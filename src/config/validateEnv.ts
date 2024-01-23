@@ -28,6 +28,7 @@ const validateEnv = cleanEnv(process.env, {
   SMTP_HOST: str(),
   SMTP_PORT: str(),
   DEVELOPER_EMAIL: str(),
+  defaultLocale: str(),
 });
 
 export default validateEnv;
