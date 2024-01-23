@@ -4,7 +4,7 @@ import validatorMiddleware from '../errors/validation.middleware';
 
 export const updateLoggedUserValidator = [
   check('name').optional().isString().withMessage('invalid_input'),
-  check('email').optional().isEmail().withMessage('invalid_input'),
+  check('email').optional().isEmail().withMessage('invalid_email'),
   check('password').isEmpty().withMessage('not_allowed'),
 
   // check('location')

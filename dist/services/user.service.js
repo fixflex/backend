@@ -46,7 +46,7 @@ let UserService = class UserService {
         // check if the user already exists
         let isEmailExists = await this.userDao.getUserByEmail(user.email);
         if (isEmailExists) {
-            throw new HttpException_1.default(409, `E-Mail address ${user.email} is already exists, please pick a different one.`);
+            throw new HttpException_1.default(409, 'email_already_exist');
         }
         // hash the password
         user.password = await bcrypt_1.default.hash(user.password, validateEnv_1.default.SALT_ROUNDS);
@@ -56,12 +56,12 @@ let UserService = class UserService {
     async updateUser(userId, user) {
         let isUserExists = await this.userDao.getOneById(userId);
         if (!isUserExists)
-            throw new HttpException_1.default(404, 'No user found');
+            throw new HttpException_1.default(404, 'user_not_found');
         if (user.email) {
             // check if the user already exists
             let isEmailExists = await this.userDao.getUserByEmail(user.email);
             if (isEmailExists) {
-                throw new HttpException_1.default(409, `'This Email Is Already Taken: ${user.email}`);
+                throw new HttpException_1.default(409, 'email_already_exist');
             }
         }
         return await this.userDao.updateOneById(userId, user);
@@ -69,7 +69,7 @@ let UserService = class UserService {
     async deleteUser(userId) {
         let isUserExists = await this.userDao.getOneById(userId);
         if (!isUserExists)
-            throw new HttpException_1.default(404, 'No user found');
+            throw new HttpException_1.default(404, 'user_not_found');
         // TODO: delete all the posts and comments that belong to this user
         return await this.userDao.deleteOneById(userId);
     }
@@ -78,7 +78,7 @@ let UserService = class UserService {
         // updateOneById the user with the image url and public id
         let user = await this.userDao.getOneById(userId);
         if (!user)
-            throw new HttpException_1.default(404, 'No user found');
+            throw new HttpException_1.default(404, 'user_not_found');
         // delete the old image from cloudinary if exists
         if (user.profilePicture.publicId)
             await (0, cloudinary_1.cloudinaryDeleteImage)(user.profilePicture.publicId);

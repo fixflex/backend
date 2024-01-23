@@ -46,6 +46,6 @@ export const updateTaskerValidator = [
   check('bio').optional().isString().withMessage('invalid_input').isLength({ max: 8000 }).withMessage('this_field_must_be_less_than_8000_characters'),
   check('rating').isEmpty().withMessage('not_allowed'),
   check('completedTasks').isEmpty().withMessage('not_allowed'),
-  check('phoneNumber').optional().isMobilePhone('ar-EG').withMessage('invalid_input'),
+  check('phoneNumber').optional().isMobilePhone('ar-EG').withMessage('invalid_phone_number'),
   validatorMiddleware,
 ];

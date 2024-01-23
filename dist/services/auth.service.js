@@ -36,7 +36,7 @@ let AuthServie = exports.AuthServie = class AuthServie {
         // check if the user already exists
         let isEmailExists = await this.userDao.getUserByEmail(user.email);
         if (isEmailExists) {
-            throw new HttpException_1.default(409, `E-Mail address ${user.email} is already exists, please pick a different one.`);
+            throw new HttpException_1.default(409, 'email_already_exist');
         }
         // hash the password
         user.password = await bcrypt_1.default.hash(user.password, validateEnv_1.default.SALT_ROUNDS);
@@ -48,11 +48,11 @@ let AuthServie = exports.AuthServie = class AuthServie {
     async login(email, password) {
         let user;
         if (!email || !password) {
-            throw new HttpException_1.default(400, 'Email and password are required');
+            throw new HttpException_1.default(400, 'email_and_password_required');
         }
         user = await this.userDao.getUserByEmail(email);
         if (!user || !(await bcrypt_1.default.compare(password, user.password))) {
-            throw new HttpException_1.default(401, 'Incorrect email or password');
+            throw new HttpException_1.default(401, '  email_or_password_incorrect');
         }
         let accessToken = (0, createToken_1.createAccessToken)(user._id);
         let refreshToken = (0, createToken_1.createRefreshToken)(user._id);
@@ -78,7 +78,7 @@ let AuthServie = exports.AuthServie = class AuthServie {
             profilePicture: { url: decoded.picture, publicId: null },
         });
         if (!newUser) {
-            throw new HttpException_1.default(500, 'Something went wrong');
+            throw new HttpException_1.default(500, 'something_went_wrong');
         }
         let accessToken = (0, createToken_1.createAccessToken)(newUser._id);
         let refreshToken = (0, createToken_1.createAccessToken)(newUser._id);
@@ -91,11 +91,11 @@ let AuthServie = exports.AuthServie = class AuthServie {
         // 4- check if the user changed his password after the token was issued
         // TODO: make this check in the user model instead of here
         if (user.passwordChangedAt && user.passwordChangedAt.getTime() / 1000 > decoded.iat) {
-            throw new HttpException_1.default(401, 'User recently changed password! Please log in again');
+            throw new HttpException_1.default(401, 'password_changed_please_login_again');
         }
         //  // 5- check if the user is active
         if (!user.active) {
-            throw new HttpException_1.default(401, 'This user is no longer active');
+            throw new HttpException_1.default(401, 'user_not_active');
         }
         let accessToken = (0, createToken_1.createAccessToken)(user._id);
         return { accessToken };
@@ -105,7 +105,7 @@ let AuthServie = exports.AuthServie = class AuthServie {
         // 1- check if the user exists by email
         let user = await this.userDao.getUserByEmail(email);
         if (!user) {
-            throw new HttpException_1.default(404, 'User not found');
+            throw new HttpException_1.default(404, 'user_not_found');
         }
         // 2- generate a reset code
         const resetCode = Math.floor(100000 + Math.random() * 90000).toString();
@@ -129,7 +129,7 @@ let AuthServie = exports.AuthServie = class AuthServie {
             user.passwordResetCodeExpiration = undefined;
             user.passwordResetVerified = false;
             await user.save();
-            return new HttpException_1.default(500, 'There is an error in sending email');
+            return new HttpException_1.default(500, 'something_went_wrong');
         }
         // 6- return the reset code to the user
         return true;
@@ -139,7 +139,7 @@ let AuthServie = exports.AuthServie = class AuthServie {
         // 1- check if the user exists
         let user = await this.userDao.getOne({ passwordResetCode: (0, hashing_1.hashCode)(resetCode), passwordResetCodeExpiration: { $gt: Date.now() } }, false);
         if (!user) {
-            throw new HttpException_1.default(400, 'Invalid reset code or the code is expired');
+            throw new HttpException_1.default(400, 'invalid_reset_code');
         }
         // 3- set the passwordResetVerified to true
         user.passwordResetVerified = true;
@@ -151,11 +151,11 @@ let AuthServie = exports.AuthServie = class AuthServie {
         // 1- check if the user exists by email
         let user = await this.userDao.getUserByEmail(email);
         if (!user) {
-            throw new HttpException_1.default(404, 'User not found');
+            throw new HttpException_1.default(404, 'user_not_found');
         }
         // 2- check if the reset code is verified
         if (!user.passwordResetVerified) {
-            throw new HttpException_1.default(400, 'Please verify your reset code first');
+            throw new HttpException_1.default(400, 'reset_code_not_verified');
         }
         // 3- hash the new password
         user.password = await bcrypt_1.default.hash(newPassword, validateEnv_1.default.SALT_ROUNDS);
@@ -173,13 +173,13 @@ let AuthServie = exports.AuthServie = class AuthServie {
         // 1- check if the password === user.password
         let isPasswordCorrect = await bcrypt_1.default.compare(payload.oldPassword, user.password);
         if (!isPasswordCorrect)
-            throw new HttpException_1.default(401, 'Incorrect password');
+            throw new HttpException_1.default(401, 'password_incorrect');
         // 2- hash the new password
         let newPassword = await bcrypt_1.default.hash(payload.newPassword, validateEnv_1.default.SALT_ROUNDS);
         // 3- update the user with the new password and update the passwordChangedAt field
         let updatedUser = await this.userDao.updateOneById(user._id, { password: newPassword, passwordChangedAt: Date.now() });
         if (!updatedUser)
-            throw new HttpException_1.default(500, 'Something went wrong');
+            throw new HttpException_1.default(500, 'something_went_wrong');
         // 4- generate a new token
         let token = (0, createToken_1.createAccessToken)(user._id);
         return { token };

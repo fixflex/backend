@@ -7,9 +7,9 @@ exports.changePasswordValidator = exports.deleteUserValidator = exports.getUserV
 const express_validator_1 = require("express-validator");
 const validation_middleware_1 = __importDefault(require("../errors/validation.middleware"));
 exports.updateLoggedUserValidator = [
-    (0, express_validator_1.check)('name').optional().isString().withMessage('Name must be a string'),
-    (0, express_validator_1.check)('email').optional().isEmail().withMessage('invalid email address'),
-    (0, express_validator_1.check)('password').isEmpty().withMessage('Cannot change password from here'),
+    (0, express_validator_1.check)('name').optional().isString().withMessage('invalid_input'),
+    (0, express_validator_1.check)('email').optional().isEmail().withMessage('invalid_email'),
+    (0, express_validator_1.check)('password').isEmpty().withMessage('not_allowed'),
     // check('location')
     //   .optional()
     //   .isArray()
@@ -24,77 +24,19 @@ exports.updateLoggedUserValidator = [
     //     }
     //     return true;
     //   }),
-    (0, express_validator_1.check)('role').isEmpty().withMessage('Role is not allowed'),
-    (0, express_validator_1.check)('active').isEmpty().withMessage('Active is not allowed'),
-    (0, express_validator_1.check)('createdAt').isEmpty().withMessage('createdAt is not allowed'),
-    (0, express_validator_1.check)('updatedAt').isEmpty().withMessage('updatedAt is not allowed'),
-    (0, express_validator_1.check)('_id').isEmpty().withMessage('_id is not allowed'),
+    (0, express_validator_1.check)('role').isEmpty().withMessage('not_allowed'),
+    (0, express_validator_1.check)('active').isEmpty().withMessage('not_allowed'),
+    (0, express_validator_1.check)('createdAt').isEmpty().withMessage('not_allowed'),
+    (0, express_validator_1.check)('updatedAt').isEmpty().withMessage('not_allowed'),
+    (0, express_validator_1.check)('_id').isEmpty().withMessage('not_allowed'),
     validation_middleware_1.default,
 ];
-exports.getUserValidator = [(0, express_validator_1.check)('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '), validation_middleware_1.default];
-exports.deleteUserValidator = [(0, express_validator_1.check)('id').notEmpty().withMessage('User id is required').isMongoId().withMessage('Invalid user id format '), validation_middleware_1.default];
+exports.getUserValidator = [(0, express_validator_1.check)('id').notEmpty().withMessage('is_required').isMongoId().withMessage('invalid_MongoId'), validation_middleware_1.default];
+exports.deleteUserValidator = [(0, express_validator_1.check)('id').notEmpty().withMessage('is_required').isMongoId().withMessage('invalid_MongoId'), validation_middleware_1.default];
 exports.changePasswordValidator = [
-    (0, express_validator_1.check)('oldPassword')
-        .notEmpty()
-        .withMessage('Old password is required')
-        .custom((oldPassword, { req }) => req.body.newPassword !== oldPassword)
-        .withMessage('New password must be different from old password'),
-    (0, express_validator_1.check)('newPassword').notEmpty().withMessage('User newPassword is required').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
+    (0, express_validator_1.check)('oldPassword').notEmpty().withMessage('is_required'),
+    // .custom((oldPassword, { req }) => req.body.newPassword !== oldPassword)
+    // .withMessage('New password must be different from old password'),
+    (0, express_validator_1.check)('newPassword').notEmpty().withMessage('is_required').isLength({ min: 8 }).withMessage('invalid_password'),
     validation_middleware_1.default,
 ];
-// ===================  =====================
-// export const updateUserValidator = [
-//   check('id')
-//     .notEmpty()
-//     .withMessage('User id is required')
-//     .isMongoId()
-//     .withMessage('Invalid user id format '),
-//   check('name').optional().isString().withMessage('Name must be a string'),
-//   check('email').optional().isEmail().withMessage('invalid email address'),
-//   check('password')
-//     .optional()
-//     .isLength({ min: 8 })
-//     .withMessage('Password must be at least 8 characters'),
-//   check('confirmPassword')
-//     .optional()
-//     .custom((confirmPassword, { req }) => {
-//       if (confirmPassword !== req.body.password) {
-//         throw new Error('Passwords must match');
-//       }
-//       return true;
-//     }),
-//   validatorMiddleware,
-// ];
-// port const createUserValidator = [
-//   check('firstName')
-//     .notEmpty()
-//     .withMessage('firstName is required')
-//     .isString()
-//     .withMessage('Name must be a string'),
-//   check('lastName')
-//     .notEmpty()
-//     .withMessage('lastName is required')
-//     .isString()
-//     .withMessage('Name must be a string'),
-//   check('email')
-//     .notEmpty()
-//     .withMessage('User email is required')
-//     .isEmail()
-//     .withMessage('Email is invalid'),
-//   check('password')
-//     .notEmpty()
-//     .withMessage('User password is required')
-//     .isLength({ min: 8 })
-//     .withMessage('Password must be at least 8 characters'),
-//   check('confirmPassword')
-//     .notEmpty()
-//     .withMessage('Confirm password is required')
-//     .custom((confirmPassword, { req }) => {
-//       if (confirmPassword !== req.body.password) {
-//         throw new Error('Passwords must match');
-//       } else {
-//         return true;
-//       }
-//     }),
-//   validatorMiddleware,
-// ];

@@ -37,24 +37,24 @@ const authenticateUser = (0, express_async_handler_1.default)(async (req, _res, 
     // 1- check if the token exists
     const token = checkAccessTokenExists(req);
     if (!token) {
-        return next(new HttpException_1.default(401, `You are not authorized, you must login to get access this route`));
+        return next(new HttpException_1.default(401, 'unauthorized'));
     }
     // 2- check if the token is valid
     const decoded = jsonwebtoken_1.default.verify(token, validateEnv_1.default.ACCESS_TOKEN_SECRET_KEY);
     // 3- check if the user still exists
     const user = await checkUserExists(decoded.userId);
     if (!user) {
-        return next(new HttpException_1.default(401, 'The user that belongs to this token no longer exists'));
+        return next(new HttpException_1.default(401, 'unauthorized'));
     }
     // 4- check if the user changed his password after the token was issued
     // TODO: make this check in the user model instead of here
     if (isPasswordChanged(user.passwordChangedAt, decoded.iat)) {
         // iat is the time the token was issued
-        return next(new HttpException_1.default(401, 'User recently changed password! Please log in again'));
+        return next(new HttpException_1.default(401, 'unauthorized'));
     }
     //  // 5- check if the user is active
     if (!user.active) {
-        return next(new HttpException_1.default(401, 'This user is no longer active'));
+        return next(new HttpException_1.default(401, 'user_not_active'));
     }
     req.user = user;
     next();
@@ -63,7 +63,7 @@ exports.authenticateUser = authenticateUser;
 // Authorization (User permissions)
 const allowedTo = (...roles) => (req, _res, next) => {
     if (!roles.includes(req.user.role)) {
-        return next(new HttpException_1.default(403, `You are not allowed to perform this action`));
+        return next(new HttpException_1.default(403, 'permission_denied'));
     }
     next();
 };

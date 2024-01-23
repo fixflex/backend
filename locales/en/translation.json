@@ -43,6 +43,7 @@
   "file_deleted": "File deleted successfully",
   "file_not_allowed": "File type not allowed",
   "file_size_exceeded": "File size exceeded the limit",
+  "limit_unexpected_file": "Exceeded the number of files allowed",
   "access_denied": "Access denied",
   "resource_not_found": "Resource not found",
   "invalid_input": "Invalid input",

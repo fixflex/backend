@@ -27,7 +27,7 @@ let TaskerService = class TaskerService {
         await Promise.all(tasker.categories.map(async (service) => {
             let serviceExists = await this.categoryDao.getOneById(service);
             if (!serviceExists)
-                throw new HttpException_1.default(404, `Service ID ${service} doesn't exist in DB`);
+                throw new HttpException_1.default(404, 'category_not_found');
             return service;
         }));
         tasker.userId = userId;
@@ -44,7 +44,7 @@ let TaskerService = class TaskerService {
             // check if service is exists in DB
             let isServiceExists = await this.categoryDao.getOneById(reqQuery.categories);
             if (!isServiceExists)
-                throw new HttpException_1.default(404, `Service ID ${reqQuery.categories} doesn't exist in DB`);
+                throw new HttpException_1.default(404, 'category_not_found');
         }
         let taskers = await this.taskerDao.listTaskers(reqQuery.longitude, reqQuery.latitude, reqQuery.categories, reqQuery.maxDistance);
         return taskers;
@@ -54,7 +54,7 @@ let TaskerService = class TaskerService {
             await Promise.all(tasker.categories.map(async (service) => {
                 let serviceExists = await this.categoryDao.getOneById(service);
                 if (!serviceExists)
-                    throw new HttpException_1.default(404, `Service ID ${service} doesn't exist in DB`);
+                    throw new HttpException_1.default(404, 'category_not_found');
                 return service;
             }));
         return await this.taskerDao.updateOne({ userId }, tasker);

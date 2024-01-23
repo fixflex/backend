@@ -27,7 +27,7 @@ let UserController = class UserController {
         this.getUser = (0, express_async_handler_1.default)(async (req, res) => {
             let user = await this.userService.getUser(req.params.id);
             if (!user)
-                throw new HttpException_1.default(404, 'No user found');
+                throw new HttpException_1.default(404, 'user_not_found');
             // TODO: remove status from customResponse
             res.status(200).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: req.t('user_found'), error: false }));
         });
@@ -39,7 +39,7 @@ let UserController = class UserController {
         this.updateMe = (0, express_async_handler_1.default)(async (req, res) => {
             let user = await this.userService.updateUser(req.user?._id, req.body);
             if (!user)
-                throw new HttpException_1.default(404, 'No user found');
+                throw new HttpException_1.default(404, 'user_not_found');
             res.status(200).json((0, customResponse_1.default)({ data: user, success: true, status: 200, message: req.t('user_updated'), error: false }));
         });
         this.deleteMe = (0, express_async_handler_1.default)(async (req, res) => {
@@ -49,7 +49,7 @@ let UserController = class UserController {
         this.updateMyProfileImage = (0, express_async_handler_1.default)(async (req, res, next) => {
             let userId = req.user?._id;
             if (!req.file)
-                return next(new HttpException_1.default(400, 'Please upload a file'));
+                return next(new HttpException_1.default(400, 'image_required'));
             // console.log(req.file);
             let user = await this.userService.updateProfileImage(userId, req.file);
             if (!user)

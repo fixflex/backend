@@ -7,16 +7,16 @@ exports.loginValidator = exports.signupValidator = void 0;
 const express_validator_1 = require("express-validator");
 const validation_middleware_1 = __importDefault(require("../errors/validation.middleware"));
 exports.signupValidator = [
-    (0, express_validator_1.check)('firstName').notEmpty().withMessage('firstName is required').isString().withMessage('Name must be a string'),
-    (0, express_validator_1.check)('lastName').notEmpty().withMessage('lastName is required').isString().withMessage('Name must be a string'),
-    (0, express_validator_1.check)('email').notEmpty().withMessage('User email is required').isEmail().withMessage('Email is invalid'),
-    (0, express_validator_1.check)('password').notEmpty().withMessage('User password is required').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
-    (0, express_validator_1.check)('role').isEmpty().withMessage('Role is not allowed'),
-    (0, express_validator_1.check)('active').isEmpty().withMessage('Active is not allowed'),
+    (0, express_validator_1.check)('firstName').notEmpty().withMessage('is_required').isString().withMessage('invalid_input'),
+    (0, express_validator_1.check)('lastName').notEmpty().withMessage('is_required').isString().withMessage('invalid_input'),
+    (0, express_validator_1.check)('email').notEmpty().withMessage('is_required').isEmail().withMessage('invalid_email'),
+    (0, express_validator_1.check)('password').notEmpty().withMessage('is_required').isLength({ min: 8 }).withMessage('invalid_password'),
+    (0, express_validator_1.check)('role').isEmpty().withMessage('not_allowed'),
+    (0, express_validator_1.check)('active').isEmpty().withMessage('not_allowed'),
     validation_middleware_1.default,
 ];
 exports.loginValidator = [
-    (0, express_validator_1.check)('email').notEmpty().withMessage('User email is required').isEmail().withMessage('Email is invalid'),
-    (0, express_validator_1.check)('password').notEmpty().withMessage('User password is required').isLength({ min: 8 }).withMessage('invalid password'),
+    (0, express_validator_1.check)('email').notEmpty().withMessage('is_required').isEmail().withMessage('invalid_email'),
+    (0, express_validator_1.check)('password').notEmpty().withMessage('is_required').isLength({ min: 8 }).withMessage('invalid_password'),
     validation_middleware_1.default,
 ];

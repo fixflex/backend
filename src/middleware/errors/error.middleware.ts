@@ -56,9 +56,9 @@ const handleMulterError = (err: HttpException) => {
   let message = '';
   let statusCode = 400;
   if (err.code === ('LIMIT_UNEXPECTED_FILE' as number | string)) {
-    message = `Too many files uploaded.`;
+    message = `limit_unexpected_file`;
   } else if (err.code === ('LIMIT_FILE_SIZE' as number | string)) {
-    message = `File too large.`;
+    message = 'file_size_exceeded';
     statusCode = 413; // Payload Too Large
   } else {
     message = err.message;

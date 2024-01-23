@@ -25,7 +25,7 @@ const multerFilter = (_req, file, cd) => {
         cd(null, true);
     }
     else {
-        cd(new HttpException_1.default(400, 'Not an image! Please upload only images'));
+        cd(new HttpException_1.default(400, 'file_not_allowed'));
     }
 };
 const multerOptions = () => (0, multer_1.default)({

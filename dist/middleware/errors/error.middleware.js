@@ -48,16 +48,16 @@ const handelValidationErrorDB = (err) => {
     const message = `Invalid input data. ${errors.join('. ')}`;
     return new HttpException_1.default(400, message);
 };
-const handleJwtInvalidSignture = () => new HttpException_1.default(401, 'Invalid token, please login again..');
-const handleJwtExpired = () => new HttpException_1.default(401, 'Expired token');
+const handleJwtInvalidSignture = () => new HttpException_1.default(401, 'invalid_signature');
+const handleJwtExpired = () => new HttpException_1.default(401, 'token_expired');
 const handleMulterError = (err) => {
     let message = '';
     let statusCode = 400;
     if (err.code === 'LIMIT_UNEXPECTED_FILE') {
-        message = `Too many files uploaded.`;
+        message = `limit_unexpected_file`;
     }
     else if (err.code === 'LIMIT_FILE_SIZE') {
-        message = `File too large.`;
+        message = 'file_size_exceeded';
         statusCode = 413; // Payload Too Large
     }
     else {
@@ -91,9 +91,9 @@ const sendForProd = (err, res, req) => {
     // B) Programming or other unknown error: don't leak error details
     else {
         // 1) Log error
-        log_1.default.error('ERROR 💥 bla bla bla', err);
+        log_1.default.error('ERROR 💥', err);
         // 2) Send generic message
-        res.status(500).json({ status: 'error', message: 'Something went wrong!' });
+        res.status(500).json({ status: 'error', message: req.t('something_went_wrong') });
         // 3) send email to the developer
     }
 };
