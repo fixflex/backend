@@ -10,14 +10,18 @@ class CategoryDao extends CommonDAO<ICategory> {
     return await CategoryModel.findOne({ name }).lean();
   }
 
-  async listServices(query: any = {}, paginate: { skip: number; limit: number }, sort: any = {}, select: any = '-__v'): Promise<ICategory[]> {
+  async listServices(query: any = {}, paginate: { skip: number; limit: number }, sort: any = {}, select: any = '-__v', reqLanguage: string): Promise<ICategory[] | null> {
     // build the query
     let categories = CategoryModel.find(query);
     if (paginate.skip) categories = categories.skip(paginate.skip);
     if (paginate.limit) categories = categories.limit(paginate.limit);
     categories = categories.sort(sort).select(select);
     // execute the query
-    return await categories.lean();
+    let categoriesList = await categories;
+
+    let localizedCategories = CategoryModel.schema.methods.toJSONLocalizedOnly(categoriesList, reqLanguage);
+
+    return localizedCategories;
   }
 }
 

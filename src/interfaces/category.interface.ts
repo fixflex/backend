@@ -23,7 +23,10 @@ export interface ICategoryController {
 }
 
 export interface ICategoryService {
-  getCategories(reqQuery: any): Promise<{
+  getCategories(
+    reqQuery: any,
+    reqLanguage: string
+  ): Promise<{
     categories: ICategory[] | null;
     paginate: IPagination;
   }>;

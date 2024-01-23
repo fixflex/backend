@@ -12,7 +12,10 @@ export const uploadServiceImage = uploadSingleFile('image');
 @autoInjectable()
 class CategoryService implements ICategoryService {
   constructor(private readonly categoryDao: CategoryDao) {}
-  async getCategories(reqQuery: any): Promise<{
+  async getCategories(
+    reqQuery: any,
+    reqLanguage: string
+  ): Promise<{
     categories: ICategory[] | null;
     paginate: IPagination;
   }> {
@@ -22,7 +25,7 @@ class CategoryService implements ICategoryService {
     let sort = apiFeatures.sort();
     let fields = apiFeatures.selectFields();
 
-    let categories = await this.categoryDao.listServices(query, paginate, sort, fields);
+    let categories = await this.categoryDao.listServices(query, paginate, sort, fields, reqLanguage);
     if (categories) paginate = apiFeatures.paginate(categories.length); // update the pagination object with the total documents
 
     return { categories: categories, paginate };

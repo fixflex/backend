@@ -1,9 +1,10 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction } from 'express';
 import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
 import HttpException from '../exceptions/HttpException';
 import customResponse from '../helpers/customResponse';
+import { Request, Response } from '../helpers/generic';
 import { AuthRequest } from '../interfaces/auth.interface';
 import { IUser, IUserController } from '../interfaces/user.interface';
 import { uploadSingleFile } from '../middleware/uploadImages.middleware';
