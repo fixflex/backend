@@ -58,7 +58,7 @@ const authenticateUser = asyncHandler(async (req: AuthRequest, _res: Response, n
   }
   //  // 5- check if the user is active
   if (!user.active) {
-    return next(new HttpException(401, 'user_not_active '));
+    return next(new HttpException(401, 'user_not_active'));
   }
 
   req.user = user!;

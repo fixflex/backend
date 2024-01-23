@@ -48,9 +48,9 @@ const handelValidationErrorDB = (err: HttpException) => {
   return new HttpException(400, message);
 };
 
-const handleJwtInvalidSignture = () => new HttpException(401, 'Invalid token, please login again..');
+const handleJwtInvalidSignture = () => new HttpException(401, 'invalid_signature');
 
-const handleJwtExpired = () => new HttpException(401, 'Expired token');
+const handleJwtExpired = () => new HttpException(401, 'token_expired');
 
 const handleMulterError = (err: HttpException) => {
   let message = '';
@@ -94,10 +94,10 @@ const sendForProd = (err: HttpException, res: Response, req: Request) => {
   // B) Programming or other unknown error: don't leak error details
   else {
     // 1) Log error
-    logger.error('ERROR 💥 bla bla bla', err);
+    logger.error('ERROR 💥', err);
 
     // 2) Send generic message
-    res.status(500).json({ status: 'error', message: 'Something went wrong!' });
+    res.status(500).json({ status: 'error', message: req.t('something_went_wrong') });
 
     // 3) send email to the developer
   }

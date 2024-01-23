@@ -13,11 +13,11 @@ export const createTaskValidator = [
     .notEmpty()
     .withMessage('is_required')
     .isString()
-    .withMessage('must_be_a_string')
+    .withMessage('invalid_input')
     .isLength({ max: 200, min: 10 })
     // should be 10 characters at least
     .withMessage('title_lenght'),
-  check('details').notEmpty().withMessage('is_required').isString().withMessage('must_be_a_string').isLength({ max: 8000, min: 10 }).withMessage('details_lenght'),
+  check('details').notEmpty().withMessage('is_required').isString().withMessage('invalid_input').isLength({ max: 8000, min: 10 }).withMessage('details_lenght'),
   check('service').notEmpty().withMessage('is_required').isMongoId().withMessage('invalid_MongoId'),
   check('location')
     .notEmpty()
@@ -31,7 +31,7 @@ export const createTaskValidator = [
       }
       return true;
     }),
-  check('budget').notEmpty().withMessage('is_required').isNumeric().withMessage('must_be_a_number'),
+  check('budget').notEmpty().withMessage('is_required').isNumeric().withMessage('invalid_input'),
   check('status').isEmpty().withMessage('not_allowed'),
   check('offers').isEmpty().withMessage('not_allowed'),
   check('createdAt').isEmpty().withMessage('not_allowed'),
@@ -43,9 +43,9 @@ export const updateTaskValidator = [
   check('ownerId').isEmpty().withMessage('not_allowed'),
   // check('dueDate.start').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Start date must be a valid date'), // some thing like this: 2021-12-31
   // check('dueDate.end').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('End date must be a valid date'),
-  check('dueDate.flexible').optional().isBoolean().withMessage('must_be_a_boolean'),
-  check('title').optional().isString().withMessage('Title must be a string').isLength({ max: 200, min: 10 }).withMessage('title_lenght'),
-  check('details').optional().isString().withMessage('Details must be a string').isLength({ max: 8000, min: 24 }).withMessage('details_lenght'),
+  check('dueDate.flexible').optional().isBoolean().withMessage('invalid_input'),
+  check('title').optional().isString().withMessage('invalid_input').isLength({ max: 200, min: 10 }).withMessage('title_lenght'),
+  check('details').optional().isString().withMessage('invalid_input').isLength({ max: 8000, min: 24 }).withMessage('details_lenght'),
   check('service').optional().isMongoId().withMessage('invalid_MongoId'),
   check('location')
     .optional()
@@ -58,7 +58,7 @@ export const updateTaskValidator = [
       }
       return true;
     }),
-  check('budget').optional().isNumeric().withMessage('must_be_a_number'),
+  check('budget').optional().isNumeric().withMessage('invalid_input'),
   check('status').optional().isIn(['OPEN', 'ASSIGNED', 'COMPLETED']).withMessage('invalid_task_status'),
   check('offers').isEmpty().withMessage('not_allowed'),
   check('createdAt').isEmpty().withMessage('not_allowed'),

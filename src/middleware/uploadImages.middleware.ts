@@ -22,7 +22,7 @@ const multerFilter = (_req: Request, file: Express.Multer.File, cd: FileFilterCa
   if (file.mimetype.startsWith('image')) {
     cd(null, true);
   } else {
-    cd(new HttpException(400, 'Not an image! Please upload only images'));
+    cd(new HttpException(400, 'file_not_allowed'));
   }
 };
 const multerOptions = () =>

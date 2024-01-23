@@ -3,8 +3,8 @@ import { check } from 'express-validator';
 import validatorMiddleware from '../errors/validation.middleware';
 
 export const updateLoggedUserValidator = [
-  check('name').optional().isString().withMessage('must_ be_a_string'),
-  check('email').optional().isEmail().withMessage('invalid_email'),
+  check('name').optional().isString().withMessage('invalid_input'),
+  check('email').optional().isEmail().withMessage('invalid_input'),
   check('password').isEmpty().withMessage('not_allowed'),
 
   // check('location')
