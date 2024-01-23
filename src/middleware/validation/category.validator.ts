@@ -3,6 +3,6 @@ import { check } from 'express-validator';
 import validatorMiddleware from '../errors/validation.middleware';
 
 export const createCategoryValidator = [
-  check('name').notEmpty().withMessage('Category name is required').isString().withMessage('Category name must be a string'),
+  check('name').notEmpty().withMessage('is_required').isString().withMessage('must_be_a_string').isLength({ max: 255 }).withMessage('exceeds_max_length'),
   validatorMiddleware,
 ];

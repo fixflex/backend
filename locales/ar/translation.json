@@ -34,5 +34,7 @@
   "user_not_active": "المستخدم غير نشط",
   "password_changed_please_login_again": "تم تغيير كلمة المرور بنجاح ، يرجى تسجيل الدخول مرة أخرى",
   "email_or_password_incorrect": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
-  "email_and_password_required": "البريد الإلكتروني وكلمة المرور مطلوبان"
+  "email_and_password_required": "البريد الإلكتروني وكلمة المرور مطلوبان",
+  "name_must_be_a_string": "يجب أن يكون الاسم سلسلة",
+  "invalid_email": "بريد إلكتروني خاطئ"
 }

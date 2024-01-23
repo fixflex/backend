@@ -40,7 +40,7 @@ const authenticateUser = asyncHandler(async (req: AuthRequest, _res: Response, n
   // 1- check if the token exists
   const token = checkAccessTokenExists(req);
   if (!token) {
-    return next(new HttpException(401, `You are not authorized, you must login to get access this route`));
+    return next(new HttpException(401, 'unauthorized'));
   }
   // 2- check if the token is valid
   const decoded = jwt.verify(token!, env.ACCESS_TOKEN_SECRET_KEY) as JwtPayload;
@@ -48,17 +48,17 @@ const authenticateUser = asyncHandler(async (req: AuthRequest, _res: Response, n
   // 3- check if the user still exists
   const user = await checkUserExists(decoded.userId);
   if (!user) {
-    return next(new HttpException(401, 'The user that belongs to this token no longer exists'));
+    return next(new HttpException(401, 'unauthorized'));
   }
   // 4- check if the user changed his password after the token was issued
   // TODO: make this check in the user model instead of here
   if (isPasswordChanged(user.passwordChangedAt, decoded.iat!)) {
     // iat is the time the token was issued
-    return next(new HttpException(401, 'User recently changed password! Please log in again'));
+    return next(new HttpException(401, 'unauthorized'));
   }
   //  // 5- check if the user is active
   if (!user.active) {
-    return next(new HttpException(401, 'This user is no longer active'));
+    return next(new HttpException(401, 'user_not_active '));
   }
 
   req.user = user!;
@@ -70,7 +70,7 @@ const allowedTo =
   (...roles: UserType[]) =>
   (req: AuthRequest, _res: Response, next: NextFunction) => {
     if (!roles.includes(req.user!.role)) {
-      return next(new HttpException(403, `You are not allowed to perform this action`));
+      return next(new HttpException(403, 'permission_denied'));
     }
 
     next();
