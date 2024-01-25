@@ -3,10 +3,6 @@ import { check } from 'express-validator';
 import validatorMiddleware from '../errors/validation.middleware';
 
 export const createCategoryValidator = [
-  //   "name": {
-  //     "en": "cleaning",
-  //     "ar": "تنظيف"
-  // }
   check('name')
     .notEmpty()
     .withMessage('is_required')

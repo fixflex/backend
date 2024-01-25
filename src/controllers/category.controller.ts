@@ -16,13 +16,13 @@ class CategoryController implements ICategoryController {
   public getCategoryById = asyncHandler(async (req: Request, res: Response) => {
     let service = await this.categoryService.getCategory(req.params.id, req.language);
     if (!service) throw new HttpException(404, 'No service found');
-    res.status(200).json(customResponse<ICategory>({ data: service, success: true, status: 200, message: 'Service found', error: false }));
+    res.status(200).json(customResponse<ICategory>({ data: service, success: true, message: 'Service found' }));
   });
 
   public getCategories = asyncHandler(async (req: Request, res: Response) => {
     let { categories, paginate } = await this.categoryService.getCategories(req.query, req.language);
 
-    res.status(200).json(Object.assign(customResponse<ICategory[]>({ data: categories!, success: true, status: 200, message: 'Services found', error: false }), { paginate }));
+    res.status(200).json(Object.assign(customResponse<ICategory[]>({ data: categories!, success: true, message: 'Services found' }), { paginate }));
   });
 
   // authenticated routes

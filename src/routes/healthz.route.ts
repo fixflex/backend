@@ -13,13 +13,13 @@ class HealthzRoute implements Routes {
   }
   private initializerRoutes() {
     this.router.get('/', (req: Request, res: Response) => {
-      res.status(200).json(customResponse({ data: null, success: true, status: 200, message: req.t('healthz'), error: false }));
+      res.status(200).json(customResponse({ data: null, success: true, message: req.t('healthz') }));
     });
 
     this.router.get(`${this.path}`, (req: Request, res: Response) => {
       console.log(req.cookies);
       console.log(req.headers);
-      res.status(200).json(customResponse({ data: null, success: true, status: 200, message: req.t('healthz'), error: false }));
+      res.status(200).json(customResponse({ data: null, success: true, message: req.t('healthz') }));
     });
   }
 }

@@ -22,24 +22,24 @@ class UserController implements IUserController {
     let user = await this.userService.getUser(req.params.id);
     if (!user) throw new HttpException(404, 'user_not_found');
     // TODO: remove status from customResponse
-    res.status(200).json(customResponse<IUser>({ data: user, success: true, status: 200, message: req.t('user_found'), error: false }));
+    res.status(200).json(customResponse<IUser>({ data: user, success: true, message: req.t('user_found') }));
   });
 
   // user profile routes (authenticated)
   public getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
     // console.log(req.headers);
-    res.status(200).json(customResponse({ data: req.user, success: true, status: 200, message: req.t('user_found'), error: false }));
+    res.status(200).json(customResponse({ data: req.user, success: true, message: req.t('user_found') }));
   });
 
   public updateMe = asyncHandler(async (req: AuthRequest, res: Response) => {
     let user = await this.userService.updateUser(req.user?._id!, req.body);
     if (!user) throw new HttpException(404, 'user_not_found');
-    res.status(200).json(customResponse<IUser>({ data: user, success: true, status: 200, message: req.t('user_updated'), error: false }));
+    res.status(200).json(customResponse<IUser>({ data: user, success: true, message: req.t('user_updated') }));
   });
 
   public deleteMe = asyncHandler(async (req: AuthRequest, res: Response) => {
     await this.userService.updateUser(req.user?._id!, { active: false });
-    res.status(204).json(customResponse({ data: null, success: true, status: 204, message: req.t('user_deleted'), error: false }));
+    res.status(204).json(customResponse({ data: null, success: true, message: req.t('user_deleted') }));
   });
 
   public updateMyProfileImage = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -48,7 +48,7 @@ class UserController implements IUserController {
     // console.log(req.file);
     let user = await this.userService.updateProfileImage(userId!, req.file);
     if (!user) return next(new HttpException(404, 'No user found'));
-    res.status(200).json(customResponse({ data: user, success: true, status: 200, message: req.t('user_updated'), error: false }));
+    res.status(200).json(customResponse({ data: user, success: true, message: req.t('user_updated') }));
   });
 }
 

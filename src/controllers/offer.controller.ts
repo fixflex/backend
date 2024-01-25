@@ -16,31 +16,31 @@ class OfferController implements IOfferController {
     const offer = await this.offerService.createOffer(req.body, req.user?._id);
 
     if (!offer) return next(new HttpException(400, 'Something went wrong, please try again later'));
-    res.status(201).json(customResponse({ data: offer, success: true, status: 201, message: 'Offer created', error: false }));
+    res.status(201).json(customResponse({ data: offer, success: true, message: 'Offer created' }));
   });
 
   getOffersByTaskId = asyncHandler(async (req: AuthRequest, res: Response) => {
     const offers = await this.offerService.getOffers(req.query.taskId as string);
 
-    res.status(200).json(customResponse({ data: offers, success: true, status: 200, message: null, error: false }));
+    res.status(200).json(customResponse({ data: offers, success: true, message: null }));
   });
 
   getOfferById = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
     const offer = await this.offerService.getOfferById(req.params.id);
     if (!offer) return next(new HttpException(404, `Offer with id ${req.params.id} not found`));
-    res.status(200).json(customResponse({ data: offer, success: true, status: 200, message: null, error: false }));
+    res.status(200).json(customResponse({ data: offer, success: true, message: null }));
   });
 
   updateOffer = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
     const offer = await this.offerService.updateOffer(req.params.id, req.body, req.user?._id);
     if (!offer) return next(new HttpException(404, `Offer with id ${req.params.id} not found`));
-    res.status(200).json(customResponse({ data: offer, success: true, status: 200, message: 'Offer updated', error: false }));
+    res.status(200).json(customResponse({ data: offer, success: true, message: 'Offer updated' }));
   });
 
   deleteOffer = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
     const offer = await this.offerService.deleteOffer(req.params.id, req.user?._id);
     if (!offer) return next(new HttpException(404, `Offer with id ${req.params.id} not found`));
-    res.status(200).json(customResponse({ data: null, success: true, status: 204, message: 'Offer deleted', error: false }));
+    res.status(200).json(customResponse({ data: null, success: true, message: 'Offer deleted' }));
   });
 }
 

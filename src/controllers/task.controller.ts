@@ -22,24 +22,24 @@ class TaskController implements ITaskController {
     req.body.ownerId = req.user?._id;
     const task = await this.taskService.createTask(req.body);
     if (!task) return next(new HttpException(400, 'Something went wrong, please try again later'));
-    res.status(201).json(customResponse({ data: task, success: true, status: 201, message: 'Task created', error: false }));
+    res.status(201).json(customResponse({ data: task, success: true, message: 'Task created' }));
   });
 
   getTasks = asyncHandler(async (_req: AuthRequest, res: Response) => {
     const tasks = await this.taskService.getTasks();
-    res.status(200).json(customResponse({ data: tasks, success: true, status: 200, message: null, error: false }));
+    res.status(200).json(customResponse({ data: tasks, success: true, message: null }));
   });
 
   getTaskById = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
     const task = await this.taskService.getTaskById(req.params.id);
     if (!task) return next(new HttpException(404, `Task with id ${req.params.id} not found`));
-    res.status(200).json(customResponse({ data: task, success: true, status: 200, message: null, error: false }));
+    res.status(200).json(customResponse({ data: task, success: true, message: null }));
   });
 
   updateTask = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
     const task = await this.taskService.updateTask(req.params.id, req.body, req.user?._id);
     if (!task) return next(new HttpException(404, `Task with id ${req.params.id} not found`));
-    res.status(200).json(customResponse({ data: task, success: true, status: 200, message: 'Task updated', error: false }));
+    res.status(200).json(customResponse({ data: task, success: true, message: 'Task updated' }));
   });
 
   uploadTaskImages = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -47,13 +47,13 @@ class TaskController implements ITaskController {
     const task = await this.taskService.uploadTaskImages(req.params.id, req.files, req.user?._id); // TODO: fix the type
 
     if (!task) return next(new HttpException(404, `Task with id ${req.params.id} not found`));
-    res.status(200).json(customResponse({ data: task, success: true, status: 200, message: 'Task images uploaded', error: false }));
+    res.status(200).json(customResponse({ data: task, success: true, message: 'Task images uploaded' }));
   });
 
   deleteTask = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
     const task = await this.taskService.deleteTask(req.params.id, req.user?._id);
     if (!task) return next(new HttpException(404, `Task with id ${req.params.id} not found`));
-    res.status(200).json(customResponse({ data: null, success: true, status: 204, message: 'Task deleted', error: false }));
+    res.status(200).json(customResponse({ data: null, success: true, message: 'Task deleted' }));
   });
 }
 
