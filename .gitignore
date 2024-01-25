@@ -10,6 +10,9 @@ lerna-debug.log*
 blog-api.postman_collection.json
 z_test
 fortest.js
+missing.json
+
+
 # uploads
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
