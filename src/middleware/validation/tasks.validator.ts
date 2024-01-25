@@ -1,5 +1,6 @@
 import { check } from 'express-validator';
 
+import { TaskTime } from '../../interfaces';
 import validatorMiddleware from '../errors/validation.middleware';
 
 export const createTaskValidator = [
@@ -9,6 +10,10 @@ export const createTaskValidator = [
   // check('dueDate.start').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Start date must be a valid date'), // some thing like this: 2021-12-31
   // check('dueDate.end').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('End date must be a valid date'),
   check('dueDate.flexible').optional().isBoolean().withMessage('must_be_a_boolean'),
+  check('dueDate.on').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('invalid_date_formate'),
+  check('dueDate.before').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('invalid_date_formate'),
+
+  check('time').optional().isArray().withMessage('must_be_an_array').isIn([TaskTime]).withMessage('invalid_input'),
   check('title')
     .notEmpty()
     .withMessage('is_required')
@@ -18,7 +23,7 @@ export const createTaskValidator = [
     // should be 10 characters at least
     .withMessage('title_lenght'),
   check('details').notEmpty().withMessage('is_required').isString().withMessage('invalid_input').isLength({ max: 8000, min: 10 }).withMessage('details_lenght'),
-  check('service').notEmpty().withMessage('is_required').isMongoId().withMessage('invalid_MongoId'),
+  check('category').notEmpty().withMessage('is_required').isMongoId().withMessage('invalid_MongoId'),
   check('location')
     .notEmpty()
     .withMessage('is_required')

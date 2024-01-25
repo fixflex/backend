@@ -21,7 +21,6 @@ class TaskService implements ITaskService {
 
   createTask = async (task: ITask) => {
     const newTask = await this.taskDao.create(task);
-
     return newTask;
   };
 

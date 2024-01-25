@@ -36,6 +36,7 @@ let taskerSchema: Schema<ITasker> = new Schema(
         // [longitude, latitude] [x, y]
         type: [Number],
         default: [0, 0],
+        required: true,
       },
       radius: {
         type: Number,

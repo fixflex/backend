@@ -15,12 +15,12 @@ class TaskRoute implements Routes {
     this.initializerRoutes();
   }
   private initializerRoutes() {
-    //### tasks routes that don't require authentication
+    //=== tasks routes that don't require authentication
     this.router.get(`${this.path}`, this.taskController.getTasks);
     this.router.get(`${this.path}/:id`, isMongoId, this.taskController.getTaskById);
     // this.router.get(`${this.path}/:id/offers`, this.taskController.getTaskOffers);
 
-    //### tasks routes that require authentication
+    //=== tasks routes that require authentication
     this.router.use(`${this.path}`, authenticateUser);
     this.router.post(`${this.path}`, createTaskValidator, this.taskController.createTask);
     // uplaodTaskImages,

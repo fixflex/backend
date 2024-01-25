@@ -20,6 +20,10 @@ export enum TaskTime {
 export interface ITask {
   _id: number;
   ownerId: string;
+  taskerId: {
+    type: string;
+    ref: 'Tasker';
+  };
   dueDate: {
     on: Date;
     before: Date;
@@ -46,7 +50,7 @@ export interface ITask {
     coordinates: [number, number];
   };
   // city: string;
-  price: number;
+  budget: number;
   offer: string;
   createdAt?: string;
   updatedAt?: string;

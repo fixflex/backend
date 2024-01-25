@@ -9,6 +9,10 @@ let taskSchema: Schema<ITask> = new Schema(
       ref: 'User',
       required: true,
     },
+    taskerId: {
+      type: String,
+      ref: 'Tasker',
+    },
     dueDate: {
       on: {
         type: Date,
@@ -73,6 +77,7 @@ let taskSchema: Schema<ITask> = new Schema(
       coordinates: {
         type: [Number],
         required: true,
+        default: [0, 0],
       },
     },
     // city: {
@@ -80,7 +85,7 @@ let taskSchema: Schema<ITask> = new Schema(
     //   trim: true,
     //   maxlength: 50,
     // },
-    price: {
+    budget: {
       type: Number,
       required: true,
       min: 5,
