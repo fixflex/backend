@@ -28,14 +28,7 @@ export const healthz = {
                 type: 'boolean',
                 example: true,
               },
-              error: {
-                type: 'boolean',
-                example: false,
-              },
-              status: {
-                type: 'number',
-                example: 200,
-              },
+
               message: {
                 type: 'string',
                 example: 'Welcome to Rest API',

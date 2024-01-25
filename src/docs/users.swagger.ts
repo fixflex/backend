@@ -1,19 +1,19 @@
 export const getMe = {
   security: [{ bearerAuth: [] }],
-  tags: ['User'],
+  tags: ['Users'],
   description: "Get the current user's data",
   opeationId: 'getMe',
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
       example: 'ar',
     },
   ],
   responses: {
     200: {
-      description: 'Get User',
+      description: 'Get Users',
       content: {
         'application/json': {
           schema: {
@@ -23,17 +23,14 @@ export const getMe = {
                 type: 'boolean',
                 example: true,
               },
-              error: {
-                type: 'boolean',
-                example: false,
-              },
+
               status: {
                 type: 'integer',
                 example: 200,
               },
               message: {
                 type: 'string',
-                example: 'User found',
+                example: 'Users found',
               },
               data: {
                 type: 'object',
@@ -119,13 +116,13 @@ export const getMe = {
 
 export const updateMe = {
   security: [{ bearerAuth: [] }],
-  tags: ['User'],
+  tags: ['Users'],
   description: 'This route allow logged in user to update his own profile details',
   opeationId: 'updateUserDetails',
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
       example: 'ar',
     },
@@ -166,17 +163,10 @@ export const updateMe = {
                 type: 'boolean',
                 example: true,
               },
-              status: {
-                type: 'number',
-                example: 200,
-              },
+
               message: {
                 type: 'string',
-                example: 'User details updated',
-              },
-              error: {
-                type: 'boolean',
-                example: false,
+                example: 'Users details updated',
               },
 
               data: {
@@ -324,13 +314,13 @@ export const updateMe = {
 
 export const updateProfileImage = {
   security: [{ bearerAuth: [] }],
-  tags: ['User'],
+  tags: ['Users'],
   description: 'This route allow logged in user to update his own profile image',
   opeationId: 'updateProfileImage',
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
       example: 'ar',
     },
@@ -363,17 +353,10 @@ export const updateProfileImage = {
                 type: 'boolean',
                 example: true,
               },
-              status: {
-                type: 'number',
-                example: 200,
-              },
+
               message: {
                 type: 'string',
-                example: 'User profile image updated',
-              },
-              error: {
-                type: 'boolean',
-                example: false,
+                example: 'Users profile image updated',
               },
 
               data: {
@@ -526,13 +509,13 @@ export const updateProfileImage = {
 
 export const deleteMe = {
   security: [{ bearerAuth: [] }],
-  tags: ['User'],
+  tags: ['Users'],
   description: 'This route allow logged in user to update his own profile details',
   opeationId: 'updateUserDetails',
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
       example: 'ar',
     },
@@ -549,17 +532,10 @@ export const deleteMe = {
                 type: 'boolean',
                 example: true,
               },
-              status: {
-                type: 'number',
-                example: 200,
-              },
+
               message: {
                 type: 'string',
-                example: 'User account deleted',
-              },
-              error: {
-                type: 'boolean',
-                example: false,
+                example: 'Users account deleted',
               },
 
               data: {

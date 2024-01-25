@@ -64,10 +64,6 @@ export const signup = {
                 type: 'string',
                 example: 'User created successfully.',
               },
-              error: {
-                type: 'boolean',
-                example: false,
-              },
 
               data: {
                 type: 'object',
@@ -231,17 +227,10 @@ export const login = {
                 type: 'boolean',
                 example: true,
               },
-              status: {
-                type: 'number',
-                example: 200,
-              },
+
               message: {
                 type: 'string',
                 example: 'User logged in successfully.',
-              },
-              error: {
-                type: 'boolean',
-                example: false,
               },
 
               data: {
@@ -388,14 +377,7 @@ export const logout = {
                 type: 'boolean',
                 example: true,
               },
-              error: {
-                type: 'boolean',
-                example: false,
-              },
-              status: {
-                type: 'number',
-                example: 200,
-              },
+
               message: {
                 type: 'string',
                 example: 'Logout successful. Access and refresh tokens invalidated.',
@@ -484,17 +466,10 @@ export const googleSignIn = {
                 type: 'boolean',
                 example: true,
               },
-              status: {
-                type: 'number',
-                example: 200,
-              },
+
               message: {
                 type: 'string',
                 example: 'User logged in successfully.',
-              },
-              error: {
-                type: 'boolean',
-                example: false,
               },
 
               data: {
@@ -603,14 +578,7 @@ export const refreshToken = {
                 type: 'boolean',
                 example: true,
               },
-              error: {
-                type: 'boolean',
-                example: false,
-              },
-              status: {
-                type: 'number',
-                example: 200,
-              },
+
               message: {
                 type: 'string',
                 example: 'Access token refreshed successfully.',
@@ -701,14 +669,7 @@ export const forgotPassword = {
                 type: 'boolean',
                 example: true,
               },
-              error: {
-                type: 'boolean',
-                example: false,
-              },
-              status: {
-                type: 'number',
-                example: 200,
-              },
+
               message: {
                 type: 'string',
                 example: 'Password reset done sent to email!, please check your email inbox',
@@ -802,14 +763,6 @@ export const verifyResetCode = {
               success: {
                 type: 'boolean',
                 example: true,
-              },
-              error: {
-                type: 'boolean',
-                example: false,
-              },
-              status: {
-                type: 'number',
-                example: 200,
               },
 
               message: {
@@ -939,17 +892,10 @@ export const resetPassword = {
                 type: 'boolean',
                 example: true,
               },
-              status: {
-                type: 'number',
-                example: 200,
-              },
+
               message: {
                 type: 'string',
                 example: 'User logged in successfully.',
-              },
-              error: {
-                type: 'boolean',
-                example: false,
               },
 
               data: {
@@ -1126,19 +1072,9 @@ export const changePassword = {
                 example: true,
               },
 
-              status: {
-                type: 'number',
-                example: 200,
-              },
-
               message: {
                 type: 'string',
                 example: 'Password changed successfully.',
-              },
-
-              error: {
-                type: 'boolean',
-                example: false,
               },
 
               data: {
