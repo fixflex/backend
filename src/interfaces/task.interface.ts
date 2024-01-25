@@ -13,18 +13,19 @@ export enum TaskStatus {
 
 export enum TaskTime {
   MORNING = 'MORNING',
+  MIDDAY = 'MIDDAY',
+  AFTERNOON = 'AFTERNOON',
   EVENING = 'EVENING',
-  NIGHT = 'NIGHT',
 }
 export interface ITask {
   _id: number;
   ownerId: string;
   dueDate: {
-    start: Date;
-    end: Date;
-    flxible: boolean;
+    on: Date;
+    before: Date;
+    flexible: boolean;
   };
-  time: TaskTime;
+  time: TaskTime[];
   title: string;
   details: string;
   imageCover: {
@@ -35,7 +36,7 @@ export interface ITask {
     url: string;
     publicId: string | null;
   }[];
-  service: string;
+  category: string;
   status: TaskStatus;
   location: {
     type: {

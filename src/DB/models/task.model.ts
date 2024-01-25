@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-import { ITask, TaskStatus } from '../../interfaces';
+import { ITask, TaskStatus, TaskTime } from '../../interfaces';
 
 let taskSchema: Schema<ITask> = new Schema(
   {
@@ -10,16 +10,22 @@ let taskSchema: Schema<ITask> = new Schema(
       required: true,
     },
     dueDate: {
-      start: {
+      on: {
         type: Date,
       },
-      end: {
+      before: {
         type: Date,
       },
       flexible: {
         type: Boolean,
       },
     },
+    time: [
+      {
+        type: String,
+        enum: TaskTime,
+      },
+    ],
     title: {
       type: String,
       required: true,
@@ -49,9 +55,9 @@ let taskSchema: Schema<ITask> = new Schema(
         },
       },
     ],
-    service: {
+    category: {
       type: String,
-      ref: 'Service',
+      ref: 'Category',
     },
     status: {
       type: String,
