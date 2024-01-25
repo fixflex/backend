@@ -523,3 +523,88 @@ export const updateProfileImage = {
     },
   },
 };
+
+export const deleteMe = {
+  security: [{ bearerAuth: [] }],
+  tags: ['User'],
+  description: 'This route allow logged in user to update his own profile details',
+  opeationId: 'updateUserDetails',
+  parameters: [
+    {
+      in: 'header',
+      name: 'Accept-Language',
+      type: 'string',
+      example: 'ar',
+    },
+  ],
+  responses: {
+    200: {
+      description: 'Delete user account',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: true,
+              },
+              status: {
+                type: 'number',
+                example: 200,
+              },
+              message: {
+                type: 'string',
+                example: 'User account deleted',
+              },
+              error: {
+                type: 'boolean',
+                example: false,
+              },
+
+              data: {
+                type: 'object',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+
+    401: {
+      description: 'Error: 401',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example1: false,
+                example: true,
+              },
+              status: {
+                type: 'number',
+                example: 401,
+              },
+              error: {
+                type: 'boolean',
+                example1: false,
+                example: true,
+              },
+              message: {
+                type: 'string',
+                example: 'You are not authorized, you must login to get access this route',
+              },
+              data: {
+                type: 'object',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};

@@ -1,7 +1,7 @@
 import { changePassword, forgotPassword, googleSignIn, login, logout, refreshToken, resetPassword, signup, verifyResetCode } from './auth.swagger';
 import { healthz } from './health.swagger';
 import { becomeTasker, getMyTaskerProfile, getTasker, getTaskers, updateMyTaskerProfile } from './taskers.swagger';
-import { getMe, updateMe, updateProfileImage } from './users.swagger';
+import { deleteMe, getMe, updateMe, updateProfileImage } from './users.swagger';
 
 const swaggerDocument = {
   openapi: '3.0.3',
@@ -34,11 +34,6 @@ const swaggerDocument = {
 
   components: {
     securitySchemes: {
-      // cookieAuth: {
-      //   type: 'apiKey', // type is apiKey since we use a cookie
-      //   in: 'cookie',
-      //   name: 'access_token', // Update the cookie name if needed
-      // },
       bearerAuth: {
         type: 'http',
         scheme: 'bearer',
@@ -49,30 +44,11 @@ const swaggerDocument = {
       },
     },
     security: [
-      // {
-      //   cookieAuth: [], // Use the new cookieAuth scheme for security
-      // },
       {
         bearerAuth: [],
       },
     ],
   },
-
-  // components: {
-  //   securitySchemes: {
-  // bearerAuth: {
-  //   type: 'http',
-  //   scheme: 'bearer',
-  //   in: 'header',
-  //   bearerFormat: 'JWT',
-  // },
-  //   },
-  // },
-  // security: [
-  //   {
-  //     jwt: [],
-  //   },
-  // ],
 
   paths: {
     // *************** Health *************** //
@@ -116,7 +92,7 @@ const swaggerDocument = {
     '/users/me': {
       get: getMe,
       patch: updateMe,
-      // delete: {},
+      delete: deleteMe,
     },
     '/users/me/profile-picture': {
       patch: updateProfileImage,
