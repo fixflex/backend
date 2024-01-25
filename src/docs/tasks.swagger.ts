@@ -15,6 +15,7 @@ export const createTask = {
       example: 'ar',
     },
   ],
+
   requestBody: {
     required: true,
     content: {
@@ -24,50 +25,73 @@ export const createTask = {
           properties: {
             title: {
               type: 'string',
-              example: 'Fix the toilet',
+              example: 'cleaning',
             },
-            description: {
+            category: {
               type: 'string',
-              example: 'The toilet is broken and needs to be fixed',
+              example: '65aee72b4adc6b5e31e94044',
+            },
+            details: {
+              type: 'string',
+              example: 'Dusting, mopping and vacuuming',
             },
             location: {
-              type: 'string',
-              example: 'El-Obour City, Cairo, Egypt',
-            },
-            coordinates: {
-              type: 'array',
-              items: {
-                type: 'number',
+              type: 'object',
+              properties: {
+                coordinates: {
+                  type: 'array',
+                  items: {
+                    type: 'number',
+                  },
+                  example: [34.781767, 32.0853],
+                },
+                online: {
+                  type: 'boolean',
+                  example: false,
+                },
               },
-              minItems: 2,
-              maxItems: 2,
-              example: [30.1418, 31.6402],
             },
-            service: {
-              type: 'string',
-              example: '5f9d5f6b0f0a7e2a3c9d3b1a',
+            dueDate: {
+              type: 'object',
+              properties: {
+                on: {
+                  type: 'string',
+                  format: 'date',
+                  example: '2021-12-30',
+                },
+                before: {
+                  type: 'string',
+                  format: 'date',
+                  example: '2024-12-30',
+                },
+                flexible: {
+                  type: 'boolean',
+                  example: false,
+                },
+              },
             },
-            date: {
-              type: 'string',
-              format: 'date-time',
-              example: '2020-11-01T18:25:43.511Z',
-            },
-            images: {
+            time: {
               type: 'array',
               items: {
                 type: 'string',
+                enum: ['MONRING', 'MIDDAY', 'AFTERNOON', 'EVENING'],
               },
-              example: ['https://example.com/image.png'],
+              example: ['MIDDAY', 'MORNING'],
+            },
+            budget: {
+              type: 'number',
+              example: 120,
             },
           },
-          required: ['title', 'description', 'location', 'coordinates', 'service', 'date'],
+          required: ['title', 'details', 'location', 'budget'],
         },
       },
     },
   },
+
   responses: {
-    200: {
-      description: 'Update user details',
+    201: {
+      description: 'Create new task',
       content: {
         'application/json': {
           schema: {
@@ -80,7 +104,7 @@ export const createTask = {
 
               message: {
                 type: 'string',
-                example: 'Users details updated',
+                example: 'Task created successfully',
               },
 
               data: {
@@ -91,25 +115,73 @@ export const createTask = {
                     example: '611d08a62fc210a30ecfb75b',
                   },
 
-                  firstName: {
+                  title: {
                     type: 'string',
-                    example: 'Ahmed',
+                    example: 'cleaning',
                   },
 
-                  lastName: {
+                  category: {
                     type: 'string',
-                    example: 'Elasiriy',
+                    example: '65aee72b4adc6b5e31e94044',
                   },
 
-                  email: {
+                  details: {
                     type: 'string',
-                    example: 'user@gmail.com',
+                    example: 'Dusting, mopping and vacuuming',
                   },
 
-                  profilePicture: {
+                  location: {
+                    type: 'object',
+                    properties: {
+                      coordinates: {
+                        type: 'array',
+                        items: {
+                          type: 'number',
+                        },
+                        example: [34.781767, 32.0853],
+                      },
+                      online: {
+                        type: 'boolean',
+                        example: false,
+                      },
+                    },
+                  },
+
+                  dueDate: {
+                    type: 'object',
+                    properties: {
+                      on: {
+                        type: 'string',
+                        format: 'date',
+                        example: '2021-12-30',
+                      },
+                    },
+                  },
+
+                  time: {
+                    type: 'array',
+                    items: {
+                      type: 'string',
+                      enum: ['MONRING', 'MIDDAY', 'AFTERNOON', 'EVENING'],
+                    },
+                    example: ['MIDDAY', 'MORNING'],
+                  },
+
+                  budget: {
+                    type: 'number',
+                    example: 120,
+                  },
+
+                  createdAt: {
                     type: 'string',
-                    example1: null,
-                    example: 'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
+                    format: 'date-time',
+                    example: '2021-08-19T19:36:38.000Z',
+                  },
+
+                  updatedAt: {
+                    type: 'string',
+                    format: 'date-time',
+                    example: '2021-08-19T19:36:38.000Z',
                   },
                 },
               },
@@ -134,17 +206,13 @@ export const createTask = {
                       type: 'string',
                       example: 'field',
                     },
-                    value: {
-                      type: 'string',
-                      example: 'password123',
-                    },
                     msg: {
                       type: 'string',
-                      example: 'Cannot change password from here, please go to update password route',
+                      example: 'Title must be between 5 and 200 characters',
                     },
                     path: {
                       type: 'string',
-                      example: 'password',
+                      example: 'title',
                     },
                     location: {
                       type: 'string',
@@ -169,53 +237,12 @@ export const createTask = {
                 type: 'boolean',
                 example: false,
               },
-              status: {
-                type: 'number',
-                example: 401,
-              },
-              error: {
-                type: 'boolean',
-                example: true,
-              },
               message: {
                 type: 'string',
-                example: 'You are not authorized, you must login to get access this route',
+                example: 'Unauthorized',
               },
               data: {
-                type: 'object',
-                example: null,
-              },
-            },
-          },
-        },
-      },
-    },
-
-    409: {
-      description: 'Error: 409',
-      content: {
-        'application/json': {
-          schema: {
-            type: 'object',
-            properties: {
-              success: {
-                type: 'boolean',
-                example: false,
-              },
-              status: {
-                type: 'number',
-                example: 409,
-              },
-              error: {
-                type: 'boolean',
-                example: true,
-              },
-              message: {
                 type: 'string',
-                example: 'This Email Is Already Taken: {email}',
-              },
-              data: {
-                type: 'object',
                 example: null,
               },
             },

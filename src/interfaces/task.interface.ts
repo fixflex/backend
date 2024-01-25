@@ -48,6 +48,7 @@ export interface ITask {
       default: 'Point';
     };
     coordinates: [number, number];
+    online: boolean;
   };
   // city: string;
   budget: number;

@@ -79,6 +79,10 @@ let taskSchema: Schema<ITask> = new Schema(
         required: true,
         default: [0, 0],
       },
+      online: {
+        type: Boolean,
+        default: false,
+      },
     },
     // city: {
     //   type: String,

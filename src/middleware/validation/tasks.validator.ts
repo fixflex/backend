@@ -5,14 +5,7 @@ import validatorMiddleware from '../errors/validation.middleware';
 
 export const createTaskValidator = [
   check('category').optional().isMongoId().withMessage('invalid_MongoId'),
-  check('title')
-    .notEmpty()
-    .withMessage('is_required')
-    .isString()
-    .withMessage('invalid_input')
-    .isLength({ max: 200, min: 5 })
-    // should be 10 characters at least
-    .withMessage('title_lenght'),
+  check('title').isString().withMessage('invalid_input').isLength({ max: 200, min: 5 }).withMessage('title_lenght'),
   check('details').notEmpty().withMessage('is_required').isString().withMessage('invalid_input').isLength({ max: 8000, min: 10 }).withMessage('details_lenght'),
   check('dueDate.flexible').optional().isBoolean().withMessage('invalid_input'),
   check('dueDate.on').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Invalid date format, must be YYYY-MM-DD'),
@@ -30,10 +23,12 @@ export const createTaskValidator = [
     .withMessage('must be an array')
     .custom(time => time.every((t: TaskTime) => Object.values(TaskTime).includes(t)))
     .withMessage('Invalid task time, must be one of MORNING, MIDDAY, AFTERNOON, EVENING'),
+  check('location.online').optional().isBoolean().withMessage('invalid_input'),
   check('location')
     .notEmpty()
     .withMessage('is_required')
     .custom(location => {
+      if (location.online) return true;
       if (location.coordinates.length !== 2) {
         throw new Error('invalid_coordinates');
       }
