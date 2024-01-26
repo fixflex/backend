@@ -3,19 +3,6 @@ import multer, { FileFilterCallback } from 'multer';
 
 import HttpException from '../exceptions/HttpException';
 
-// const multerStorage = multer.diskStorage({
-//   destination: (_req, _file, cb) => {
-//     cb(null, `${process.cwd()}/uploads`);
-//   },
-//   filename: (_req, file, cb) => {
-//     let imageFileName: string;
-//     const ext = file.mimetype.split('/')[1];
-//     // it the file is imageCover then the name will contain cover
-//     if (file.fieldname === 'imageCover') imageFileName = `cover-${new Date().toISOString().replace(/:/g, '-')}.${ext}`;
-//     else imageFileName = `${new Date().toISOString().replace(/:/g, '-')}.${ext}`;
-//     cb(null, imageFileName);
-//   },
-// });
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (_req: Request, file: Express.Multer.File, cd: FileFilterCallback) => {
@@ -34,3 +21,17 @@ const multerOptions = () =>
 
 export const uploadSingleFile = (fileName: string) => multerOptions().single(fileName);
 export const uploadMixFiles = (arrayOfFields: { name: string; maxCount?: number }[]) => multerOptions().fields(arrayOfFields);
+
+// const multerStorage = multer.diskStorage({
+//   destination: (_req, _file, cb) => {
+//     cb(null, `${process.cwd()}/uploads`);
+//   },
+//   filename: (_req, file, cb) => {
+//     let imageFileName: string;
+//     const ext = file.mimetype.split('/')[1];
+//     // it the file is imageCover then the name will contain cover
+//     if (file.fieldname === 'imageCover') imageFileName = `cover-${new Date().toISOString().replace(/:/g, '-')}.${ext}`;
+//     else imageFileName = `${new Date().toISOString().replace(/:/g, '-')}.${ext}`;
+//     cb(null, imageFileName);
+//   },
+// });

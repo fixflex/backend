@@ -29,7 +29,7 @@ export const createTaskValidator = [
     .withMessage('is_required')
     .custom(location => {
       if (location.online) return true;
-      if (location.coordinates.length !== 2) {
+      if (!location.coordinates || location.coordinates.length !== 2) {
         throw new Error('invalid_coordinates');
       }
       if (typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
@@ -37,7 +37,7 @@ export const createTaskValidator = [
       }
       return true;
     }),
-  check('budget').notEmpty().withMessage('is_required').isNumeric().withMessage('invalid_input').isInt({ min: 5 }).withMessage('invalid_input'),
+  check('budget').notEmpty().withMessage('is_required').isNumeric().withMessage('invalid_input').isInt({ min: 10 }).withMessage('invalid_budget'),
 
   check('status').isEmpty().withMessage('not_allowed'),
   check('offers').isEmpty().withMessage('not_allowed'),
