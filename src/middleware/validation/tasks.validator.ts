@@ -11,12 +11,6 @@ export const createTaskValidator = [
   check('dueDate.on').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Invalid date format, must be YYYY-MM-DD'),
 
   check('dueDate.before').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage(' "Invalid date format, must be YYYY-MM-DD",'),
-  // export enum TaskTime {
-  //   MORNING = 'MORNING',
-  //   MIDDAY = 'MIDDAY',
-  //   AFTERNOON = 'AFTERNOON',
-  //   EVENING = 'EVENING',
-  // }
   check('time')
     .optional()
     .isArray()
@@ -48,22 +42,23 @@ export const createTaskValidator = [
 
 export const updateTaskValidator = [
   check('dueDate.flexible').optional().isBoolean().withMessage('invalid_input'),
-  check('title').optional().isString().withMessage('invalid_input').isLength({ max: 200, min: 10 }).withMessage('title_lenght'),
-  check('details').optional().isString().withMessage('invalid_input').isLength({ max: 8000, min: 24 }).withMessage('details_lenght'),
-  check('service').optional().isMongoId().withMessage('invalid_MongoId'),
+  check('title').optional().isString().withMessage('invalid_input').isLength({ max: 200, min: 5 }).withMessage('title_lenght'),
+  check('details').optional().isString().withMessage('invalid_input').isLength({ max: 8000, min: 10 }).withMessage('details_lenght'),
+  check('category').optional().isMongoId().withMessage('invalid_MongoId'),
+  check('location.online').optional().isBoolean().withMessage('invalid_input'),
   check('location')
     .optional()
     .custom(location => {
-      if (location.coordinates.length !== 2) {
-        throw new Error('ivalid_coordinates');
-      }
-      if (typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
-        throw new Error('invalid_coordinates');
-      }
+      if (location.online) return true;
+      if (location.coordinates)
+        if (location.coordinates.length !== 2 || typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
+          throw new Error('invalid_coordinates');
+        }
       return true;
     }),
   check('budget').optional().isNumeric().withMessage('invalid_input'),
   check('status').optional().isIn(['OPEN', 'ASSIGNED', 'COMPLETED']).withMessage('invalid_task_status'),
+
   check('offers').isEmpty().withMessage('not_allowed'),
   check('taskerId').isEmpty().withMessage('not_allowed'),
   check('createdAt').isEmpty().withMessage('not_allowed'),

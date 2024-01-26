@@ -81,5 +81,6 @@
   "invalid_email": "Invalid email",
 
   "must_be_object": "This field must be an object",
-  "user_logged_in": "User logged in successfully"
+  "user_logged_in": "User logged in successfully",
+  "invalid_budget": "the budget must be greater than 10"
 }

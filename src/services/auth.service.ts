@@ -46,7 +46,7 @@ export class AuthServie implements IAuthService {
     user = await this.userDao.getUserByEmail(email);
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      throw new HttpException(401, '  email_or_password_incorrect');
+      throw new HttpException(401, 'email_or_password_incorrect');
     }
     let accessToken = createAccessToken(user._id!);
     let refreshToken = createRefreshToken(user._id!);
