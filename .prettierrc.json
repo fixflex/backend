@@ -8,6 +8,6 @@
   "importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
-  "printWidth": 180,
+  "printWidth": 140,
   "importOrderParserPlugins": ["typescript", "decorators-legacy"]
 }
