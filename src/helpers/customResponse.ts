@@ -1,7 +1,9 @@
 import { ResponseT } from '../interfaces';
 
-export const customResponse = <T>({ data, success, message }: ResponseT<T>) => {
+export const customResponse = <T>({ data, success, message, pagination, results }: ResponseT<T>) => {
   return {
+    results,
+    pagination,
     success,
     message,
     data,

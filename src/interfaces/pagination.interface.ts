@@ -6,6 +6,6 @@ export interface IPagination {
   totalPages?: number;
   hasNextPage?: boolean;
   hasPrevPage?: boolean;
-  nextPage?: number;
-  prevPage?: number;
+  next?: number;
+  prev?: number;
 }
