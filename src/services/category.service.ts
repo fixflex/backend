@@ -2,7 +2,7 @@ import { autoInjectable } from 'tsyringe';
 
 import { CategoryDao } from '../DB/dao/category.dao';
 import HttpException from '../exceptions/HttpException';
-import APIFeatures from '../helpers/apiFeatures';
+import { APIFeatures } from '../helpers';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { ICategory, ICategoryService } from '../interfaces/category.interface';
 import { IPagination } from '../interfaces/pagination.interface';

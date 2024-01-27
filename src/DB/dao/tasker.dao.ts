@@ -16,7 +16,7 @@ class TaskerDao extends CommonDAO<ITasker> {
             $maxDistance: maxDistance * 1000, // convert km to meters (mongodb uses meters) it is 60km by default
             $geometry: {
               type: 'Point',
-              coordinates: [longitude, latitude], // [longitude, latitude] [x, y]
+              coordinates: [longitude, latitude], // [longitude, latitude] [y, x]
             },
           },
         },
@@ -49,14 +49,21 @@ class TaskerDao extends CommonDAO<ITasker> {
         .populate('userId', 'firstName lastName email  profilePicture')
         .populate('categories', 'name')
         .lean();
-    } else taskers = await TaskerModel.find({}).populate('userId', 'firstName lastName email  profilePicture').populate('categories', 'name').lean();
+    } else
+      taskers = await TaskerModel.find({})
+        .populate('userId', 'firstName lastName email  profilePicture')
+        .populate('categories', 'name')
+        .lean();
 
     return taskers;
   }
 
   // get tasker profile with user data and categories data
   async getTaskerProfile(taskerId: string): Promise<ITasker | null> {
-    let tasker = await TaskerModel.findById(taskerId).populate('userId', 'firstName lastName email profilePicture').populate('categories', '_id name').lean();
+    let tasker = await TaskerModel.findById(taskerId)
+      .populate('userId', 'firstName lastName email profilePicture')
+      .populate('categories', '_id name')
+      .lean();
     return tasker;
   }
 }
