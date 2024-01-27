@@ -25,8 +25,8 @@ class TaskController implements ITaskController {
     res.status(201).json(customResponse({ data: task, success: true, message: 'Task created' }));
   });
 
-  getTasks = asyncHandler(async (_req: Request, res: Response) => {
-    const tasks = await this.taskService.getTasks();
+  getTasks = asyncHandler(async (req: Request, res: Response) => {
+    const tasks = await this.taskService.getTasks(req.query);
     res.status(200).json(customResponse({ data: tasks, success: true, message: null }));
   });
 

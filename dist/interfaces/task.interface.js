@@ -13,6 +13,7 @@ var TaskStatus;
 var TaskTime;
 (function (TaskTime) {
     TaskTime["MORNING"] = "MORNING";
+    TaskTime["MIDDAY"] = "MIDDAY";
+    TaskTime["AFTERNOON"] = "AFTERNOON";
     TaskTime["EVENING"] = "EVENING";
-    TaskTime["NIGHT"] = "NIGHT";
 })(TaskTime || (exports.TaskTime = TaskTime = {}));

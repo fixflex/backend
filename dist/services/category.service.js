@@ -24,22 +24,28 @@ let CategoryService = class CategoryService {
     constructor(categoryDao) {
         this.categoryDao = categoryDao;
     }
-    async getCategories(reqQuery) {
+    async getCategories(reqQuery, reqLanguage) {
         let apiFeatures = new apiFeatures_1.default(reqQuery);
         let query = apiFeatures.filter();
         let paginate = apiFeatures.paginate();
         let sort = apiFeatures.sort();
         let fields = apiFeatures.selectFields();
-        let categories = await this.categoryDao.listServices(query, paginate, sort, fields);
-        if (categories)
+        let categories = await this.categoryDao.getCategories(query, paginate, sort, fields);
+        let localizedDocs = null;
+        if (categories) {
             paginate = apiFeatures.paginate(categories.length); // update the pagination object with the total documents
-        return { categories: categories, paginate };
+            localizedDocs = this.categoryDao.toJSONLocalizedOnly(categories, reqLanguage);
+        }
+        return { categories: localizedDocs, paginate };
     }
-    async getCategory(serviceId) {
-        return await this.categoryDao.getOneById(serviceId);
+    async getCategory(serviceId, reqLanguage) {
+        let category = await this.categoryDao.getOneById(serviceId, false);
+        if (!category)
+            throw new HttpException_1.default(404, 'No service found');
+        return this.categoryDao.toJSONLocalizedOnly(category, reqLanguage);
     }
     async createCategory(service) {
-        let isServiceExists = await this.categoryDao.getServiceByName(service.name);
+        let isServiceExists = await this.categoryDao.getCategoryByName(service.name);
         if (isServiceExists) {
             throw new HttpException_1.default(409, `Service ${service.name} is already exists, please pick a different one.`);
         }

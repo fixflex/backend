@@ -27,41 +27,41 @@ let TaskController = class TaskController {
             { name: 'image', maxCount: 5 },
         ]);
         this.createTask = (0, express_async_handler_1.default)(async (req, res, next) => {
-            req.body.ownerId = req.user?._id;
+            req.body.ownerId = req.user._id;
             const task = await this.taskService.createTask(req.body);
             if (!task)
                 return next(new HttpException_1.default(400, 'Something went wrong, please try again later'));
-            res.status(201).json((0, customResponse_1.default)({ data: task, success: true, status: 201, message: 'Task created', error: false }));
+            res.status(201).json((0, customResponse_1.default)({ data: task, success: true, message: 'Task created' }));
         });
-        this.getTasks = (0, express_async_handler_1.default)(async (_req, res) => {
-            const tasks = await this.taskService.getTasks();
-            res.status(200).json((0, customResponse_1.default)({ data: tasks, success: true, status: 200, message: null, error: false }));
+        this.getTasks = (0, express_async_handler_1.default)(async (req, res) => {
+            const tasks = await this.taskService.getTasks(req.query);
+            res.status(200).json((0, customResponse_1.default)({ data: tasks, success: true, message: null }));
         });
         this.getTaskById = (0, express_async_handler_1.default)(async (req, res, next) => {
             const task = await this.taskService.getTaskById(req.params.id);
             if (!task)
                 return next(new HttpException_1.default(404, `Task with id ${req.params.id} not found`));
-            res.status(200).json((0, customResponse_1.default)({ data: task, success: true, status: 200, message: null, error: false }));
+            res.status(200).json((0, customResponse_1.default)({ data: task, success: true, message: null }));
         });
         this.updateTask = (0, express_async_handler_1.default)(async (req, res, next) => {
-            const task = await this.taskService.updateTask(req.params.id, req.body, req.user?._id);
+            const task = await this.taskService.updateTask(req.params.id, req.body, req.user._id);
             if (!task)
                 return next(new HttpException_1.default(404, `Task with id ${req.params.id} not found`));
-            res.status(200).json((0, customResponse_1.default)({ data: task, success: true, status: 200, message: 'Task updated', error: false }));
+            res.status(200).json((0, customResponse_1.default)({ data: task, success: true, message: 'Task updated' }));
         });
         this.uploadTaskImages = (0, express_async_handler_1.default)(async (req, res, next) => {
             if (!req.files)
                 return next(new HttpException_1.default(400, 'Please upload files'));
-            const task = await this.taskService.uploadTaskImages(req.params.id, req.files, req.user?._id); // TODO: fix the type
+            const task = await this.taskService.uploadTaskImages(req.params.id, req.files, req.user._id); // TODO: fix the type
             if (!task)
                 return next(new HttpException_1.default(404, `Task with id ${req.params.id} not found`));
-            res.status(200).json((0, customResponse_1.default)({ data: task, success: true, status: 200, message: 'Task images uploaded', error: false }));
+            res.status(200).json((0, customResponse_1.default)({ data: task, success: true, message: 'Task images uploaded' }));
         });
         this.deleteTask = (0, express_async_handler_1.default)(async (req, res, next) => {
-            const task = await this.taskService.deleteTask(req.params.id, req.user?._id);
+            const task = await this.taskService.deleteTask(req.params.id, req.user._id);
             if (!task)
                 return next(new HttpException_1.default(404, `Task with id ${req.params.id} not found`));
-            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 204, message: 'Task deleted', error: false }));
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, message: 'Task deleted' }));
         });
     }
 };

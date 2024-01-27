@@ -26,7 +26,7 @@ let ChatController = class ChatController {
             let chat = await this.chatService.getChatById(req.params.id);
             if (!chat)
                 throw new HttpException_1.default(404, 'No chat found');
-            res.status(200).json((0, customResponse_1.default)({ data: chat, success: true, status: 200, message: 'Chat found', error: false }));
+            res.status(200).json((0, customResponse_1.default)({ data: chat, success: true, message: 'Chat found' }));
         });
         this.getChatByUserId = (0, express_async_handler_1.default)(async (req, res) => {
             let chat = await this.chatService.getChatByUserId(req.user?._id);
@@ -36,7 +36,7 @@ let ChatController = class ChatController {
         });
         this.createChat = (0, express_async_handler_1.default)(async (req, res) => {
             const chat = await this.chatService.createChat(req.body);
-            res.status(201).json((0, customResponse_1.default)({ data: chat, success: true, status: 201, message: 'Chat created', error: false }));
+            res.status(201).json((0, customResponse_1.default)({ data: chat, success: true, message: 'Chat created' }));
         });
     }
 };

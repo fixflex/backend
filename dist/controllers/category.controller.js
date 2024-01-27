@@ -23,14 +23,14 @@ let CategoryController = class CategoryController {
         this.categoryService = categoryService;
         // public Routes
         this.getCategoryById = (0, express_async_handler_1.default)(async (req, res) => {
-            let service = await this.categoryService.getCategory(req.params.id);
+            let service = await this.categoryService.getCategory(req.params.id, req.language);
             if (!service)
                 throw new HttpException_1.default(404, 'No service found');
-            res.status(200).json((0, customResponse_1.default)({ data: service, success: true, status: 200, message: 'Service found', error: false }));
+            res.status(200).json((0, customResponse_1.default)({ data: service, success: true, message: 'Service found' }));
         });
         this.getCategories = (0, express_async_handler_1.default)(async (req, res) => {
-            let { categories, paginate } = await this.categoryService.getCategories(req.query);
-            res.status(200).json(Object.assign((0, customResponse_1.default)({ data: categories, success: true, status: 200, message: 'Services found', error: false }), { paginate }));
+            let { categories, paginate } = await this.categoryService.getCategories(req.query, req.language);
+            res.status(200).json(Object.assign((0, customResponse_1.default)({ data: categories, success: true, message: 'Services found' }), { paginate }));
         });
         // authenticated routes
         this.createCategory = (0, express_async_handler_1.default)(async (req, res, next) => {
@@ -58,7 +58,7 @@ let CategoryController = class CategoryController {
         this.deleteCategory = (0, express_async_handler_1.default)(async (req, res, next) => {
             let service = await this.categoryService.deleteCategory(req.params.id);
             if (!service)
-                return next(new HttpException_1.default(404, 'No service found'));
+                return next(new HttpException_1.default(404, req.t('no_service_found')));
             res.sendStatus(204);
         });
     }

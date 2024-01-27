@@ -8,17 +8,27 @@ let taskSchema = new mongoose_1.Schema({
         ref: 'User',
         required: true,
     },
+    taskerId: {
+        type: String,
+        ref: 'Tasker',
+    },
     dueDate: {
-        start: {
+        on: {
             type: Date,
         },
-        end: {
+        before: {
             type: Date,
         },
         flexible: {
             type: Boolean,
         },
     },
+    time: [
+        {
+            type: String,
+            enum: interfaces_1.TaskTime,
+        },
+    ],
     title: {
         type: String,
         required: true,
@@ -48,9 +58,9 @@ let taskSchema = new mongoose_1.Schema({
             },
         },
     ],
-    service: {
+    category: {
         type: String,
-        ref: 'Service',
+        ref: 'Category',
     },
     status: {
         type: String,
@@ -66,6 +76,11 @@ let taskSchema = new mongoose_1.Schema({
         coordinates: {
             type: [Number],
             required: true,
+            default: [0, 0],
+        },
+        online: {
+            type: Boolean,
+            default: false,
         },
     },
     // city: {
@@ -73,7 +88,7 @@ let taskSchema = new mongoose_1.Schema({
     //   trim: true,
     //   maxlength: 50,
     // },
-    price: {
+    budget: {
         type: Number,
         required: true,
         min: 5,

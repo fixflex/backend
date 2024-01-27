@@ -1,12 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.customResponse = void 0;
-const customResponse = ({ data, success, error, message, status }) => {
+const customResponse = ({ data, success, message }) => {
     return {
         success,
-        error,
         message,
-        status,
         data,
     };
 };

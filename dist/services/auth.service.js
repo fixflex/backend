@@ -52,7 +52,7 @@ let AuthServie = exports.AuthServie = class AuthServie {
         }
         user = await this.userDao.getUserByEmail(email);
         if (!user || !(await bcrypt_1.default.compare(password, user.password))) {
-            throw new HttpException_1.default(401, '  email_or_password_incorrect');
+            throw new HttpException_1.default(401, 'email_or_password_incorrect');
         }
         let accessToken = (0, createToken_1.createAccessToken)(user._id);
         let refreshToken = (0, createToken_1.createRefreshToken)(user._id);

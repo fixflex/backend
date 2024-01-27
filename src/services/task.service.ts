@@ -1,4 +1,5 @@
 import { UploadApiResponse } from 'cloudinary';
+import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
 import { TaskDao } from '../DB/dao/task.dao';
@@ -10,8 +11,8 @@ import { ITask, ITaskService } from '../interfaces';
 class TaskService implements ITaskService {
   constructor(private readonly taskDao: TaskDao) {}
 
-  getTasks = async () => {
-    const tasks = await this.taskDao.getMany();
+  getTasks = async (query: Query) => {
+    const tasks = await this.taskDao.getTasks(query);
     return tasks;
   };
 

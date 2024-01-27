@@ -24,11 +24,11 @@ let TaskRoute = class TaskRoute {
         this.initializerRoutes();
     }
     initializerRoutes() {
-        //### tasks routes that don't require authentication
+        //=== tasks routes that don't require authentication
         this.router.get(`${this.path}`, this.taskController.getTasks);
         this.router.get(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.taskController.getTaskById);
         // this.router.get(`${this.path}/:id/offers`, this.taskController.getTaskOffers);
-        //### tasks routes that require authentication
+        //=== tasks routes that require authentication
         this.router.use(`${this.path}`, auth_middleware_1.authenticateUser);
         this.router.post(`${this.path}`, tasks_validator_1.createTaskValidator, this.taskController.createTask);
         // uplaodTaskImages,

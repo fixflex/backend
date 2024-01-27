@@ -13,12 +13,12 @@ class HealthzRoute {
     }
     initializerRoutes() {
         this.router.get('/', (req, res) => {
-            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: req.t('healthz'), error: false }));
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, message: req.t('healthz') }));
         });
         this.router.get(`${this.path}`, (req, res) => {
             console.log(req.cookies);
             console.log(req.headers);
-            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, status: 200, message: req.t('healthz'), error: false }));
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, message: req.t('healthz') }));
         });
     }
 }

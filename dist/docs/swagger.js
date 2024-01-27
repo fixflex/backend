@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const auth_swagger_1 = require("./auth.swagger");
 const health_swagger_1 = require("./health.swagger");
 const taskers_swagger_1 = require("./taskers.swagger");
+const tasks_swagger_1 = require("./tasks.swagger");
 const users_swagger_1 = require("./users.swagger");
 const swaggerDocument = {
     openapi: '3.0.3',
@@ -34,11 +35,6 @@ const swaggerDocument = {
     ],
     components: {
         securitySchemes: {
-            // cookieAuth: {
-            //   type: 'apiKey', // type is apiKey since we use a cookie
-            //   in: 'cookie',
-            //   name: 'access_token', // Update the cookie name if needed
-            // },
             bearerAuth: {
                 type: 'http',
                 scheme: 'bearer',
@@ -48,29 +44,11 @@ const swaggerDocument = {
             },
         },
         security: [
-            // {
-            //   cookieAuth: [], // Use the new cookieAuth scheme for security
-            // },
             {
                 bearerAuth: [],
             },
         ],
     },
-    // components: {
-    //   securitySchemes: {
-    // bearerAuth: {
-    //   type: 'http',
-    //   scheme: 'bearer',
-    //   in: 'header',
-    //   bearerFormat: 'JWT',
-    // },
-    //   },
-    // },
-    // security: [
-    //   {
-    //     jwt: [],
-    //   },
-    // ],
     paths: {
         // *************** Health *************** //
         '/healthz': {
@@ -108,7 +86,7 @@ const swaggerDocument = {
         '/users/me': {
             get: users_swagger_1.getMe,
             patch: users_swagger_1.updateMe,
-            // delete: {},
+            delete: users_swagger_1.deleteMe,
         },
         '/users/me/profile-picture': {
             patch: users_swagger_1.updateProfileImage,
@@ -129,6 +107,20 @@ const swaggerDocument = {
             // delete: {},
         },
         // *************** Tasks *************** //
+        '/tasks': {
+            get: tasks_swagger_1.getTasks,
+            post: tasks_swagger_1.createTask,
+        },
+        '/tasks/{taskId}': {
+            get: tasks_swagger_1.getTask,
+            patch: tasks_swagger_1.updateTask,
+            delete: tasks_swagger_1.deleteTask,
+        },
+        '/tasks/{taskId}/images': {
+            patch: tasks_swagger_1.uploadTaskImages,
+        },
+        // *************** Categories *************** //
+        // '/categories': {},
         // *************** Locations *************** //
         // *************** Reviews *************** //
         // *************** Categories *************** //

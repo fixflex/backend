@@ -1,22 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProfileImage = exports.updateMe = exports.getMe = void 0;
+exports.deleteMe = exports.updateProfileImage = exports.updateMe = exports.getMe = void 0;
 exports.getMe = {
     security: [{ bearerAuth: [] }],
-    tags: ['User'],
+    tags: ['Users'],
     description: "Get the current user's data",
     opeationId: 'getMe',
     parameters: [
         {
             in: 'header',
-            name: 'Accept-Language',
+            name: 'accept-language',
             type: 'string',
             example: 'ar',
         },
     ],
     responses: {
         200: {
-            description: 'Get User',
+            description: 'Get Users',
             content: {
                 'application/json': {
                     schema: {
@@ -26,17 +26,13 @@ exports.getMe = {
                                 type: 'boolean',
                                 example: true,
                             },
-                            error: {
-                                type: 'boolean',
-                                example: false,
-                            },
                             status: {
                                 type: 'integer',
                                 example: 200,
                             },
                             message: {
                                 type: 'string',
-                                example: 'User found',
+                                example: 'Users found',
                             },
                             data: {
                                 type: 'object',
@@ -121,13 +117,13 @@ exports.getMe = {
 };
 exports.updateMe = {
     security: [{ bearerAuth: [] }],
-    tags: ['User'],
+    tags: ['Users'],
     description: 'This route allow logged in user to update his own profile details',
     opeationId: 'updateUserDetails',
     parameters: [
         {
             in: 'header',
-            name: 'Accept-Language',
+            name: 'accept-language',
             type: 'string',
             example: 'ar',
         },
@@ -168,17 +164,9 @@ exports.updateMe = {
                                 type: 'boolean',
                                 example: true,
                             },
-                            status: {
-                                type: 'number',
-                                example: 200,
-                            },
                             message: {
                                 type: 'string',
-                                example: 'User details updated',
-                            },
-                            error: {
-                                type: 'boolean',
-                                example: false,
+                                example: 'Users details updated',
                             },
                             data: {
                                 type: 'object',
@@ -319,13 +307,13 @@ exports.updateMe = {
 };
 exports.updateProfileImage = {
     security: [{ bearerAuth: [] }],
-    tags: ['User'],
+    tags: ['Users'],
     description: 'This route allow logged in user to update his own profile image',
     opeationId: 'updateProfileImage',
     parameters: [
         {
             in: 'header',
-            name: 'Accept-Language',
+            name: 'accept-language',
             type: 'string',
             example: 'ar',
         },
@@ -358,17 +346,9 @@ exports.updateProfileImage = {
                                 type: 'boolean',
                                 example: true,
                             },
-                            status: {
-                                type: 'number',
-                                example: 200,
-                            },
                             message: {
                                 type: 'string',
-                                example: 'User profile image updated',
-                            },
-                            error: {
-                                type: 'boolean',
-                                example: false,
+                                example: 'Users profile image updated',
                             },
                             data: {
                                 type: 'object',
@@ -503,6 +483,80 @@ exports.updateProfileImage = {
                             message: {
                                 type: 'string',
                                 example: 'File too large.',
+                            },
+                            data: {
+                                type: 'object',
+                                example: null,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+};
+exports.deleteMe = {
+    security: [{ bearerAuth: [] }],
+    tags: ['Users'],
+    description: 'This route allow logged in user to update his own profile details',
+    opeationId: 'updateUserDetails',
+    parameters: [
+        {
+            in: 'header',
+            name: 'accept-language',
+            type: 'string',
+            example: 'ar',
+        },
+    ],
+    responses: {
+        200: {
+            description: 'Delete user account',
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            success: {
+                                type: 'boolean',
+                                example: true,
+                            },
+                            message: {
+                                type: 'string',
+                                example: 'Users account deleted',
+                            },
+                            data: {
+                                type: 'object',
+                                example: null,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        401: {
+            description: 'Error: 401',
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            success: {
+                                type: 'boolean',
+                                example1: false,
+                                example: true,
+                            },
+                            status: {
+                                type: 'number',
+                                example: 401,
+                            },
+                            error: {
+                                type: 'boolean',
+                                example1: false,
+                                example: true,
+                            },
+                            message: {
+                                type: 'string',
+                                example: 'You are not authorized, you must login to get access this route',
                             },
                             data: {
                                 type: 'object',

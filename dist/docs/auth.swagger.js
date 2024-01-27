@@ -67,10 +67,6 @@ exports.signup = {
                                 type: 'string',
                                 example: 'User created successfully.',
                             },
-                            error: {
-                                type: 'boolean',
-                                example: false,
-                            },
                             data: {
                                 type: 'object',
                                 properties: {
@@ -228,17 +224,9 @@ exports.login = {
                                 type: 'boolean',
                                 example: true,
                             },
-                            status: {
-                                type: 'number',
-                                example: 200,
-                            },
                             message: {
                                 type: 'string',
                                 example: 'User logged in successfully.',
-                            },
-                            error: {
-                                type: 'boolean',
-                                example: false,
                             },
                             data: {
                                 type: 'object',
@@ -378,14 +366,6 @@ exports.logout = {
                                 type: 'boolean',
                                 example: true,
                             },
-                            error: {
-                                type: 'boolean',
-                                example: false,
-                            },
-                            status: {
-                                type: 'number',
-                                example: 200,
-                            },
                             message: {
                                 type: 'string',
                                 example: 'Logout successful. Access and refresh tokens invalidated.',
@@ -473,17 +453,9 @@ exports.googleSignIn = {
                                 type: 'boolean',
                                 example: true,
                             },
-                            status: {
-                                type: 'number',
-                                example: 200,
-                            },
                             message: {
                                 type: 'string',
                                 example: 'User logged in successfully.',
-                            },
-                            error: {
-                                type: 'boolean',
-                                example: false,
                             },
                             data: {
                                 type: 'object',
@@ -585,14 +557,6 @@ exports.refreshToken = {
                                 type: 'boolean',
                                 example: true,
                             },
-                            error: {
-                                type: 'boolean',
-                                example: false,
-                            },
-                            status: {
-                                type: 'number',
-                                example: 200,
-                            },
                             message: {
                                 type: 'string',
                                 example: 'Access token refreshed successfully.',
@@ -681,14 +645,6 @@ exports.forgotPassword = {
                             success: {
                                 type: 'boolean',
                                 example: true,
-                            },
-                            error: {
-                                type: 'boolean',
-                                example: false,
-                            },
-                            status: {
-                                type: 'number',
-                                example: 200,
                             },
                             message: {
                                 type: 'string',
@@ -782,14 +738,6 @@ exports.verifyResetCode = {
                             success: {
                                 type: 'boolean',
                                 example: true,
-                            },
-                            error: {
-                                type: 'boolean',
-                                example: false,
-                            },
-                            status: {
-                                type: 'number',
-                                example: 200,
                             },
                             message: {
                                 type: 'string',
@@ -917,17 +865,9 @@ exports.resetPassword = {
                                 type: 'boolean',
                                 example: true,
                             },
-                            status: {
-                                type: 'number',
-                                example: 200,
-                            },
                             message: {
                                 type: 'string',
                                 example: 'User logged in successfully.',
-                            },
-                            error: {
-                                type: 'boolean',
-                                example: false,
                             },
                             data: {
                                 type: 'object',
@@ -1085,17 +1025,9 @@ exports.changePassword = {
                                 type: 'boolean',
                                 example: true,
                             },
-                            status: {
-                                type: 'number',
-                                example: 200,
-                            },
                             message: {
                                 type: 'string',
                                 example: 'Password changed successfully.',
-                            },
-                            error: {
-                                type: 'boolean',
-                                example: false,
                             },
                             data: {
                                 type: 'object',
