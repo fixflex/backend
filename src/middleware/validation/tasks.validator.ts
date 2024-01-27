@@ -35,6 +35,8 @@ export const createTaskValidator = [
       if (typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
         throw new Error('invalid_coordinates');
       }
+      // swaped the coordinates
+      location.coordinates = [location.coordinates[1], location.coordinates[0]]; // [longitude, latitude]
       return true;
     }),
   check('budget')

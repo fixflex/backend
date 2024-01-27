@@ -1,6 +1,7 @@
 import { Query } from 'express-serve-static-core';
 
-import { ITask } from '../../interfaces';
+import { QueryBuilder } from '../../helpers';
+import { IPagination, ITask } from '../../interfaces';
 import TaskModel from '../models/task.model';
 import CommonDAO from './baseDao';
 
@@ -10,18 +11,33 @@ class TaskDao extends CommonDAO<ITask> {
   }
 
   async getTasks(query: Query) {
-    const tasks = await TaskModel.find(query)
-      .populate('ownerId', 'firstName lastName email profilePicture')
-      .populate('taskerId', 'firstName lastName email profilePicture')
-      .populate('categories', 'name')
-      .populate('chatId', 'messages');
+    const countDocments = await TaskModel.countDocuments();
 
-    return tasks;
+    let apiFeatures = new QueryBuilder<ITask>(TaskModel.find(), query)
+      .filter(['location', 'online', 'maxDistance'])
+      .locationFilter()
+      .search(['title', 'details'])
+      .sort()
+      .limitFields()
+      .paginate(countDocments);
+    console.log(apiFeatures.mongooseQuery.getQuery());
+
+    const pagination: IPagination | undefined = apiFeatures.pagination;
+    const tasks = await apiFeatures.mongooseQuery;
+
+    return { tasks, pagination };
   }
-  // async getTasks(query: Query) {
-  //   const tasks = await TaskModel.find( )
-  //   return tasks;
-  // }
 }
 
 export { TaskDao };
+
+// async getTasks(query: Query) {
+//   const tasks = await TaskModel.find( )
+//   return tasks;
+
+// }
+// const tasks = await TaskModel.find(query);
+// // .populate('ownerId', 'firstName lastName email profilePicture')
+// // .populate('taskerId', 'firstName lastName email profilePicture')
+// // .populate('categories', 'name')
+// // .populate('chatId', 'messages');

@@ -26,8 +26,8 @@ class TaskController implements ITaskController {
   });
 
   getTasks = asyncHandler(async (req: Request, res: Response) => {
-    const tasks = await this.taskService.getTasks(req.query);
-    res.status(200).json(customResponse({ data: tasks, success: true, message: null }));
+    const { tasks, pagination } = await this.taskService.getTasks(req.query);
+    res.status(200).json(customResponse({ data: tasks, success: true, message: null, pagination, results: tasks.length }));
   });
 
   getTaskById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -44,7 +44,11 @@ class TaskController implements ITaskController {
 
   uploadTaskImages = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     if (!req.files) return next(new HttpException(400, 'Please upload files'));
-    const task = await this.taskService.uploadTaskImages(req.params.id, req.files as { [fieldname: string]: Express.Multer.File[] }, req.user._id); // TODO: fix the type
+    const task = await this.taskService.uploadTaskImages(
+      req.params.id,
+      req.files as { [fieldname: string]: Express.Multer.File[] },
+      req.user._id
+    ); // TODO: fix the type
 
     if (!task) return next(new HttpException(404, `Task with id ${req.params.id} not found`));
     res.status(200).json(customResponse({ data: task, success: true, message: 'Task images uploaded' }));

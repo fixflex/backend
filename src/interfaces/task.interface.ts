@@ -1,5 +1,6 @@
 import { NextFunction } from 'express';
 
+import { IPagination } from '.';
 import { Request, Response } from '../helpers/generic';
 
 export enum TaskStatus {
@@ -73,7 +74,7 @@ export interface ITaskController {
 }
 
 export interface ITaskService {
-  getTasks(reqQuery: any): Promise<ITask[] | null>;
+  getTasks(reqQuery: any): Promise<{ tasks: ITask[]; pagination: IPagination | undefined }>;
   getTaskById(taskId: string): Promise<ITask | null>;
   // getTaskOffers(taskId: string): Promise<any>;
   // getTaskOwner(taskId: string): Promise<any>;
