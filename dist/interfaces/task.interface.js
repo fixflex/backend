@@ -6,6 +6,7 @@ var TaskStatus;
     TaskStatus["OPEN"] = "OPEN";
     TaskStatus["ASSIGNED"] = "ASSIGNED";
     TaskStatus["COMPLETED"] = "COMPLETED";
+    TaskStatus["CANCELLED"] = "CANCELLED";
     // DONE = 'DONE',
     // IN_PROGRESS = 'IN_PROGRESS',
     // CANCELED = 'CANCELED',

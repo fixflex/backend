@@ -16,7 +16,7 @@ exports.CategoryService = exports.uploadServiceImage = void 0;
 const tsyringe_1 = require("tsyringe");
 const category_dao_1 = require("../DB/dao/category.dao");
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
-const apiFeatures_1 = __importDefault(require("../helpers/apiFeatures"));
+const helpers_1 = require("../helpers");
 const cloudinary_1 = require("../helpers/cloudinary");
 const uploadImages_middleware_1 = require("../middleware/uploadImages.middleware");
 exports.uploadServiceImage = (0, uploadImages_middleware_1.uploadSingleFile)('image');
@@ -25,7 +25,7 @@ let CategoryService = class CategoryService {
         this.categoryDao = categoryDao;
     }
     async getCategories(reqQuery, reqLanguage) {
-        let apiFeatures = new apiFeatures_1.default(reqQuery);
+        let apiFeatures = new helpers_1.APIFeatures(reqQuery);
         let query = apiFeatures.filter();
         let paginate = apiFeatures.paginate();
         let sort = apiFeatures.sort();

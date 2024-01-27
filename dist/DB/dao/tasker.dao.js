@@ -19,7 +19,7 @@ class TaskerDao extends baseDao_1.default {
                         $maxDistance: maxDistance * 1000,
                         $geometry: {
                             type: 'Point',
-                            coordinates: [longitude, latitude], // [longitude, latitude] [x, y]
+                            coordinates: [longitude, latitude], // [longitude, latitude] [y, x]
                         },
                     },
                 },
@@ -56,12 +56,18 @@ class TaskerDao extends baseDao_1.default {
                 .lean();
         }
         else
-            taskers = await tasker_model_1.default.find({}).populate('userId', 'firstName lastName email  profilePicture').populate('categories', 'name').lean();
+            taskers = await tasker_model_1.default.find({})
+                .populate('userId', 'firstName lastName email  profilePicture')
+                .populate('categories', 'name')
+                .lean();
         return taskers;
     }
     // get tasker profile with user data and categories data
     async getTaskerProfile(taskerId) {
-        let tasker = await tasker_model_1.default.findById(taskerId).populate('userId', 'firstName lastName email profilePicture').populate('categories', '_id name').lean();
+        let tasker = await tasker_model_1.default.findById(taskerId)
+            .populate('userId', 'firstName lastName email profilePicture')
+            .populate('categories', '_id name')
+            .lean();
         return tasker;
     }
 }

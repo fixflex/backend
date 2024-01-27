@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.QueryBuilder = exports.APIFeatures = void 0;
 class APIFeatures {
     constructor(reqQuery) {
         this.reqQuery = reqQuery;
@@ -7,7 +8,7 @@ class APIFeatures {
     filter() {
         // 1- Filteration
         let query = { ...this.reqQuery };
-        let excludedFields = ['page', 'sort', 'limit', 'fields', 'keyword'];
+        let excludedFields = ['page', 'sort', 'limit', 'fields'];
         excludedFields.forEach(field => delete query[field]);
         // 2- Advanced Filteration (gt, gte, lt, lte, in) (mongodb operators)
         let queryStr = JSON.stringify(query);
@@ -32,8 +33,8 @@ class APIFeatures {
         pagination.totalDocuments = countDocuments;
         pagination.hasNextPage = page < pagination.totalPages;
         pagination.hasPrevPage = page > 1;
-        pagination.nextPage = page + 1;
-        pagination.prevPage = page - 1;
+        pagination.next = page + 1;
+        pagination.prev = page - 1;
         return pagination;
     }
     sort() {
@@ -47,4 +48,118 @@ class APIFeatures {
         return fields;
     }
 }
-exports.default = APIFeatures;
+exports.APIFeatures = APIFeatures;
+// ############################################################################################################ //
+// ############################################################################################################ //
+// ############################################################################################################ //
+// ############################################################################################################ //
+class QueryBuilder {
+    constructor(mongooseQuery, queryString) {
+        this.mongooseQuery = mongooseQuery;
+        this.queryString = queryString;
+    }
+    filter(extraExcludesFields = []) {
+        const queryStringObj = { ...this.queryString };
+        const defaultExcludesFields = ['limit', 'page', 'fields', 'sort', 'keyword'];
+        const excludesFields = [...defaultExcludesFields, ...extraExcludesFields];
+        excludesFields.forEach(field => {
+            delete queryStringObj[field];
+        });
+        let querStr = JSON.stringify(queryStringObj);
+        querStr = querStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+        this.mongooseQuery = this.mongooseQuery.find(JSON.parse(querStr));
+        return this;
+    }
+    locationFilter() {
+        if (this.queryString.online === 'true') {
+            // return all tasks where location is online
+            this.mongooseQuery = this.mongooseQuery.find({ 'location.online': true });
+        }
+        else if (this.queryString.location) {
+            // return all tasks near by
+            const location = this.queryString.location.split(',');
+            const latitude = parseFloat(location[0]);
+            const longitude = parseFloat(location[1]);
+            const maxDistance = parseFloat(this.queryString.maxDistance || '60'); // Default to 60 km if maxDistance is not provided
+            console.log(longitude, latitude, maxDistance);
+            this.mongooseQuery = this.mongooseQuery.find({
+                location: {
+                    $near: {
+                        $maxDistance: maxDistance * 1000,
+                        $geometry: {
+                            type: 'Point',
+                            coordinates: [longitude, latitude], // [longitude, latitude] [x, y]
+                        },
+                    },
+                },
+            });
+            // .sort({ 'location.coordinates': 'asc' });
+        }
+        return this;
+    }
+    /**
+     * Adds a search filter to the Mongoose query based on the provided keyword and model fields.
+     * @param modelFields - The model fields to search within.
+     */
+    search(modelFields) {
+        // Check if a keyword is provided in the query string
+        if (this.queryString.keyword) {
+            // Construct a Mongoose query for a case-insensitive search on each specified model field
+            const query = {
+                $or: modelFields.map(field => ({
+                    [field]: {
+                        $regex: this.queryString.keyword,
+                        $options: 'i', // Case-insensitive
+                    },
+                })),
+            };
+            // Apply the search query to the Mongoose query
+            this.mongooseQuery = this.mongooseQuery.find(query);
+        }
+        return this;
+    }
+    sort() {
+        if (this.queryString.sort) {
+            const sortBy = this.queryString.sort.split(',').join(' ');
+            this.mongooseQuery = this.mongooseQuery.sort(sortBy);
+        }
+        else {
+            this.mongooseQuery = this.mongooseQuery.sort('-createdAt');
+        }
+        return this;
+    }
+    limitFields() {
+        if (this.queryString.fields) {
+            const fields = this.queryString.fields.split(',').join(' ');
+            this.mongooseQuery = this.mongooseQuery.select(fields);
+        }
+        else {
+            this.mongooseQuery = this.mongooseQuery.select('-__v');
+        }
+        return this;
+    }
+    paginate(countDocuments) {
+        const page = 1 * this.queryString.page || 1;
+        const limit = 1 * this.queryString.limit || 50;
+        const skip = (page - 1) * limit;
+        const endIndex = page * limit;
+        this.pagination = {
+            currentPage: page,
+            limit,
+            skip,
+            totalPages: Math.ceil(countDocuments / limit),
+            totalDocuments: countDocuments,
+        };
+        // Next page
+        if (endIndex < countDocuments) {
+            this.pagination.next = page + 1;
+        }
+        // Previous page
+        if (skip) {
+            this.pagination.prev = page - 1;
+        }
+        this.mongooseQuery = this.mongooseQuery.skip(skip).limit(limit);
+        return this;
+    }
+}
+exports.QueryBuilder = QueryBuilder;

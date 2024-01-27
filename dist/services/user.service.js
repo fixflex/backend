@@ -18,14 +18,14 @@ const tsyringe_1 = require("tsyringe");
 const user_dao_1 = __importDefault(require("../DB/dao/user.dao"));
 const validateEnv_1 = __importDefault(require("../config/validateEnv"));
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
-const apiFeatures_1 = __importDefault(require("../helpers/apiFeatures"));
+const apiFeatures_1 = require("../helpers/apiFeatures");
 const cloudinary_1 = require("../helpers/cloudinary");
 let UserService = class UserService {
     constructor(userDao) {
         this.userDao = userDao;
     }
     async getUsers(reqQuery) {
-        let apiFeatures = new apiFeatures_1.default(reqQuery);
+        let apiFeatures = new apiFeatures_1.APIFeatures(reqQuery);
         let query = apiFeatures.filter();
         let paginate = apiFeatures.paginate();
         let sort = apiFeatures.sort();

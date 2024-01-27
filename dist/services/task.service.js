@@ -21,8 +21,8 @@ let TaskService = class TaskService {
     constructor(taskDao) {
         this.taskDao = taskDao;
         this.getTasks = async (query) => {
-            const tasks = await this.taskDao.getTasks(query);
-            return tasks;
+            const { tasks, pagination } = await this.taskDao.getTasks(query);
+            return { pagination, tasks };
         };
         this.getTaskById = async (id) => {
             const task = await this.taskDao.getOneById(id);

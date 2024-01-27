@@ -34,8 +34,8 @@ let TaskController = class TaskController {
             res.status(201).json((0, customResponse_1.default)({ data: task, success: true, message: 'Task created' }));
         });
         this.getTasks = (0, express_async_handler_1.default)(async (req, res) => {
-            const tasks = await this.taskService.getTasks(req.query);
-            res.status(200).json((0, customResponse_1.default)({ data: tasks, success: true, message: null }));
+            const { tasks, pagination } = await this.taskService.getTasks(req.query);
+            res.status(200).json((0, customResponse_1.default)({ data: tasks, success: true, message: null, pagination, results: tasks.length }));
         });
         this.getTaskById = (0, express_async_handler_1.default)(async (req, res, next) => {
             const task = await this.taskService.getTaskById(req.params.id);

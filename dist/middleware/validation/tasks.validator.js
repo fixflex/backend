@@ -10,7 +10,13 @@ const validation_middleware_1 = __importDefault(require("../errors/validation.mi
 exports.createTaskValidator = [
     (0, express_validator_1.check)('category').optional().isMongoId().withMessage('invalid_MongoId'),
     (0, express_validator_1.check)('title').isString().withMessage('invalid_input').isLength({ max: 200, min: 5 }).withMessage('title_lenght'),
-    (0, express_validator_1.check)('details').notEmpty().withMessage('is_required').isString().withMessage('invalid_input').isLength({ max: 8000, min: 10 }).withMessage('details_lenght'),
+    (0, express_validator_1.check)('details')
+        .notEmpty()
+        .withMessage('is_required')
+        .isString()
+        .withMessage('invalid_input')
+        .isLength({ max: 8000, min: 10 })
+        .withMessage('details_lenght'),
     (0, express_validator_1.check)('dueDate.flexible').optional().isBoolean().withMessage('invalid_input'),
     (0, express_validator_1.check)('dueDate.on').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Invalid date format, must be YYYY-MM-DD'),
     (0, express_validator_1.check)('dueDate.before').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage(' "Invalid date format, must be YYYY-MM-DD",'),
@@ -33,9 +39,17 @@ exports.createTaskValidator = [
         if (typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
             throw new Error('invalid_coordinates');
         }
+        // swaped the coordinates
+        location.coordinates = [location.coordinates[1], location.coordinates[0]]; // [longitude, latitude]
         return true;
     }),
-    (0, express_validator_1.check)('budget').notEmpty().withMessage('is_required').isNumeric().withMessage('invalid_input').isInt({ min: 10 }).withMessage('invalid_budget'),
+    (0, express_validator_1.check)('budget')
+        .notEmpty()
+        .withMessage('is_required')
+        .isNumeric()
+        .withMessage('invalid_input')
+        .isInt({ min: 10 })
+        .withMessage('invalid_budget'),
     (0, express_validator_1.check)('status').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('offers').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('createdAt').isEmpty().withMessage('not_allowed'),
@@ -54,13 +68,15 @@ exports.updateTaskValidator = [
         if (location.online)
             return true;
         if (location.coordinates)
-            if (location.coordinates.length !== 2 || typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
+            if (location.coordinates.length !== 2 ||
+                typeof location.coordinates[0] !== 'number' ||
+                typeof location.coordinates[1] !== 'number') {
                 throw new Error('invalid_coordinates');
             }
         return true;
     }),
     (0, express_validator_1.check)('budget').optional().isNumeric().withMessage('invalid_input'),
-    (0, express_validator_1.check)('status').optional().isIn(['OPEN', 'ASSIGNED', 'COMPLETED']).withMessage('invalid_task_status'),
+    (0, express_validator_1.check)('status').optional().isIn(Object.values(interfaces_1.TaskStatus)).withMessage('invalid_status'),
     (0, express_validator_1.check)('offers').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('taskerId').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('createdAt').isEmpty().withMessage('not_allowed'),
