@@ -655,7 +655,11 @@ export const createTask = {
                     type: 'number',
                     example: 120,
                   },
-
+                  status: {
+                    type: 'string',
+                    enum: ['OPEN', 'ASSIGNED', 'COMPLETED', 'CANCELLED'],
+                    example: 'OPEN',
+                  },
                   createdAt: {
                     type: 'string',
                     format: 'date-time',
@@ -1106,6 +1110,11 @@ export const updateTask = {
             budget: {
               type: 'number',
               example: 120,
+            },
+            status: {
+              type: 'string',
+              enum: ['OPEN', 'ASSIGNED', 'COMPLETED', 'CANCELLED'],
+              example: 'ASSIGNED',
             },
           },
         },

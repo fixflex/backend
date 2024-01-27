@@ -1,12 +1,18 @@
 import { check } from 'express-validator';
 
-import { TaskTime } from '../../interfaces';
+import { TaskStatus, TaskTime } from '../../interfaces';
 import validatorMiddleware from '../errors/validation.middleware';
 
 export const createTaskValidator = [
   check('category').optional().isMongoId().withMessage('invalid_MongoId'),
   check('title').isString().withMessage('invalid_input').isLength({ max: 200, min: 5 }).withMessage('title_lenght'),
-  check('details').notEmpty().withMessage('is_required').isString().withMessage('invalid_input').isLength({ max: 8000, min: 10 }).withMessage('details_lenght'),
+  check('details')
+    .notEmpty()
+    .withMessage('is_required')
+    .isString()
+    .withMessage('invalid_input')
+    .isLength({ max: 8000, min: 10 })
+    .withMessage('details_lenght'),
   check('dueDate.flexible').optional().isBoolean().withMessage('invalid_input'),
   check('dueDate.on').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Invalid date format, must be YYYY-MM-DD'),
 
@@ -31,7 +37,13 @@ export const createTaskValidator = [
       }
       return true;
     }),
-  check('budget').notEmpty().withMessage('is_required').isNumeric().withMessage('invalid_input').isInt({ min: 10 }).withMessage('invalid_budget'),
+  check('budget')
+    .notEmpty()
+    .withMessage('is_required')
+    .isNumeric()
+    .withMessage('invalid_input')
+    .isInt({ min: 10 })
+    .withMessage('invalid_budget'),
 
   check('status').isEmpty().withMessage('not_allowed'),
   check('offers').isEmpty().withMessage('not_allowed'),
@@ -51,13 +63,17 @@ export const updateTaskValidator = [
     .custom(location => {
       if (location.online) return true;
       if (location.coordinates)
-        if (location.coordinates.length !== 2 || typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
+        if (
+          location.coordinates.length !== 2 ||
+          typeof location.coordinates[0] !== 'number' ||
+          typeof location.coordinates[1] !== 'number'
+        ) {
           throw new Error('invalid_coordinates');
         }
       return true;
     }),
   check('budget').optional().isNumeric().withMessage('invalid_input'),
-  check('status').optional().isIn(['OPEN', 'ASSIGNED', 'COMPLETED']).withMessage('invalid_task_status'),
+  check('status').optional().isIn(Object.values(TaskStatus)).withMessage('invalid_status'),
 
   check('offers').isEmpty().withMessage('not_allowed'),
   check('taskerId').isEmpty().withMessage('not_allowed'),

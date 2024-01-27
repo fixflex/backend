@@ -6,6 +6,7 @@ export enum TaskStatus {
   OPEN = 'OPEN',
   ASSIGNED = 'ASSIGNED',
   COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
   // DONE = 'DONE',
   // IN_PROGRESS = 'IN_PROGRESS',
   // CANCELED = 'CANCELED',
