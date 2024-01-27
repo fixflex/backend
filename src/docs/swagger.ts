@@ -1,7 +1,7 @@
 import { changePassword, forgotPassword, googleSignIn, login, logout, refreshToken, resetPassword, signup, verifyResetCode } from './auth.swagger';
 import { healthz } from './health.swagger';
 import { becomeTasker, getMyTaskerProfile, getTasker, getTaskers, updateMyTaskerProfile } from './taskers.swagger';
-import { createTask, getTask, updateTask, uploadTaskImages } from './tasks.swagger';
+import { createTask, deleteTask, getTask, getTasks, updateTask, uploadTaskImages } from './tasks.swagger';
 import { deleteMe, getMe, updateMe, updateProfileImage } from './users.swagger';
 
 const swaggerDocument = {
@@ -120,17 +120,23 @@ const swaggerDocument = {
 
     // *************** Tasks *************** //
     '/tasks': {
+      get: getTasks,
       post: createTask,
     },
 
     '/tasks/{taskId}': {
       get: getTask,
       patch: updateTask,
+      delete: deleteTask,
     },
 
     '/tasks/{taskId}/images': {
       patch: uploadTaskImages,
     },
+
+    // *************** Categories *************** //
+
+    // '/categories': {},
 
     // *************** Locations *************** //
     // *************** Reviews *************** //
