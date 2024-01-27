@@ -76,12 +76,9 @@ let taskSchema: Schema<ITask> = new Schema(
       },
       coordinates: {
         type: [Number],
-        required: true,
-        default: [0, 0],
       },
       online: {
         type: Boolean,
-        default: false,
       },
     },
     // city: {

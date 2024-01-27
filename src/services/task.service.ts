@@ -5,15 +5,15 @@ import { autoInjectable } from 'tsyringe';
 import { TaskDao } from '../DB/dao/task.dao';
 import HttpException from '../exceptions/HttpException';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
-import { ITask, ITaskService } from '../interfaces';
+import { IPagination, ITask, ITaskService } from '../interfaces';
 
 @autoInjectable()
 class TaskService implements ITaskService {
   constructor(private readonly taskDao: TaskDao) {}
 
-  getTasks = async (query: Query) => {
-    const tasks = await this.taskDao.getTasks(query);
-    return tasks;
+  getTasks = async (query: Query): Promise<{ tasks: ITask[]; pagination: IPagination | undefined }> => {
+    const { tasks, pagination } = await this.taskDao.getTasks(query);
+    return { pagination, tasks };
   };
 
   getTaskById = async (id: string) => {
@@ -65,7 +65,9 @@ class TaskService implements ITaskService {
     // 4. Upload images if provided
     if (files.image) {
       // 4.1 Upload each image to cloudinary and store the results
-      images = await Promise.all(files.image.map(async (img: Express.Multer.File) => await cloudinaryUploadImage(img.buffer, 'task-image')));
+      images = await Promise.all(
+        files.image.map(async (img: Express.Multer.File) => await cloudinaryUploadImage(img.buffer, 'task-image'))
+      );
 
       // 4.2 Delete the old images from cloudinary if they exist
       if (task.images.length > 0) {

@@ -4,7 +4,7 @@ import { autoInjectable } from 'tsyringe';
 import UserDao from '../DB/dao/user.dao';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
-import APIFeatures from '../helpers/apiFeatures';
+import { APIFeatures } from '../helpers/apiFeatures';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { IPagination } from '../interfaces/pagination.interface';
 import { IUser, IUserService } from '../interfaces/user.interface';
