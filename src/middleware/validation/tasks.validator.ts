@@ -15,8 +15,29 @@ export const createTaskValidator = [
     .withMessage('details_lenght'),
   check('dueDate.flexible').optional().isBoolean().withMessage('invalid_input'),
   check('dueDate.on').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Invalid date format, must be YYYY-MM-DD'),
-
   check('dueDate.before').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage(' "Invalid date format, must be YYYY-MM-DD",'),
+  check('dueDate').custom(dueDate => {
+    if (dueDate) {
+      if (dueDate.before && dueDate.on) {
+        throw new Error('can not set both before and on');
+      }
+      if ((dueDate.flexible !== undefined && dueDate.on) || (dueDate.flexible !== undefined && dueDate.before)) {
+        throw new Error('can not set both flexible and on or before');
+      }
+      // dueDate.flexible should be true
+      if (dueDate.flexible === false && !dueDate.on && !dueDate.before) {
+        throw new Error('dueDate.flexible should be true or on or before should be set');
+      }
+      // check if the date is in the past
+      if (new Date(dueDate.before) < new Date()) {
+        throw new Error('invalid_dueDate');
+      }
+      if (new Date(dueDate.on) < new Date()) {
+        throw new Error('invalid_dueDate');
+      }
+    }
+    return true;
+  }),
   check('time')
     .optional()
     .isArray()
@@ -56,6 +77,37 @@ export const createTaskValidator = [
 
 export const updateTaskValidator = [
   check('dueDate.flexible').optional().isBoolean().withMessage('invalid_input'),
+  check('dueDate.on').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Invalid date format, must be YYYY-MM-DD'),
+  check('dueDate.before').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage(' "Invalid date format, must be YYYY-MM-DD",'),
+  check('dueDate').custom(dueDate => {
+    if (dueDate) {
+      if (dueDate.before && dueDate.on) {
+        throw new Error('can not set both before and on');
+      }
+      if ((dueDate.flexible !== undefined && dueDate.on) || (dueDate.flexible !== undefined && dueDate.before)) {
+        throw new Error('can not set both flexible and on or before');
+      }
+      // dueDate.flexible should be true
+      if (dueDate.flexible === false && !dueDate.on && !dueDate.before) {
+        throw new Error('dueDate.flexible should be true or on or before should be set');
+      }
+      // check if the date is in the past
+      if (new Date(dueDate.before) < new Date()) {
+        throw new Error('invalid_dueDate');
+      }
+
+      if (new Date(dueDate.on) < new Date()) {
+        throw new Error('invalid_dueDate');
+      }
+    }
+    return true;
+  }),
+  check('time')
+    .optional()
+    .isArray()
+    .withMessage('must be an array')
+    .custom(time => time.every((t: TaskTime) => Object.values(TaskTime).includes(t)))
+    .withMessage('Invalid task time, must be one of MORNING, MIDDAY, AFTERNOON, EVENING'),
   check('title').optional().isString().withMessage('invalid_input').isLength({ max: 200, min: 5 }).withMessage('title_lenght'),
   check('details').optional().isString().withMessage('invalid_input').isLength({ max: 8000, min: 10 }).withMessage('details_lenght'),
   check('category').optional().isMongoId().withMessage('invalid_MongoId'),
@@ -72,6 +124,8 @@ export const updateTaskValidator = [
         ) {
           throw new Error('invalid_coordinates');
         }
+      // swaped the coordinates
+      location.coordinates = [location.coordinates[1], location.coordinates[0]]; // [longitude, latitude]
       return true;
     }),
   check('budget').optional().isNumeric().withMessage('invalid_input'),
