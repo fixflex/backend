@@ -33,10 +33,13 @@ class TaskerController implements ITaskerController {
     if (!tasker) return next(new HttpException(404, 'tasker_not_found'));
     res.status(200).json(customResponse<ITasker>({ data: tasker, success: true, message: req.t('tasker_found') }));
   });
-  getTaskers = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    let taskers = await this.taskerService.getTaskers(req.query);
-    if (!taskers) return next(new HttpException(400, 'something_went_wrong'));
-    res.status(200).json(Object.assign({ results: taskers.length }, customResponse<ITasker[]>({ data: taskers, success: true, message: null })));
+  getTaskers = asyncHandler(async (req: Request, res: Response) => {
+    let { taskers, pagination } = await this.taskerService.getTaskers(req.query);
+    res
+      .status(200)
+      .json(
+        customResponse<ITasker[]>({ data: taskers, success: true, message: req.t('taskers_found'), pagination, results: taskers.length })
+      );
   });
 
   updateMe = asyncHandler(async (req: Request<ITasker>, res: Response, next: NextFunction) => {

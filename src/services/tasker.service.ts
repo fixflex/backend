@@ -1,8 +1,10 @@
+import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
 import { CategoryDao } from '../DB/dao';
 import TaskerDao from '../DB/dao/tasker.dao';
 import HttpException from '../exceptions/HttpException';
+import { IPagination } from '../interfaces';
 import { ITasker, ITaskerService } from '../interfaces/tasker.interface';
 
 @autoInjectable()
@@ -29,14 +31,10 @@ class TaskerService implements ITaskerService {
   async getMyProfile(userId: string) {
     return await this.taskerDao.getOne({ userId });
   }
-  async getTaskers(reqQuery: any) {
-    if (reqQuery.categories) {
-      // check if service is exists in DB
-      let isServiceExists = await this.categoryDao.getOneById(reqQuery.categories);
-      if (!isServiceExists) throw new HttpException(404, 'category_not_found');
-    }
-    let taskers = await this.taskerDao.listTaskers(reqQuery.longitude, reqQuery.latitude, reqQuery.categories, reqQuery.maxDistance);
-    return taskers;
+
+  async getTaskers(reqQuery: Query): Promise<{ taskers: ITasker[]; pagination: IPagination | undefined }> {
+    const { taskers, pagination } = await this.taskerDao.getTaskers(reqQuery);
+    return { pagination, taskers };
   }
 
   async updateTasker(userId: string, tasker: Partial<ITasker>) {

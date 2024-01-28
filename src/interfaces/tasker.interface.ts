@@ -1,5 +1,6 @@
 import { NextFunction } from 'express';
 
+import { IPagination } from '.';
 import { Request, Response } from '../helpers/generic';
 
 export interface ITasker {
@@ -45,7 +46,7 @@ export interface ITaskerController {
 
 export interface ITaskerService {
   getTasker(taskerId: string): Promise<ITasker | null>;
-  getTaskers(reqQuery: any): Promise<ITasker[] | null>;
+  getTaskers(reqQuery: any): Promise<{ taskers: ITasker[]; pagination: IPagination | undefined }>;
   createTasker(userId: string, tasker: ITasker): Promise<ITasker>;
   updateTasker(userId: string, tasker: Partial<ITasker>): Promise<any>;
   deleteTasker(taskerId: string): Promise<any>;
