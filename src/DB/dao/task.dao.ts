@@ -17,7 +17,7 @@ class TaskDao extends CommonDAO<ITask> {
       .filter(['location', 'online', 'maxDistance'])
       .locationFilter()
       .search(['title', 'details'])
-      .sort()
+      .sort('-location.coordinates')
       .limitFields()
       .paginate(countDocments);
 

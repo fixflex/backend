@@ -134,7 +134,7 @@ export class QueryBuilder<T> {
   sort(defaultSort: string = '-createdAt') {
     if (this.queryString.sort) {
       // concatinate the default sort with the query sort
-      const sortBy = `${this.queryString.sort} ${defaultSort}`;
+      const sortBy = this.queryString.sort;
 
       this.mongooseQuery = this.mongooseQuery.sort(sortBy);
     } else {
