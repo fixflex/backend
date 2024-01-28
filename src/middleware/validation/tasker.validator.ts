@@ -19,7 +19,6 @@ export const createTaskerValidator = [
   check('location')
     .notEmpty()
     .withMessage('this_field_is_required')
-
     .custom(location => {
       if (location.coordinates.length !== 2) {
         throw new Error('invalid_coordinates');
@@ -45,6 +44,19 @@ export const updateTaskerValidator = [
   check('categories').isEmpty().withMessage('not_allowed'),
   // check('categories').optional().isArray().withMessage('Services must be an array').isLength({ min: 1 }).withMessage('Services must have at least one service'),
   // check('categories.*').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
+  check('location')
+    .optional()
+    .custom(location => {
+      if (location.coordinates.length !== 2) {
+        throw new Error('invalid_coordinates');
+      }
+      if (typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
+        throw new Error('invalid_coordinates');
+      }
+      // swap the coordinates to be [longitude, latitude] [x, y]
+      location.coordinates = [location.coordinates[1], location.coordinates[0]];
+      return true;
+    }),
   check('bio')
     .optional()
     .isString()
