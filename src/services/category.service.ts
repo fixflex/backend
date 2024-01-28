@@ -1,11 +1,9 @@
-import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
 import { CategoryDao } from '../DB/dao/category.dao';
 import HttpException from '../exceptions/HttpException';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { ICategory, ICategoryService } from '../interfaces/category.interface';
-import { IPagination } from '../interfaces/pagination.interface';
 import { uploadSingleFile } from '../middleware/uploadImages.middleware';
 
 export const uploadServiceImage = uploadSingleFile('image');
@@ -13,13 +11,13 @@ export const uploadServiceImage = uploadSingleFile('image');
 class CategoryService implements ICategoryService {
   constructor(private readonly categoryDao: CategoryDao) {}
 
-  async getCategories(query: Query, reqLanguage: string): Promise<{ categories: ICategory[] | null; pagination: IPagination | undefined }> {
-    const { categories, pagination } = await this.categoryDao.getCategories(query);
+  async getCategories(reqLanguage: string): Promise<ICategory[] | null> {
+    const categories = await this.categoryDao.getMany();
 
     let localizedDocs: ICategory[] | null = null;
     if (categories) localizedDocs = this.categoryDao.toJSONLocalizedOnly(categories, reqLanguage) as ICategory[];
 
-    return { pagination, categories: localizedDocs };
+    return localizedDocs;
   }
 
   async getCategory(serviceId: string, reqLanguage: string): Promise<ICategory> {

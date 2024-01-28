@@ -1,6 +1,5 @@
 import { NextFunction } from 'express';
 
-import { IPagination } from '.';
 import { Request, Response } from '../helpers';
 
 export interface ICategory {
@@ -24,7 +23,7 @@ export interface ICategoryController {
 }
 
 export interface ICategoryService {
-  getCategories(reqQuery: any, reqLanguage: string): Promise<{ categories: ICategory[] | null; pagination: IPagination | undefined }>;
+  getCategories(reqQuery: any, reqLanguage: string): Promise<ICategory[] | null>;
   getCategory(categoryId: string, reqLanguage: string): Promise<ICategory>;
   createCategory(category: ICategory): Promise<ICategory>;
   updateCategory(categoryId: string, category: ICategory): Promise<ICategory | null>;
