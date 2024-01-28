@@ -45,7 +45,6 @@
   "file_size_exceeded": "File size exceeded the limit",
   "limit_unexpected_file": "Exceeded the number of files allowed",
   "access_denied": "Access denied",
-  "resource_not_found": "Resource not found",
   "invalid_input": "Invalid input",
   "success": "Success",
   "failure": "Failure",
@@ -82,5 +81,11 @@
 
   "must_be_object": "This field must be an object",
   "user_logged_in": "User logged in successfully",
-  "invalid_budget": "the budget must be greater than 10"
+  "invalid_budget": "the budget must be greater than 10",
+
+  "task_created": "Task created successfully",
+  "task_updated": "Task updated successfully",
+  "task_deleted": "Task deleted successfully",
+  "task_not_found": "Task not found",
+  "resource_not_found": "Resource not found"
 }

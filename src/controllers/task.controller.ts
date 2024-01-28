@@ -21,8 +21,8 @@ class TaskController implements ITaskController {
   createTask = asyncHandler(async (req: Request<ITask>, res: Response, next: NextFunction) => {
     req.body.ownerId = req.user._id;
     const task = await this.taskService.createTask(req.body);
-    if (!task) return next(new HttpException(400, 'Something went wrong, please try again later'));
-    res.status(201).json(customResponse({ data: task, success: true, message: 'Task created' }));
+    if (!task) return next(new HttpException(400, 'something_went_wrong'));
+    res.status(201).json(customResponse({ data: task, success: true, message: req.t('task_created') }));
   });
 
   getTasks = asyncHandler(async (req: Request, res: Response) => {
@@ -32,14 +32,14 @@ class TaskController implements ITaskController {
 
   getTaskById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const task = await this.taskService.getTaskById(req.params.id);
-    if (!task) return next(new HttpException(404, `Task with id ${req.params.id} not found`));
+    if (!task) return next(new HttpException(404, 'resource_not_found'));
     res.status(200).json(customResponse({ data: task, success: true, message: null }));
   });
 
   updateTask = asyncHandler(async (req: Request<ITask>, res: Response, next: NextFunction) => {
     const task = await this.taskService.updateTask(req.params.id, req.body, req.user._id);
-    if (!task) return next(new HttpException(404, `Task with id ${req.params.id} not found`));
-    res.status(200).json(customResponse({ data: task, success: true, message: 'Task updated' }));
+    if (!task) return next(new HttpException(404, 'resource_not_found'));
+    res.status(200).json(customResponse({ data: task, success: true, message: req.t('task_updated') }));
   });
 
   uploadTaskImages = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -50,14 +50,14 @@ class TaskController implements ITaskController {
       req.user._id
     ); // TODO: fix the type
 
-    if (!task) return next(new HttpException(404, `Task with id ${req.params.id} not found`));
-    res.status(200).json(customResponse({ data: task, success: true, message: 'Task images uploaded' }));
+    if (!task) return next(new HttpException(404, 'resource_not_found'));
+    res.status(200).json(customResponse({ data: task, success: true, message: req.t('task_updated') }));
   });
 
   deleteTask = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const task = await this.taskService.deleteTask(req.params.id, req.user._id);
-    if (!task) return next(new HttpException(404, `Task with id ${req.params.id} not found`));
-    res.status(200).json(customResponse({ data: null, success: true, message: 'Task deleted' }));
+    if (!task) return next(new HttpException(404, 'resource_not_found'));
+    res.status(200).json(customResponse({ data: null, success: true, message: req.t('task_deleted') }));
   });
 }
 

@@ -32,19 +32,19 @@ class TaskService implements ITaskService {
 
     if (!task) throw new HttpException(404, 'Task not found');
     // convert the id to string to compare it with the ownerId
-    if (task.ownerId !== userId?.toString()) throw new HttpException(403, 'You are not allowed to update this task');
+    if (task.ownerId !== userId?.toString()) throw new HttpException(403, 'unauthorized');
     const updatedTask = await this.taskDao.updateOneById(id, payload);
     return updatedTask;
   };
 
   uploadTaskImages = async (id: string, files: { [fieldname: string]: Express.Multer.File[] }, userId: string) => {
     // 1. Check if files are uploaded
-    if (!files.imageCover && !files.image) throw new HttpException(400, 'Please upload files');
+    if (!files.imageCover && !files.image) throw new HttpException(400, 'file_not_found');
 
     // 2. Check if the task exists and the user is the owner of the task
     const task = await this.taskDao.getOneById(id);
     if (!task) throw new HttpException(404, 'Task not found');
-    if (task.ownerId !== userId?.toString()) throw new HttpException(403, 'You are not allowed to update this task');
+    if (task.ownerId !== userId?.toString()) throw new HttpException(403, 'unauthorized');
 
     let imageCover: UploadApiResponse;
     let images: UploadApiResponse[];
@@ -94,46 +94,10 @@ class TaskService implements ITaskService {
   deleteTask = async (id: string, userId: string | undefined) => {
     const task = await this.taskDao.getOneById(id);
     if (!task) throw new HttpException(404, 'Task not found');
-    if (task.ownerId !== userId?.toString()) throw new HttpException(403, 'You are not allowed to update this task');
+    if (task.ownerId !== userId?.toString()) throw new HttpException(403, 'unauthorized');
     const deletedTask = await this.taskDao.deleteOneById(id);
     return deletedTask;
   };
 }
 
 export { TaskService };
-
-// uploadTaskImages = async (id: string, files: { [fieldname: string]: Express.Multer.File[] }, userId: string) => {
-//   // 1- check if files are uploaded
-//   if (!files.imageCover && !files.image) throw new HttpException(400, 'Please upload files');
-//   const task = await this.taskDao.getOneById(id);
-//   if (!task) throw new HttpException(404, 'Task not found');
-//   if (task.ownerId !== userId?.toString()) throw new HttpException(403, 'You are not allowed to update this task');
-
-//   let imageCover: UploadApiResponse;
-//   let images: UploadApiResponse[];
-//   const updateData: any = {};
-
-//   if ((files as { [fieldname: string]: Express.Multer.File[] }).imageCover) {
-//     imageCover = await cloudinaryUploadImage((files as { [fieldname: string]: Express.Multer.File[] }).imageCover[0].buffer, 'task-image');
-//     if (task.imageCover.publicId) await cloudinaryDeleteImage(task.imageCover.publicId);
-//     updateData.imageCover = { url: imageCover.secure_url, publicId: imageCover.public_id };
-//   }
-//   if ((files as { [fieldname: string]: Express.Multer.File[] }).image) {
-//     images = await Promise.all(
-//       (files as { [fieldname: string]: Express.Multer.File[] }).image.map(async (img: Express.Multer.File) => await cloudinaryUploadImage(img.buffer, 'task-image'))
-//     );
-//     if (task.images.length > 0)
-//       await Promise.all(
-//         task.images.map(async img => {
-//           if (img.publicId) return await cloudinaryDeleteImage(img.publicId);
-//           // 3.2- delete the old images from cloudinary
-//         })
-//       );
-//     updateData.images = images.map(img => {
-//       return { url: img.secure_url, publicId: img.public_id };
-//     });
-//   }
-//   let updatedTask = await this.taskDao.updateOneById(id, updateData);
-
-//   return updatedTask;
-// };
