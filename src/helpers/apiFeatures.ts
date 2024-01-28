@@ -92,7 +92,6 @@ export class QueryBuilder<T> {
       const longitude = parseFloat(location[0]);
       const latitude = parseFloat(location[1]);
       const maxDistance = parseFloat(this.queryString.maxDistance || '60'); // Default to 60 km if maxDistance is not provided
-
       this.mongooseQuery = this.mongooseQuery.find({
         location: {
           $near: {
@@ -132,12 +131,14 @@ export class QueryBuilder<T> {
     return this;
   }
 
-  sort() {
+  sort(defaultSort: string = '-createdAt') {
     if (this.queryString.sort) {
-      const sortBy = this.queryString.sort.split(',').join(' ');
+      // concatinate the default sort with the query sort
+      const sortBy = `${this.queryString.sort} ${defaultSort}`;
+
       this.mongooseQuery = this.mongooseQuery.sort(sortBy);
     } else {
-      this.mongooseQuery = this.mongooseQuery.sort('-createdAt');
+      this.mongooseQuery = this.mongooseQuery.sort(defaultSort);
     }
     return this;
   }

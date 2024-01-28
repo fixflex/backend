@@ -45,7 +45,6 @@ class TaskerController implements ITaskerController {
   updateMe = asyncHandler(async (req: Request<ITasker>, res: Response, next: NextFunction) => {
     let userId = req.user?._id;
     let updatedTasker = await this.taskerService.updateTasker(userId!, req.body);
-    console.log(updatedTasker);
     if (updatedTasker.modifiedCount == 0) return next(new HttpException(404, 'tasker_not_found'));
     res.status(200).json(customResponse({ data: null, success: true, message: req.t('tasker_updated') }));
   });
