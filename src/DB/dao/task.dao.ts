@@ -22,7 +22,9 @@ class TaskDao extends CommonDAO<ITask> {
       .paginate(countDocments);
 
     const pagination: IPagination | undefined = apiFeatures.pagination;
-    const tasks = await apiFeatures.mongooseQuery;
+    const tasks = await apiFeatures.mongooseQuery
+      .select('-__v  -images  -imageCover  -details')
+      .populate('ownerId', 'firstName lastName  profilePicture');
 
     return { tasks, pagination };
   }

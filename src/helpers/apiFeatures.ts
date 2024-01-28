@@ -155,7 +155,7 @@ export class QueryBuilder<T> {
 
   paginate(countDocuments: number) {
     const page: number = 1 * this.queryString.page || 1;
-    const limit: number = 1 * this.queryString.limit || 50;
+    const limit: number = 1 * this.queryString.limit || 20;
     const skip: number = (page - 1) * limit;
     const endIndex: number = page * limit;
 
