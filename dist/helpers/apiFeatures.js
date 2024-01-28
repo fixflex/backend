@@ -1,58 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.QueryBuilder = exports.APIFeatures = void 0;
-class APIFeatures {
-    constructor(reqQuery) {
-        this.reqQuery = reqQuery;
-    }
-    filter() {
-        // 1- Filteration
-        let query = { ...this.reqQuery };
-        let excludedFields = ['page', 'sort', 'limit', 'fields'];
-        excludedFields.forEach(field => delete query[field]);
-        // 2- Advanced Filteration (gt, gte, lt, lte, in) (mongodb operators)
-        let queryStr = JSON.stringify(query);
-        queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
-        query = JSON.parse(queryStr);
-        return query;
-    }
-    paginate(countDocuments = 0) {
-        // 2- Pagination
-        let page = parseInt(this.reqQuery.page) || 1;
-        let limit = parseInt(this.reqQuery.limit) || 10;
-        let skip = (page - 1) * limit;
-        // Pagination result
-        let pagination = {
-            currentPage: page,
-            limit,
-            skip,
-        };
-        if (countDocuments === 0)
-            return pagination;
-        pagination.totalPages = Math.ceil(countDocuments / limit); // round up to the nearest integer
-        pagination.totalDocuments = countDocuments;
-        pagination.hasNextPage = page < pagination.totalPages;
-        pagination.hasPrevPage = page > 1;
-        pagination.next = page + 1;
-        pagination.prev = page - 1;
-        return pagination;
-    }
-    sort() {
-        // 3- Sorting
-        let sort = this.reqQuery.sort?.split(',').join(' ') || '-createdAt'; // default sort by createdAt desc
-        return sort;
-    }
-    selectFields() {
-        // 4- Fields limiting (projecting & selecting)
-        let fields = this.reqQuery.fields?.split(',').join(' ') || '-__v'; // default exclude __v field
-        return fields;
-    }
-}
-exports.APIFeatures = APIFeatures;
-// ############################################################################################################ //
-// ############################################################################################################ //
-// ############################################################################################################ //
-// ############################################################################################################ //
+exports.QueryBuilder = void 0;
 class QueryBuilder {
     constructor(mongooseQuery, queryString) {
         this.mongooseQuery = mongooseQuery;
@@ -78,10 +26,9 @@ class QueryBuilder {
         else if (this.queryString.location) {
             // return all tasks near by
             const location = this.queryString.location.split(',');
-            const latitude = parseFloat(location[0]);
-            const longitude = parseFloat(location[1]);
+            const longitude = parseFloat(location[0]);
+            const latitude = parseFloat(location[1]);
             const maxDistance = parseFloat(this.queryString.maxDistance || '60'); // Default to 60 km if maxDistance is not provided
-            console.log(longitude, latitude, maxDistance);
             this.mongooseQuery = this.mongooseQuery.find({
                 location: {
                     $near: {
@@ -118,13 +65,14 @@ class QueryBuilder {
         }
         return this;
     }
-    sort() {
+    sort(defaultSort = '-createdAt') {
         if (this.queryString.sort) {
-            const sortBy = this.queryString.sort.split(',').join(' ');
+            // concatinate the default sort with the query sort
+            const sortBy = this.queryString.sort;
             this.mongooseQuery = this.mongooseQuery.sort(sortBy);
         }
         else {
-            this.mongooseQuery = this.mongooseQuery.sort('-createdAt');
+            this.mongooseQuery = this.mongooseQuery.sort(defaultSort);
         }
         return this;
     }
@@ -140,7 +88,7 @@ class QueryBuilder {
     }
     paginate(countDocuments) {
         const page = 1 * this.queryString.page || 1;
-        const limit = 1 * this.queryString.limit || 50;
+        const limit = 1 * this.queryString.limit || 20;
         const skip = (page - 1) * limit;
         const endIndex = page * limit;
         this.pagination = {

@@ -15,10 +15,6 @@ exports.getTaskersValidator = [
 exports.createTaskerValidator = [
     (0, express_validator_1.check)('categories').isArray().withMessage('this_field_must_be_an_array').isLength({ min: 1 }).withMessage('this_field_is_required'),
     (0, express_validator_1.check)('categories.*').isMongoId().withMessage('invalid_MongoId'),
-    //         "location": {
-    // "coordinates": [32.1617485, 26.0524745]
-    // }
-    // custom validator to check if coordinates are valid numbers (longitude, latitude) [x, y]
     (0, express_validator_1.check)('location')
         .notEmpty()
         .withMessage('this_field_is_required')
@@ -29,8 +25,6 @@ exports.createTaskerValidator = [
         if (typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
             throw new Error('invalid_coordinates');
         }
-        // swap the coordinates to be [longitude, latitude] [x, y]
-        location.coordinates = [location.coordinates[1], location.coordinates[0]];
         return true;
     }),
     //  ckeck that the phone number is valid  and be from egypt
@@ -44,6 +38,17 @@ exports.updateTaskerValidator = [
     (0, express_validator_1.check)('categories').isEmpty().withMessage('not_allowed'),
     // check('categories').optional().isArray().withMessage('Services must be an array').isLength({ min: 1 }).withMessage('Services must have at least one service'),
     // check('categories.*').optional().isMongoId().withMessage('Service must be a valid mongo ID'),
+    (0, express_validator_1.check)('location')
+        .optional()
+        .custom(location => {
+        if (location.coordinates.length !== 2) {
+            throw new Error('invalid_coordinates');
+        }
+        if (typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
+            throw new Error('invalid_coordinates');
+        }
+        return true;
+    }),
     (0, express_validator_1.check)('bio')
         .optional()
         .isString()

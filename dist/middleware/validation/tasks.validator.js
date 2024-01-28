@@ -20,6 +20,28 @@ exports.createTaskValidator = [
     (0, express_validator_1.check)('dueDate.flexible').optional().isBoolean().withMessage('invalid_input'),
     (0, express_validator_1.check)('dueDate.on').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Invalid date format, must be YYYY-MM-DD'),
     (0, express_validator_1.check)('dueDate.before').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage(' "Invalid date format, must be YYYY-MM-DD",'),
+    (0, express_validator_1.check)('dueDate').custom(dueDate => {
+        if (dueDate) {
+            if (dueDate.before && dueDate.on) {
+                throw new Error('can not set both before and on');
+            }
+            if ((dueDate.flexible !== undefined && dueDate.on) || (dueDate.flexible !== undefined && dueDate.before)) {
+                throw new Error('can not set both flexible and on or before');
+            }
+            // dueDate.flexible should be true
+            if (dueDate.flexible === false && !dueDate.on && !dueDate.before) {
+                throw new Error('dueDate.flexible should be true or on or before should be set');
+            }
+            // check if the date is in the past
+            if (new Date(dueDate.before) < new Date()) {
+                throw new Error('invalid_dueDate');
+            }
+            if (new Date(dueDate.on) < new Date()) {
+                throw new Error('invalid_dueDate');
+            }
+        }
+        return true;
+    }),
     (0, express_validator_1.check)('time')
         .optional()
         .isArray()
@@ -58,6 +80,36 @@ exports.createTaskValidator = [
 ];
 exports.updateTaskValidator = [
     (0, express_validator_1.check)('dueDate.flexible').optional().isBoolean().withMessage('invalid_input'),
+    (0, express_validator_1.check)('dueDate.on').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Invalid date format, must be YYYY-MM-DD'),
+    (0, express_validator_1.check)('dueDate.before').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage(' "Invalid date format, must be YYYY-MM-DD",'),
+    (0, express_validator_1.check)('dueDate').custom(dueDate => {
+        if (dueDate) {
+            if (dueDate.before && dueDate.on) {
+                throw new Error('can not set both before and on');
+            }
+            if ((dueDate.flexible !== undefined && dueDate.on) || (dueDate.flexible !== undefined && dueDate.before)) {
+                throw new Error('can not set both flexible and on or before');
+            }
+            // dueDate.flexible should be true
+            if (dueDate.flexible === false && !dueDate.on && !dueDate.before) {
+                throw new Error('dueDate.flexible should be true or on or before should be set');
+            }
+            // check if the date is in the past
+            if (new Date(dueDate.before) < new Date()) {
+                throw new Error('invalid_dueDate');
+            }
+            if (new Date(dueDate.on) < new Date()) {
+                throw new Error('invalid_dueDate');
+            }
+        }
+        return true;
+    }),
+    (0, express_validator_1.check)('time')
+        .optional()
+        .isArray()
+        .withMessage('must be an array')
+        .custom(time => time.every((t) => Object.values(interfaces_1.TaskTime).includes(t)))
+        .withMessage('Invalid task time, must be one of MORNING, MIDDAY, AFTERNOON, EVENING'),
     (0, express_validator_1.check)('title').optional().isString().withMessage('invalid_input').isLength({ max: 200, min: 5 }).withMessage('title_lenght'),
     (0, express_validator_1.check)('details').optional().isString().withMessage('invalid_input').isLength({ max: 8000, min: 10 }).withMessage('details_lenght'),
     (0, express_validator_1.check)('category').optional().isMongoId().withMessage('invalid_MongoId'),
@@ -73,6 +125,8 @@ exports.updateTaskValidator = [
                 typeof location.coordinates[1] !== 'number') {
                 throw new Error('invalid_coordinates');
             }
+        // swaped the coordinates
+        location.coordinates = [location.coordinates[1], location.coordinates[0]]; // [longitude, latitude]
         return true;
     }),
     (0, express_validator_1.check)('budget').optional().isNumeric().withMessage('invalid_input'),

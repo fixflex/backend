@@ -16,18 +16,6 @@ class CategoryDao extends baseDao_1.default {
     async getCategoryByName(name) {
         return await category_model_1.default.findOne({ name });
     }
-    async getCategories(query = {}, paginate, sort = {}, select = '-__v') {
-        // build the query
-        let categories = category_model_1.default.find(query);
-        if (paginate.skip)
-            categories = categories.skip(paginate.skip);
-        if (paginate.limit)
-            categories = categories.limit(paginate.limit);
-        categories = categories.sort(sort).select(select);
-        // execute the query
-        let categoriesList = await categories;
-        return categoriesList;
-    }
     toJSONLocalizedOnly(doc, reqLanguage = validateEnv_1.default.defaultLocale) {
         let localizedDoc = category_model_1.default.schema.methods.toJSONLocalizedOnly(doc, reqLanguage);
         return localizedDoc;

@@ -30,8 +30,8 @@ let TaskController = class TaskController {
             req.body.ownerId = req.user._id;
             const task = await this.taskService.createTask(req.body);
             if (!task)
-                return next(new HttpException_1.default(400, 'Something went wrong, please try again later'));
-            res.status(201).json((0, customResponse_1.default)({ data: task, success: true, message: 'Task created' }));
+                return next(new HttpException_1.default(400, 'something_went_wrong'));
+            res.status(201).json((0, customResponse_1.default)({ data: task, success: true, message: req.t('task_created') }));
         });
         this.getTasks = (0, express_async_handler_1.default)(async (req, res) => {
             const { tasks, pagination } = await this.taskService.getTasks(req.query);
@@ -40,28 +40,28 @@ let TaskController = class TaskController {
         this.getTaskById = (0, express_async_handler_1.default)(async (req, res, next) => {
             const task = await this.taskService.getTaskById(req.params.id);
             if (!task)
-                return next(new HttpException_1.default(404, `Task with id ${req.params.id} not found`));
+                return next(new HttpException_1.default(404, 'resource_not_found'));
             res.status(200).json((0, customResponse_1.default)({ data: task, success: true, message: null }));
         });
         this.updateTask = (0, express_async_handler_1.default)(async (req, res, next) => {
             const task = await this.taskService.updateTask(req.params.id, req.body, req.user._id);
             if (!task)
-                return next(new HttpException_1.default(404, `Task with id ${req.params.id} not found`));
-            res.status(200).json((0, customResponse_1.default)({ data: task, success: true, message: 'Task updated' }));
+                return next(new HttpException_1.default(404, 'resource_not_found'));
+            res.status(200).json((0, customResponse_1.default)({ data: task, success: true, message: req.t('task_updated') }));
         });
         this.uploadTaskImages = (0, express_async_handler_1.default)(async (req, res, next) => {
             if (!req.files)
                 return next(new HttpException_1.default(400, 'Please upload files'));
             const task = await this.taskService.uploadTaskImages(req.params.id, req.files, req.user._id); // TODO: fix the type
             if (!task)
-                return next(new HttpException_1.default(404, `Task with id ${req.params.id} not found`));
-            res.status(200).json((0, customResponse_1.default)({ data: task, success: true, message: 'Task images uploaded' }));
+                return next(new HttpException_1.default(404, 'resource_not_found'));
+            res.status(200).json((0, customResponse_1.default)({ data: task, success: true, message: req.t('task_updated') }));
         });
         this.deleteTask = (0, express_async_handler_1.default)(async (req, res, next) => {
             const task = await this.taskService.deleteTask(req.params.id, req.user._id);
             if (!task)
-                return next(new HttpException_1.default(404, `Task with id ${req.params.id} not found`));
-            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, message: 'Task deleted' }));
+                return next(new HttpException_1.default(404, 'resource_not_found'));
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, message: req.t('task_deleted') }));
         });
     }
 };

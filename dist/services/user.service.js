@@ -18,27 +18,28 @@ const tsyringe_1 = require("tsyringe");
 const user_dao_1 = __importDefault(require("../DB/dao/user.dao"));
 const validateEnv_1 = __importDefault(require("../config/validateEnv"));
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
-const apiFeatures_1 = require("../helpers/apiFeatures");
 const cloudinary_1 = require("../helpers/cloudinary");
 let UserService = class UserService {
     constructor(userDao) {
         this.userDao = userDao;
     }
-    async getUsers(reqQuery) {
-        let apiFeatures = new apiFeatures_1.APIFeatures(reqQuery);
-        let query = apiFeatures.filter();
-        let paginate = apiFeatures.paginate();
-        let sort = apiFeatures.sort();
-        let fields = apiFeatures.selectFields();
-        // search by keyword
-        // if (reqQuery.keyword) {
-        //   query = { ...query, bio: { $regex: reqQuery.keyword, $options: 'i' } };
-        // }
-        let users = await this.userDao.listUsers(query, paginate, sort, fields);
-        if (users)
-            paginate = apiFeatures.paginate(users.length); // update the pagination object with the total documents
-        return { users, paginate };
-    }
+    // async getUsers(reqQuery: any): Promise<{
+    //   users: IUser[] | null;
+    //   paginate: IPagination;
+    // }> {
+    //   let apiFeatures = new APIFeatures(reqQuery);
+    //   let query = apiFeatures.filter();
+    //   let paginate = apiFeatures.paginate();
+    //   let sort = apiFeatures.sort();
+    //   let fields = apiFeatures.selectFields();
+    //   // search by keyword
+    //   // if (reqQuery.keyword) {
+    //   //   query = { ...query, bio: { $regex: reqQuery.keyword, $options: 'i' } };
+    //   // }
+    //   let users = await this.userDao.listUsers(query, paginate, sort, fields);
+    //   if (users) paginate = apiFeatures.paginate(users.length); // update the pagination object with the total documents
+    //   return { users, paginate };
+    // }
     async getUser(userId) {
         return await this.userDao.getOneById(userId);
     }

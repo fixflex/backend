@@ -4,34 +4,32 @@ import { autoInjectable } from 'tsyringe';
 import UserDao from '../DB/dao/user.dao';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
-import { APIFeatures } from '../helpers/apiFeatures';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
-import { IPagination } from '../interfaces/pagination.interface';
 import { IUser, IUserService } from '../interfaces/user.interface';
 
 @autoInjectable()
 class UserService implements IUserService {
   constructor(private readonly userDao: UserDao) {}
 
-  async getUsers(reqQuery: any): Promise<{
-    users: IUser[] | null;
-    paginate: IPagination;
-  }> {
-    let apiFeatures = new APIFeatures(reqQuery);
-    let query = apiFeatures.filter();
-    let paginate = apiFeatures.paginate();
-    let sort = apiFeatures.sort();
-    let fields = apiFeatures.selectFields();
-    // search by keyword
-    // if (reqQuery.keyword) {
-    //   query = { ...query, bio: { $regex: reqQuery.keyword, $options: 'i' } };
-    // }
+  // async getUsers(reqQuery: any): Promise<{
+  //   users: IUser[] | null;
+  //   paginate: IPagination;
+  // }> {
+  //   let apiFeatures = new APIFeatures(reqQuery);
+  //   let query = apiFeatures.filter();
+  //   let paginate = apiFeatures.paginate();
+  //   let sort = apiFeatures.sort();
+  //   let fields = apiFeatures.selectFields();
+  //   // search by keyword
+  //   // if (reqQuery.keyword) {
+  //   //   query = { ...query, bio: { $regex: reqQuery.keyword, $options: 'i' } };
+  //   // }
 
-    let users = await this.userDao.listUsers(query, paginate, sort, fields);
-    if (users) paginate = apiFeatures.paginate(users.length); // update the pagination object with the total documents
+  //   let users = await this.userDao.listUsers(query, paginate, sort, fields);
+  //   if (users) paginate = apiFeatures.paginate(users.length); // update the pagination object with the total documents
 
-    return { users, paginate };
-  }
+  //   return { users, paginate };
+  // }
 
   async getUser(userId: string) {
     return await this.userDao.getOneById(userId);

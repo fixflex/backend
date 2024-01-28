@@ -40,14 +40,8 @@ let TaskerService = class TaskerService {
         return await this.taskerDao.getOne({ userId });
     }
     async getTaskers(reqQuery) {
-        if (reqQuery.categories) {
-            // check if service is exists in DB
-            let isServiceExists = await this.categoryDao.getOneById(reqQuery.categories);
-            if (!isServiceExists)
-                throw new HttpException_1.default(404, 'category_not_found');
-        }
-        let taskers = await this.taskerDao.listTaskers(reqQuery.longitude, reqQuery.latitude, reqQuery.categories, reqQuery.maxDistance);
-        return taskers;
+        const { taskers, pagination } = await this.taskerDao.getTaskers(reqQuery);
+        return { pagination, taskers };
     }
     async updateTasker(userId, tasker) {
         if (tasker.categories)

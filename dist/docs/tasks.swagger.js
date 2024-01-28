@@ -8,278 +8,175 @@ exports.getTasks = {
     parameters: [
         {
             in: 'query',
-            name: 'category',
+            name: 'category_id',
             type: 'string',
-            example: '65aee72b4adc6b5e31e94044',
         },
         {
             in: 'query',
             name: 'location',
             type: 'string',
-            example: '34.781767,32.0853',
+            description: 'longitude, latitude  (30.745831, 28.101130)',
         },
         {
             in: 'query',
-            name: 'distance',
+            name: 'maxDistance',
             type: 'number',
-            example: 1000,
+            description: 'in km, default is `60km`',
         },
         {
             in: 'query',
             name: 'budget',
             type: 'number',
-            example: 100,
-        },
-        {
-            in: 'query',
-            name: 'dueDate',
-            type: 'string',
-            example: '2021-12-30',
-        },
-        {
-            in: 'query',
-            name: 'time',
-            type: 'string',
-            example: 'MIDDAY',
+            description: 'Example `budget[gte]=100&budget[lte]=200` to get tasks with budget between 100 and 200',
         },
         {
             in: 'query',
             name: 'sort',
             type: 'string',
-            example: 'createdAt',
+            description: 'Example: `-createdAt` will sort by descending order or `createdAt` will sort by ascending order',
         },
         {
             in: 'query',
             name: 'page',
             type: 'number',
-            example: 1,
-        },
-        {
-            in: 'query',
-            name: 'page',
-            type: 'number',
-            example: 1,
         },
         {
             in: 'query',
             name: 'limit',
             type: 'number',
-            example: 10,
+            description: 'default is `20`',
         },
         {
             in: 'query',
-            name: 'select',
+            name: 'fields',
             type: 'string',
-            example: 'title,category',
+            description: 'Select which fields to include in the response, Example: `title,category` to include or `-title,-category` to exclude',
         },
         {
             in: 'query',
-            name: 'populate',
+            name: 'keyword',
             type: 'string',
-            example: 'category',
+            description: 'Search in title and details fields',
         },
         {
             in: 'header',
             name: 'accept-language',
             type: 'string',
-            example: 'en',
         },
     ],
     responses: {
         200: {
-            description: 'Get all tasks',
+            descriptoin: 'Get list of tasks',
             content: {
                 'application/json': {
                     schema: {
                         type: 'object',
                         properties: {
+                            results: {
+                                type: 'number',
+                                example: 20,
+                            },
+                            pagination: {
+                                type: 'object',
+                                properties: {
+                                    totalDocuments: {
+                                        type: 'number',
+                                        example: 1,
+                                    },
+                                    limit: {
+                                        type: 'number',
+                                        example: 10,
+                                    },
+                                    totalPages: {
+                                        type: 'number',
+                                        example: 99,
+                                    },
+                                    currentPage: {
+                                        type: 'number',
+                                        example: 1,
+                                    },
+                                    prev: {
+                                        type: 'number',
+                                        example: null,
+                                    },
+                                    next: {
+                                        type: 'number',
+                                        example: 2,
+                                    },
+                                },
+                            },
                             success: {
                                 type: 'boolean',
                                 example: true,
                             },
                             message: {
                                 type: 'string',
-                                example: 'Tasks found successfully',
+                                example: 'Tasks retrieved successfully',
                             },
                             data: {
-                                type: 'object',
-                                properties: {
-                                    tasks: {
-                                        type: 'array',
-                                        items: {
-                                            type: 'object',
-                                            properties: {
-                                                _id: {
-                                                    type: 'string',
-                                                    example: '65b236563ea5079d86670037',
-                                                },
-                                                title: {
-                                                    type: 'string',
-                                                    example: 'cleaning',
-                                                },
-                                                category: {
-                                                    type: 'string',
-                                                    example: '65aee72b4adc6b5e31e94044',
-                                                },
-                                                details: {
-                                                    type: 'string',
-                                                    example: 'Dusting, mopping and vacuuming',
-                                                },
-                                                location: {
-                                                    type: 'object',
-                                                    properties: {
-                                                        coordinates: {
-                                                            type: 'array',
-                                                            items: {
-                                                                type: 'number',
-                                                            },
-                                                            example: [34.781767, 32.0853],
-                                                        },
-                                                        online: {
-                                                            type: 'boolean',
-                                                            example: false,
-                                                        },
-                                                    },
-                                                },
-                                                dueDate: {
-                                                    type: 'object',
-                                                    properties: {
-                                                        on: {
-                                                            type: 'string',
-                                                            format: 'date',
-                                                            example: '2021-12-30',
-                                                        },
-                                                    },
-                                                },
-                                                time: {
-                                                    type: 'array',
-                                                    items: {
-                                                        type: 'string',
-                                                        enum: ['MONRING', 'MIDDAY', 'AFTERNOON', 'EVENING'],
-                                                    },
-                                                    example: ['MIDDAY', 'MORNING'],
-                                                },
-                                                budget: {
-                                                    type: 'number',
-                                                    example: 120,
-                                                },
-                                                imageCover: {
-                                                    type: 'object',
-                                                    properties: {
-                                                        url: {
-                                                            type: 'string',
-                                                            example: 'https://res.cloudinary.com/deak07uus/image/upload/v1706266848/task-images/cei1jswmt6glsnsmurbf.png',
-                                                        },
-                                                        publicId: {
-                                                            type: 'string',
-                                                            example: 'task-images/cei1jswmt6glsnsmurbf',
-                                                        },
-                                                    },
-                                                },
-                                                images: {
-                                                    type: 'array',
-                                                    items: {
-                                                        type: 'object',
-                                                        properties: {
-                                                            url: {
-                                                                type: 'string',
-                                                                example: 'https://res.cloudinary.com/deak07uus/image/upload',
-                                                            },
-                                                            publicId: {
-                                                                type: 'string',
-                                                                example: 'task-images/w2qrpabd4vuksidjkylu',
-                                                            },
-                                                        },
-                                                    },
-                                                },
-                                                createdAt: {
-                                                    type: 'string',
-                                                    format: 'date-time',
-                                                    example: '2021-08-19T19:36:38.000Z',
-                                                },
-                                                updatedAt: {
-                                                    type: 'string',
-                                                    format: 'date-time',
-                                                    example: '2021-08-19T19:36:38.000Z',
-                                                },
-                                            },
-                                        },
-                                    },
-                                    pagination: {
-                                        type: 'object',
-                                        properties: {
-                                            totalDocs: {
-                                                type: 'number',
-                                                example: 1,
-                                            },
-                                            limit: {
-                                                type: 'number',
-                                                example: 10,
-                                            },
-                                            totalPages: {
-                                                type: 'number',
-                                                example: 1,
-                                            },
-                                            page: {
-                                                type: 'number',
-                                                example: 1,
-                                            },
-                                            pagingCounter: {
-                                                type: 'number',
-                                                example: 1,
-                                            },
-                                            hasPrevPage: {
-                                                type: 'boolean',
-                                                example: false,
-                                            },
-                                            hasNextPage: {
-                                                type: 'boolean',
-                                                example: false,
-                                            },
-                                            prevPage: {
-                                                type: 'number',
-                                                example: null,
-                                            },
-                                            nextPage: {
-                                                type: 'number',
-                                                example: null,
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        400: {
-            description: 'Error: 400',
-            content: {
-                'application/json': {
-                    schema: {
-                        type: 'object',
-                        properties: {
-                            errors: {
                                 type: 'array',
                                 items: {
                                     type: 'object',
                                     properties: {
-                                        type: {
+                                        _id: {
                                             type: 'string',
-                                            example: 'field',
+                                            example: '65b236563ea5079d86670037',
                                         },
-                                        msg: {
+                                        title: {
                                             type: 'string',
-                                            example: 'Title must be between 5 and 200 characters',
+                                            example: 'cleaning',
                                         },
-                                        path: {
+                                        category: {
                                             type: 'string',
-                                            example: 'title',
+                                            example: '65aee72b4adc6b5e31e94044',
                                         },
                                         location: {
+                                            type: 'object',
+                                            properties: {
+                                                coordinates: {
+                                                    type: 'array',
+                                                    items: {
+                                                        type: 'number',
+                                                    },
+                                                    example: [34.781767, 32.0853],
+                                                },
+                                                online: {
+                                                    type: 'boolean',
+                                                    example: false,
+                                                },
+                                            },
+                                        },
+                                        dueDate: {
+                                            type: 'object',
+                                            properties: {
+                                                on: {
+                                                    type: 'string',
+                                                    format: 'date',
+                                                    example: '2021-12-30',
+                                                },
+                                            },
+                                        },
+                                        time: {
+                                            type: 'array',
+                                            items: {
+                                                type: 'string',
+                                                enum: ['MONRING', 'MIDDAY', 'AFTERNOON', 'EVENING'],
+                                            },
+                                            example: ['MIDDAY', 'MORNING'],
+                                        },
+                                        budget: {
+                                            type: 'number',
+                                            example: 120,
+                                        },
+                                        createdAt: {
                                             type: 'string',
-                                            example: 'body',
+                                            format: 'date-time',
+                                            example: '2021-08-19T19:36:38.000Z',
+                                        },
+                                        updatedAt: {
+                                            type: 'string',
+                                            format: 'date-time',
+                                            example: '2021-08-19T19:36:38.000Z',
                                         },
                                     },
                                 },
@@ -306,7 +203,6 @@ exports.getTask = {
             in: 'header',
             name: 'accept-language',
             type: 'string',
-            example: 'en',
         },
     ],
     responses: {
@@ -468,7 +364,6 @@ exports.createTask = {
             in: 'header',
             name: 'accept-language',
             type: 'string',
-            example: 'en',
         },
     ],
     requestBody: {
@@ -720,7 +615,6 @@ exports.uploadTaskImages = {
             in: 'header',
             name: 'accept-language',
             type: 'string',
-            example: 'en',
         },
     ],
     requestBody: {
@@ -984,7 +878,6 @@ exports.updateTask = {
             in: 'header',
             name: 'accept-language',
             type: 'string',
-            example: 'en',
         },
     ],
     requestBody: {
@@ -1288,7 +1181,6 @@ exports.deleteTask = {
             in: 'header',
             name: 'accept-language',
             type: 'string',
-            example: 'en',
         },
     ],
     responses: {

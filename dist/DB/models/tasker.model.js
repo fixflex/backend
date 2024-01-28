@@ -33,12 +33,11 @@ let taskerSchema = new mongoose_1.Schema({
         coordinates: {
             // [longitude, latitude] [x, y]
             type: [Number],
-            default: [0, 0],
             required: true,
         },
         radius: {
             type: Number,
-            default: 0,
+            default: 50000, // 50 km
         },
     },
     bio: String,

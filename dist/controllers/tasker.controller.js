@@ -44,16 +44,15 @@ let TaskerController = class TaskerController {
                 return next(new HttpException_1.default(404, 'tasker_not_found'));
             res.status(200).json((0, customResponse_1.default)({ data: tasker, success: true, message: req.t('tasker_found') }));
         });
-        this.getTaskers = (0, express_async_handler_1.default)(async (req, res, next) => {
-            let taskers = await this.taskerService.getTaskers(req.query);
-            if (!taskers)
-                return next(new HttpException_1.default(400, 'something_went_wrong'));
-            res.status(200).json(Object.assign({ results: taskers.length }, (0, customResponse_1.default)({ data: taskers, success: true, message: null })));
+        this.getTaskers = (0, express_async_handler_1.default)(async (req, res) => {
+            let { taskers, pagination } = await this.taskerService.getTaskers(req.query);
+            res
+                .status(200)
+                .json((0, customResponse_1.default)({ data: taskers, success: true, message: req.t('taskers_found'), pagination, results: taskers.length }));
         });
         this.updateMe = (0, express_async_handler_1.default)(async (req, res, next) => {
             let userId = req.user?._id;
             let updatedTasker = await this.taskerService.updateTasker(userId, req.body);
-            console.log(updatedTasker);
             if (updatedTasker.modifiedCount == 0)
                 return next(new HttpException_1.default(404, 'tasker_not_found'));
             res.status(200).json((0, customResponse_1.default)({ data: null, success: true, message: req.t('tasker_updated') }));

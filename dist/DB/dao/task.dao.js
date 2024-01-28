@@ -17,12 +17,13 @@ class TaskDao extends baseDao_1.default {
             .filter(['location', 'online', 'maxDistance'])
             .locationFilter()
             .search(['title', 'details'])
-            .sort()
+            .sort('-location.coordinates')
             .limitFields()
             .paginate(countDocments);
-        console.log(apiFeatures.mongooseQuery.getQuery());
         const pagination = apiFeatures.pagination;
-        const tasks = await apiFeatures.mongooseQuery;
+        const tasks = await apiFeatures.mongooseQuery
+            .select('-__v  -images  -imageCover  -details')
+            .populate('ownerId', 'firstName lastName  profilePicture');
         return { tasks, pagination };
     }
 }

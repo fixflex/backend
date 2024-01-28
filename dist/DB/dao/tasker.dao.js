@@ -3,64 +3,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const helpers_1 = require("../../helpers");
 const tasker_model_1 = __importDefault(require("../models/tasker.model"));
 const baseDao_1 = __importDefault(require("./baseDao"));
 class TaskerDao extends baseDao_1.default {
     constructor() {
         super(tasker_model_1.default);
     }
-    async listTaskers(longitude, latitude, categories, maxDistance = 60) {
-        let taskers;
-        // /api/v1/taskers?longitude=35.5&latitude=33.5&categories=6560fabd6f972e1d74a71242&maxDistance=60
-        if (latitude && longitude && categories) {
-            taskers = await tasker_model_1.default.find({
-                location: {
-                    $near: {
-                        $maxDistance: maxDistance * 1000,
-                        $geometry: {
-                            type: 'Point',
-                            coordinates: [longitude, latitude], // [longitude, latitude] [y, x]
-                        },
-                    },
-                },
-                // where categories = service
-                categories: { $eq: categories },
-            })
-                .populate('userId', 'firstName lastName email  profilePicture')
-                .populate('categories', 'name')
-                .lean();
-        }
-        else if (categories) {
-            taskers = await tasker_model_1.default.find({
-                // where categories = service
-                categories: { $eq: categories },
-            })
-                .populate('userId', 'firstName lastName email  profilePicture')
-                .populate('categories', 'name')
-                .lean();
-        }
-        else if (latitude && longitude) {
-            taskers = await tasker_model_1.default.find({
-                location: {
-                    $near: {
-                        $maxDistance: maxDistance * 1000,
-                        $geometry: {
-                            type: 'Point',
-                            coordinates: [longitude, latitude], // [longitude, latitude] [x, y]
-                        },
-                    },
-                },
-            })
-                .populate('userId', 'firstName lastName email  profilePicture')
-                .populate('categories', 'name')
-                .lean();
-        }
-        else
-            taskers = await tasker_model_1.default.find({})
-                .populate('userId', 'firstName lastName email  profilePicture')
-                .populate('categories', 'name')
-                .lean();
-        return taskers;
+    async getTaskers(query) {
+        const countDocments = await tasker_model_1.default.countDocuments();
+        let apiFeatures = new helpers_1.QueryBuilder(tasker_model_1.default.find(), query)
+            .filter(['location', 'maxDistance'])
+            .locationFilter()
+            .search(['bio'])
+            .sort()
+            .limitFields()
+            .paginate(countDocments);
+        const pagination = apiFeatures.pagination;
+        const taskers = await apiFeatures.mongooseQuery
+            .select('-__v  -availability  -isVerified -workingHours  -phoneNumber  -location')
+            .populate('userId', 'firstName lastName  profilePicture');
+        return { taskers, pagination };
     }
     // get tasker profile with user data and categories data
     async getTaskerProfile(taskerId) {

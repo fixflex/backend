@@ -16,7 +16,6 @@ exports.CategoryService = exports.uploadServiceImage = void 0;
 const tsyringe_1 = require("tsyringe");
 const category_dao_1 = require("../DB/dao/category.dao");
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
-const helpers_1 = require("../helpers");
 const cloudinary_1 = require("../helpers/cloudinary");
 const uploadImages_middleware_1 = require("../middleware/uploadImages.middleware");
 exports.uploadServiceImage = (0, uploadImages_middleware_1.uploadSingleFile)('image');
@@ -24,19 +23,12 @@ let CategoryService = class CategoryService {
     constructor(categoryDao) {
         this.categoryDao = categoryDao;
     }
-    async getCategories(reqQuery, reqLanguage) {
-        let apiFeatures = new helpers_1.APIFeatures(reqQuery);
-        let query = apiFeatures.filter();
-        let paginate = apiFeatures.paginate();
-        let sort = apiFeatures.sort();
-        let fields = apiFeatures.selectFields();
-        let categories = await this.categoryDao.getCategories(query, paginate, sort, fields);
+    async getCategories(reqLanguage) {
+        const categories = await this.categoryDao.getMany({}, false);
         let localizedDocs = null;
-        if (categories) {
-            paginate = apiFeatures.paginate(categories.length); // update the pagination object with the total documents
+        if (categories.length)
             localizedDocs = this.categoryDao.toJSONLocalizedOnly(categories, reqLanguage);
-        }
-        return { categories: localizedDocs, paginate };
+        return localizedDocs;
     }
     async getCategory(serviceId, reqLanguage) {
         let category = await this.categoryDao.getOneById(serviceId, false);
@@ -68,7 +60,9 @@ let CategoryService = class CategoryService {
         if (service.image.publicId)
             await (0, cloudinary_1.cloudinaryDeleteImage)(service.image.publicId);
         // update the image field in the DB with the new image url and public id
-        service = await this.categoryDao.updateOneById(serviceId, { image: { url: result.secure_url, publicId: result.public_id } });
+        service = await this.categoryDao.updateOneById(serviceId, {
+            image: { url: result.secure_url, publicId: result.public_id },
+        });
         return service;
     }
     async deleteCategory(serviceId) {

@@ -29,8 +29,8 @@ let CategoryController = class CategoryController {
             res.status(200).json((0, customResponse_1.default)({ data: service, success: true, message: 'Service found' }));
         });
         this.getCategories = (0, express_async_handler_1.default)(async (req, res) => {
-            let { categories, paginate } = await this.categoryService.getCategories(req.query, req.language);
-            res.status(200).json(Object.assign((0, customResponse_1.default)({ data: categories, success: true, message: 'Services found' }), { paginate }));
+            let categories = await this.categoryService.getCategories(req.language);
+            res.status(200).json((0, customResponse_1.default)({ data: categories, success: true, message: 'Services found' }));
         });
         // authenticated routes
         this.createCategory = (0, express_async_handler_1.default)(async (req, res, next) => {
