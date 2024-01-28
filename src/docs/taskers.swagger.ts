@@ -14,9 +14,8 @@ export const getTasker = {
     },
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   responses: {
@@ -72,7 +71,8 @@ export const getTasker = {
                       profilePicture: {
                         type: 'string',
                         example1: null,
-                        example: 'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
+                        example:
+                          'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
                       },
                     },
                   },
@@ -173,54 +173,86 @@ export const getTasker = {
 
 export const getTaskers = {
   tags: ['Taskers'],
-  summary: 'Get list of taskers',
-  description:
-    "Get a list of taskers filtered and ordered by location. \n\n**Query Parameters:**\n\n* `services` (*optional*): Filter taskers by service(s). Can pass a single service or comma separated list.\n* `longitude` (*optional*): User's longitude location.\n* `latitude` (*optional*): User's latitude location.\n* `maxDistance` (*optional*, default: `60`): Maximum distance in km to search.\n\nIf location parameters are provided, taskers will be returned sorted by proximity to the given point. \n\n_If no parameters are provided, taskers will be returned randomly without filtering or sorting._",
+  description: 'Get list of taskers',
   operationId: 'getTaskers',
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
     {
-      name: 'services',
+      name: 'categories',
       in: 'query',
-      description: 'Service ID',
-      required: false,
+      description: 'Category ID',
       schema: {
         type: 'string',
       },
     },
     {
-      name: 'latitude',
+      // rating
+      name: 'rating',
       in: 'query',
-      description: "User's latitude",
-      required: false,
+      description: 'Example: rating[gt]=3 | rating[gte]=3 | rating[lt]=3 | rating[lte]=3',
       schema: {
         type: 'number',
       },
     },
     {
-      name: 'longitude',
+      name: 'location',
       in: 'query',
-      description: "User's longitude",
-      required: false,
-      schema: {
-        type: 'number',
-      },
+      description: "User's location in the format `longitude,latitude` respectively ",
     },
     {
       name: 'maxDistance',
       in: 'query',
-      description: 'Maximum distance in kilometers',
-      required: false,
+      description: 'Maximum distance in kilometers, default is `60 km`',
       schema: {
         type: 'number',
       },
     },
+    {
+      name: 'fields',
+      in: 'query',
+      description: 'Fields to return',
+
+      schema: {
+        type: 'string',
+      },
+    },
+    {
+      name: 'sort',
+      in: 'query',
+      description: 'Sort by fields',
+
+      schema: {
+        type: 'string',
+      },
+    },
+    {
+      name: 'limit',
+      in: 'query',
+      schema: {
+        type: 'number',
+      },
+    },
+    {
+      name: 'page',
+      in: 'query',
+      schema: {
+        type: 'number',
+      },
+    },
+    {
+      name: 'keyword',
+      in: 'query',
+      description: 'Search by keyword',
+      schema: {
+        type: 'string',
+      },
+    },
   ],
+
   responses: {
     200: {
       description: 'Taskers',
@@ -233,13 +265,38 @@ export const getTaskers = {
                 type: 'number',
                 example: 9,
               },
+              pagination: {
+                type: 'object',
+                properties: {
+                  currentPage: {
+                    type: 'number',
+                    example: 1,
+                  },
+                  limit: {
+                    type: 'number',
+                    example: 2,
+                  },
+                  skip: {
+                    type: 'number',
+                    example: 0,
+                  },
+                  totalPages: {
+                    type: 'number',
+                    example: 4,
+                  },
+                  totalDocuments: {
+                    type: 'number',
+                    example: 8,
+                  },
+                  next: {
+                    type: 'number',
+                    example: 2,
+                  },
+                },
+              },
               success: {
                 type: 'boolean',
                 example: true,
-              },
-              error: {
-                type: 'boolean',
-                example: false,
               },
               message: {
                 type: 'string',
@@ -262,22 +319,14 @@ export const getTaskers = {
                       type: 'string',
                       example: '656f8a2ad9acb58aba0707fd',
                     },
-                    services: {
+                    categories: {
                       type: 'array',
                       items: {
-                        type: 'object',
-                        properties: {
-                          _id: {
-                            type: 'string',
-                            example: '656238d82ff5c250c72f093d',
-                          },
-                          name: {
-                            type: 'string',
-                            example: 'سباك',
-                          },
-                        },
+                        type: 'string',
+                        example: '656238d82ff5c250c72f093d',
                       },
                     },
+
                     rating: {
                       type: 'number',
                       example: 3,
@@ -287,22 +336,22 @@ export const getTaskers = {
                       type: 'number',
                       example: 9,
                     },
-                    /*location: {
-                    type: 'object',
-                    properties: {
-                      coordinates: {
-                        type: 'array',
-                        items: {
-                          type: 'number',
-                          example: 31.185277,
+                    location: {
+                      type: 'object',
+                      properties: {
+                        coordinates: {
+                          type: 'array',
+                          items: {
+                            type: 'number',
+                            example: 31.185277,
+                          },
+                        },
+                        type: {
+                          type: 'string',
+                          example: 'Point',
                         },
                       },
-                      type: {
-                        type: 'string',
-                        example: 'Point',
-                      },
                     },
-                  },*/
                     phoneNumber: {
                       type: 'string',
                       example: '01066032809',
@@ -330,14 +379,13 @@ export const becomeTasker = {
   security: [{ bearerAuth: [] }],
   tags: ['Taskers'],
   // summary: 'Become a tasker',
-  description: 'Register a new taskers. The user must be authenticated.',
+  description: 'Register a new taskers. The user must be logged in.',
   operationId: 'becomeTasker',
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   requestBody: {
@@ -573,9 +621,8 @@ export const getMyTaskerProfile = {
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   responses: {
@@ -631,7 +678,8 @@ export const getMyTaskerProfile = {
                       profilePicture: {
                         type: 'string',
                         example1: null,
-                        example: 'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
+                        example:
+                          'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
                       },
                     },
                   },
@@ -739,9 +787,8 @@ export const updateMyTaskerProfile = {
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   requestBody: {
