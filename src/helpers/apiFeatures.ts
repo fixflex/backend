@@ -1,4 +1,3 @@
-// import { IPagination } from '../interfaces/pagination.interface';
 import { FilterQuery, Query } from 'mongoose';
 
 import { IPagination } from '../interfaces';

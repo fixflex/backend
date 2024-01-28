@@ -1,4 +1,8 @@
+import { Query } from 'express-serve-static-core';
+
 import env from '../../config/validateEnv';
+import { QueryBuilder } from '../../helpers';
+import { IPagination } from '../../interfaces';
 import { ICategory } from '../../interfaces/category.interface';
 import CategoryModel from '../models/category.model';
 import CommonDAO from './baseDao';
@@ -13,16 +17,20 @@ class CategoryDao extends CommonDAO<ICategory> {
     return await CategoryModel.findOne({ name });
   }
 
-  async getCategories(query: any = {}, paginate: { skip: number; limit: number }, sort: any = {}, select: any = '-__v'): Promise<ICategory[] | null> {
-    // build the query
-    let categories = CategoryModel.find(query);
-    if (paginate.skip) categories = categories.skip(paginate.skip);
-    if (paginate.limit) categories = categories.limit(paginate.limit);
-    categories = categories.sort(sort).select(select);
-    // execute the query
-    let categoriesList = await categories;
+  async getCategories(query: Query) {
+    const countDocments = await CategoryModel.countDocuments();
 
-    return categoriesList;
+    let apiFeatures = new QueryBuilder<ICategory>(CategoryModel.find(), query)
+      .filter()
+      .search(['name', 'description'])
+      .sort()
+      .limitFields()
+      .paginate(countDocments);
+
+    const pagination: IPagination | undefined = apiFeatures.pagination;
+    const categories = await apiFeatures.mongooseQuery.select('-__v');
+
+    return { categories, pagination };
   }
 
   toJSONLocalizedOnly(doc: ICategory | ICategory[], reqLanguage: string = env.defaultLocale): ICategory | ICategory[] {

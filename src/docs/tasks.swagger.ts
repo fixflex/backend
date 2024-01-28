@@ -24,6 +24,7 @@ export const getTasks = {
       in: 'query',
       name: 'budget',
       type: 'number',
+      description: 'Example `budget[gte]=100&budget[lte]=200` to get tasks with budget between 100 and 200',
     },
     {
       in: 'query',

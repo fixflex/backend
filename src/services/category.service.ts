@@ -1,8 +1,8 @@
+import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
 import { CategoryDao } from '../DB/dao/category.dao';
 import HttpException from '../exceptions/HttpException';
-import { APIFeatures } from '../helpers';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { ICategory, ICategoryService } from '../interfaces/category.interface';
 import { IPagination } from '../interfaces/pagination.interface';
@@ -12,26 +12,14 @@ export const uploadServiceImage = uploadSingleFile('image');
 @autoInjectable()
 class CategoryService implements ICategoryService {
   constructor(private readonly categoryDao: CategoryDao) {}
-  async getCategories(
-    reqQuery: any,
-    reqLanguage: string
-  ): Promise<{
-    categories: ICategory[] | null;
-    paginate: IPagination;
-  }> {
-    let apiFeatures = new APIFeatures(reqQuery);
-    let query = apiFeatures.filter();
-    let paginate = apiFeatures.paginate();
-    let sort = apiFeatures.sort();
-    let fields = apiFeatures.selectFields();
 
-    let categories = await this.categoryDao.getCategories(query, paginate, sort, fields);
+  async getCategories(query: Query, reqLanguage: string): Promise<{ categories: ICategory[] | null; pagination: IPagination | undefined }> {
+    const { categories, pagination } = await this.categoryDao.getCategories(query);
+
     let localizedDocs: ICategory[] | null = null;
-    if (categories) {
-      paginate = apiFeatures.paginate(categories.length); // update the pagination object with the total documents
-      localizedDocs = this.categoryDao.toJSONLocalizedOnly(categories, reqLanguage) as ICategory[];
-    }
-    return { categories: localizedDocs, paginate };
+    if (categories) localizedDocs = this.categoryDao.toJSONLocalizedOnly(categories, reqLanguage) as ICategory[];
+
+    return { pagination, categories: localizedDocs };
   }
 
   async getCategory(serviceId: string, reqLanguage: string): Promise<ICategory> {
@@ -63,7 +51,9 @@ class CategoryService implements ICategoryService {
     // delete the old image from cloudinary if exists
     if (service.image.publicId) await cloudinaryDeleteImage(service.image.publicId);
     // update the image field in the DB with the new image url and public id
-    service = await this.categoryDao.updateOneById(serviceId, { image: { url: result.secure_url, publicId: result.public_id } } as ICategory);
+    service = await this.categoryDao.updateOneById(serviceId, {
+      image: { url: result.secure_url, publicId: result.public_id },
+    } as ICategory);
 
     return service;
   }
