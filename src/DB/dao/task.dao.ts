@@ -20,7 +20,6 @@ class TaskDao extends CommonDAO<ITask> {
       .sort()
       .limitFields()
       .paginate(countDocments);
-    console.log(apiFeatures.mongooseQuery.getQuery());
 
     const pagination: IPagination | undefined = apiFeatures.pagination;
     const tasks = await apiFeatures.mongooseQuery;

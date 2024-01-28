@@ -94,7 +94,6 @@ export class QueryBuilder<T> {
       const longitude = parseFloat(location[1]);
       const maxDistance = parseFloat(this.queryString.maxDistance || '60'); // Default to 60 km if maxDistance is not provided
 
-      console.log(longitude, latitude, maxDistance);
       this.mongooseQuery = this.mongooseQuery.find({
         location: {
           $near: {
