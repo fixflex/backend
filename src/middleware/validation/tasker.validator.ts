@@ -12,10 +12,6 @@ export const getTaskersValidator = [
 export const createTaskerValidator = [
   check('categories').isArray().withMessage('this_field_must_be_an_array').isLength({ min: 1 }).withMessage('this_field_is_required'),
   check('categories.*').isMongoId().withMessage('invalid_MongoId'),
-  //         "location": {
-  // "coordinates": [32.1617485, 26.0524745]
-  // }
-  // custom validator to check if coordinates are valid numbers (longitude, latitude) [x, y]
   check('location')
     .notEmpty()
     .withMessage('this_field_is_required')
@@ -26,8 +22,7 @@ export const createTaskerValidator = [
       if (typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
         throw new Error('invalid_coordinates');
       }
-      // swap the coordinates to be [longitude, latitude] [x, y]
-      location.coordinates = [location.coordinates[1], location.coordinates[0]];
+
       return true;
     }),
 
@@ -53,8 +48,7 @@ export const updateTaskerValidator = [
       if (typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
         throw new Error('invalid_coordinates');
       }
-      // swap the coordinates to be [longitude, latitude] [x, y]
-      location.coordinates = [location.coordinates[1], location.coordinates[0]];
+
       return true;
     }),
   check('bio')

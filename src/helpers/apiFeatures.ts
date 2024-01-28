@@ -89,8 +89,8 @@ export class QueryBuilder<T> {
     } else if (this.queryString.location) {
       // return all tasks near by
       const location = this.queryString.location.split(',');
-      const latitude = parseFloat(location[0]);
-      const longitude = parseFloat(location[1]);
+      const longitude = parseFloat(location[0]);
+      const latitude = parseFloat(location[1]);
       const maxDistance = parseFloat(this.queryString.maxDistance || '60'); // Default to 60 km if maxDistance is not provided
 
       this.mongooseQuery = this.mongooseQuery.find({

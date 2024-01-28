@@ -12,7 +12,7 @@ export const getTasks = {
       in: 'query',
       name: 'location',
       type: 'string',
-      description: 'latitude, longitude  (27.127962, 31.282536)',
+      description: 'longitude, latitude  (30.745831, 28.101130)',
     },
     {
       in: 'query',

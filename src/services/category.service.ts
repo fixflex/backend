@@ -12,10 +12,11 @@ class CategoryService implements ICategoryService {
   constructor(private readonly categoryDao: CategoryDao) {}
 
   async getCategories(reqLanguage: string): Promise<ICategory[] | null> {
-    const categories = await this.categoryDao.getMany();
+    const categories = await this.categoryDao.getMany({}, false);
 
     let localizedDocs: ICategory[] | null = null;
-    if (categories) localizedDocs = this.categoryDao.toJSONLocalizedOnly(categories, reqLanguage) as ICategory[];
+
+    if (categories.length) localizedDocs = this.categoryDao.toJSONLocalizedOnly(categories, reqLanguage) as ICategory[];
 
     return localizedDocs;
   }
