@@ -42,12 +42,15 @@ class OfferService implements IOfferService {
   }
 
   async updateOffer(id: string, payload: Partial<IOffer>, userId: string | undefined) {
-    // check if this offer belongs to this tasker
+    // 1. check if the user is a tasker
     let tasker = await this.taskerDao.getOne({ userId });
-    if (!tasker) throw new HttpException(400, 'You are not a tasker');
+    if (!tasker) throw new HttpException(400, 'forbidden');
+    // 2. check if the offer is exist
     let offer = await this.offerDao.getOneById(id);
-    if (!offer) throw new HttpException(404, 'Offer not found');
-    if (offer.taskerId.toString() !== tasker._id.toString()) throw new HttpException(400, 'This offer is not yours');
+    if (!offer) throw new HttpException(404, 'resource_not_found');
+    // 3. check if the offer belongs to this tasker
+    if (offer.taskerId.toString() !== tasker._id.toString()) throw new HttpException(400, 'forbidden');
+    // 4. update the offer and return it
     return await this.offerDao.updateOneById(id, payload);
   }
 

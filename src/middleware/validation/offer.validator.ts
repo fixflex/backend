@@ -29,11 +29,15 @@ export const createOfferValidator = [
 ];
 
 export const updateOfferValidator = [
+  check('id').notEmpty().withMessage('is_required').isMongoId().withMessage('invalid_MongoId'),
+
+  check('price').optional().isNumeric().withMessage('invalid_input').isLength({ min: 5 }).withMessage('min_length'),
+  check('message').optional().isLength({ max: 8000 }).withMessage('exceeds_max_length'),
+
   check('taskId').isEmpty().withMessage('not_allowed'),
   check('taskerId').isEmpty().withMessage('not_allowed'),
-  check('message').optional().isString().withMessage('invalid_input').isLength({ max: 8000 }).withMessage('exceeds_max_length'),
-  check('subMessages').isEmpty().withMessage('not_allowed'), // "subMessages is not allowed to be updated in this route
-  check('images').isEmpty().withMessage('not_allowed'),
+  check('subMessages').isEmpty().withMessage('not_allowed'),
+  // check('images').isEmpty().withMessage('not_allowed'),
   check('createdAt').isEmpty().withMessage('not_allowed'),
   check('updatedAt').isEmpty().withMessage('not_allowed'),
   validatorMiddleware,

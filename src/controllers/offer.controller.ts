@@ -31,10 +31,10 @@ class OfferController implements IOfferController {
     res.status(200).json(customResponse({ data: offer, success: true, message: null }));
   });
 
-  updateOffer = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const offer = await this.offerService.updateOffer(req.params.id, req.body, req.user?._id);
-    if (!offer) return next(new HttpException(404, `Offer with id ${req.params.id} not found`));
-    res.status(200).json(customResponse({ data: offer, success: true, message: 'Offer updated' }));
+  updateOffer = asyncHandler(async (req: Request<IOffer>, res: Response, next: NextFunction) => {
+    const offer = await this.offerService.updateOffer(req.params.id, req.body, req.user._id);
+    if (!offer) return next(new HttpException(404, 'resource_not_found'));
+    res.status(200).json(customResponse({ data: offer, success: true, message: 'offer_updated' }));
   });
 
   deleteOffer = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
