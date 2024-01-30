@@ -11,22 +11,24 @@ import { TaskStatus } from '../interfaces/task.interface';
 class OfferService implements IOfferService {
   constructor(private offerDao: OfferDao, private taskerDao: TaskerDao, private taskDao: TaskDao) {}
 
-  async createOffer(offer: any, userId: string | undefined) {
-    // check if the current user is a tasker
+  async createOffer(offer: IOffer, userId: string) {
+    // 1. check if the user is a tasker
     let tasker = await this.taskerDao.getOne({ userId });
-    if (!tasker) throw new HttpException(400, 'You are not a tasker');
-    // check if task exists
-    let task = await this.taskDao.getOneById(offer.taskId);
-    if (!task) throw new HttpException(400, 'Task not found');
-    if (task.status !== TaskStatus.OPEN) throw new HttpException(400, 'This task is not open for offers');
-    offer.taskerId = tasker._id;
-    let createdOffer = await this.offerDao.create(offer);
-    // update the task status to assigned and add the offer id to the task offers array
-    await this.taskDao.updateOneById(offer.taskId, {
-      $push: { offers: createdOffer._id },
-    });
-
-    return await createdOffer;
+    if (!tasker) throw new HttpException(400, 'You_are_not_a_tasker');
+    // 2. check if the task is exist and status is open
+    let task = await this.taskDao.getOne({ _id: offer.taskId });
+    if (!task) throw new HttpException(400, 'Task_not_found');
+    if (task.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
+    // 3. check if the tasker already made an offer on this task, if yes return an error
+    let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });
+    if (isOfferExist) throw new HttpException(400, 'something_went_wrong');
+    // 4. create the offer
+    let newOffer = await this.offerDao.create(offer);
+    // 5. update the task offers array with the new offer
+    await this.taskDao.updateOneById(offer.taskId, { $push: { offers: newOffer._id } });
+    // TODO: 6. send notification to the owner of the task
+    // 7. return the offer
+    return newOffer;
   }
 
   async getOfferById(id: string) {
