@@ -41,7 +41,7 @@ class OfferService implements IOfferService {
     return await this.offerDao.getMany();
   }
 
-  async updateOffer(id: string, payload: Partial<IOffer>, userId: string | undefined) {
+  async updateOffer(id: string, payload: Partial<IOffer>, userId: string) {
     // 1. check if the user is a tasker
     let tasker = await this.taskerDao.getOne({ userId });
     if (!tasker) throw new HttpException(400, 'forbidden');
@@ -54,13 +54,16 @@ class OfferService implements IOfferService {
     return await this.offerDao.updateOneById(id, payload);
   }
 
-  async deleteOffer(id: string, userId: string | undefined) {
-    //check if this offer belongs to this tasker
+  async deleteOffer(id: string, userId: string) {
+    // 1. check if the user is a tasker
     let tasker = await this.taskerDao.getOne({ userId });
-    if (!tasker) throw new HttpException(400, 'You are not a tasker');
+    if (!tasker) throw new HttpException(400, 'forbidden');
+    // 2. check if the offer is exist
     let offer = await this.offerDao.getOneById(id);
-    if (!offer) throw new HttpException(404, 'Offer not found');
-    if (offer.taskerId.toString() !== tasker._id.toString()) throw new HttpException(400, 'This offer is not yours');
+    if (!offer) throw new HttpException(404, 'resource_not_found');
+    // 3. check if the offer belongs to this tasker
+    if (offer.taskerId.toString() !== tasker._id.toString()) throw new HttpException(400, 'forbidden');
+    // 4. delete the offer and return it
     return await this.offerDao.deleteOneById(id);
   }
 }
