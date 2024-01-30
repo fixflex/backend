@@ -15,18 +15,51 @@ import { AuthServie } from '../services';
 export class AuthController implements IAuthController {
   constructor(private readonly authService: AuthServie) {}
 
+  /**
+   *    Cookie Options on development should be like this:
+   *     {
+   *       httpOnly: true,
+   *       maxAge: 30 * 24 * 60 * 60 * 1000,
+   *       secure: false,
+   *       sameSite: lax,
+   *     }
+   *
+   *   Cookie Options on production or staging should be like this:
+   *    {
+   *     httpOnly: true,
+   *     maxAge: 30 * 24 * 60 * 60 * 1000,
+   *     secure: true,
+   *     sameSite: none,
+   *    }
+   */
+
+  // private accessTokenCookieOptions: CookieOptions = {
+  //   httpOnly: true, // client side js cannot access the cookie
+  //   maxAge: 30 * 24 * 60 * 60 * 1000, // one month
+  //   secure: env.NODE_ENV !== 'development', // cookie only works in https (secure is true if NODE_ENV is production and false if NODE_ENV is development)
+  //   sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax', // sameSite is none if secure is true and lax if secure is false because we are using cors and we are not using csrf protection
+  // };
+
+  // private refreshTokenCookieOptions: CookieOptions = {
+  //   httpOnly: true, // client side js cannot access the cookie
+  //   maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+  //   secure: env.NODE_ENV !== 'development', // cookie only works in https
+  //   sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax', // sameSite is none if NODE_ENV is production and lax if NODE_ENV is development because we are using cors and we are not using csrf protection
+  //   path: '/api/v1/auth/refresh-token',
+  // };
+
   private accessTokenCookieOptions: CookieOptions = {
     httpOnly: true, // client side js cannot access the cookie
     maxAge: 30 * 24 * 60 * 60 * 1000, // one month
-    secure: env.NODE_ENV !== 'development', // cookie only works in https
-    sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax', // sameSite is none if secure is true and lax if secure is false because we are using cors and we are not using csrf protection
+    secure: env.NODE_ENV !== 'development', // cookie only works in https (secure is true if NODE_ENV is production and false if NODE_ENV is development)
+    sameSite: env.NODE_ENV !== 'development' ? 'none' : 'lax', // sameSite is none if secure is true and lax if secure is false because we are using cors and we are not using csrf protection
   };
 
   private refreshTokenCookieOptions: CookieOptions = {
     httpOnly: true, // client side js cannot access the cookie
     maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
     secure: env.NODE_ENV !== 'development', // cookie only works in https
-    sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax', // sameSite is none if NODE_ENV is production and lax if NODE_ENV is development because we are using cors and we are not using csrf protection
+    sameSite: env.NODE_ENV !== 'development' ? 'none' : 'lax', // sameSite is none if NODE_ENV is production and lax if NODE_ENV is development because we are using cors and we are not using csrf protection
     path: '/api/v1/auth/refresh-token',
   };
 
