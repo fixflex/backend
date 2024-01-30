@@ -6,7 +6,7 @@
   "user_loged_in": "User loged in successfully",
   "user_loged_out": "User loged out successfully",
   "unauthorized": "You are not authorized, please login first",
-  "forbidden": "You are not allowed to access this resource",
+  "forbidden": "You are not allowed to perform this action",
   "invalid_token": "Invalid token",
   "invalid_credentials": "Invalid credentials",
   "token_refreshed": "Token refreshed successfully",
@@ -87,5 +87,13 @@
   "task_updated": "Task updated successfully",
   "task_deleted": "Task deleted successfully",
   "task_not_found": "Task not found",
-  "resource_not_found": "Resource not found"
+  "resource_not_found": "Resource not found",
+
+  "deleted_successfully": "Entity deleted successfully",
+  "updated_successfully": "Entity updated successfully",
+  "created_successfully": "Entity created successfully",
+  "found_successfully": "Entity retrieved successfully",
+
+  "already_exist": "Entity already exist",
+  "not_active": "Entity not active"
 }

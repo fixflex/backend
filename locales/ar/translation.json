@@ -46,7 +46,6 @@
   "file_size_exceeded": "تجاوز حجم الملف الحد",
   "limit_unexpected_file": "تم تجاوز الحد الأقصى لعدد الملفات المسموح بها ",
   "access_denied": "تم الرفض",
-  "resource_not_found": "المورد غير موجود",
   "invalid_input": "مدخل غير صالح",
   "success": "نجاح",
   "failure": "فشل",
@@ -85,5 +84,11 @@
   "task_created": "تم إنشاء المهمة بنجاح",
   "task_updated": "تم تحديث المهمة بنجاح",
   "task_deleted": "تم حذف المهمة بنجاح",
-  "task_not_found": "المهمة غير موجودة"
+  "task_not_found": "المهمة غير موجودة",
+
+  "resource_not_found": "المورد غير موجود",
+  "deleted_successfully": "تم حذف الكيان بنجاح",
+  "updated_successfully": "تم تحديث الكيان بنجاح",
+  "created_successfully": "تم إنشاء الكيان بنجاح",
+  "found_successfully": "تم استرداد الكيان بنجاح"
 }
