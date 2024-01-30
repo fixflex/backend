@@ -4,6 +4,7 @@ import { autoInjectable } from 'tsyringe';
 
 import { TaskDao } from '../DB/dao/task.dao';
 import HttpException from '../exceptions/HttpException';
+import { IPopulate } from '../helpers';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { IPagination, ITask, ITaskService } from '../interfaces';
 
@@ -11,13 +12,18 @@ import { IPagination, ITask, ITaskService } from '../interfaces';
 class TaskService implements ITaskService {
   constructor(private readonly taskDao: TaskDao) {}
 
+  private taskPopulate: IPopulate = {
+    path: 'ownerId offers',
+    select: '-__v -password -active -role',
+  };
+
   getTasks = async (query: Query): Promise<{ tasks: ITask[]; pagination: IPagination | undefined }> => {
     const { tasks, pagination } = await this.taskDao.getTasks(query);
     return { pagination, tasks };
   };
 
   getTaskById = async (id: string) => {
-    const task = await this.taskDao.getOneById(id);
+    let task = await this.taskDao.getOneByIdPopulate(id, this.taskPopulate);
     return task;
   };
 

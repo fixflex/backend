@@ -6,3 +6,8 @@ export interface Request<T = Record<string, any>> extends ExpressRequest {
   body: T;
   user?: any;
 }
+
+export interface IPopulate {
+  path: string;
+  select?: string;
+}

@@ -20,7 +20,13 @@ class OfferService implements IOfferService {
     if (!task) throw new HttpException(400, 'Task not found');
     if (task.status !== TaskStatus.OPEN) throw new HttpException(400, 'This task is not open for offers');
     offer.taskerId = tasker._id;
-    return await this.offerDao.create(offer);
+    let createdOffer = await this.offerDao.create(offer);
+    // update the task status to assigned and add the offer id to the task offers array
+    await this.taskDao.updateOneById(offer.taskId, {
+      $push: { offers: createdOffer._id },
+    });
+
+    return await createdOffer;
   }
 
   async getOfferById(id: string) {

@@ -9,6 +9,21 @@ class TaskDao extends CommonDAO<ITask> {
   constructor() {
     super(TaskModel);
   }
+  // override the getOneById method to populate the ownerId and offers and don't select the __v and the password
+
+  // async getOneById(id: string) {
+  //   //  make nested populate to populate the offers the taskerId for each offer
+  //   return await this.model
+  //     .findById(id)
+  //     .populate({
+  //       path: 'offers',
+  //       populate: {
+  //         path: 'taskId',
+  //       },
+  //     })
+  //     .populate('ownerId', 'firstName lastName profilePicture')
+  //     .select('-__v -password');
+  // }
 
   async getTasks(query: Query) {
     const countDocments = await TaskModel.countDocuments();

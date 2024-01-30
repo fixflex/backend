@@ -22,7 +22,7 @@ class CategoryService implements ICategoryService {
   }
 
   async getCategory(serviceId: string, reqLanguage: string): Promise<ICategory> {
-    let category = await this.categoryDao.getOneById(serviceId, false);
+    let category = await this.categoryDao.getOneById(serviceId, '', false);
     if (!category) throw new HttpException(404, 'No service found');
     return this.categoryDao.toJSONLocalizedOnly(category, reqLanguage) as ICategory;
   }

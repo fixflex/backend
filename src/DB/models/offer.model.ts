@@ -7,7 +7,7 @@ let offerSchema: Schema<IOffer> = new Schema(
   {
     taskerId: {
       type: String,
-      ref: 'User',
+      ref: 'User', // TODO: change it to Tasker
       required: true,
     },
     taskId: {
@@ -44,12 +44,6 @@ let offerSchema: Schema<IOffer> = new Schema(
         },
       },
     ],
-    // images: [
-    //   {
-    //     url: String,
-    //     publicId: String,
-    //   },
-    // ],
   },
   { timestamps: true }
 );
