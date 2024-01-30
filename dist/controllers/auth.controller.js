@@ -54,13 +54,13 @@ let AuthController = exports.AuthController = class AuthController {
         //   path: '/api/v1/auth/refresh-token',
         // };
         this.accessTokenCookieOptions = {
-            httpOnly: true,
+            httpOnly: false,
             maxAge: 30 * 24 * 60 * 60 * 1000,
             secure: validateEnv_1.default.NODE_ENV !== 'development',
             sameSite: validateEnv_1.default.NODE_ENV !== 'development' ? 'none' : 'lax', // sameSite is none if secure is true and lax if secure is false because we are using cors and we are not using csrf protection
         };
         this.refreshTokenCookieOptions = {
-            httpOnly: true,
+            httpOnly: false,
             maxAge: 6 * 30 * 24 * 60 * 60 * 1000,
             secure: validateEnv_1.default.NODE_ENV !== 'development',
             sameSite: validateEnv_1.default.NODE_ENV !== 'development' ? 'none' : 'lax',
