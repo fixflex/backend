@@ -1,5 +1,7 @@
 import { FilterQuery, Model, ObjectId, UpdateQuery } from 'mongoose';
 
+import { IPopulate } from '../../helpers';
+
 // Base DAO
 export default abstract class BaseDAO<T> {
   constructor(protected readonly model: Model<T>) {}
@@ -8,8 +10,17 @@ export default abstract class BaseDAO<T> {
     return await this.model.create(entity);
   }
 
-  async getOneById(id: string | ObjectId, useLean: boolean = true) {
-    return await this.model.findById(id).lean(useLean);
+  async getOneById(id: string, select: string = '', useLean: boolean = true) {
+    return await this.model.findById(id).select(select).lean(useLean);
+  }
+
+  async getOneByIdPopulate(
+    id: string | ObjectId,
+    populate: IPopulate = { path: '', select: '' },
+    select: string = '',
+    useLean: boolean = true
+  ) {
+    return await this.model.findById(id).populate(populate.path, populate.select).select(select).lean(useLean);
   }
 
   async getOne(filter: FilterQuery<T> = {}, useLean: boolean = true) {
