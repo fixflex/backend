@@ -91,7 +91,13 @@ let taskSchema: Schema<ITask> = new Schema(
       required: true,
       min: 5,
     },
-    offer: {
+    offers: [
+      {
+        type: String,
+        ref: 'Offer',
+      },
+    ],
+    acceptedOffer: {
       type: String,
       ref: 'Offer',
     },

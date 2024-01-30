@@ -8,7 +8,6 @@ export const getMe = {
       in: 'header',
       name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   responses: {
@@ -54,7 +53,8 @@ export const getMe = {
                   profilePicture: {
                     type: 'string',
                     example1: null,
-                    example: 'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
+                    example:
+                      'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
                   },
                   active: {
                     type: 'boolean',
@@ -124,7 +124,6 @@ export const updateMe = {
       in: 'header',
       name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   requestBody: {
@@ -195,7 +194,8 @@ export const updateMe = {
                   profilePicture: {
                     type: 'string',
                     example1: null,
-                    example: 'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
+                    example:
+                      'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
                   },
                 },
               },
@@ -322,7 +322,6 @@ export const updateProfileImage = {
       in: 'header',
       name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   requestBody: {
@@ -381,7 +380,8 @@ export const updateProfileImage = {
                   profilePicture: {
                     type: 'string',
                     example1: null,
-                    example: 'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
+                    example:
+                      'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
                   },
                   active: {
                     type: 'boolean',
@@ -517,7 +517,6 @@ export const deleteMe = {
       in: 'header',
       name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   responses: {

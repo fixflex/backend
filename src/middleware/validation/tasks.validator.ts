@@ -5,7 +5,7 @@ import validatorMiddleware from '../errors/validation.middleware';
 
 export const createTaskValidator = [
   check('category').optional().isMongoId().withMessage('invalid_MongoId'),
-  check('title').isString().withMessage('invalid_input').isLength({ max: 200, min: 5 }).withMessage('title_lenght'),
+  check('title').isString().withMessage('invalid_input').isLength({ max: 300, min: 5 }).withMessage('title_lenght'),
   check('details')
     .notEmpty()
     .withMessage('is_required')

@@ -2,21 +2,28 @@ import { NextFunction } from 'express';
 
 import { Request, Response } from '../helpers/generic';
 
+export enum OfferStatus {
+  PENDING = 'PENDING',
+  ACCEPTED = 'ACCEPTED',
+  CANCELLED = 'CANCELLED',
+}
+
 export interface IOffer {
   _id?: string;
   taskerId: string;
   taskId: string;
   message: string;
   price: number;
-  // submessages are the messages that the tasker and the owner of the task send to each other in the offer
+  status: OfferStatus;
+
   subMessages: {
-    sender: string;
+    userId: string;
     message: string;
   }[];
-  images: {
-    url: string;
-    publicId: string | null;
-  }[];
+  // images: {
+  //   url: string;
+  //   publicId: string | null;
+  // }[];
   createdAt?: string;
   updatedAt?: string;
 }

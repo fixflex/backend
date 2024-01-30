@@ -54,7 +54,8 @@ export interface ITask {
   };
   // city: string;
   budget: number;
-  offer: string;
+  offers: string[];
+  acceptedOffer: string;
   createdAt?: string;
   updatedAt?: string;
 }

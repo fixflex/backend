@@ -1,7 +1,7 @@
 // task model implement the IOffer interface
 import { Schema, model } from 'mongoose';
 
-import { IOffer } from '../../interfaces/offer.interface';
+import { IOffer, OfferStatus } from '../../interfaces';
 
 let offerSchema: Schema<IOffer> = new Schema(
   {
@@ -15,15 +15,23 @@ let offerSchema: Schema<IOffer> = new Schema(
       ref: 'Offer',
       required: true,
     },
+    price: {
+      type: Number,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: OfferStatus,
+      default: OfferStatus.PENDING,
+    },
     message: {
       type: String,
-      required: true,
       trim: true,
-      maxlength: 6000,
+      maxlength: 8000,
     },
     subMessages: [
       {
-        sender: {
+        userId: {
           type: String,
           ref: 'User',
           required: true,
@@ -32,16 +40,16 @@ let offerSchema: Schema<IOffer> = new Schema(
           type: String,
           required: true,
           trim: true,
-          maxlength: 6000,
+          maxlength: 8000,
         },
       },
     ],
-    images: [
-      {
-        url: String,
-        publicId: String,
-      },
-    ],
+    // images: [
+    //   {
+    //     url: String,
+    //     publicId: String,
+    //   },
+    // ],
   },
   { timestamps: true }
 );

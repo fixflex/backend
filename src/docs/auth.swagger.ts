@@ -7,7 +7,6 @@ export const signup = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'en',
     },
   ],
   requestBody: {
@@ -91,7 +90,8 @@ export const signup = {
                   profileImage: {
                     type: 'string',
                     example1: null,
-                    example: 'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
+                    example:
+                      'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
                   },
                 },
               },
@@ -259,7 +259,8 @@ export const login = {
                   profileImage: {
                     type: 'string',
                     example1: null,
-                    example: 'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
+                    example:
+                      'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
                   },
                 },
               },
@@ -362,7 +363,6 @@ export const logout = {
       in: 'header',
       name: 'Accept-Language',
       type: 'string',
-      example: 'en',
     },
   ],
   responses: {
@@ -924,7 +924,8 @@ export const resetPassword = {
                   profileImage: {
                     type: 'string',
                     example1: null,
-                    example: 'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
+                    example:
+                      'https://res.cloudinary.com/dknma8cck/image/upload/v1629291909/EcommerceAPI/Users/admin/xxcrbfkwglqa5c5kay4u.webp',
                   },
                 },
               },
