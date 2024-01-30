@@ -75,6 +75,7 @@ let AuthController = exports.AuthController = class AuthController {
         this.login = (0, express_async_handler_1.default)(async (req, res) => {
             let { email, password } = req.body;
             let { user, accessToken, refreshToken } = await this.authService.login(email, password);
+            console.log('==== login ====');
             console.log(this.accessTokenCookieOptions);
             res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
             res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);

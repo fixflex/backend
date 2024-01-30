@@ -75,7 +75,7 @@ export class AuthController implements IAuthController {
   public login = asyncHandler(async (req: Request, res: Response) => {
     let { email, password } = req.body;
     let { user, accessToken, refreshToken } = await this.authService.login(email, password);
-
+    console.log('==== login ====');
     console.log(this.accessTokenCookieOptions);
 
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
