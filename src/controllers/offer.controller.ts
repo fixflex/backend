@@ -3,8 +3,9 @@ import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
 import HttpException from '../exceptions/HttpException';
+import { Request } from '../helpers';
 import customResponse from '../helpers/customResponse';
-import { IOfferController } from '../interfaces';
+import { IOffer, IOfferController } from '../interfaces';
 import { AuthRequest } from '../interfaces/auth.interface';
 import { OfferService } from '../services/offer.service';
 
@@ -12,10 +13,9 @@ import { OfferService } from '../services/offer.service';
 class OfferController implements IOfferController {
   constructor(private readonly offerService: OfferService) {}
 
-  createOffer = asyncHandler(async (req: AuthRequest, res: Response, next: NextFunction) => {
-    const offer = await this.offerService.createOffer(req.body, req.user?._id);
-
-    if (!offer) return next(new HttpException(400, 'Something went wrong, please try again later'));
+  createOffer = asyncHandler(async (req: Request<IOffer>, res: Response, next: NextFunction) => {
+    const offer = await this.offerService.createOffer(req.body, req.user._id);
+    if (!offer) return next(new HttpException(400, 'something_went_wrong'));
     res.status(201).json(customResponse({ data: offer, success: true, message: 'Offer created' }));
   });
 
