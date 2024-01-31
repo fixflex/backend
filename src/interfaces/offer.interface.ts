@@ -1,4 +1,5 @@
 import { NextFunction } from 'express';
+import { Document } from 'mongoose';
 
 import { IPagination } from '.';
 import { Request, Response } from '../helpers/generic';
@@ -9,7 +10,7 @@ export enum OfferStatus {
   CANCELLED = 'CANCELLED',
 }
 
-export interface IOffer {
+export interface IOffer extends Document {
   _id?: string;
   taskerId: string;
   taskId: string;

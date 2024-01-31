@@ -7,12 +7,12 @@ let offerSchema: Schema<IOffer> = new Schema(
   {
     taskerId: {
       type: String,
-      ref: 'User', // TODO: change it to Tasker
+      ref: 'Tasker',
       required: true,
     },
     taskId: {
       type: String,
-      ref: 'Offer',
+      ref: 'Task',
       required: true,
     },
     price: {
