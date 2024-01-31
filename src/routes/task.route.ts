@@ -30,9 +30,9 @@ class TaskRoute implements Routes {
     this.router.delete(`${this.path}/:id`, isMongoId, this.taskController.deleteTask);
 
     // ==================== offer status ==================== //
+    this.router.patch(`${this.path}/:id/open`, isMongoId, this.taskController.openTask);
     this.router.patch(`${this.path}/:id/cancel`, isMongoId, this.taskController.cancelTask);
     // this.router.patch(`${this.path}/:id/complete`, isMongoId, this.taskController.completeTask);
-    // this.router.patch(`${this.path}/:id/open`, isMongoId, this.taskController.openTask);
   }
 }
 

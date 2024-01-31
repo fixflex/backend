@@ -2,15 +2,15 @@ import { UploadApiResponse } from 'cloudinary';
 import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
-import { CategoryDao, TaskDao } from '../DB/dao';
+import { CategoryDao, OfferDao, TaskDao } from '../DB/dao';
 import HttpException from '../exceptions/HttpException';
 import { IPopulate } from '../helpers';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
-import { IPagination, ITask, ITaskService, TaskStatus } from '../interfaces';
+import { IPagination, ITask, ITaskService, OfferStatus, TaskStatus } from '../interfaces';
 
 @autoInjectable()
 class TaskService implements ITaskService {
-  constructor(private readonly taskDao: TaskDao, private readonly categoryDao: CategoryDao) {}
+  constructor(private readonly taskDao: TaskDao, private readonly categoryDao: CategoryDao, private readonly offerDao: OfferDao) {}
 
   private taskPopulate: IPopulate = {
     path: 'userId offers',
@@ -127,6 +127,26 @@ class TaskService implements ITaskService {
     // 5. Update the task status to CANCELED
     task.status = TaskStatus.CANCELLED;
     task = await task.save();
+    return task;
+  };
+
+  openTask = async (id: string, userId: string) => {
+    // 1. Check if the task exists
+    let task = await this.taskDao.getOneById(id, '', false);
+    if (!task) throw new HttpException(404, 'resource_not_found');
+    // 2. Check if the user is the owner of the task
+    if (task.userId !== userId.toString()) throw new HttpException(403, 'forbidden');
+    // 3. Check if the task is not completed or
+    if (task.status === TaskStatus.COMPLETED || task.status === TaskStatus.CANCELLED) throw new HttpException(400, 'bad_request');
+    // 4. if the task is ASSIGNED then remove the acceptedOffer and update the task status to OPEN and update the offers status to PENDING instead of ACCEPTED
+    if (task.status === TaskStatus.ASSIGNED) {
+      await this.offerDao.updateOneById(task.acceptedOffer as string, { status: OfferStatus.PENDING });
+      // await this.offerDao.updateMany({ _id: { $in: task.offers } }, { status: OfferStatus.PENDING });
+    }
+
+    task.acceptedOffer = undefined;
+    task.status = TaskStatus.OPEN;
+    await task.save();
     return task;
   };
 }

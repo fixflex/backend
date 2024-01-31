@@ -54,7 +54,7 @@ export interface ITask extends Document {
   // city: string;
   budget: number;
   offers: string[];
-  acceptedOffer: string;
+  acceptedOffer: string | undefined;
   createdAt?: string;
   updatedAt?: string;
 }
