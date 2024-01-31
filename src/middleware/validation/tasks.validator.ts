@@ -1,6 +1,6 @@
 import { check } from 'express-validator';
 
-import { TaskStatus, TaskTime } from '../../interfaces';
+import { TaskTime } from '../../interfaces';
 import validatorMiddleware from '../errors/validation.middleware';
 
 export const createTaskValidator = [
@@ -80,6 +80,12 @@ export const createTaskValidator = [
   validatorMiddleware,
 ];
 
+/**
+ *
+ * @description this validator is used to validate the update task request
+ * @see src/routes/task.route.ts
+ *
+ */
 export const updateTaskValidator = [
   // ====================>>>>>>>> is optional <<<<<<<<<<<==================== //
   check('dueDate.flexible').optional().isBoolean().withMessage('invalid_input'),
@@ -135,10 +141,10 @@ export const updateTaskValidator = [
       return true;
     }),
   check('budget').optional().isNumeric().withMessage('invalid_input'),
-  check('status').optional().isIn(Object.values(TaskStatus)).withMessage('invalid_status'),
 
   // ====================>>>>>>>> is empty <<<<<<<<<<<==================== //
   check('offers').isEmpty().withMessage('not_allowed'),
+  check('status').isEmpty().withMessage('not_allowed'),
   check('taskerId').isEmpty().withMessage('not_allowed'),
   check('acceptedOffer').isEmpty().withMessage('not_allowed'),
   check('createdAt').isEmpty().withMessage('not_allowed'),
