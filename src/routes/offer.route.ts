@@ -17,7 +17,7 @@ class OfferRoute implements Routes {
   private initializerRoutes() {
     //### offers routes that don't require authentication
     this.router.get(`${this.path}/:id`, isMongoId, this.offerController.getOfferById);
-    this.router.get(`${this.path}`, this.offerController.getOffersByTaskId);
+    this.router.get(`${this.path}`, this.offerController.getOffers);
     // =================================================================== //
     // ====>>>====>>>====>>>  require authentication <<<====<<<====<<<==== //
     // =================================================================== //

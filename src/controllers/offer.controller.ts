@@ -18,10 +18,9 @@ class OfferController implements IOfferController {
     res.status(201).json(customResponse({ data: offer, success: true, message: req.t('created_success') }));
   });
 
-  getOffersByTaskId = asyncHandler(async (req: Request, res: Response) => {
-    const offers = await this.offerService.getOffers(req.query.taskId as string);
-
-    res.status(200).json(customResponse({ data: offers, success: true, message: null }));
+  getOffers = asyncHandler(async (req: Request, res: Response) => {
+    const { offers, pagination } = await this.offerService.getOffers(req.query);
+    res.status(200).json(customResponse({ data: offers, success: true, message: null, pagination, results: offers.length }));
   });
 
   getOfferById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {

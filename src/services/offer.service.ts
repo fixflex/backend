@@ -1,3 +1,4 @@
+import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
 import { OfferDao } from '../DB/dao/offer.dao';
@@ -6,6 +7,7 @@ import TaskerDao from '../DB/dao/tasker.dao';
 import HttpException from '../exceptions/HttpException';
 import { IOffer, IOfferService, OfferStatus } from '../interfaces';
 import { TaskStatus } from '../interfaces/task.interface';
+import { IPagination } from './../interfaces/pagination.interface';
 
 @autoInjectable()
 class OfferService implements IOfferService {
@@ -36,9 +38,9 @@ class OfferService implements IOfferService {
     return await this.offerDao.getOneById(id);
   }
 
-  async getOffers(taskId: any) {
-    if (taskId) return await this.offerDao.getMany({ taskId });
-    return await this.offerDao.getMany();
+  async getOffers(reqQuery: Query): Promise<{ offers: IOffer[]; pagination: IPagination | undefined }> {
+    const { offers, pagination } = await this.offerDao.getOffers(reqQuery);
+    return { offers, pagination };
   }
 
   async updateOffer(id: string, payload: Partial<IOffer>, userId: string) {
