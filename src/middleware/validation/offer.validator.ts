@@ -10,15 +10,9 @@ export const createOfferValidator = [
     .withMessage('is_required')
     .isNumeric()
     .withMessage('invalid_input')
-    .isLength({ min: 5 })
+    .isInt({ min: 10 })
     .withMessage('min_length'),
-  check('message')
-    .notEmpty()
-    .withMessage('is_required')
-    .isString()
-    .withMessage('invalid_input')
-    .isLength({ max: 8000 })
-    .withMessage('exceeds_max_length'),
+  check('message').notEmpty().withMessage('is_required').isLength({ max: 8000 }).withMessage('exceeds_max_length'),
 
   check('subMessages').isEmpty().withMessage('not_allowed'),
   // check('images').isEmpty().withMessage('not_allowed'),

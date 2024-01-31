@@ -16,7 +16,7 @@ class OfferDao extends CommonDAO<IOffer> {
     const pagination: IPagination | undefined = apiFeatures.pagination;
     const offers = await apiFeatures.mongooseQuery.select('-__v');
     // .populate('taskId')
-    // .populate('taskerId', 'firstName lastName profilePicture');
+    // .populate({ path: 'taskerId', populate: { path: 'userId' } });
     return { offers, pagination };
   }
 }
