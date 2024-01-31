@@ -57,13 +57,17 @@ class OfferService implements IOfferService {
   async deleteOffer(id: string, userId: string) {
     // 1. check if the user is a tasker
     let tasker = await this.taskerDao.getOne({ userId });
-    if (!tasker) throw new HttpException(400, 'forbidden');
+    if (!tasker) throw new HttpException(400, 'You_are_not_a_tasker');
     // 2. check if the offer is exist
     let offer = await this.offerDao.getOneById(id);
     if (!offer) throw new HttpException(404, 'resource_not_found');
     // 3. check if the offer belongs to this tasker
     if (offer.taskerId.toString() !== tasker._id.toString()) throw new HttpException(403, 'forbidden');
-    // 4. delete the offer and return it
+    // 5. check if the offer status is not accepted
+    if (offer.status === OfferStatus.ACCEPTED) throw new HttpException(403, 'forbidden');
+    // 6. delete the offer from the task offers array
+    await this.taskDao.updateOneById(offer.taskId, { $pull: { offers: offer._id } });
+    // 7. delete the offer
     return await this.offerDao.deleteOneById(id);
   }
 
