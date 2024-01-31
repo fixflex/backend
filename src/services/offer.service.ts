@@ -65,8 +65,11 @@ class OfferService implements IOfferService {
     if (!offer) throw new HttpException(404, 'resource_not_found');
     // 3. check if the offer belongs to this tasker
     if (offer.taskerId.toString() !== tasker._id.toString()) throw new HttpException(403, 'forbidden');
-    // 5. check if the offer status is not accepted
+    // 4. check if the offer status is accepted
+    // 4.1 if yes, return an error
     if (offer.status === OfferStatus.ACCEPTED) throw new HttpException(403, 'forbidden');
+    // TODO: if accepted, change the offer status to canceled, send notification to the owner of the task that the offer he accepted is canceled and change the task status to open
+
     // 6. delete the offer from the task offers array
     await this.taskDao.updateOneById(offer.taskId, { $pull: { offers: offer._id } });
     // 7. delete the offer
