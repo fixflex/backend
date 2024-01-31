@@ -4,8 +4,33 @@ import { TaskStatus, TaskTime } from '../../interfaces';
 import validatorMiddleware from '../errors/validation.middleware';
 
 export const createTaskValidator = [
-  check('category').optional().isMongoId().withMessage('invalid_MongoId'),
+  // ====================>>>>>>>> is required <<<<<<<<<<<==================== //
   check('title').isString().withMessage('invalid_input').isLength({ max: 300, min: 5 }).withMessage('title_lenght'),
+  check('location')
+    .notEmpty()
+    .withMessage('is_required')
+    .custom(location => {
+      if (location.online) return true;
+      if (!location.coordinates || location.coordinates.length !== 2) {
+        throw new Error('invalid_coordinates');
+      }
+      if (typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
+        throw new Error('invalid_coordinates');
+      }
+      // swaped the coordinates
+      location.coordinates = [location.coordinates[1], location.coordinates[0]]; // [longitude, latitude]
+      return true;
+    }),
+  check('budget')
+    .notEmpty()
+    .withMessage('is_required')
+    .isNumeric()
+    .withMessage('invalid_input')
+    .isInt({ min: 10 })
+    .withMessage('invalid_budget'),
+
+  // ====================>>>>>>>> is optional <<<<<<<<<<<==================== //
+  check('category').optional().isMongoId().withMessage('invalid_MongoId'),
   check('details')
     .notEmpty()
     .withMessage('is_required')
@@ -45,37 +70,18 @@ export const createTaskValidator = [
     .custom(time => time.every((t: TaskTime) => Object.values(TaskTime).includes(t)))
     .withMessage('Invalid task time, must be one of MORNING, MIDDAY, AFTERNOON, EVENING'),
   check('location.online').optional().isBoolean().withMessage('invalid_input'),
-  check('location')
-    .notEmpty()
-    .withMessage('is_required')
-    .custom(location => {
-      if (location.online) return true;
-      if (!location.coordinates || location.coordinates.length !== 2) {
-        throw new Error('invalid_coordinates');
-      }
-      if (typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
-        throw new Error('invalid_coordinates');
-      }
-      // swaped the coordinates
-      location.coordinates = [location.coordinates[1], location.coordinates[0]]; // [longitude, latitude]
-      return true;
-    }),
-  check('budget')
-    .notEmpty()
-    .withMessage('is_required')
-    .isNumeric()
-    .withMessage('invalid_input')
-    .isInt({ min: 10 })
-    .withMessage('invalid_budget'),
 
+  // ====================>>>>>>>> is empty <<<<<<<<<<<==================== //
   check('status').isEmpty().withMessage('not_allowed'),
   check('offers').isEmpty().withMessage('not_allowed'),
+  check('acceptedOffer').isEmpty().withMessage('not_allowed'),
   check('createdAt').isEmpty().withMessage('not_allowed'),
   check('updatedAt').isEmpty().withMessage('not_allowed'),
   validatorMiddleware,
 ];
 
 export const updateTaskValidator = [
+  // ====================>>>>>>>> is optional <<<<<<<<<<<==================== //
   check('dueDate.flexible').optional().isBoolean().withMessage('invalid_input'),
   check('dueDate.on').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Invalid date format, must be YYYY-MM-DD'),
   check('dueDate.before').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage(' "Invalid date format, must be YYYY-MM-DD",'),
@@ -131,6 +137,7 @@ export const updateTaskValidator = [
   check('budget').optional().isNumeric().withMessage('invalid_input'),
   check('status').optional().isIn(Object.values(TaskStatus)).withMessage('invalid_status'),
 
+  // ====================>>>>>>>> is empty <<<<<<<<<<<==================== //
   check('offers').isEmpty().withMessage('not_allowed'),
   check('taskerId').isEmpty().withMessage('not_allowed'),
   check('createdAt').isEmpty().withMessage('not_allowed'),
