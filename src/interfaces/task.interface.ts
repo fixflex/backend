@@ -1,4 +1,5 @@
 import { NextFunction } from 'express';
+import { Document } from 'mongoose';
 
 import { IPagination } from '.';
 import { Request, Response } from '../helpers/generic';
@@ -19,7 +20,8 @@ export enum TaskTime {
   AFTERNOON = 'AFTERNOON',
   EVENING = 'EVENING',
 }
-export interface ITask {
+
+export interface ITask extends Document {
   _id: string;
   userId: string;
   taskerId: string;

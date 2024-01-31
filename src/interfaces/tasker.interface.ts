@@ -1,9 +1,10 @@
 import { NextFunction } from 'express';
+import { Document } from 'mongoose';
 
 import { IPagination } from '.';
 import { Request, Response } from '../helpers/generic';
 
-export interface ITasker {
+export interface ITasker extends Document {
   _id: string;
   userId: string;
   rating: number;

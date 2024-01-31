@@ -1,4 +1,5 @@
 import { NextFunction } from 'express';
+import { Document } from 'mongoose';
 
 import { Request, Response } from '../helpers/generic';
 
@@ -7,7 +8,7 @@ export enum UserType {
   ADMIN = 'ADMIN',
 }
 
-export interface IUser {
+export interface IUser extends Document {
   _id: string;
   firstName: string;
   lastName: string;

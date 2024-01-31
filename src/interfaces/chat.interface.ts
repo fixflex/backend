@@ -1,8 +1,9 @@
 import { NextFunction } from 'express';
+import { Document } from 'mongoose';
 
 import { Request, Response } from '../helpers/generic';
 
-export interface IChat {
+export interface IChat extends Document {
   _id: string;
   client: string; // ref: User
   tasker: string; // ref: User

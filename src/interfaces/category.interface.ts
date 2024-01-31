@@ -1,8 +1,9 @@
 import { NextFunction } from 'express';
+import { Document } from 'mongoose';
 
 import { Request, Response } from '../helpers';
 
-export interface ICategory {
+export interface ICategory extends Document {
   _id?: string;
   name: string;
   description: string;
