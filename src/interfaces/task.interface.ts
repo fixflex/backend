@@ -42,7 +42,7 @@ export interface ITask {
     url: string;
     publicId: string | null;
   }[];
-  category: string;
+  categoryId: string;
   status: TaskStatus;
   location: {
     type: {

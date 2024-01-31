@@ -2,7 +2,7 @@ import { UploadApiResponse } from 'cloudinary';
 import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
-import { TaskDao } from '../DB/dao/task.dao';
+import { CategoryDao, TaskDao } from '../DB/dao';
 import HttpException from '../exceptions/HttpException';
 import { IPopulate } from '../helpers';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
@@ -10,7 +10,7 @@ import { IPagination, ITask, ITaskService } from '../interfaces';
 
 @autoInjectable()
 class TaskService implements ITaskService {
-  constructor(private readonly taskDao: TaskDao) {}
+  constructor(private readonly taskDao: TaskDao, private readonly categoryDao: CategoryDao) {}
 
   private taskPopulate: IPopulate = {
     path: 'ownerId offers',
@@ -28,6 +28,11 @@ class TaskService implements ITaskService {
   };
 
   createTask = async (task: ITask) => {
+    // if there is categoryId, check if it exists
+    if (task.categoryId) {
+      const category = await this.categoryDao.getOneById(task.categoryId);
+      if (!category) throw new HttpException(404, 'Category not found');
+    }
     const newTask = await this.taskDao.create(task);
     return newTask;
   };

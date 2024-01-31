@@ -2,6 +2,14 @@ import { Schema, model } from 'mongoose';
 
 import { ITask, TaskStatus, TaskTime } from '../../interfaces';
 
+// TODO
+//=====================================================
+// Query executed without index
+// This query ran without an index.
+// If you plan on using this query heavily in your application,
+// you should create an index that covers this query.
+//=====================================================
+
 let taskSchema: Schema<ITask> = new Schema(
   {
     ownerId: {
@@ -59,7 +67,7 @@ let taskSchema: Schema<ITask> = new Schema(
         },
       },
     ],
-    category: {
+    categoryId: {
       type: String,
       ref: 'Category',
     },
