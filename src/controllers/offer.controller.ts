@@ -42,7 +42,6 @@ class OfferController implements IOfferController {
   });
 
   acceptOffer = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    console.log('form acceptOffer controller');
     const offer = await this.offerService.acceptOffer(req.params.id, req.user._id);
     if (!offer) return next(new HttpException(400, 'something_went_wrong'));
     res.status(200).json(customResponse({ data: offer, success: true, message: 'offer_accepted' }));

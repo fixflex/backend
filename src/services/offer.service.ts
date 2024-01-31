@@ -79,7 +79,7 @@ class OfferService implements IOfferService {
     if (!offer) throw new HttpException(404, 'resource_not_found');
     // 2. check if the user is the owner of the task
     // @ts-ignore
-    if (offer.taskId.userId.toString() !== userId) throw new HttpException(403, 'forbidden');
+    if (offer.taskId.userId.toString() !== userId.toString()) throw new HttpException(403, 'forbidden');
     // 3. check if task status is open
     // @ts-ignore
     if (offer.taskId.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
