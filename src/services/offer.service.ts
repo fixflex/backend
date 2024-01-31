@@ -74,25 +74,24 @@ class OfferService implements IOfferService {
   }
 
   async acceptOffer(id: string, userId: string) {
-    // 1. check if the user is the owner of the task
-    let task = await this.taskDao.getOne({ userId }, false);
-    if (!task) throw new HttpException(404, 'resource_not_found');
-    // 2. check if task status is open
-    if (task.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
-    // 3. check if the offer is exist
-    let offer = await this.offerDao.getOneById(id);
+    // 1. get the offer by id
+    let offer = await this.offerDao.getOneByIdPopulate(id, { path: 'taskId', select: '' }, '', false);
     if (!offer) throw new HttpException(404, 'resource_not_found');
-    // 4. check if the offer belongs to this task
-    if (offer.taskId.toString() !== task._id.toString()) throw new HttpException(403, 'forbidden');
-    // 5. update the offer status to accepted
-    let acceptedOffer = await this.offerDao.updateOneById(id, { status: OfferStatus.ACCEPTED });
-    if (!acceptedOffer) throw new HttpException(400, 'something_went_wrong');
-    // 6. update the task status to assigned and add the accepted offer id to it
-    await this.taskDao.updateOneById(task._id, { status: TaskStatus.ASSIGNED, acceptedOffer: acceptedOffer._id });
-    // 7. TODO: send notification to the tasker that his offer is accepted
-    // 8. return the accepted offer
-    return acceptedOffer;
+    // 2. check if the user is the owner of the task
+    // @ts-ignore
+    if (offer.taskId.userId.toString() !== userId) throw new HttpException(403, 'forbidden');
+    // 3. check if task status is open
+    // @ts-ignore
+    if (offer.taskId.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
+    //  4. update the offer status to accepted
+    offer.status = OfferStatus.ACCEPTED;
+    await offer.save();
+    // 5. update the task status to assigned and add the accepted offer id to it
+    // @ts-ignore
+    await this.taskDao.updateOneById(offer.taskId._id, { status: TaskStatus.ASSIGNED, acceptedOffer: offer._id });
+    // 6. TODO: send notification to the tasker that his offer is accepted
+    // 7. return the accepted offer
+    return offer;
   }
 }
-
 export { OfferService };
