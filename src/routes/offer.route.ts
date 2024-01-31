@@ -25,7 +25,7 @@ class OfferRoute implements Routes {
     this.router.post(`${this.path}`, createOfferValidator, this.offerController.createOffer);
     this.router.patch(`${this.path}/:id`, isMongoId, updateOfferValidator, this.offerController.updateOffer);
     this.router.delete(`${this.path}/:id`, isMongoId, this.offerController.deleteOffer);
-    // this.router.patch(`${this.path}/:id/accept`, isMongoId, this.offerController.acceptOffer);
+    this.router.patch(`${this.path}/:id/accept`, isMongoId, this.offerController.acceptOffer);
   }
 }
 

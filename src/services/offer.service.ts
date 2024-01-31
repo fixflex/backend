@@ -4,7 +4,7 @@ import { OfferDao } from '../DB/dao/offer.dao';
 import { TaskDao } from '../DB/dao/task.dao';
 import TaskerDao from '../DB/dao/tasker.dao';
 import HttpException from '../exceptions/HttpException';
-import { IOffer, IOfferService } from '../interfaces';
+import { IOffer, IOfferService, OfferStatus } from '../interfaces';
 import { TaskStatus } from '../interfaces/task.interface';
 
 @autoInjectable()
@@ -62,9 +62,30 @@ class OfferService implements IOfferService {
     let offer = await this.offerDao.getOneById(id);
     if (!offer) throw new HttpException(404, 'resource_not_found');
     // 3. check if the offer belongs to this tasker
-    if (offer.taskerId.toString() !== tasker._id.toString()) throw new HttpException(400, 'forbidden');
+    if (offer.taskerId.toString() !== tasker._id.toString()) throw new HttpException(403, 'forbidden');
     // 4. delete the offer and return it
     return await this.offerDao.deleteOneById(id);
+  }
+
+  async acceptOffer(id: string, userId: string) {
+    // 1. check if the user is the owner of the task
+    let task = await this.taskDao.getOne({ userId }, false);
+    if (!task) throw new HttpException(404, 'resource_not_found');
+    // 2. check if task status is open
+    if (task.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
+    // 3. check if the offer is exist
+    let offer = await this.offerDao.getOneById(id);
+    if (!offer) throw new HttpException(404, 'resource_not_found');
+    // 4. check if the offer belongs to this task
+    if (offer.taskId.toString() !== task._id.toString()) throw new HttpException(403, 'forbidden');
+    // 5. update the offer status to accepted
+    let acceptedOffer = await this.offerDao.updateOneById(id, { status: OfferStatus.ACCEPTED });
+    if (!acceptedOffer) throw new HttpException(400, 'something_went_wrong');
+    // 6. update the task status to assigned and add the accepted offer id to it
+    await this.taskDao.updateOneById(task._id, { status: TaskStatus.ASSIGNED, acceptedOffer: acceptedOffer._id });
+    // 7. TODO: send notification to the tasker that his offer is accepted
+    // 8. return the accepted offer
+    return acceptedOffer;
   }
 }
 

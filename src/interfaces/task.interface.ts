@@ -20,7 +20,7 @@ export enum TaskTime {
   EVENING = 'EVENING',
 }
 export interface ITask {
-  _id: number;
+  _id: string;
   ownerId: string;
   taskerId: {
     type: string;

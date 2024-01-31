@@ -12,7 +12,6 @@ export const createOfferValidator = [
     .withMessage('invalid_input')
     .isLength({ min: 5 })
     .withMessage('min_length'),
-
   check('message')
     .notEmpty()
     .withMessage('is_required')
@@ -20,6 +19,7 @@ export const createOfferValidator = [
     .withMessage('invalid_input')
     .isLength({ max: 8000 })
     .withMessage('exceeds_max_length'),
+
   check('subMessages').isEmpty().withMessage('not_allowed'),
   // check('images').isEmpty().withMessage('not_allowed'),
   check('createdAt').isEmpty().withMessage('not_allowed'),

@@ -41,6 +41,12 @@ class OfferController implements IOfferController {
     if (!offer) return next(new HttpException(404, 'resource_not_found'));
     res.status(200).json(customResponse({ data: null, success: true, message: 'deleted_success' }));
   });
+
+  acceptOffer = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const offer = await this.offerService.acceptOffer(req.params.id, req.user._id);
+    if (!offer) return next(new HttpException(404, 'resource_not_found'));
+    res.status(200).json(customResponse({ data: offer, success: true, message: 'offer_accepted' }));
+  });
 }
 
 export { OfferController };
