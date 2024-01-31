@@ -59,6 +59,13 @@ class TaskController implements ITaskController {
     if (!task) return next(new HttpException(404, 'resource_not_found'));
     res.status(200).json(customResponse({ data: null, success: true, message: req.t('task_deleted') }));
   });
+
+  // ==================== offer status ==================== //
+  cancelTask = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const task = await this.taskService.cancelTask(req.params.id, req.user._id);
+    if (!task) return next(new HttpException(404, 'resource_not_found'));
+    res.status(200).json(customResponse({ data: task, success: true, message: req.t('task_canceled') }));
+  });
 }
 
 export { TaskController };
