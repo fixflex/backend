@@ -12,7 +12,7 @@ import { ITask, TaskStatus, TaskTime } from '../../interfaces';
 
 let taskSchema: Schema<ITask> = new Schema(
   {
-    ownerId: {
+    userId: {
       type: String,
       ref: 'User',
       required: true,

@@ -21,11 +21,8 @@ export enum TaskTime {
 }
 export interface ITask {
   _id: string;
-  ownerId: string;
-  taskerId: {
-    type: string;
-    ref: 'Tasker';
-  };
+  userId: string;
+  taskerId: string;
   dueDate: {
     on: Date;
     before: Date;

@@ -13,7 +13,7 @@ class TaskService implements ITaskService {
   constructor(private readonly taskDao: TaskDao, private readonly categoryDao: CategoryDao) {}
 
   private taskPopulate: IPopulate = {
-    path: 'ownerId offers',
+    path: 'userId offers',
     select: '-__v -password -active -role',
   };
 
@@ -42,8 +42,8 @@ class TaskService implements ITaskService {
     const task = await this.taskDao.getOneById(id);
 
     if (!task) throw new HttpException(404, 'Task not found');
-    // convert the id to string to compare it with the ownerId
-    if (task.ownerId !== userId?.toString()) throw new HttpException(403, 'unauthorized');
+    // convert the id to string to compare it with the userId
+    if (task.userId !== userId?.toString()) throw new HttpException(403, 'unauthorized');
     const updatedTask = await this.taskDao.updateOneById(id, payload);
     return updatedTask;
   };
@@ -55,7 +55,7 @@ class TaskService implements ITaskService {
     // 2. Check if the task exists and the user is the owner of the task
     const task = await this.taskDao.getOneById(id);
     if (!task) throw new HttpException(404, 'Task not found');
-    if (task.ownerId !== userId?.toString()) throw new HttpException(403, 'unauthorized');
+    if (task.userId !== userId?.toString()) throw new HttpException(403, 'unauthorized');
 
     let imageCover: UploadApiResponse;
     let images: UploadApiResponse[];
@@ -105,7 +105,7 @@ class TaskService implements ITaskService {
   deleteTask = async (id: string, userId: string | undefined) => {
     const task = await this.taskDao.getOneById(id);
     if (!task) throw new HttpException(404, 'Task not found');
-    if (task.ownerId !== userId?.toString()) throw new HttpException(403, 'unauthorized');
+    if (task.userId !== userId?.toString()) throw new HttpException(403, 'unauthorized');
     const deletedTask = await this.taskDao.deleteOneById(id);
     return deletedTask;
   };
