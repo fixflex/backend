@@ -140,6 +140,7 @@ export const updateTaskValidator = [
   // ====================>>>>>>>> is empty <<<<<<<<<<<==================== //
   check('offers').isEmpty().withMessage('not_allowed'),
   check('taskerId').isEmpty().withMessage('not_allowed'),
+  check('acceptedOffer').isEmpty().withMessage('not_allowed'),
   check('createdAt').isEmpty().withMessage('not_allowed'),
   check('updatedAt').isEmpty().withMessage('not_allowed'),
   validatorMiddleware,
