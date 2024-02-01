@@ -149,6 +149,16 @@ class TaskService implements ITaskService {
     await task.save();
     return task;
   };
+
+  completeTask = async (id: string, userId: string) => {
+    // 1. Check if the task exists
+    // 2. Check if the user is the owner of the task
+    // 3. Check if the task is assigned
+    // 4. calculate the commission from the task price for the platform and calculate the tasker earnings and update the tasker balance and the platform balance
+    // 5. update the tasker balance and the platform balance
+    // 6. update the task status to COMPLETED
+    // 7. return the task
+  };
 }
 
 export { TaskService };

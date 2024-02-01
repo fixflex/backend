@@ -15,6 +15,7 @@ export enum OfferStatus {
 
 export interface IOffer extends Document {
   _id?: string;
+  // tasker: { type: Schema.Types.ObjectId; ref: 'Tasker' }; // TODO: For Fix the populate issue
   taskerId: string;
   taskId: string;
   message: string;

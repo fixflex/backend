@@ -2,14 +2,6 @@ import { Schema, model } from 'mongoose';
 
 import { ITask, TaskStatus, TaskTime } from '../../interfaces';
 
-// TODO
-//=====================================================
-// Query executed without index
-// This query ran without an index.
-// If you plan on using this query heavily in your application,
-// you should create an index that covers this query.
-//=====================================================
-
 let taskSchema: Schema<ITask> = new Schema(
   {
     userId: {
@@ -119,3 +111,11 @@ taskSchema.index({ location: '2dsphere' });
 let Task = model<ITask>('Task', taskSchema);
 
 export default Task;
+
+// TODO
+//=====================================================
+// Query executed without index
+// This query ran without an index.
+// If you plan on using this query heavily in your application,
+// you should create an index that covers this query.
+//=====================================================

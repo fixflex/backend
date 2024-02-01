@@ -20,9 +20,9 @@ class UserRoute implements Routes {
     this.router
       .route(`${this.path}/me`)
       .get(authenticateUser, this.userController.getMe)
-      .patch(updateLoggedUserValidator, authenticateUser, this.userController.updateMe)
-      // deactivate user
-      .delete(authenticateUser, this.userController.deleteMe);
+      .patch(updateLoggedUserValidator, authenticateUser, this.userController.updateMe);
+    // deactivate user
+    // .delete(authenticateUser, this.userController.deleteMe);
 
     this.router
       .route(`${this.path}/me/profile-picture`)

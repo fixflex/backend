@@ -22,7 +22,7 @@ class TaskerRoute implements Routes {
     this.router.post(`${this.path}/become-tasker`, authenticateUser, createTaskerValidator, this.taskerController.createTasker);
     this.router.get(`${this.path}/me`, authenticateUser, this.taskerController.getMe);
     this.router.patch(`${this.path}/me`, authenticateUser, updateTaskerValidator, this.taskerController.updateMe);
-    this.router.delete(`${this.path}/me`, authenticateUser, this.taskerController.deleteTasker);
+    // this.router.delete(`${this.path}/me`, authenticateUser, this.taskerController.deleteTasker);
 
     // Public routes
     this.router.get(`${this.path}/:id`, isMongoId, this.taskerController.getTaskerPublicProfile);
