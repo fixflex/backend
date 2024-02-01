@@ -20,7 +20,6 @@ export enum TaskTime {
   AFTERNOON = 'AFTERNOON',
   EVENING = 'EVENING',
 }
-
 export interface ITask extends Document {
   _id: string;
   userId: string;
@@ -51,12 +50,13 @@ export interface ITask extends Document {
     coordinates: [number, number];
     online: boolean;
   };
-  // city: string;
   budget: number;
   offers: string[];
   acceptedOffer: string | undefined;
   createdAt?: string;
   updatedAt?: string;
+  // ======================================================================================================== //
+  transcactionId: string;
 }
 
 export interface ITaskController {
