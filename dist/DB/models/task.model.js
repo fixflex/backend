@@ -2,16 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const interfaces_1 = require("../../interfaces");
+const transaction_interface_1 = require("../../interfaces/transaction.interface");
 let taskSchema = new mongoose_1.Schema({
-    ownerId: {
+    userId: {
         type: String,
         ref: 'User',
         required: true,
     },
-    taskerId: {
-        type: String,
-        ref: 'Tasker',
-    },
+    // taskerId: {
+    //   type: String,
+    //   ref: 'Tasker',
+    // },
     dueDate: {
         on: {
             type: Date,
@@ -58,7 +59,7 @@ let taskSchema = new mongoose_1.Schema({
             },
         },
     ],
-    category: {
+    categoryId: {
         type: String,
         ref: 'Category',
     },
@@ -90,9 +91,35 @@ let taskSchema = new mongoose_1.Schema({
         required: true,
         min: 5,
     },
-    offer: {
+    offers: [
+        {
+            type: String,
+            ref: 'Offer',
+        },
+    ],
+    acceptedOffer: {
         type: String,
         ref: 'Offer',
+    },
+    // ======================================================================================================== //
+    transcactionId: {
+        type: String,
+        ref: 'Transaction',
+    },
+    paymentMethod: {
+        type: String,
+        enum: transaction_interface_1.PaymentMethod,
+        default: transaction_interface_1.PaymentMethod.CASH,
+        // card: {
+        //   cardNumber: String,
+        //   cardHolderName: String,
+        //   expiryDate: String,
+        //   cvc: String,
+        // },
+        // vodafoneCash: {
+        //   phoneNumber: String,
+        //   pin: String,
+        // },
     },
 }, { timestamps: true });
 // Apply the geospatial index to the coordinates field inside the location object
@@ -100,3 +127,10 @@ let taskSchema = new mongoose_1.Schema({
 taskSchema.index({ location: '2dsphere' });
 let Task = (0, mongoose_1.model)('Task', taskSchema);
 exports.default = Task;
+// TODO
+//=====================================================
+// Query executed without index
+// This query ran without an index.
+// If you plan on using this query heavily in your application,
+// you should create an index that covers this query.
+//=====================================================

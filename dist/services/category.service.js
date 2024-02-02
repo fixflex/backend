@@ -31,7 +31,7 @@ let CategoryService = class CategoryService {
         return localizedDocs;
     }
     async getCategory(serviceId, reqLanguage) {
-        let category = await this.categoryDao.getOneById(serviceId, false);
+        let category = await this.categoryDao.getOneById(serviceId, '', false);
         if (!category)
             throw new HttpException_1.default(404, 'No service found');
         return this.categoryDao.toJSONLocalizedOnly(category, reqLanguage);

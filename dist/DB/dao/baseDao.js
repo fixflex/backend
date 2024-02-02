@@ -8,8 +8,11 @@ class BaseDAO {
     async create(entity) {
         return await this.model.create(entity);
     }
-    async getOneById(id, useLean = true) {
-        return await this.model.findById(id).lean(useLean);
+    async getOneById(id, select = '', useLean = true) {
+        return await this.model.findById(id).select(select).lean(useLean);
+    }
+    async getOneByIdPopulate(id, populate = { path: '', select: '' }, select = '', useLean = true) {
+        return await this.model.findById(id).populate(populate.path, populate.select).select(select).lean(useLean);
     }
     async getOne(filter = {}, useLean = true) {
         return await this.model.findOne(filter).lean(useLean);

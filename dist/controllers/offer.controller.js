@@ -22,32 +22,38 @@ let OfferController = class OfferController {
     constructor(offerService) {
         this.offerService = offerService;
         this.createOffer = (0, express_async_handler_1.default)(async (req, res, next) => {
-            const offer = await this.offerService.createOffer(req.body, req.user?._id);
+            const offer = await this.offerService.createOffer(req.body, req.user._id);
             if (!offer)
-                return next(new HttpException_1.default(400, 'Something went wrong, please try again later'));
-            res.status(201).json((0, customResponse_1.default)({ data: offer, success: true, message: 'Offer created' }));
+                return next(new HttpException_1.default(400, 'something_went_wrong'));
+            res.status(201).json((0, customResponse_1.default)({ data: offer, success: true, message: req.t('created_success') }));
         });
-        this.getOffersByTaskId = (0, express_async_handler_1.default)(async (req, res) => {
-            const offers = await this.offerService.getOffers(req.query.taskId);
-            res.status(200).json((0, customResponse_1.default)({ data: offers, success: true, message: null }));
+        this.getOffers = (0, express_async_handler_1.default)(async (req, res) => {
+            const { offers, pagination } = await this.offerService.getOffers(req.query);
+            res.status(200).json((0, customResponse_1.default)({ data: offers, success: true, message: null, pagination, results: offers.length }));
         });
         this.getOfferById = (0, express_async_handler_1.default)(async (req, res, next) => {
             const offer = await this.offerService.getOfferById(req.params.id);
             if (!offer)
-                return next(new HttpException_1.default(404, `Offer with id ${req.params.id} not found`));
+                return next(new HttpException_1.default(404, 'resource_not_found'));
             res.status(200).json((0, customResponse_1.default)({ data: offer, success: true, message: null }));
         });
         this.updateOffer = (0, express_async_handler_1.default)(async (req, res, next) => {
-            const offer = await this.offerService.updateOffer(req.params.id, req.body, req.user?._id);
+            const offer = await this.offerService.updateOffer(req.params.id, req.body, req.user._id);
             if (!offer)
-                return next(new HttpException_1.default(404, `Offer with id ${req.params.id} not found`));
-            res.status(200).json((0, customResponse_1.default)({ data: offer, success: true, message: 'Offer updated' }));
+                return next(new HttpException_1.default(404, 'resource_not_found'));
+            res.status(200).json((0, customResponse_1.default)({ data: offer, success: true, message: 'offer_updated' }));
         });
         this.deleteOffer = (0, express_async_handler_1.default)(async (req, res, next) => {
-            const offer = await this.offerService.deleteOffer(req.params.id, req.user?._id);
+            const offer = await this.offerService.deleteOffer(req.params.id, req.user._id);
             if (!offer)
-                return next(new HttpException_1.default(404, `Offer with id ${req.params.id} not found`));
-            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, message: 'Offer deleted' }));
+                return next(new HttpException_1.default(404, 'resource_not_found'));
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, message: 'deleted_success' }));
+        });
+        this.acceptOffer = (0, express_async_handler_1.default)(async (req, res, next) => {
+            const offer = await this.offerService.acceptOffer(req.params.id, req.user._id);
+            if (!offer)
+                return next(new HttpException_1.default(400, 'something_went_wrong'));
+            res.status(200).json((0, customResponse_1.default)({ data: offer, success: true, message: 'offer_accepted' }));
         });
     }
 };

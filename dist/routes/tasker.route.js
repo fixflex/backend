@@ -29,7 +29,7 @@ let TaskerRoute = class TaskerRoute {
         this.router.post(`${this.path}/become-tasker`, auth_middleware_1.authenticateUser, tasker_validator_1.createTaskerValidator, this.taskerController.createTasker);
         this.router.get(`${this.path}/me`, auth_middleware_1.authenticateUser, this.taskerController.getMe);
         this.router.patch(`${this.path}/me`, auth_middleware_1.authenticateUser, tasker_validator_1.updateTaskerValidator, this.taskerController.updateMe);
-        this.router.delete(`${this.path}/me`, auth_middleware_1.authenticateUser, this.taskerController.deleteTasker);
+        // this.router.delete(`${this.path}/me`, authenticateUser, this.taskerController.deleteTasker);
         // Public routes
         this.router.get(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.taskerController.getTaskerPublicProfile);
         // get list of taskers by location and service (optional)

@@ -10,7 +10,6 @@ exports.signup = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'en',
         },
     ],
     requestBody: {
@@ -351,7 +350,6 @@ exports.logout = {
             in: 'header',
             name: 'Accept-Language',
             type: 'string',
-            example: 'en',
         },
     ],
     responses: {

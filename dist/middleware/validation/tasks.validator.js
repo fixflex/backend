@@ -8,8 +8,33 @@ const express_validator_1 = require("express-validator");
 const interfaces_1 = require("../../interfaces");
 const validation_middleware_1 = __importDefault(require("../errors/validation.middleware"));
 exports.createTaskValidator = [
+    // ====================>>>>>>>> is required <<<<<<<<<<<==================== //
+    (0, express_validator_1.check)('title').isString().withMessage('invalid_input').isLength({ max: 300, min: 5 }).withMessage('title_lenght'),
+    (0, express_validator_1.check)('location')
+        .notEmpty()
+        .withMessage('is_required')
+        .custom(location => {
+        if (location.online)
+            return true;
+        if (!location.coordinates || location.coordinates.length !== 2) {
+            throw new Error('invalid_coordinates');
+        }
+        if (typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
+            throw new Error('invalid_coordinates');
+        }
+        // swaped the coordinates
+        location.coordinates = [location.coordinates[1], location.coordinates[0]]; // [longitude, latitude]
+        return true;
+    }),
+    (0, express_validator_1.check)('budget')
+        .notEmpty()
+        .withMessage('is_required')
+        .isNumeric()
+        .withMessage('invalid_input')
+        .isInt({ min: 10 })
+        .withMessage('invalid_budget'),
+    // ====================>>>>>>>> is optional <<<<<<<<<<<==================== //
     (0, express_validator_1.check)('category').optional().isMongoId().withMessage('invalid_MongoId'),
-    (0, express_validator_1.check)('title').isString().withMessage('invalid_input').isLength({ max: 200, min: 5 }).withMessage('title_lenght'),
     (0, express_validator_1.check)('details')
         .notEmpty()
         .withMessage('is_required')
@@ -49,36 +74,22 @@ exports.createTaskValidator = [
         .custom(time => time.every((t) => Object.values(interfaces_1.TaskTime).includes(t)))
         .withMessage('Invalid task time, must be one of MORNING, MIDDAY, AFTERNOON, EVENING'),
     (0, express_validator_1.check)('location.online').optional().isBoolean().withMessage('invalid_input'),
-    (0, express_validator_1.check)('location')
-        .notEmpty()
-        .withMessage('is_required')
-        .custom(location => {
-        if (location.online)
-            return true;
-        if (!location.coordinates || location.coordinates.length !== 2) {
-            throw new Error('invalid_coordinates');
-        }
-        if (typeof location.coordinates[0] !== 'number' || typeof location.coordinates[1] !== 'number') {
-            throw new Error('invalid_coordinates');
-        }
-        // swaped the coordinates
-        location.coordinates = [location.coordinates[1], location.coordinates[0]]; // [longitude, latitude]
-        return true;
-    }),
-    (0, express_validator_1.check)('budget')
-        .notEmpty()
-        .withMessage('is_required')
-        .isNumeric()
-        .withMessage('invalid_input')
-        .isInt({ min: 10 })
-        .withMessage('invalid_budget'),
+    // ====================>>>>>>>> is empty <<<<<<<<<<<==================== //
     (0, express_validator_1.check)('status').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('offers').isEmpty().withMessage('not_allowed'),
+    (0, express_validator_1.check)('acceptedOffer').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('createdAt').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('updatedAt').isEmpty().withMessage('not_allowed'),
     validation_middleware_1.default,
 ];
+/**
+ *
+ * @description this validator is used to validate the update task request
+ * @see src/routes/task.route.ts
+ *
+ */
 exports.updateTaskValidator = [
+    // ====================>>>>>>>> is optional <<<<<<<<<<<==================== //
     (0, express_validator_1.check)('dueDate.flexible').optional().isBoolean().withMessage('invalid_input'),
     (0, express_validator_1.check)('dueDate.on').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Invalid date format, must be YYYY-MM-DD'),
     (0, express_validator_1.check)('dueDate.before').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage(' "Invalid date format, must be YYYY-MM-DD",'),
@@ -130,9 +141,11 @@ exports.updateTaskValidator = [
         return true;
     }),
     (0, express_validator_1.check)('budget').optional().isNumeric().withMessage('invalid_input'),
-    (0, express_validator_1.check)('status').optional().isIn(Object.values(interfaces_1.TaskStatus)).withMessage('invalid_status'),
+    // ====================>>>>>>>> is empty <<<<<<<<<<<==================== //
     (0, express_validator_1.check)('offers').isEmpty().withMessage('not_allowed'),
+    (0, express_validator_1.check)('status').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('taskerId').isEmpty().withMessage('not_allowed'),
+    (0, express_validator_1.check)('acceptedOffer').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('createdAt').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('updatedAt').isEmpty().withMessage('not_allowed'),
     validation_middleware_1.default,

@@ -26,12 +26,15 @@ let OfferRoute = class OfferRoute {
     initializerRoutes() {
         //### offers routes that don't require authentication
         this.router.get(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.offerController.getOfferById);
-        this.router.get(`${this.path}`, this.offerController.getOffersByTaskId);
-        //### offers routes that require authentication
+        this.router.get(`${this.path}`, this.offerController.getOffers);
+        // =================================================================== //
+        // ====>>>====>>>====>>>  require authentication <<<====<<<====<<<==== //
+        // =================================================================== //
         this.router.use(`${this.path}`, auth_middleware_1.authenticateUser);
         this.router.post(`${this.path}`, offer_validator_1.createOfferValidator, this.offerController.createOffer);
         this.router.patch(`${this.path}/:id`, isMongoID_validator_1.isMongoId, offer_validator_1.updateOfferValidator, this.offerController.updateOffer);
         this.router.delete(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.offerController.deleteOffer);
+        this.router.patch(`${this.path}/:id/accept`, isMongoID_validator_1.isMongoId, this.offerController.acceptOffer);
     }
 };
 exports.OfferRoute = OfferRoute;

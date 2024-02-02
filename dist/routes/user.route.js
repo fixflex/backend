@@ -27,9 +27,9 @@ let UserRoute = class UserRoute {
         this.router
             .route(`${this.path}/me`)
             .get(auth_middleware_1.authenticateUser, this.userController.getMe)
-            .patch(validation_1.updateLoggedUserValidator, auth_middleware_1.authenticateUser, this.userController.updateMe)
-            // deactivate user
-            .delete(auth_middleware_1.authenticateUser, this.userController.deleteMe);
+            .patch(validation_1.updateLoggedUserValidator, auth_middleware_1.authenticateUser, this.userController.updateMe);
+        // deactivate user
+        // .delete(authenticateUser, this.userController.deleteMe);
         this.router
             .route(`${this.path}/me/profile-picture`)
             .patch(auth_middleware_1.authenticateUser, this.userController.uploadProfileImage, auth_middleware_1.authenticateUser, this.userController.updateMyProfileImage);

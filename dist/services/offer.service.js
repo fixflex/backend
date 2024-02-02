@@ -14,10 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OfferService = void 0;
 const tsyringe_1 = require("tsyringe");
+const dao_1 = require("../DB/dao");
 const offer_dao_1 = require("../DB/dao/offer.dao");
 const task_dao_1 = require("../DB/dao/task.dao");
-const tasker_dao_1 = __importDefault(require("../DB/dao/tasker.dao"));
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
+const interfaces_1 = require("../interfaces");
 const task_interface_1 = require("../interfaces/task.interface");
 let OfferService = class OfferService {
     constructor(offerDao, taskerDao, taskDao) {
@@ -26,54 +27,99 @@ let OfferService = class OfferService {
         this.taskDao = taskDao;
     }
     async createOffer(offer, userId) {
-        // check if the current user is a tasker
+        // 1. check if the user is a tasker
         let tasker = await this.taskerDao.getOne({ userId });
         if (!tasker)
-            throw new HttpException_1.default(400, 'You are not a tasker');
-        // check if task exists
-        let task = await this.taskDao.getOneById(offer.taskId);
+            throw new HttpException_1.default(403, 'You_are_not_a_tasker');
+        // 2. check if the task is exist and status is open
+        let task = await this.taskDao.getOne({ _id: offer.taskId });
         if (!task)
-            throw new HttpException_1.default(400, 'Task not found');
+            throw new HttpException_1.default(400, 'Task_not_found');
         if (task.status !== task_interface_1.TaskStatus.OPEN)
-            throw new HttpException_1.default(400, 'This task is not open for offers');
+            throw new HttpException_1.default(400, 'Task_is_not_open');
+        // 3. check if the tasker already made an offer on this task, if yes return an error
+        let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });
+        if (isOfferExist)
+            throw new HttpException_1.default(400, 'something_went_wrong');
+        // 4. create the offer and add the tasker id to it
         offer.taskerId = tasker._id;
-        return await this.offerDao.create(offer);
+        let newOffer = await this.offerDao.create(offer);
+        // 5. update the task offers array with the new offer
+        await this.taskDao.updateOneById(offer.taskId, { $push: { offers: newOffer._id } });
+        // TODO: 6. send notification to the owner of the task
+        // 7. return the offer
+        return newOffer;
     }
     async getOfferById(id) {
         return await this.offerDao.getOneById(id);
     }
-    async getOffers(taskId) {
-        if (taskId)
-            return await this.offerDao.getMany({ taskId });
-        return await this.offerDao.getMany();
+    async getOffers(reqQuery) {
+        const { offers, pagination } = await this.offerDao.getOffers(reqQuery);
+        return { offers, pagination };
     }
     async updateOffer(id, payload, userId) {
-        // check if this offer belongs to this tasker
+        // 1. check if the user is a tasker
         let tasker = await this.taskerDao.getOne({ userId });
         if (!tasker)
-            throw new HttpException_1.default(400, 'You are not a tasker');
+            throw new HttpException_1.default(400, 'forbidden');
+        // 2. check if the offer is exist
         let offer = await this.offerDao.getOneById(id);
         if (!offer)
-            throw new HttpException_1.default(404, 'Offer not found');
+            throw new HttpException_1.default(404, 'resource_not_found');
+        // 3. check if the offer belongs to this tasker
         if (offer.taskerId.toString() !== tasker._id.toString())
-            throw new HttpException_1.default(400, 'This offer is not yours');
+            throw new HttpException_1.default(400, 'forbidden');
+        // 4. update the offer and return it
         return await this.offerDao.updateOneById(id, payload);
     }
     async deleteOffer(id, userId) {
-        //check if this offer belongs to this tasker
+        // 1. check if the user is a tasker
         let tasker = await this.taskerDao.getOne({ userId });
         if (!tasker)
-            throw new HttpException_1.default(400, 'You are not a tasker');
+            throw new HttpException_1.default(400, 'You_are_not_a_tasker');
+        // 2. check if the offer is exist
         let offer = await this.offerDao.getOneById(id);
         if (!offer)
-            throw new HttpException_1.default(404, 'Offer not found');
+            throw new HttpException_1.default(404, 'resource_not_found');
+        // 3. check if the offer belongs to this tasker
         if (offer.taskerId.toString() !== tasker._id.toString())
-            throw new HttpException_1.default(400, 'This offer is not yours');
+            throw new HttpException_1.default(403, 'forbidden');
+        // 4. check if the offer status is accepted
+        // 4.1 if yes, return an error
+        if (offer.status === interfaces_1.OfferStatus.ACCEPTED)
+            throw new HttpException_1.default(403, 'forbidden');
+        // TODO: if accepted, change the offer status to canceled, send notification to the owner of the task that the offer he accepted is canceled and change the task status to open
+        // 6. delete the offer from the task offers array
+        await this.taskDao.updateOneById(offer.taskId, { $pull: { offers: offer._id } });
+        // 7. delete the offer
         return await this.offerDao.deleteOneById(id);
+    }
+    async acceptOffer(id, userId) {
+        // 1. get the offer by id
+        let offer = await this.offerDao.getOneByIdPopulate(id, { path: 'taskId', select: '' }, '', false);
+        if (!offer)
+            throw new HttpException_1.default(404, 'resource_not_found');
+        // 2. check if the user is the owner of the task
+        // @ts-ignore
+        if (offer.taskId.userId.toString() !== userId.toString())
+            throw new HttpException_1.default(403, 'forbidden');
+        // 3. check if task status is open
+        // @ts-ignore
+        if (offer.taskId.status !== task_interface_1.TaskStatus.OPEN)
+            throw new HttpException_1.default(400, 'Task_is_not_open');
+        //  4. update the offer status to accepted
+        offer.status = interfaces_1.OfferStatus.ACCEPTED;
+        await offer.save();
+        // 5. update the task status to assigned and add the accepted offer id to it
+        // @ts-ignore
+        await this.taskDao.updateOneById(offer.taskId._id, { status: task_interface_1.TaskStatus.ASSIGNED, acceptedOffer: offer._id });
+        // 6. TODO: send notification to the tasker that his offer is accepted
+        // 7. return the accepted offer
+        return offer;
     }
 };
 exports.OfferService = OfferService;
 exports.OfferService = OfferService = __decorate([
     (0, tsyringe_1.autoInjectable)(),
-    __metadata("design:paramtypes", [offer_dao_1.OfferDao, tasker_dao_1.default, task_dao_1.TaskDao])
+    __metadata("design:paramtypes", [offer_dao_1.OfferDao, dao_1.TaskerDao, task_dao_1.TaskDao])
 ], OfferService);

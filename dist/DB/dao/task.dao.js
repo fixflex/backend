@@ -11,8 +11,24 @@ class TaskDao extends baseDao_1.default {
     constructor() {
         super(task_model_1.default);
     }
+    // override the getOneById method to populate the userId and offers and don't select the __v and the password
+    // async getOneById(id: string) {
+    //   //  make nested populate to populate the offers the taskerId for each offer
+    //   return await this.model
+    //     .findById(id)
+    //     .populate({
+    //       path: 'offers',
+    //       populate: {
+    //         path: 'taskId',
+    //       },
+    //     })
+    //     .populate('userId', 'firstName lastName profilePicture')
+    //     .select('-__v -password');
+    // }
     async getTasks(query) {
         const countDocments = await task_model_1.default.countDocuments();
+        if (!query.status)
+            query.status = { $nin: ['CANCELLED'] };
         let apiFeatures = new helpers_1.QueryBuilder(task_model_1.default.find(), query)
             .filter(['location', 'online', 'maxDistance'])
             .locationFilter()
@@ -23,17 +39,8 @@ class TaskDao extends baseDao_1.default {
         const pagination = apiFeatures.pagination;
         const tasks = await apiFeatures.mongooseQuery
             .select('-__v  -images  -imageCover  -details')
-            .populate('ownerId', 'firstName lastName  profilePicture');
+            .populate('userId', 'firstName lastName  profilePicture');
         return { tasks, pagination };
     }
 }
 exports.TaskDao = TaskDao;
-// async getTasks(query: Query) {
-//   const tasks = await TaskModel.find( )
-//   return tasks;
-// }
-// const tasks = await TaskModel.find(query);
-// // .populate('ownerId', 'firstName lastName email profilePicture')
-// // .populate('taskerId', 'firstName lastName email profilePicture')
-// // .populate('categories', 'name')
-// // .populate('chatId', 'messages');

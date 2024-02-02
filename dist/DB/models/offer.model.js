@@ -2,26 +2,35 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 // task model implement the IOffer interface
 const mongoose_1 = require("mongoose");
+const interfaces_1 = require("../../interfaces");
 let offerSchema = new mongoose_1.Schema({
     taskerId: {
         type: String,
-        ref: 'User',
+        ref: 'Tasker',
         required: true,
     },
     taskId: {
         type: String,
-        ref: 'Offer',
+        ref: 'Task',
         required: true,
+    },
+    price: {
+        type: Number,
+        required: true,
+    },
+    status: {
+        type: String,
+        enum: interfaces_1.OfferStatus,
+        default: interfaces_1.OfferStatus.PENDING,
     },
     message: {
         type: String,
-        required: true,
         trim: true,
-        maxlength: 6000,
+        maxlength: 8000,
     },
     subMessages: [
         {
-            sender: {
+            userId: {
                 type: String,
                 ref: 'User',
                 required: true,
@@ -30,14 +39,8 @@ let offerSchema = new mongoose_1.Schema({
                 type: String,
                 required: true,
                 trim: true,
-                maxlength: 6000,
+                maxlength: 8000,
             },
-        },
-    ],
-    images: [
-        {
-            url: String,
-            publicId: String,
         },
     ],
 }, { timestamps: true });

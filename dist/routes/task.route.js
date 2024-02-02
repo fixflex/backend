@@ -24,17 +24,22 @@ let TaskRoute = class TaskRoute {
         this.initializerRoutes();
     }
     initializerRoutes() {
-        //=== tasks routes that don't require authentication
         this.router.get(`${this.path}`, this.taskController.getTasks);
         this.router.get(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.taskController.getTaskById);
         // this.router.get(`${this.path}/:id/offers`, this.taskController.getTaskOffers);
-        //=== tasks routes that require authentication
+        // =================================================================== //
+        // ====>>>====>>>====>>>  require authentication <<<====<<<====<<<==== //
+        // =================================================================== //
         this.router.use(`${this.path}`, auth_middleware_1.authenticateUser);
         this.router.post(`${this.path}`, tasks_validator_1.createTaskValidator, this.taskController.createTask);
         // uplaodTaskImages,
         this.router.patch(`${this.path}/:id`, isMongoID_validator_1.isMongoId, tasks_validator_1.updateTaskValidator, this.taskController.updateTask);
         this.router.patch(`${this.path}/:id/images`, isMongoID_validator_1.isMongoId, this.taskController.taskImages, this.taskController.uploadTaskImages);
         this.router.delete(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.taskController.deleteTask);
+        // ==================== offer status ==================== //
+        this.router.patch(`${this.path}/:id/open`, isMongoID_validator_1.isMongoId, this.taskController.openTask);
+        this.router.patch(`${this.path}/:id/cancel`, isMongoID_validator_1.isMongoId, this.taskController.cancelTask);
+        this.router.patch(`${this.path}/:id/complete`, isMongoID_validator_1.isMongoId, this.taskController.completeTask);
     }
 };
 exports.TaskRoute = TaskRoute;

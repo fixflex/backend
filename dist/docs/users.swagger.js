@@ -11,7 +11,6 @@ exports.getMe = {
             in: 'header',
             name: 'accept-language',
             type: 'string',
-            example: 'ar',
         },
     ],
     responses: {
@@ -125,7 +124,6 @@ exports.updateMe = {
             in: 'header',
             name: 'accept-language',
             type: 'string',
-            example: 'ar',
         },
     ],
     requestBody: {
@@ -315,7 +313,6 @@ exports.updateProfileImage = {
             in: 'header',
             name: 'accept-language',
             type: 'string',
-            example: 'ar',
         },
     ],
     requestBody: {
@@ -505,7 +502,6 @@ exports.deleteMe = {
             in: 'header',
             name: 'accept-language',
             type: 'string',
-            example: 'ar',
         },
     ],
     responses: {

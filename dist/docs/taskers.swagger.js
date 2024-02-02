@@ -194,7 +194,7 @@ exports.getTaskers = {
             // rating
             name: 'rating',
             in: 'query',
-            description: 'Example: rating[gt]=3 | rating[gte]=3 | rating[lt]=3 | rating[lte]=3',
+            description: 'Example: `rating[gt]=3` | `rating[gte]=3` | `rating[lt]=3` | `rating[lte]=3`',
             schema: {
                 type: 'number',
             },

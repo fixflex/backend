@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TaskerService = void 0;
 const tsyringe_1 = require("tsyringe");
 const dao_1 = require("../DB/dao");
-const tasker_dao_1 = __importDefault(require("../DB/dao/tasker.dao"));
+const dao_2 = require("../DB/dao");
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
 let TaskerService = class TaskerService {
     constructor(categoryDao, taskerDao) {
@@ -60,5 +60,5 @@ let TaskerService = class TaskerService {
 exports.TaskerService = TaskerService;
 exports.TaskerService = TaskerService = __decorate([
     (0, tsyringe_1.autoInjectable)(),
-    __metadata("design:paramtypes", [dao_1.CategoryDao, tasker_dao_1.default])
+    __metadata("design:paramtypes", [dao_1.CategoryDao, dao_2.TaskerDao])
 ], TaskerService);

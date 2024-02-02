@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.TaskerDao = void 0;
 const helpers_1 = require("../../helpers");
 const tasker_model_1 = __importDefault(require("../models/tasker.model"));
 const baseDao_1 = __importDefault(require("./baseDao"));
@@ -34,4 +35,4 @@ class TaskerDao extends baseDao_1.default {
         return tasker;
     }
 }
-exports.default = TaskerDao;
+exports.TaskerDao = TaskerDao;

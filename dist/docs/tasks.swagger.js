@@ -197,7 +197,6 @@ exports.getTask = {
             in: 'path',
             name: 'taskId',
             type: 'string',
-            example: '65b236563ea5079d86670037',
         },
         {
             in: 'header',
@@ -277,6 +276,74 @@ exports.getTask = {
                                     budget: {
                                         type: 'number',
                                         example: 120,
+                                    },
+                                    offers: {
+                                        type: 'array',
+                                        items: {
+                                            type: 'object',
+                                            properties: {
+                                                _id: {
+                                                    type: 'string',
+                                                    example: '65bcfaa5c6b84484680fc2dc',
+                                                },
+                                                taskerId: {
+                                                    type: 'string',
+                                                    example: '65b64c83ac819f33de11df9d',
+                                                },
+                                                taskId: {
+                                                    type: 'string',
+                                                    example: '65bcfa5ec6b84484680fc2d1',
+                                                },
+                                                price: {
+                                                    type: 'number',
+                                                    example: 120,
+                                                },
+                                                status: {
+                                                    type: 'string',
+                                                    enum: ['PENDING', 'ACCEPTED', 'CANCELLED'],
+                                                    example: 'ACCEPTED',
+                                                },
+                                                message: {
+                                                    type: 'string',
+                                                    example: 'Offer for task 2 , by user 1',
+                                                },
+                                                subMessages: {
+                                                    type: 'array',
+                                                    items: {
+                                                        type: 'object',
+                                                        properties: {
+                                                            userId: {
+                                                                type: 'string',
+                                                                example: '65b64c83ac819f33de11df9d',
+                                                            },
+                                                            message: {
+                                                                type: 'string',
+                                                                example: 'I will do it for 100',
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                                createdAt: {
+                                                    type: 'string',
+                                                    format: 'date-time',
+                                                    example: '2024-02-02T14:22:29.803Z',
+                                                },
+                                                updatedAt: {
+                                                    type: 'string',
+                                                    format: 'date-time',
+                                                    example: '2024-02-02T14:25:27.140Z',
+                                                },
+                                            },
+                                        },
+                                    },
+                                    paymentMethod: {
+                                        type: 'string',
+                                        enum: ['CASH', 'CARD'],
+                                        example: 'CASH',
+                                    },
+                                    acceptedOffer: {
+                                        type: 'string',
+                                        example: '65bcfaa5c6b84484680fc2dc',
                                     },
                                     imageCover: {
                                         type: 'object',

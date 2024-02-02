@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const auth_swagger_1 = require("./auth.swagger");
 const health_swagger_1 = require("./health.swagger");
+const offers_swagger_1 = require("./offers.swagger");
 const taskers_swagger_1 = require("./taskers.swagger");
 const tasks_swagger_1 = require("./tasks.swagger");
 const users_swagger_1 = require("./users.swagger");
@@ -118,6 +119,16 @@ const swaggerDocument = {
         },
         '/tasks/{taskId}/images': {
             patch: tasks_swagger_1.uploadTaskImages,
+        },
+        // *************** Offers *************** //
+        '/offers': {
+            // get: getOffers,
+            post: offers_swagger_1.createOffer,
+        },
+        '/offers/{offerId}': {
+            get: offers_swagger_1.getOfferById,
+            patch: offers_swagger_1.updateOffer,
+            delete: offers_swagger_1.deleteOffer,
         },
         // *************** Categories *************** //
         // '/categories': {},

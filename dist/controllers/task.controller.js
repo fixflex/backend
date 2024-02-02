@@ -27,7 +27,7 @@ let TaskController = class TaskController {
             { name: 'image', maxCount: 5 },
         ]);
         this.createTask = (0, express_async_handler_1.default)(async (req, res, next) => {
-            req.body.ownerId = req.user._id;
+            req.body.userId = req.user._id;
             const task = await this.taskService.createTask(req.body);
             if (!task)
                 return next(new HttpException_1.default(400, 'something_went_wrong'));
@@ -62,6 +62,25 @@ let TaskController = class TaskController {
             if (!task)
                 return next(new HttpException_1.default(404, 'resource_not_found'));
             res.status(200).json((0, customResponse_1.default)({ data: null, success: true, message: req.t('task_deleted') }));
+        });
+        // ==================== offer status ==================== //
+        this.cancelTask = (0, express_async_handler_1.default)(async (req, res, next) => {
+            const task = await this.taskService.cancelTask(req.params.id, req.user._id);
+            if (!task)
+                return next(new HttpException_1.default(404, 'resource_not_found'));
+            res.status(200).json((0, customResponse_1.default)({ data: task, success: true, message: req.t('task_canceled') }));
+        });
+        this.openTask = (0, express_async_handler_1.default)(async (req, res, next) => {
+            const task = await this.taskService.openTask(req.params.id, req.user._id);
+            if (!task)
+                return next(new HttpException_1.default(404, 'resource_not_found'));
+            res.status(200).json((0, customResponse_1.default)({ data: task, success: true, message: req.t('task_opened') }));
+        });
+        this.completeTask = (0, express_async_handler_1.default)(async (req, res, next) => {
+            const task = await this.taskService.completeTask(req.params.id, req.user._id);
+            if (!task)
+                return next(new HttpException_1.default(404, 'resource_not_found'));
+            res.status(200).json((0, customResponse_1.default)({ data: task, success: true, message: req.t('task_completed') }));
         });
     }
 };
