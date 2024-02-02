@@ -12,7 +12,7 @@ import {
 import { healthz } from './health.swagger';
 import { createOffer, deleteOffer, getOfferById, updateOffer } from './offers.swagger';
 import { becomeTasker, getMyTaskerProfile, getTasker, getTaskers, updateMyTaskerProfile } from './taskers.swagger';
-import { cancelTask, createTask, deleteTask, getTask, getTasks, updateTask, uploadTaskImages } from './tasks.swagger';
+import { cancelTask, completeTask, createTask, deleteTask, getTask, getTasks, updateTask, uploadTaskImages } from './tasks.swagger';
 import { deleteMe, getMe, updateMe, updateProfileImage } from './users.swagger';
 
 const swaggerDocument = {
@@ -152,6 +152,10 @@ const swaggerDocument = {
 
     '/tasks/{taskId}/cancel': {
       patch: cancelTask,
+    },
+
+    'tasks/{taskId}/complete': {
+      patch: completeTask,
     },
 
     // *************** Offers *************** //

@@ -1510,3 +1510,105 @@ export const cancelTask = {
     },
   },
 };
+
+export const completeTask = {
+  tags: ['Tasks'],
+  description: 'Complete task by id',
+  operationId: 'completeTask',
+  security: [
+    {
+      bearerAuth: [],
+    },
+  ],
+  parameters: [
+    {
+      in: 'path',
+      name: 'taskId',
+      type: 'string',
+    },
+    {
+      in: 'header',
+      name: 'accept-language',
+      type: 'string',
+    },
+  ],
+
+  responses: {
+    200: {
+      description: 'Complete task by id',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: true,
+              },
+
+              message: {
+                type: 'string',
+                example: 'Task completed successfully',
+              },
+
+              data: {
+                type: 'object',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+    404: {
+      description: 'Error: 404',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: false,
+              },
+
+              message: {
+                type: 'string',
+                example: 'Task not found',
+              },
+
+              data: {
+                type: 'string',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+    401: {
+      description: 'Error: 401',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: false,
+              },
+              message: {
+                type: 'string',
+                example: 'Unauthorized',
+              },
+              data: {
+                type: 'string',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
