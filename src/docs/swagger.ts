@@ -1,5 +1,16 @@
-import { changePassword, forgotPassword, googleSignIn, login, logout, refreshToken, resetPassword, signup, verifyResetCode } from './auth.swagger';
+import {
+  changePassword,
+  forgotPassword,
+  googleSignIn,
+  login,
+  logout,
+  refreshToken,
+  resetPassword,
+  signup,
+  verifyResetCode,
+} from './auth.swagger';
 import { healthz } from './health.swagger';
+import { createOffer } from './offers.swagger';
 import { becomeTasker, getMyTaskerProfile, getTasker, getTaskers, updateMyTaskerProfile } from './taskers.swagger';
 import { createTask, deleteTask, getTask, getTasks, updateTask, uploadTaskImages } from './tasks.swagger';
 import { deleteMe, getMe, updateMe, updateProfileImage } from './users.swagger';
@@ -132,6 +143,12 @@ const swaggerDocument = {
 
     '/tasks/{taskId}/images': {
       patch: uploadTaskImages,
+    },
+
+    // *************** Offers *************** //
+    '/offers': {
+      // get: getOffers,
+      post: createOffer,
     },
 
     // *************** Categories *************** //
