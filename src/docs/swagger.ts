@@ -12,7 +12,17 @@ import {
 import { healthz } from './health.swagger';
 import { createOffer, deleteOffer, getOfferById, updateOffer } from './offers.swagger';
 import { becomeTasker, getMyTaskerProfile, getTasker, getTaskers, updateMyTaskerProfile } from './taskers.swagger';
-import { cancelTask, completeTask, createTask, deleteTask, getTask, getTasks, updateTask, uploadTaskImages } from './tasks.swagger';
+import {
+  cancelTask,
+  completeTask,
+  createTask,
+  deleteTask,
+  getTask,
+  getTasks,
+  openTask,
+  updateTask,
+  uploadTaskImages,
+} from './tasks.swagger';
 import { deleteMe, getMe, updateMe, updateProfileImage } from './users.swagger';
 
 const swaggerDocument = {
@@ -145,10 +155,9 @@ const swaggerDocument = {
       patch: uploadTaskImages,
     },
 
-    //  task status update //
-    // '/tasks/{taskId}/open': {
-    //   patch: openTask,
-    // },
+    '/tasks/{taskId}/open': {
+      patch: openTask,
+    },
 
     '/tasks/{taskId}/cancel': {
       patch: cancelTask,
