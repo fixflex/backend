@@ -1,9 +1,9 @@
 import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
+import { TaskerDao } from '../DB/dao';
 import { OfferDao } from '../DB/dao/offer.dao';
 import { TaskDao } from '../DB/dao/task.dao';
-import TaskerDao from '../DB/dao/tasker.dao';
 import HttpException from '../exceptions/HttpException';
 import { IOffer, IOfferService, OfferStatus } from '../interfaces';
 import { TaskStatus } from '../interfaces/task.interface';

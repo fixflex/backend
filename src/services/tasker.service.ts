@@ -2,7 +2,7 @@ import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
 import { CategoryDao } from '../DB/dao';
-import TaskerDao from '../DB/dao/tasker.dao';
+import { TaskerDao } from '../DB/dao';
 import HttpException from '../exceptions/HttpException';
 import { IPagination } from '../interfaces';
 import { ITasker, ITaskerService } from '../interfaces/tasker.interface';
