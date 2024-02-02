@@ -1402,3 +1402,111 @@ export const deleteTask = {
     },
   },
 };
+
+// task status update //
+
+export const cancelTask = {
+  tags: ['Tasks'],
+
+  //  NOTE to cancel a task, the task must be in `OPEN`, `ASSIGNED` status and not `COMPLETED` or `CANCELLED` status
+  // to down one line in swagger, use /n or \
+  description:
+    'Cancel task by id, \n\n**NOTE** to cancel a task, the task must be in `OPEN` or `ASSIGNED` status and not `COMPLETED` or `CANCELLED` status',
+  operationId: 'cancelTask',
+  security: [
+    {
+      bearerAuth: [],
+    },
+  ],
+  parameters: [
+    {
+      in: 'path',
+      name: 'taskId',
+      type: 'string',
+    },
+    {
+      in: 'header',
+      name: 'accept-language',
+      type: 'string',
+    },
+  ],
+
+  responses: {
+    200: {
+      description: 'Cancel task by id',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: true,
+              },
+
+              message: {
+                type: 'string',
+                example: 'Task cancelled successfully',
+              },
+
+              data: {
+                type: 'object',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+    404: {
+      description: 'Error: 404',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: false,
+              },
+
+              message: {
+                type: 'string',
+                example: 'Task not found',
+              },
+
+              data: {
+                type: 'string',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+    401: {
+      description: 'Error: 401',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: false,
+              },
+              message: {
+                type: 'string',
+                example: 'Unauthorized',
+              },
+              data: {
+                type: 'string',
+                example: null,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};

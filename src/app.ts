@@ -9,7 +9,6 @@ import path from 'path';
 import 'reflect-metadata';
 import swaggerUi from 'swagger-ui-express';
 
-// import swaggerSaddamarbaa from '../z_test/swagger-saddamarbaa.json';
 import dbConnection from './DB';
 import env from './config/validateEnv';
 // Documentation
