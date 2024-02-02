@@ -16,7 +16,7 @@ class OfferService implements IOfferService {
   async createOffer(offer: IOffer, userId: string) {
     // 1. check if the user is a tasker
     let tasker = await this.taskerDao.getOne({ userId });
-    if (!tasker) throw new HttpException(400, 'You_are_not_a_tasker');
+    if (!tasker) throw new HttpException(403, 'You_are_not_a_tasker');
     // 2. check if the task is exist and status is open
     let task = await this.taskDao.getOne({ _id: offer.taskId });
     if (!task) throw new HttpException(400, 'Task_not_found');

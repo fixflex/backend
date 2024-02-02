@@ -149,6 +149,7 @@ const swaggerDocument = {
     '/offers': {
       // get: getOffers,
       post: createOffer,
+      // patch : updateOffer
     },
 
     // *************** Categories *************** //

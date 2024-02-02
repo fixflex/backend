@@ -290,5 +290,77 @@ export const createOffer = {
         },
       },
     },
+    400: {
+      description: 'Bad Request',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: false,
+              },
+              message: {
+                type: 'string',
+                example: 'Validation Error',
+              },
+              errors: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    type: {
+                      type: 'string',
+                      example: 'field',
+                    },
+                    msg: {
+                      type: 'string',
+                      example: 'This field is required',
+                    },
+                    path: {
+                      type: 'string',
+                      example: 'message',
+                    },
+                    location: {
+                      type: 'string',
+                      example: 'body',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    403: {
+      description: 'Forbidden',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: false,
+              },
+              message: {
+                type: 'string',
+                example: 'You are not a tasker',
+              },
+              error: {
+                type: 'boolean',
+                example: true,
+              },
+              status: {
+                type: 'string',
+                example: 'fail',
+              },
+            },
+          },
+        },
+      },
+    },
   },
 };
