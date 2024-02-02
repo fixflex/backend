@@ -10,7 +10,7 @@ import {
   verifyResetCode,
 } from './auth.swagger';
 import { healthz } from './health.swagger';
-import { createOffer } from './offers.swagger';
+import { createOffer, deleteOffer, getOfferById, updateOffer } from './offers.swagger';
 import { becomeTasker, getMyTaskerProfile, getTasker, getTaskers, updateMyTaskerProfile } from './taskers.swagger';
 import { createTask, deleteTask, getTask, getTasks, updateTask, uploadTaskImages } from './tasks.swagger';
 import { deleteMe, getMe, updateMe, updateProfileImage } from './users.swagger';
@@ -149,7 +149,12 @@ const swaggerDocument = {
     '/offers': {
       // get: getOffers,
       post: createOffer,
-      // patch : updateOffer
+    },
+
+    '/offers/{offerId}': {
+      get: getOfferById,
+      patch: updateOffer,
+      delete: deleteOffer,
     },
 
     // *************** Categories *************** //

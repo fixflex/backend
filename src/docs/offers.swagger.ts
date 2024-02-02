@@ -193,6 +193,93 @@ export const getOffers = {
   },
 };
 
+export const getOfferById = {
+  tags: ['Offers'],
+  description: 'Get offer by ID',
+  operationId: 'getOfferById',
+  parameters: [
+    {
+      in: 'path',
+      name: 'offerId',
+      schema: {
+        type: 'string',
+      },
+      description: 'Offer ID',
+    },
+  ],
+  responses: {
+    200: {
+      description: 'Get offer by ID',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: true,
+              },
+              message: {
+                type: 'string',
+                example: 'Offer retrieved successfully',
+              },
+              data: {
+                type: 'object',
+                properties: {
+                  taskerId: {
+                    type: 'string',
+                    example: '65b913a07846f0b770d184eb',
+                  },
+                  taskId: {
+                    type: 'string',
+                    example: '65b913a07846f0b770d184eb',
+                  },
+                  message: {
+                    type: 'string',
+                    example: 'I can do it',
+                  },
+                  price: {
+                    type: 'number',
+                    example: 200,
+                  },
+                  status: {
+                    type: 'string',
+                    example: 'PENDING',
+                  },
+                  subMessages: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        userId: {
+                          type: 'string',
+                          example: '65b913a07846f0b770d184eb',
+                        },
+                        message: {
+                          type: 'string',
+                          example: 'I can do it',
+                        },
+                      },
+                    },
+                  },
+                  createdAt: {
+                    type: 'string',
+                    example: '2021-07-31T10:00:00.000Z',
+                  },
+                  updatedAt: {
+                    type: 'string',
+                    example: '2021-07-31T10:00:00.000Z',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
 export const createOffer = {
   tags: ['Offers'],
   description: 'Create new offer',
@@ -356,6 +443,199 @@ export const createOffer = {
               status: {
                 type: 'string',
                 example: 'fail',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+export const updateOffer = {
+  tags: ['Offers'],
+  description: 'Update offer',
+  operationId: 'updateOffer',
+  parameters: [
+    {
+      in: 'path',
+      name: 'offerId',
+      schema: {
+        type: 'string',
+      },
+      description: 'Offer ID',
+    },
+  ],
+  requestBody: {
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+              example: 'I can do it',
+            },
+            price: {
+              type: 'number',
+              example: 200,
+            },
+          },
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Update offer',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: true,
+              },
+              message: {
+                type: 'string',
+                example: 'Offer updated successfully',
+              },
+              data: {
+                type: 'object',
+                properties: {
+                  taskerId: {
+                    type: 'string',
+                    example: '65b913a07846f0b770d184eb',
+                  },
+                  taskId: {
+                    type: 'string',
+                    example: '65b913a07846f0b770d184eb',
+                  },
+                  message: {
+                    type: 'string',
+                    example: 'I can do it',
+                  },
+                  price: {
+                    type: 'number',
+                    example: 200,
+                  },
+                  status: {
+                    type: 'string',
+                    example: 'PENDING',
+                  },
+                  subMessages: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        userId: {
+                          type: 'string',
+                          example: '65b913a07846f0b770d184eb',
+                        },
+                        message: {
+                          type: 'string',
+                          example: 'I can do it',
+                        },
+                      },
+                    },
+                  },
+                  createdAt: {
+                    type: 'string',
+                    example: '2021-07-31T10:00:00.000Z',
+                  },
+                  updatedAt: {
+                    type: 'string',
+                    example: '2021-07-31T10:00:00.000Z',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+
+    400: {
+      description: 'Bad Request',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: false,
+              },
+              message: {
+                type: 'string',
+                example: 'Validation Error',
+              },
+              errors: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    type: {
+                      type: 'string',
+                      example: 'field',
+                    },
+                    msg: {
+                      type: 'string',
+                      example: 'This field is required',
+                    },
+                    path: {
+                      type: 'string',
+                      example: 'message',
+                    },
+                    location: {
+                      type: 'string',
+                      example: 'body',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+export const deleteOffer = {
+  tags: ['Offers'],
+  description: 'Delete offer',
+  operationId: 'deleteOffer',
+  parameters: [
+    {
+      in: 'path',
+      name: 'offerId',
+      schema: {
+        type: 'string',
+      },
+      description: 'Offer ID',
+    },
+  ],
+  responses: {
+    200: {
+      description: 'Delete offer',
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              success: {
+                type: 'boolean',
+                example: true,
+              },
+              message: {
+                type: 'string',
+                example: 'Offer deleted successfully',
+              },
+              data: {
+                type: 'null',
+                example: null,
               },
             },
           },
