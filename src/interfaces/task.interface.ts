@@ -3,6 +3,7 @@ import { Document } from 'mongoose';
 
 import { IPagination } from '.';
 import { Request, Response } from '../helpers/generic';
+import { PaymentMethod } from './transaction.interface';
 
 export enum TaskStatus {
   OPEN = 'OPEN',
@@ -23,7 +24,7 @@ export enum TaskTime {
 export interface ITask extends Document {
   _id: string;
   userId: string;
-  taskerId: string;
+  // taskerId: { type: Schema.Types.ObjectId; ref: 'Tasker' };
   dueDate: {
     on: Date;
     before: Date;
@@ -57,6 +58,20 @@ export interface ITask extends Document {
   updatedAt?: string;
   // ======================================================================================================== //
   transcactionId: string;
+  paymentMethod: PaymentMethod;
+  // paymentMethod: {
+  //   type: string;
+  //   card: {
+  //     cardNumber: string;
+  //     cardHolderName: string;
+  //     expiryDate: string;
+  //     cvc: string;
+  //   };
+  //   vodafoneCash: {
+  //     phoneNumber: string;
+  //     pin: string;
+  //   };
+  // };
 }
 
 export interface ITaskController {

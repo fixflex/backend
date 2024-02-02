@@ -50,6 +50,46 @@ let taskerSchema: Schema<ITasker> = new Schema(
       minlength: 11,
       maxlength: 11,
     },
+    // ======================================================================================================== //
+    commissionsToPay: [
+      {
+        taskId: {
+          type: String,
+          ref: 'Task',
+          required: true,
+        },
+        ratio: {
+          type: Number,
+          required: true,
+        },
+        amount: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+    totalCanceledTasks: {
+      type: Number,
+      default: 0,
+    },
+    totalEarnings: {
+      type: Number,
+      default: 0,
+    },
+    netEarnings: {
+      type: Number,
+      default: 0,
+    },
+    completedTasks: [
+      {
+        type: String,
+        ref: 'Task',
+      },
+    ],
+    commissionRatio: {
+      type: Number,
+      default: 0.1,
+    },
   },
   { timestamps: true }
 );

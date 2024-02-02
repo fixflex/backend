@@ -54,19 +54,6 @@ export interface ITasker extends Document {
   };
   isActive: boolean;
   isVerified: boolean;
-
-  // ======================================================================================================== //
-
-  commissionsToPay: {
-    taskId: string;
-    ratio: number; // the ratio of the commission that the tasker has to pay  (task price * ratio)
-    amount: number; // the amount of the commission that the tasker has to pay (task price * ratio) (task price * commission percentage) (task price * commission ratio) (task price * commission amount) ex: 100 * 0.2 = 20 (20%) (20% of the task price)
-  }[];
-  totalCanceledTasks: number;
-  totalEarnings: number;
-  netEarnings: number;
-  completedTasks: string[];
-
   availability: {
     monday: boolean;
     tuesday: boolean;
@@ -82,6 +69,19 @@ export interface ITasker extends Document {
   };
   createdAt: Date;
   updatedAt: Date;
+
+  // ======================================================================================================== //
+
+  commissionsToPay: {
+    taskId: string;
+    ratio: number; // the ratio of the commission that the tasker has to pay  (task price * ratio)
+    amount: number; // the amount of the commission that the tasker has to pay (task price * ratio) (task price * commission percentage) (task price * commission ratio) (task price * commission amount) ex: 100 * 0.2 = 20 (20%) (20% of the task price)
+  }[];
+  totalCanceledTasks: number;
+  totalEarnings: number;
+  netEarnings: number;
+  completedTasks: string[];
+  commissionRatio: number;
 
   // ======================================================================================================== //
 

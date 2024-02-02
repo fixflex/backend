@@ -2,15 +2,21 @@ import { UploadApiResponse } from 'cloudinary';
 import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
-import { CategoryDao, OfferDao, TaskDao } from '../DB/dao';
+import { CategoryDao, OfferDao, TaskDao, TaskerDao } from '../DB/dao';
 import HttpException from '../exceptions/HttpException';
 import { IPopulate } from '../helpers';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { IPagination, ITask, ITaskService, OfferStatus, TaskStatus } from '../interfaces';
+import { PaymentMethod } from '../interfaces/transaction.interface';
 
 @autoInjectable()
 class TaskService implements ITaskService {
-  constructor(private readonly taskDao: TaskDao, private readonly categoryDao: CategoryDao, private readonly offerDao: OfferDao) {}
+  constructor(
+    private readonly taskDao: TaskDao,
+    private readonly categoryDao: CategoryDao,
+    private readonly offerDao: OfferDao,
+    private readonly taskerDao: TaskerDao
+  ) {}
 
   private taskPopulate: IPopulate = {
     path: 'userId offers',
@@ -152,12 +158,38 @@ class TaskService implements ITaskService {
 
   completeTask = async (id: string, userId: string) => {
     // 1. Check if the task exists
+    let task = await this.taskDao.getOneByIdPopulate(id, { path: 'acceptedOffer', select: '-__v' }, '', false);
+    if (!task) throw new HttpException(404, 'resource_not_found');
     // 2. Check if the user is the owner of the task
+    if (task.userId !== userId.toString()) throw new HttpException(403, 'forbidden');
     // 3. Check if the task is assigned
-    // 4. calculate the commission from the task price for the platform and calculate the tasker earnings and update the tasker balance and the platform balance
-    // 5. update the tasker balance and the platform balance
+    if (task.status !== TaskStatus.ASSIGNED) throw new HttpException(400, 'bad_request');
+    // 4. get the tasker who his offer is accepted
+    // @ts-ignore
+    let tasker = await this.taskerDao.getOneById(task.acceptedOffer.taskerId, '', false);
+    if (!tasker) throw new HttpException(404, 'resource_not_found');
+    // 4. check the task payment method
+    // 4.1 if the payment method is cash
+    if (task.paymentMethod === PaymentMethod.CASH) {
+      // 4.1.1 calculate the commission
+      // @ts-ignore
+      let commission = task.acceptedOffer.price * tasker.commissionRatio;
+      // 4.1.2 update commissionToPay in the tasker model
+      tasker.commissionsToPay.push({ taskId: task._id, ratio: tasker.commissionRatio, amount: commission });
+    }
+    // 4.2 if the payment method is online
+    // TODO: implement the online payment method
+    // 5. update the tasker totalEarnings, netEarnings, completedTasks
+    // @ts-ignore
+    tasker.totalEarnings += task.acceptedOffer.price;
+    tasker.netEarnings = tasker.totalEarnings - tasker.commissionsToPay.reduce((acc, commission) => acc + commission.amount, 0);
+    tasker.completedTasks.push(task._id);
+
     // 6. update the task status to COMPLETED
     // 7. return the task
+    let results = await Promise.all([tasker.save(), task.save()]); // this is more efficient than await tasker.save() and then await task.save() because it will run in parallel not sequentially and it will return the results in an array in the same order as the promises passed to it (tasker.save() then task.save())
+
+    return results[1]; // return the task
   };
 }
 
