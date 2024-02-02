@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 import { ITask, TaskStatus, TaskTime } from '../../interfaces';
+import { PaymentMethod } from '../../interfaces/transaction.interface';
 
 let taskSchema: Schema<ITask> = new Schema(
   {
@@ -9,10 +10,10 @@ let taskSchema: Schema<ITask> = new Schema(
       ref: 'User',
       required: true,
     },
-    taskerId: {
-      type: String,
-      ref: 'Tasker',
-    },
+    // taskerId: {
+    //   type: String,
+    //   ref: 'Tasker',
+    // },
     dueDate: {
       on: {
         type: Date,
@@ -100,6 +101,26 @@ let taskSchema: Schema<ITask> = new Schema(
     acceptedOffer: {
       type: String,
       ref: 'Offer',
+    },
+    // ======================================================================================================== //
+    transcactionId: {
+      type: String,
+      ref: 'Transaction',
+    },
+    paymentMethod: {
+      type: String,
+      enum: PaymentMethod,
+      default: PaymentMethod.CASH,
+      // card: {
+      //   cardNumber: String,
+      //   cardHolderName: String,
+      //   expiryDate: String,
+      //   cvc: String,
+      // },
+      // vodafoneCash: {
+      //   phoneNumber: String,
+      //   pin: String,
+      // },
     },
   },
   { timestamps: true }

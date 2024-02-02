@@ -40,4 +40,4 @@ class TaskerDao extends CommonDAO<ITasker> {
   }
 }
 
-export default TaskerDao;
+export { TaskerDao };
