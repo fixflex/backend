@@ -122,6 +122,14 @@ let taskSchema: Schema<ITask> = new Schema(
       //   pin: String,
       // },
     },
+    commission: {
+      type: Number,
+      // default: 0,
+    },
+    commissionAfterDescount: {
+      type: Number,
+      // default: 0,
+    },
   },
   { timestamps: true }
 );

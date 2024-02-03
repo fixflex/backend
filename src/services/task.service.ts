@@ -164,7 +164,9 @@ class TaskService implements ITaskService {
     // Step 2: Check if the user is the owner of the task
     if (task.userId !== userId.toString()) throw new HttpException(403, 'forbidden');
 
-    // Step 3: Check if the task is assigned
+    // Step 3: Check if the task is assigned to a tasker and not completed or canceled
+    if (task.status === TaskStatus.CANCELLED || task.status === TaskStatus.COMPLETED)
+      throw new HttpException(400, 'task is already completed or canceled');
     if (task.status !== TaskStatus.ASSIGNED) throw new HttpException(400, 'bad_request');
 
     // Step 4: Get the tasker who has the accepted offer
@@ -176,22 +178,33 @@ class TaskService implements ITaskService {
     if (task.paymentMethod === PaymentMethod.CASH) {
       // If the payment method is cash
       // @ts-ignore
-      const commission = task.acceptedOffer.price * tasker.commissionRatio;
+      const commission: number = task.acceptedOffer.price * tasker.commissionRate;
+      // // @ts-ignore
+
+      // console.log(task.acceptedOffer.price);
+      // console.log(tasker.commissionRate);
+      // console.log(commission);
+
       task.commission = commission;
+      tasker.notPaidTasks.push(task._id);
     }
     // TODO: Implement online payment method
 
     // Step 6: Update tasker's earnings and completed tasks
     // @ts-ignore
     tasker.totalEarnings += task.acceptedOffer.price;
-    tasker.netEarnings = tasker.netEarnings + task.commission;
+    console.log('tasker.totalEarnings', tasker.totalEarnings);
+    // @ts-ignore
+    tasker.netEarnings = (tasker.netEarnings || 0) + (task.acceptedOffer.price - task.commission);
+    console.log('tasker.netEarnings', typeof tasker.netEarnings, tasker.netEarnings);
+
     tasker.completedTasks.push(task._id);
 
     // Step 7: Update task status to COMPLETED
     task.status = TaskStatus.COMPLETED;
 
     // Step 8: Save changes and return the updated task
-    await Promise.all([tasker.save(), task.save()]);
+    await Promise.all([task.save(), tasker.save()]);
     return task;
   };
 }
