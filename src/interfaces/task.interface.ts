@@ -59,6 +59,8 @@ export interface ITask extends Document {
   // ======================================================================================================== //
   transcactionId: string;
   paymentMethod: PaymentMethod;
+  commission: number;
+  commissionAfterDescount: number;
   // paymentMethod: {
   //   type: string;
   //   card: {

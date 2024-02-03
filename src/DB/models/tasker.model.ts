@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 
+import env from '../../config/validateEnv';
 import { ITasker } from '../../interfaces/tasker.interface';
 
 let taskerSchema: Schema<ITasker> = new Schema(
@@ -51,21 +52,10 @@ let taskerSchema: Schema<ITasker> = new Schema(
       maxlength: 11,
     },
     // ======================================================================================================== //
-    commissionsToPay: [
+    notPaidTasks: [
       {
-        taskId: {
-          type: String,
-          ref: 'Task',
-          required: true,
-        },
-        ratio: {
-          type: Number,
-          required: true,
-        },
-        amount: {
-          type: Number,
-          required: true,
-        },
+        type: String,
+        ref: 'Task',
       },
     ],
     totalCanceledTasks: {
@@ -86,9 +76,9 @@ let taskerSchema: Schema<ITasker> = new Schema(
         ref: 'Task',
       },
     ],
-    commissionRatio: {
+    commissionRate: {
       type: Number,
-      default: 0.1,
+      default: env.COMMISSION_RATE,
     },
   },
   { timestamps: true }

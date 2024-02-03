@@ -177,14 +177,14 @@ class TaskService implements ITaskService {
       // If the payment method is cash
       // @ts-ignore
       const commission = task.acceptedOffer.price * tasker.commissionRatio;
-      tasker.commissionsToPay.push({ taskId: task._id, ratio: tasker.commissionRatio, amount: commission });
+      task.commission = commission;
     }
     // TODO: Implement online payment method
 
     // Step 6: Update tasker's earnings and completed tasks
     // @ts-ignore
     tasker.totalEarnings += task.acceptedOffer.price;
-    tasker.netEarnings = tasker.totalEarnings - tasker.commissionsToPay.reduce((acc, commission) => acc + commission.amount, 0);
+    tasker.netEarnings = tasker.netEarnings + task.commission;
     tasker.completedTasks.push(task._id);
 
     // Step 7: Update task status to COMPLETED
