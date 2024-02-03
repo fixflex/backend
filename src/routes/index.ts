@@ -6,5 +6,6 @@ export * from './category.route';
 export * from './task.route';
 export * from './tasker.route';
 export * from './user.route';
+export * from './coupon.route';
 
 // export * from './admin.route';

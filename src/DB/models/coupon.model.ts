@@ -42,6 +42,6 @@ const couponSchema = new Schema<ICoupon>(
   { timestamps: true }
 );
 
-const Coupon = model<ICoupon>('Coupon', couponSchema);
+const CouponModel = model<ICoupon>('Coupon', couponSchema);
 
-export { Coupon };
+export { CouponModel };

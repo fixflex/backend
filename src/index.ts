@@ -9,6 +9,7 @@ import { UserRoute } from './routes';
 import { AuthRoute } from './routes';
 import { CategoryRoute } from './routes';
 import { ChatRoute } from './routes/chat.route';
+import { CouponRoute } from './routes/coupon.route';
 import HealthzRoute from './routes/healthz.route';
 import { OfferRoute } from './routes/offer.route';
 import { TaskRoute } from './routes/task.route';
@@ -24,9 +25,9 @@ let healthzRoute = container.resolve(HealthzRoute);
 let chatRoute = container.resolve(ChatRoute);
 let taskRoute = container.resolve(TaskRoute);
 let offerRoute = container.resolve(OfferRoute);
-
+let couponRoute = container.resolve(CouponRoute);
 // Setup app
-let app = new App([healthzRoute, authRoute, userRoute, taskerRoute, categoryRoute, chatRoute, taskRoute, offerRoute]);
+let app = new App([healthzRoute, authRoute, userRoute, taskerRoute, categoryRoute, chatRoute, taskRoute, offerRoute, couponRoute]);
 
 // Setup http server
 let client = app.getServer();

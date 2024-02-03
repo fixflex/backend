@@ -5,3 +5,5 @@ export * from './category.model';
 export * from './task.model';
 export * from './tasker.model';
 export * from './user.model';
+export * from './coupon.model';
+export * from './transaction.model';

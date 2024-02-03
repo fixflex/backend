@@ -17,5 +17,3 @@ export interface ICoupon extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
-
-export default ICoupon;

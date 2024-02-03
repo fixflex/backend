@@ -21,7 +21,7 @@ let offerSchema: Schema<IOffer> = new Schema(
     },
     status: {
       type: String,
-      enum: OfferStatus,
+      enum: Object.values(OfferStatus),
       default: OfferStatus.PENDING,
     },
     message: {

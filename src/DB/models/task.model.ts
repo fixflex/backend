@@ -66,7 +66,7 @@ let taskSchema: Schema<ITask> = new Schema(
     },
     status: {
       type: String,
-      enum: TaskStatus,
+      enum: Object.values(TaskStatus),
       default: TaskStatus.OPEN,
     },
     location: {
@@ -109,7 +109,7 @@ let taskSchema: Schema<ITask> = new Schema(
     },
     paymentMethod: {
       type: String,
-      enum: PaymentMethod,
+      enum: Object.values(PaymentMethod),
       default: PaymentMethod.CASH,
       // card: {
       //   cardNumber: String,
