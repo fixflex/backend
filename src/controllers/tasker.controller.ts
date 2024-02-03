@@ -55,6 +55,14 @@ class TaskerController implements ITaskerController {
     if (user.deletedCount == 0) return next(new HttpException(404, 'tasker_not_found'));
     res.status(204).json(customResponse({ data: null, success: true, message: req.t('tasker_deleted') }));
   });
+
+  applyCoupon = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    let userId = req.user?._id;
+    let couponCode = req.body.couponCode;
+    let appliedCoupon = await this.taskerService.applyCoupon(userId!, couponCode);
+    if (!appliedCoupon) return next(new HttpException(400, 'coupon_not_applied'));
+    res.status(200).json(customResponse({ data: null, success: true, message: req.t('coupon_applied') }));
+  });
 }
 
 export { TaskerController };
