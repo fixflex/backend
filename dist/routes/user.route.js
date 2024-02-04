@@ -25,11 +25,15 @@ let UserRoute = class UserRoute {
     insitializeRoutes() {
         // Logged in user routes (authenticated)
         this.router
+            // TODO: change the route to /profile
             .route(`${this.path}/me`)
             .get(auth_middleware_1.authenticateUser, this.userController.getMe)
             .patch(validation_1.updateLoggedUserValidator, auth_middleware_1.authenticateUser, this.userController.updateMe);
         // deactivate user
         // .delete(authenticateUser, this.userController.deleteMe);
+        // TODO: enable user and disable user routes
+        // user/enable
+        // user/disable
         this.router
             .route(`${this.path}/me/profile-picture`)
             .patch(auth_middleware_1.authenticateUser, this.userController.uploadProfileImage, auth_middleware_1.authenticateUser, this.userController.updateMyProfileImage);

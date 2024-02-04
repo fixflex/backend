@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTask = exports.updateTask = exports.uploadTaskImages = exports.createTask = exports.getTask = exports.getTasks = void 0;
+exports.openTask = exports.completeTask = exports.cancelTask = exports.deleteTask = exports.updateTask = exports.uploadTaskImages = exports.createTask = exports.getTask = exports.getTasks = void 0;
 exports.getTasks = {
     tags: ['Tasks'],
     description: 'Get list of tasks',
@@ -1265,6 +1265,297 @@ exports.deleteTask = {
                             message: {
                                 type: 'string',
                                 example: 'Task deleted successfully',
+                            },
+                            data: {
+                                type: 'object',
+                                example: null,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        404: {
+            description: 'Error: 404',
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            success: {
+                                type: 'boolean',
+                                example: false,
+                            },
+                            message: {
+                                type: 'string',
+                                example: 'Task not found',
+                            },
+                            data: {
+                                type: 'string',
+                                example: null,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        401: {
+            description: 'Error: 401',
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            success: {
+                                type: 'boolean',
+                                example: false,
+                            },
+                            message: {
+                                type: 'string',
+                                example: 'Unauthorized',
+                            },
+                            data: {
+                                type: 'string',
+                                example: null,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+};
+// task status update //
+exports.cancelTask = {
+    tags: ['Tasks'],
+    //  NOTE to cancel a task, the task must be in `OPEN`, `ASSIGNED` status and not `COMPLETED` or `CANCELLED` status
+    // to down one line in swagger, use /n or \
+    description: 'Cancel task by id, \n\n**NOTE** to cancel a task, the task must be in `OPEN` or `ASSIGNED` status and not `COMPLETED` or `CANCELLED` status',
+    operationId: 'cancelTask',
+    security: [
+        {
+            bearerAuth: [],
+        },
+    ],
+    parameters: [
+        {
+            in: 'path',
+            name: 'taskId',
+            type: 'string',
+        },
+        {
+            in: 'header',
+            name: 'accept-language',
+            type: 'string',
+        },
+    ],
+    responses: {
+        200: {
+            description: 'Cancel task by id',
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            success: {
+                                type: 'boolean',
+                                example: true,
+                            },
+                            message: {
+                                type: 'string',
+                                example: 'Task cancelled successfully',
+                            },
+                            data: {
+                                type: 'object',
+                                example: null,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        404: {
+            description: 'Error: 404',
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            success: {
+                                type: 'boolean',
+                                example: false,
+                            },
+                            message: {
+                                type: 'string',
+                                example: 'Task not found',
+                            },
+                            data: {
+                                type: 'string',
+                                example: null,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        401: {
+            description: 'Error: 401',
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            success: {
+                                type: 'boolean',
+                                example: false,
+                            },
+                            message: {
+                                type: 'string',
+                                example: 'Unauthorized',
+                            },
+                            data: {
+                                type: 'string',
+                                example: null,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+};
+exports.completeTask = {
+    tags: ['Tasks'],
+    description: 'Complete task by id',
+    operationId: 'completeTask',
+    security: [
+        {
+            bearerAuth: [],
+        },
+    ],
+    parameters: [
+        {
+            in: 'path',
+            name: 'taskId',
+            type: 'string',
+        },
+        {
+            in: 'header',
+            name: 'accept-language',
+            type: 'string',
+        },
+    ],
+    responses: {
+        200: {
+            description: 'Complete task by id',
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            success: {
+                                type: 'boolean',
+                                example: true,
+                            },
+                            message: {
+                                type: 'string',
+                                example: 'Task completed successfully',
+                            },
+                            data: {
+                                type: 'object',
+                                example: null,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        404: {
+            description: 'Error: 404',
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            success: {
+                                type: 'boolean',
+                                example: false,
+                            },
+                            message: {
+                                type: 'string',
+                                example: 'Task not found',
+                            },
+                            data: {
+                                type: 'string',
+                                example: null,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        401: {
+            description: 'Error: 401',
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            success: {
+                                type: 'boolean',
+                                example: false,
+                            },
+                            message: {
+                                type: 'string',
+                                example: 'Unauthorized',
+                            },
+                            data: {
+                                type: 'string',
+                                example: null,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+};
+exports.openTask = {
+    tags: ['Tasks'],
+    description: 'Open task by id',
+    operationId: 'openTask',
+    security: [
+        {
+            bearerAuth: [],
+        },
+    ],
+    parameters: [
+        {
+            in: 'path',
+            name: 'taskId',
+            type: 'string',
+        },
+        {
+            in: 'header',
+            name: 'accept-language',
+            type: 'string',
+        },
+    ],
+    responses: {
+        200: {
+            description: 'Open task by id',
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            success: {
+                                type: 'boolean',
+                                example: true,
+                            },
+                            message: {
+                                type: 'string',
+                                example: 'Task opened successfully',
                             },
                             data: {
                                 type: 'object',

@@ -15,8 +15,15 @@ exports.createOfferValidator = [
         .withMessage('is_required')
         .isNumeric()
         .withMessage('invalid_input')
-        .isInt({ min: 10 })
-        .withMessage('min_length'),
+        .isNumeric()
+        .withMessage('invalid_input')
+        // Ensure that the price is greater than 5.00 EGP
+        .custom(value => {
+        if (value < 5.0) {
+            throw new Error('min_length');
+        }
+        return true;
+    }),
     (0, express_validator_1.check)('message').notEmpty().withMessage('is_required').isLength({ max: 8000 }).withMessage('exceeds_max_length'),
     // ====================>>>>>>>> is empty <<<<<<<<<<<==================== //
     (0, express_validator_1.check)('subMessages').isEmpty().withMessage('not_allowed'),

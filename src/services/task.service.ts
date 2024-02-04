@@ -176,15 +176,8 @@ class TaskService implements ITaskService {
 
     // Step 5: Handle the task payment method
     if (task.paymentMethod === PaymentMethod.CASH) {
-      // If the payment method is cash
       // @ts-ignore
-      const commission: number = task.acceptedOffer.price * tasker.commissionRate;
-      // // @ts-ignore
-
-      // console.log(task.acceptedOffer.price);
-      // console.log(tasker.commissionRate);
-      // console.log(commission);
-
+      const commission: number = (task.acceptedOffer.price * tasker.commissionRate).toFixed(2);
       task.commission = commission;
       tasker.notPaidTasks.push(task._id);
     }
@@ -193,11 +186,8 @@ class TaskService implements ITaskService {
     // Step 6: Update tasker's earnings and completed tasks
     // @ts-ignore
     tasker.totalEarnings += task.acceptedOffer.price;
-    console.log('tasker.totalEarnings', tasker.totalEarnings);
     // @ts-ignore
     tasker.netEarnings = (tasker.netEarnings || 0) + (task.acceptedOffer.price - task.commission);
-    console.log('tasker.netEarnings', typeof tasker.netEarnings, tasker.netEarnings);
-
     tasker.completedTasks.push(task._id);
 
     // Step 7: Update task status to COMPLETED

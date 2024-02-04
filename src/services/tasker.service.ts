@@ -64,7 +64,7 @@ class TaskerService implements ITaskerService {
     let tasker = await this.taskerDao.getOne({ userId }, false);
     if (!tasker) throw new HttpException(404, 'tasker_not_found');
     // step 2: check coupon is exists & valid
-    let coupon = await this.couponeDao.getOne({ code: couponCode, expirationDate: { $gte: new Date() }, remainingUses: { $gt: 0 } });
+    let coupon = await this.couponeDao.getOne({ code: couponCode, expirationDate: { $gte: new Date() }, remainingUses: { $gt: 0 } }, false);
     if (!coupon) throw new HttpException(404, 'coupon_not_found');
     // step 3: apply coupon to tasker
     tasker.notPaidTasks.forEach(async taskId => {

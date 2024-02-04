@@ -65,7 +65,7 @@ let taskSchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        enum: interfaces_1.TaskStatus,
+        enum: Object.values(interfaces_1.TaskStatus),
         default: interfaces_1.TaskStatus.OPEN,
     },
     location: {
@@ -108,7 +108,7 @@ let taskSchema = new mongoose_1.Schema({
     },
     paymentMethod: {
         type: String,
-        enum: transaction_interface_1.PaymentMethod,
+        enum: Object.values(transaction_interface_1.PaymentMethod),
         default: transaction_interface_1.PaymentMethod.CASH,
         // card: {
         //   cardNumber: String,
@@ -120,6 +120,14 @@ let taskSchema = new mongoose_1.Schema({
         //   phoneNumber: String,
         //   pin: String,
         // },
+    },
+    commission: {
+        type: Number,
+        // default: 0,
+    },
+    commissionAfterDescount: {
+        type: Number,
+        // default: 0,
     },
 }, { timestamps: true });
 // Apply the geospatial index to the coordinates field inside the location object

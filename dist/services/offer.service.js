@@ -27,10 +27,12 @@ let OfferService = class OfferService {
         this.taskDao = taskDao;
     }
     async createOffer(offer, userId) {
-        // 1. check if the user is a tasker
+        // 1. check if the user is a tasker & notPaidTask array is empty
         let tasker = await this.taskerDao.getOne({ userId });
         if (!tasker)
             throw new HttpException_1.default(403, 'You_are_not_a_tasker');
+        if (tasker.notPaidTasks && tasker.notPaidTasks.length > 0)
+            throw new HttpException_1.default(403, 'You_have_not_paid_tasks');
         // 2. check if the task is exist and status is open
         let task = await this.taskDao.getOne({ _id: offer.taskId });
         if (!task)
@@ -40,7 +42,7 @@ let OfferService = class OfferService {
         // 3. check if the tasker already made an offer on this task, if yes return an error
         let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });
         if (isOfferExist)
-            throw new HttpException_1.default(400, 'something_went_wrong');
+            throw new HttpException_1.default(400, 'You_already_made_an_offer_on_this_task');
         // 4. create the offer and add the tasker id to it
         offer.taskerId = tasker._id;
         let newOffer = await this.offerDao.create(offer);
@@ -96,7 +98,7 @@ let OfferService = class OfferService {
     }
     async acceptOffer(id, userId) {
         // 1. get the offer by id
-        let offer = await this.offerDao.getOneByIdPopulate(id, { path: 'taskId', select: '' }, '', false);
+        let offer = await this.offerDao.getOneByIdPopulate(id, { path: 'taskId taskerId', select: '' }, '', false);
         if (!offer)
             throw new HttpException_1.default(404, 'resource_not_found');
         // 2. check if the user is the owner of the task
@@ -112,7 +114,13 @@ let OfferService = class OfferService {
         await offer.save();
         // 5. update the task status to assigned and add the accepted offer id to it
         // @ts-ignore
-        await this.taskDao.updateOneById(offer.taskId._id, { status: task_interface_1.TaskStatus.ASSIGNED, acceptedOffer: offer._id });
+        let updatedTask = await this.taskDao.updateOneById(offer.taskId._id, {
+            status: task_interface_1.TaskStatus.ASSIGNED,
+            acceptedOffer: offer._id,
+            // @ts-ignore
+            commission: offer.price * offer.taskerId.commissionRate,
+        });
+        // in mongoDB if the field doesn't exist it will be created, to make it update only if the field exists, we need to use $set but it's not working with the updateOneById method so we need to use the updateOne method
         // 6. TODO: send notification to the tasker that his offer is accepted
         // 7. return the accepted offer
         return offer;

@@ -29,3 +29,4 @@ __exportStar(require("./socket.interface"), exports);
 __exportStar(require("./task.interface"), exports);
 __exportStar(require("./tasker.interface"), exports);
 __exportStar(require("./user.interface"), exports);
+__exportStar(require("./coupon .interface"), exports);

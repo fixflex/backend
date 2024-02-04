@@ -24,7 +24,7 @@ class OfferService implements IOfferService {
     if (task.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
     // 3. check if the tasker already made an offer on this task, if yes return an error
     let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });
-    if (isOfferExist) throw new HttpException(400, 'something_went_wrong');
+    if (isOfferExist) throw new HttpException(400, 'You_already_made_an_offer_on_this_task');
     // 4. create the offer and add the tasker id to it
     offer.taskerId = tasker._id;
     let newOffer = await this.offerDao.create(offer);

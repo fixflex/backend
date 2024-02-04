@@ -30,10 +30,11 @@ let TaskerRoute = class TaskerRoute {
         this.router.get(`${this.path}/me`, auth_middleware_1.authenticateUser, this.taskerController.getMe);
         this.router.patch(`${this.path}/me`, auth_middleware_1.authenticateUser, tasker_validator_1.updateTaskerValidator, this.taskerController.updateMe);
         // this.router.delete(`${this.path}/me`, authenticateUser, this.taskerController.deleteTasker);
+        // apply coupon
+        this.router.post(`${this.path}/apply-coupon`, auth_middleware_1.authenticateUser, this.taskerController.applyCoupon);
         // Public routes
         this.router.get(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.taskerController.getTaskerPublicProfile);
         // get list of taskers by location and service (optional)
-        // the api for this route is like this: /taskers?longitude=32.1617485&latitude=26.0524745&services=5f9d5f6b0f0a7e2a3c9d3b1a
         this.router.get(`${this.path}`, this.taskerController.getTaskers);
         // Admin routes
         // this.router.use(`${this.path}`, authenticateUser, allowedTo(UserType.ADMIN));

@@ -21,3 +21,4 @@ __exportStar(require("./category.service"), exports);
 __exportStar(require("./task.service"), exports);
 __exportStar(require("./tasker.service"), exports);
 __exportStar(require("./user.service"), exports);
+__exportStar(require("./coupon.service"), exports);

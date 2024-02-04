@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
+const validateEnv_1 = __importDefault(require("../../config/validateEnv"));
 let taskerSchema = new mongoose_1.Schema({
     userId: {
         unique: true,
@@ -49,21 +53,10 @@ let taskerSchema = new mongoose_1.Schema({
         maxlength: 11,
     },
     // ======================================================================================================== //
-    commissionsToPay: [
+    notPaidTasks: [
         {
-            taskId: {
-                type: String,
-                ref: 'Task',
-                required: true,
-            },
-            ratio: {
-                type: Number,
-                required: true,
-            },
-            amount: {
-                type: Number,
-                required: true,
-            },
+            type: String,
+            ref: 'Task',
         },
     ],
     totalCanceledTasks: {
@@ -84,9 +77,9 @@ let taskerSchema = new mongoose_1.Schema({
             ref: 'Task',
         },
     ],
-    commissionRatio: {
+    commissionRate: {
         type: Number,
-        default: 0.1,
+        default: validateEnv_1.default.COMMISSION_RATE,
     },
 }, { timestamps: true });
 // Apply the geospatial index to the coordinates field inside the location object

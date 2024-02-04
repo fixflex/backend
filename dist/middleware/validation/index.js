@@ -22,3 +22,4 @@ __exportStar(require("./category.validator"), exports);
 __exportStar(require("./tasks.validator"), exports);
 __exportStar(require("./user.validator"), exports);
 __exportStar(require("./tasker.validator"), exports);
+__exportStar(require("./coupon.validator"), exports);

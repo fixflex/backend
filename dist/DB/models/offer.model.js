@@ -20,7 +20,7 @@ let offerSchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        enum: interfaces_1.OfferStatus,
+        enum: Object.values(interfaces_1.OfferStatus),
         default: interfaces_1.OfferStatus.PENDING,
     },
     message: {

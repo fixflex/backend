@@ -21,3 +21,5 @@ __exportStar(require("./category.model"), exports);
 __exportStar(require("./task.model"), exports);
 __exportStar(require("./tasker.model"), exports);
 __exportStar(require("./user.model"), exports);
+__exportStar(require("./coupon.model"), exports);
+__exportStar(require("./transaction.model"), exports);

@@ -120,6 +120,15 @@ const swaggerDocument = {
         '/tasks/{taskId}/images': {
             patch: tasks_swagger_1.uploadTaskImages,
         },
+        '/tasks/{taskId}/open': {
+            patch: tasks_swagger_1.openTask,
+        },
+        '/tasks/{taskId}/cancel': {
+            patch: tasks_swagger_1.cancelTask,
+        },
+        'tasks/{taskId}/complete': {
+            patch: tasks_swagger_1.completeTask,
+        },
         // *************** Offers *************** //
         '/offers': {
             // get: getOffers,

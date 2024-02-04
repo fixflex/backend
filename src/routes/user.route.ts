@@ -18,11 +18,15 @@ class UserRoute implements Routes {
   private insitializeRoutes() {
     // Logged in user routes (authenticated)
     this.router
+      // TODO: change the route to /profile
       .route(`${this.path}/me`)
       .get(authenticateUser, this.userController.getMe)
       .patch(updateLoggedUserValidator, authenticateUser, this.userController.updateMe);
     // deactivate user
     // .delete(authenticateUser, this.userController.deleteMe);
+    // TODO: enable user and disable user routes
+    // user/enable
+    // user/disable
 
     this.router
       .route(`${this.path}/me/profile-picture`)

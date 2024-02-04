@@ -21,3 +21,4 @@ __exportStar(require("./category.controller"), exports);
 __exportStar(require("./task.controller"), exports);
 __exportStar(require("./tasker.controller"), exports);
 __exportStar(require("./user.controller"), exports);
+__exportStar(require("./coupon.controller"), exports);

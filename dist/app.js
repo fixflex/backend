@@ -13,7 +13,6 @@ const morgan_1 = __importDefault(require("morgan"));
 const path_1 = __importDefault(require("path"));
 require("reflect-metadata");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
-// import swaggerSaddamarbaa from '../z_test/swagger-saddamarbaa.json';
 const DB_1 = __importDefault(require("./DB"));
 const validateEnv_1 = __importDefault(require("./config/validateEnv"));
 // Documentation

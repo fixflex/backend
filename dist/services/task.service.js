@@ -161,7 +161,9 @@ let TaskService = class TaskService {
             // Step 2: Check if the user is the owner of the task
             if (task.userId !== userId.toString())
                 throw new HttpException_1.default(403, 'forbidden');
-            // Step 3: Check if the task is assigned
+            // Step 3: Check if the task is assigned to a tasker and not completed or canceled
+            if (task.status === interfaces_1.TaskStatus.CANCELLED || task.status === interfaces_1.TaskStatus.COMPLETED)
+                throw new HttpException_1.default(400, 'task is already completed or canceled');
             if (task.status !== interfaces_1.TaskStatus.ASSIGNED)
                 throw new HttpException_1.default(400, 'bad_request');
             // Step 4: Get the tasker who has the accepted offer
@@ -171,21 +173,22 @@ let TaskService = class TaskService {
                 throw new HttpException_1.default(404, 'resource_not_found');
             // Step 5: Handle the task payment method
             if (task.paymentMethod === transaction_interface_1.PaymentMethod.CASH) {
-                // If the payment method is cash
                 // @ts-ignore
-                const commission = task.acceptedOffer.price * tasker.commissionRatio;
-                tasker.commissionsToPay.push({ taskId: task._id, ratio: tasker.commissionRatio, amount: commission });
+                const commission = (task.acceptedOffer.price * tasker.commissionRate).toFixed(2);
+                task.commission = commission;
+                tasker.notPaidTasks.push(task._id);
             }
             // TODO: Implement online payment method
             // Step 6: Update tasker's earnings and completed tasks
             // @ts-ignore
             tasker.totalEarnings += task.acceptedOffer.price;
-            tasker.netEarnings = tasker.totalEarnings - tasker.commissionsToPay.reduce((acc, commission) => acc + commission.amount, 0);
+            // @ts-ignore
+            tasker.netEarnings = (tasker.netEarnings || 0) + (task.acceptedOffer.price - task.commission);
             tasker.completedTasks.push(task._id);
             // Step 7: Update task status to COMPLETED
             task.status = interfaces_1.TaskStatus.COMPLETED;
             // Step 8: Save changes and return the updated task
-            await Promise.all([tasker.save(), task.save()]);
+            await Promise.all([task.save(), tasker.save()]);
             return task;
         };
     }

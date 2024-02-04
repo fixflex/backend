@@ -22,4 +22,5 @@ __exportStar(require("./category.route"), exports);
 __exportStar(require("./task.route"), exports);
 __exportStar(require("./tasker.route"), exports);
 __exportStar(require("./user.route"), exports);
+__exportStar(require("./coupon.route"), exports);
 // export * from './admin.route';
