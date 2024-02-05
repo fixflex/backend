@@ -8,7 +8,7 @@ exports.signup = {
     parameters: [
         {
             in: 'header',
-            name: 'Accept-Language',
+            name: 'accept-language',
             type: 'string',
         },
     ],
@@ -186,9 +186,8 @@ exports.login = {
     parameters: [
         {
             in: 'header',
-            name: 'Accept-Language',
+            name: 'accept-language',
             type: 'string',
-            example: 'ar',
         },
     ],
     requestBody: {
@@ -348,7 +347,7 @@ exports.logout = {
     parameters: [
         {
             in: 'header',
-            name: 'Accept-Language',
+            name: 'accept-language',
             type: 'string',
         },
     ],
@@ -418,9 +417,8 @@ exports.googleSignIn = {
     parameters: [
         {
             in: 'header',
-            name: 'Accept-Language',
+            name: 'accept-language',
             type: 'string',
-            example: 'ar',
         },
     ],
     requestBody: {
@@ -538,9 +536,8 @@ exports.refreshToken = {
     parameters: [
         {
             in: 'header',
-            name: 'Accept-Language',
+            name: 'accept-language',
             type: 'string',
-            example: 'ar',
         },
     ],
     responses: {
@@ -611,9 +608,8 @@ exports.forgotPassword = {
     parameters: [
         {
             in: 'header',
-            name: 'Accept-Language',
+            name: 'accept-language',
             type: 'string',
-            example: 'ar',
         },
     ],
     requestBody: {
@@ -698,9 +694,8 @@ exports.verifyResetCode = {
     parameters: [
         {
             in: 'header',
-            name: 'Accept-Language',
+            name: 'accept-language',
             type: 'string',
-            example: 'ar',
         },
     ],
     requestBody: {
@@ -819,9 +814,8 @@ exports.resetPassword = {
     parameters: [
         {
             in: 'header',
-            name: 'Accept-Language',
+            name: 'accept-language',
             type: 'string',
-            example: 'ar',
         },
     ],
     requestBody: {
@@ -984,9 +978,8 @@ exports.changePassword = {
     parameters: [
         {
             in: 'header',
-            name: 'Accept-Language',
+            name: 'accept-language',
             type: 'string',
-            example: 'ar',
         },
     ],
     requestBody: {

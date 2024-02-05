@@ -5,7 +5,7 @@ export const signup = {
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
     },
   ],
@@ -190,9 +190,8 @@ export const login = {
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   requestBody: {
@@ -361,7 +360,7 @@ export const logout = {
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
     },
   ],
@@ -433,9 +432,8 @@ export const googleSignIn = {
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   requestBody: {
@@ -561,9 +559,8 @@ export const refreshToken = {
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   responses: {
@@ -636,9 +633,8 @@ export const forgotPassword = {
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   requestBody: {
@@ -725,9 +721,8 @@ export const verifyResetCode = {
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   requestBody: {
@@ -848,9 +843,8 @@ export const resetPassword = {
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   requestBody: {
@@ -1032,9 +1026,8 @@ export const changePassword = {
   parameters: [
     {
       in: 'header',
-      name: 'Accept-Language',
+      name: 'accept-language',
       type: 'string',
-      example: 'ar',
     },
   ],
   requestBody: {

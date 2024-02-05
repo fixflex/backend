@@ -7,7 +7,7 @@ class UserDto {
         this.email = user.email;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
-        this.profilePicture = user.profilePicture.url;
+        // this.profilePicture = user.profilePicture.url;
     }
 }
 exports.UserDto = UserDto;

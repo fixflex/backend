@@ -8,7 +8,6 @@ export const healthz = {
       in: 'header',
       name: 'accept-language',
       type: 'string',
-      example: 'ar',
       // /**Note*/ that you can pass the accept-language parameter in the header or in the cookie.\n if you don't pass it, it will take the default language which is english.\n if you pass it in the header, the value must be a valid language code like en, ar, fr, etc.\n if you pass it in the cookie, the key must be accept-language and the value must be a valid language code like en, ar .
       required: false,
       description:
