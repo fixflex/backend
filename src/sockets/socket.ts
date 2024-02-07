@@ -35,14 +35,17 @@ class SocketService {
     // });
 
     this.io.on('connection', (socket: AuthSocket) => {
+      console.log('User connected ', socket.id);
       socket.on('message', async (data: IMessage) => {
         try {
+          console.log(data);
           // TODO
           let chatRoom = await ChatModel.findById(data.chatId);
           // if !chatRoom throw error
           if (!chatRoom) throw new Error('Chat room not found');
           // if chatRoom.participants doesn't include the sender throw error
-          if (chatRoom.client !== data.sender && chatRoom.tasker !== data.sender) throw new Error('You are not a participant in this chat room');
+          if (chatRoom.client !== data.sender && chatRoom.tasker !== data.sender)
+            throw new Error('You are not a participant in this chat room');
 
           let message = await MessageModel.create(data);
           if (!message) throw new Error('Message not created');
@@ -93,7 +96,7 @@ class SocketService {
   }
 }
 
-export default SocketService;
+export { SocketService };
 
 // console.log('User connected ', socket.id);
 
@@ -115,3 +118,25 @@ export default SocketService;
 // socket.on('disconnect', () => {
 //   console.log('User disconnected from socket:', socket.id);
 // });
+
+//  =================>> socket.io <<================= //
+// 1 socket is the connection between the client and the server
+// 2 the server can have multiple sockets
+// 3 the server can emit events to the client using the socket
+// 4 the client can emit events to the server using the socket
+// 5 the server can listen to events from the client using the socket
+// 6 the client can listen to events from the server using the socket
+
+// socket.emit : emit to the sender only (private)
+// socket.broadcast.emit : emit to all clients except the sender
+// io.emit : emit to all clients in the chat room or namespace
+
+// socket.join(chatId) : join the user to the chat room
+// socket.leave(chatId) : leave the chat room
+// io.to(chatId).emit : emit to all clients in the chat room
+// socket.broadcast.to(chatId).emit : emit to all clients in the chat room except the sender
+
+// socket.on('message', data => {}) : listen to the message event from the client
+// socket.on('disconnect', () => {}) : listen to the disconnect event from the client
+// io.of('/chat').emit : emit to all clients in the chat namespace
+// io.of('/chat').to(chatId).emit : emit to all clients in the chat room in the chat namespace

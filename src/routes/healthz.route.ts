@@ -39,3 +39,4 @@ export default HealthzRoute;
 //     clearInterval(interval);
 //   });
 // });
+// the privous code is for sse (server sent events) to send the response to the client every 5 seconds, the response is the time now

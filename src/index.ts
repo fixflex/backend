@@ -14,7 +14,7 @@ import HealthzRoute from './routes/healthz.route';
 import { OfferRoute } from './routes/offer.route';
 import { TaskRoute } from './routes/task.route';
 import { TaskerRoute } from './routes/tasker.route';
-import Socket from './sockets/socket';
+import { SocketService } from './sockets/socket';
 
 // Setup routes
 let authRoute = container.resolve(AuthRoute);
@@ -34,7 +34,7 @@ let client = app.getServer();
 let server = createServer(client);
 
 // Setup socket server
-let socket = new Socket(server);
+let socket = new SocketService(server);
 socket.initializeSocket();
 
 server.listen(env.PORT).on('listening', () => {
