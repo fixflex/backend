@@ -52,6 +52,7 @@ export interface ITask extends Document {
     coordinates: [number, number];
     online: boolean;
   };
+  city: string;
   budget: number;
   offers: string[];
   acceptedOffer: string | undefined;
