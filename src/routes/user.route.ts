@@ -30,7 +30,7 @@ class UserRoute implements Routes {
 
     this.router
       .route(`${this.path}/me/profile-picture`)
-      .patch(authenticateUser, this.userController.uploadProfileImage, authenticateUser, this.userController.updateMyProfileImage);
+      .patch(authenticateUser, this.userController.uploadProfileImage, authenticateUser, this.userController.updateMyProfileImage); // TODO: change the patch
     // Public routes
     this.router.get(`${this.path}/:id`, getUserValidator, this.userController.getUser);
   }

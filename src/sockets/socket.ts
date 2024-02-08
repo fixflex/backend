@@ -15,6 +15,10 @@ class SocketService {
 
   constructor(private httpServer: http.Server) {
     this.io = new Server(this.httpServer, {
+      // add options here
+      // timeout: 10000,
+      // pingTimeout: 30000, // this is the time to wait for the pong response before disconnecting the client
+      // pingInterval: 30000, // this is the interval to send ping to the client
       cors: {
         origin: '*',
         methods: ['GET', 'POST'],
