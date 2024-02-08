@@ -19,7 +19,7 @@ const healthz_route_1 = __importDefault(require("./routes/healthz.route"));
 const offer_route_1 = require("./routes/offer.route");
 const task_route_1 = require("./routes/task.route");
 const tasker_route_1 = require("./routes/tasker.route");
-const socket_1 = __importDefault(require("./sockets/socket"));
+const socket_1 = require("./sockets/socket");
 // Setup routes
 let authRoute = tsyringe_1.container.resolve(routes_2.AuthRoute);
 let userRoute = tsyringe_1.container.resolve(routes_1.UserRoute);
@@ -38,7 +38,7 @@ exports.client = client;
 let server = (0, http_1.createServer)(client);
 exports.server = server;
 // Setup socket server
-let socket = new socket_1.default(server);
+let socket = new socket_1.SocketService(server);
 socket.initializeSocket();
 server.listen(validateEnv_1.default.PORT).on('listening', () => {
     log_1.default.info(`🚀 App listening in ${validateEnv_1.default.NODE_ENV} mode on the port ${validateEnv_1.default.PORT}`);

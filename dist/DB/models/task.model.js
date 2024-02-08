@@ -81,11 +81,10 @@ let taskSchema = new mongoose_1.Schema({
             type: Boolean,
         },
     },
-    // city: {
-    //   type: String,
-    //   trim: true,
-    //   maxlength: 50,
-    // },
+    city: {
+        type: String,
+        trim: true,
+    },
     budget: {
         type: Number,
         required: true,
