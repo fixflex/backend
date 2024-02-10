@@ -23,40 +23,12 @@ const services_1 = require("../services");
 let AuthController = exports.AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
-        /**
-         *    Cookie Options on development should be like this:
-         *     {
-         *       httpOnly: true,
-         *       maxAge: 30 * 24 * 60 * 60 * 1000,
-         *       secure: false,
-         *       sameSite: lax,
-         *     }
-         *
-         *   Cookie Options on production or staging should be like this:
-         *    {
-         *     httpOnly: true,
-         *     maxAge: 30 * 24 * 60 * 60 * 1000,
-         *     secure: true,
-         *     sameSite: none,
-         *    }
-         */
-        // private accessTokenCookieOptions: CookieOptions = {
-        //   httpOnly: true, // client side js cannot access the cookie
-        //   maxAge: 30 * 24 * 60 * 60 * 1000, // one month
-        //   secure: env.NODE_ENV !== 'development', // cookie only works in https (secure is true if NODE_ENV is production and false if NODE_ENV is development)
-        //   sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax', // sameSite is none if secure is true and lax if secure is false because we are using cors and we are not using csrf protection
-        // };
-        // private refreshTokenCookieOptions: CookieOptions = {
-        //   httpOnly: true, // client side js cannot access the cookie
-        //   maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
-        //   secure: env.NODE_ENV !== 'development', // cookie only works in https
-        //   sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax', // sameSite is none if NODE_ENV is production and lax if NODE_ENV is development because we are using cors and we are not using csrf protection
-        //   path: '/api/v1/auth/refresh-token',
-        // };
+        // TODO: return the access token in the response body additionally to the cookie
         this.accessTokenCookieOptions = {
             httpOnly: true,
             maxAge: 30 * 24 * 60 * 60 * 1000,
             secure: validateEnv_1.default.NODE_ENV !== 'development',
+            // signed: true,
             sameSite: validateEnv_1.default.NODE_ENV !== 'development' ? 'none' : 'lax', // sameSite is none if secure is true and lax if secure is false because we are using cors and we are not using csrf protection
         };
         this.refreshTokenCookieOptions = {
@@ -68,16 +40,21 @@ let AuthController = exports.AuthController = class AuthController {
         };
         this.signup = (0, express_async_handler_1.default)(async (req, res) => {
             let { user, accessToken, refreshToken } = await this.authService.signup(req.body);
+            // TODO: make save the cookie name in a variable
             res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
             res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
-            res.status(201).json({ data: new dtos_1.UserDto(user), success: true, message: req.t('user_created') });
+            res
+                .status(201)
+                .json(Object.assign((0, helpers_1.customResponse)({ data: new dtos_1.UserDto(user), success: true, message: req.t('user_created') }), { accessToken }));
         });
         this.login = (0, express_async_handler_1.default)(async (req, res) => {
             let { email, password } = req.body;
             let { user, accessToken, refreshToken } = await this.authService.login(email, password);
             res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
             res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
-            res.status(200).json({ data: new dtos_1.UserDto(user), success: true, message: req.t('user_logged_in') });
+            res
+                .status(200)
+                .json(Object.assign((0, helpers_1.customResponse)({ data: new dtos_1.UserDto(user), success: true, message: req.t('user_logged_in') }), { accessToken }));
         });
         this.logout = (0, express_async_handler_1.default)(async (req, res) => {
             if (!req.cookies.access_token) {
@@ -97,7 +74,9 @@ let AuthController = exports.AuthController = class AuthController {
             let { user, accessToken, refreshToken } = await this.authService.googleLogin(credential);
             res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
             res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
-            res.status(200).json({ data: new dtos_1.UserDto(user), success: true, message: req.t('user_logged_in') });
+            res
+                .status(200)
+                .json(Object.assign((0, helpers_1.customResponse)({ data: new dtos_1.UserDto(user), success: true, message: req.t('user_logged_in') }), { accessToken }));
         });
         this.refreshToken = (0, express_async_handler_1.default)(async (req, res) => {
             if (!req.cookies.refresh_token || !req.cookies.access_token) {
@@ -106,7 +85,7 @@ let AuthController = exports.AuthController = class AuthController {
             }
             let { accessToken } = await this.authService.refreshToken(req.cookies.refresh_token);
             res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
-            res.status(200).json({ data: null, success: true, message: req.t('token_refreshed') });
+            res.status(200).json(Object.assign((0, helpers_1.customResponse)({ data: null, success: true, message: req.t('token_refreshed') }), { accessToken }));
         });
         this.forgotPassword = (0, express_async_handler_1.default)(async (req, res) => {
             let { email } = req.body;
@@ -123,12 +102,16 @@ let AuthController = exports.AuthController = class AuthController {
             let results = await this.authService.resetPassword(email, newPassword);
             res.cookie('access_token', results.accessToken, this.accessTokenCookieOptions);
             res.cookie('refresh_token', results.refreshToken, this.refreshTokenCookieOptions);
-            res.status(200).json((0, helpers_1.customResponse)({ data: new dtos_1.UserDto(results.user), success: true, message: req.t('password_reset_done') }));
+            res
+                .status(200)
+                .json((0, helpers_1.customResponse)(Object.assign({ data: null, success: true, message: req.t('password_reset') }, { accessToken: results.accessToken })));
         });
         this.changePassword = (0, express_async_handler_1.default)(async (req, res) => {
             let { token } = await this.authService.changePassword(req.body, req.user);
             res.cookie('access_token', token, this.accessTokenCookieOptions);
-            res.status(200).json((0, helpers_1.customResponse)({ data: null, success: true, message: req.t('password_changed') }));
+            res
+                .status(200)
+                .json((0, helpers_1.customResponse)(Object.assign({ data: null, success: true, message: req.t('password_changed') }, { accessToken: token })));
         });
     }
 };

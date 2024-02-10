@@ -14,44 +14,12 @@ import { AuthServie } from '../services';
 @autoInjectable()
 export class AuthController implements IAuthController {
   constructor(private readonly authService: AuthServie) {}
-
-  /**
-   *    Cookie Options on development should be like this:
-   *     {
-   *       httpOnly: true,
-   *       maxAge: 30 * 24 * 60 * 60 * 1000,
-   *       secure: false,
-   *       sameSite: lax,
-   *     }
-   *
-   *   Cookie Options on production or staging should be like this:
-   *    {
-   *     httpOnly: true,
-   *     maxAge: 30 * 24 * 60 * 60 * 1000,
-   *     secure: true,
-   *     sameSite: none,
-   *    }
-   */
-
-  // private accessTokenCookieOptions: CookieOptions = {
-  //   httpOnly: true, // client side js cannot access the cookie
-  //   maxAge: 30 * 24 * 60 * 60 * 1000, // one month
-  //   secure: env.NODE_ENV !== 'development', // cookie only works in https (secure is true if NODE_ENV is production and false if NODE_ENV is development)
-  //   sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax', // sameSite is none if secure is true and lax if secure is false because we are using cors and we are not using csrf protection
-  // };
-
-  // private refreshTokenCookieOptions: CookieOptions = {
-  //   httpOnly: true, // client side js cannot access the cookie
-  //   maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
-  //   secure: env.NODE_ENV !== 'development', // cookie only works in https
-  //   sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax', // sameSite is none if NODE_ENV is production and lax if NODE_ENV is development because we are using cors and we are not using csrf protection
-  //   path: '/api/v1/auth/refresh-token',
-  // };
-
+  // TODO: return the access token in the response body additionally to the cookie
   private accessTokenCookieOptions: CookieOptions = {
     httpOnly: true, // client side js cannot access the cookie
     maxAge: 30 * 24 * 60 * 60 * 1000, // one month
     secure: env.NODE_ENV !== 'development', // cookie only works in https (secure is true if NODE_ENV is production and false if NODE_ENV is development)
+    // signed: true,
     sameSite: env.NODE_ENV !== 'development' ? 'none' : 'lax', // sameSite is none if secure is true and lax if secure is false because we are using cors and we are not using csrf protection
   };
 
@@ -65,11 +33,13 @@ export class AuthController implements IAuthController {
 
   public signup = asyncHandler(async (req: Request<IUser>, res: Response) => {
     let { user, accessToken, refreshToken } = await this.authService.signup(req.body);
-
+    // TODO: make save the cookie name in a variable
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
     res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
 
-    res.status(201).json({ data: new UserDto(user), success: true, message: req.t('user_created') });
+    res
+      .status(201)
+      .json(Object.assign(customResponse({ data: new UserDto(user), success: true, message: req.t('user_created') }), { accessToken }));
   });
 
   public login = asyncHandler(async (req: Request, res: Response) => {
@@ -79,7 +49,9 @@ export class AuthController implements IAuthController {
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
     res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
 
-    res.status(200).json({ data: new UserDto(user), success: true, message: req.t('user_logged_in') });
+    res
+      .status(200)
+      .json(Object.assign(customResponse({ data: new UserDto(user), success: true, message: req.t('user_logged_in') }), { accessToken }));
   });
 
   public logout = asyncHandler(async (req: Request, res: Response) => {
@@ -104,7 +76,9 @@ export class AuthController implements IAuthController {
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
     res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
 
-    res.status(200).json({ data: new UserDto(user), success: true, message: req.t('user_logged_in') });
+    res
+      .status(200)
+      .json(Object.assign(customResponse({ data: new UserDto(user), success: true, message: req.t('user_logged_in') }), { accessToken }));
   });
 
   public refreshToken = asyncHandler(async (req: Request, res: Response) => {
@@ -116,7 +90,7 @@ export class AuthController implements IAuthController {
 
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
 
-    res.status(200).json({ data: null, success: true, message: req.t('token_refreshed') });
+    res.status(200).json(Object.assign(customResponse({ data: null, success: true, message: req.t('token_refreshed') }), { accessToken }));
   });
 
   public forgotPassword = asyncHandler(async (req: Request, res: Response) => {
@@ -138,13 +112,19 @@ export class AuthController implements IAuthController {
     res.cookie('access_token', results.accessToken, this.accessTokenCookieOptions);
     res.cookie('refresh_token', results.refreshToken, this.refreshTokenCookieOptions);
 
-    res.status(200).json(customResponse({ data: new UserDto(results.user), success: true, message: req.t('password_reset_done') }));
+    res
+      .status(200)
+      .json(
+        customResponse(Object.assign({ data: null, success: true, message: req.t('password_reset') }, { accessToken: results.accessToken }))
+      );
   });
 
   public changePassword = asyncHandler(async (req: Request, res: Response) => {
     let { token } = await this.authService.changePassword(req.body as { oldPassword: string; newPassword: string }, req.user!);
     res.cookie('access_token', token, this.accessTokenCookieOptions);
 
-    res.status(200).json(customResponse({ data: null, success: true, message: req.t('password_changed') }));
+    res
+      .status(200)
+      .json(customResponse(Object.assign({ data: null, success: true, message: req.t('password_changed') }, { accessToken: token })));
   });
 }
