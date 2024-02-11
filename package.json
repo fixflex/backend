@@ -12,6 +12,7 @@
     "start:test": "cross-env NODE_ENV=testing  jest --detectOpenHandles --runInBand  --verbose  --watchAll",
     "start:prod": "cross-env NODE_ENV=production  node  ./dist/index.js",
     "start:dev-prod": "cross-env NODE_ENV=production nodemon  ./src/index.ts",
+    "start:dev-stg": "cross-env NODE_ENV=staging ts-node  ./src/index.ts",
     "start:sta": "cross-env NODE_ENV=staging  node  ./dist/index.js",
     "start": "cross-env NODE_ENV=development node ./dist/index.js",
     "debug": "ndb  ./src/index.ts",
