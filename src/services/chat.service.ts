@@ -12,8 +12,8 @@ class ChatService implements IChatService {
     return await ChatDao.getChatById(id);
   }
 
-  async getChatByUserId(id: string) {
-    return await ChatDao.getChatByUserId(id);
+  async getChatsByUserId(id: string) {
+    return await this.chatDao.getMany({ $or: [{ user: id }, { tasker: id }] });
   }
 
   async createChat(data: IChat, user: IUser) {

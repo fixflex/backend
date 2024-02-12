@@ -21,7 +21,7 @@ class ChatRoute implements Routes {
     this.router.use(`${this.path}`, authenticateUser);
     this.router.post(`${this.path}`, createChatValidator, this.chatController.createChat);
     // get chat for logged in user
-    this.router.get(`${this.path}`, this.chatController.getChatByUserId);
+    this.router.get(`${this.path}`, this.chatController.getChatsByUserId);
     this.router.get(`${this.path}/:id`, isMongoId, this.chatController.getChatById);
   }
 }
