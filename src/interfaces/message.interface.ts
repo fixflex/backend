@@ -14,18 +14,18 @@ export interface IMessage extends Document {
 }
 
 export interface IMessageController {
-  getMessages(req: Request, res: Response, next: NextFunction): void;
-  getMessageById(req: Request, res: Response, next: NextFunction): void;
+  // getMessages(req: Request, res: Response, next: NextFunction): void;
+  // getMessageById(req: Request, res: Response, next: NextFunction): void;
   createMessage(req: Request, res: Response, next: NextFunction): void;
   getMessagesByChatId(req: Request, res: Response, next: NextFunction): void;
   deleteMessage(req: Request, res: Response, next: NextFunction): void;
 }
 
 export interface IMessageService {
-  getMessages(reqQuery: any): Promise<IMessage[] | null>;
-  getMessageById(messageId: string): Promise<IMessage | null>;
-  getMessagesByChatId(chatId: string): Promise<IMessage[] | null>;
+  // getMessages(reqQuery: any, user: IUser): Promise<IMessage[] | null>;
+  // getMessageById(messageId: string, user: IUser): Promise<IMessage | null>;
+  getMessagesByChatId(chatId: string, user: IUser): Promise<IMessage[] | null>;
 
   createMessage(message: IMessage, user: IUser): Promise<IMessage>;
-  deleteMessage(messageId: string): Promise<any>;
+  deleteMessage(messageId: string, user: IUser): Promise<any>;
 }
