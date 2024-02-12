@@ -36,6 +36,7 @@ const isPasswordChanged = (passwordChangedAt, tokenIssuedAt) => {
 const authenticateUser = (0, express_async_handler_1.default)(async (req, _res, next) => {
     // 1- check if the token exists
     const token = checkAccessTokenExists(req);
+    console.log('token', token);
     if (!token) {
         return next(new HttpException_1.default(401, 'unauthorized'));
     }

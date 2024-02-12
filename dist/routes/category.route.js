@@ -32,7 +32,7 @@ let CategoryRoute = exports.CategoryRoute = class CategoryRoute {
         // Admin routes
         this.router.use(`${this.path}`, auth_middleware_1.authenticateUser, (0, auth_middleware_1.allowedTo)(interfaces_1.UserType.ADMIN));
         this.router.post(`${this.path}`, validation_1.createCategoryValidator, this.categoryController.createCategory);
-        this.router.route(`${this.path}/upload-service-image/:id`).patch(isMongoID_validator_1.isMongoId, services_1.uploadServiceImage, this.categoryController.uploadCategoryImage);
+        this.router.route(`${this.path}/category-image/:id`).patch(isMongoID_validator_1.isMongoId, services_1.uploadServiceImage, this.categoryController.uploadCategoryImage);
         this.router.patch(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.categoryController.updateCategory);
         this.router.delete(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.categoryController.deleteCategory);
     }

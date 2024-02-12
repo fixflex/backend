@@ -40,7 +40,6 @@ class SocketService {
         }
       } catch (error: any) {
         console.log(error);
-        next(new Error('error'));
       }
     });
 

@@ -56,6 +56,7 @@ class App {
             fallbackLng: validateEnv_1.default.defaultLocale,
             saveMissing: true,
             detection: {
+                // TODO: get the language from the user's browser
                 order: ['header', 'cookie'],
                 lookupHeader: 'accept-language',
                 lookupCookie: 'accept-language',
@@ -67,6 +68,10 @@ class App {
         this.app.use(i18next_http_middleware_1.default.handle(i18next_1.default));
     }
     initializeRoutes(routes) {
+        // serve the static files (index.html)
+        this.app.get('/index.html', (_req, res) => {
+            res.sendFile(path_1.default.join(__dirname, '../index.html'));
+        });
         routes.forEach(route => {
             this.app.use('/api/v1', route.router);
         });

@@ -471,6 +471,7 @@ exports.createTask = {
                         dueDate: {
                             type: 'object',
                             properties: {
+                                // only one of the following properties is required (on, before, flexible)
                                 on: {
                                     type: 'string',
                                     format: 'date',
@@ -497,6 +498,7 @@ exports.createTask = {
                         },
                         budget: {
                             type: 'number',
+                            // TODO: add minimum and maximum budget
                             example: 120,
                         },
                     },

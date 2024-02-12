@@ -37,9 +37,10 @@ let client = app.getServer();
 exports.client = client;
 let server = (0, http_1.createServer)(client);
 exports.server = server;
-// Setup socket server
-let socket = new socket_1.SocketService(server);
-socket.initializeSocket();
-server.listen(validateEnv_1.default.PORT).on('listening', () => {
+let s = server.listen(validateEnv_1.default.PORT).on('listening', () => {
     log_1.default.info(`🚀 App listening in ${validateEnv_1.default.NODE_ENV} mode on the port ${validateEnv_1.default.PORT}`);
 });
+// Setup socket server
+let socketService = socket_1.SocketService.getInstance(s);
+let io = socketService.getSocketIO();
+exports.default = io;

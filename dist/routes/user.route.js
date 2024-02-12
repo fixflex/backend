@@ -36,7 +36,7 @@ let UserRoute = class UserRoute {
         // user/disable
         this.router
             .route(`${this.path}/me/profile-picture`)
-            .patch(auth_middleware_1.authenticateUser, this.userController.uploadProfileImage, auth_middleware_1.authenticateUser, this.userController.updateMyProfileImage);
+            .patch(auth_middleware_1.authenticateUser, this.userController.uploadProfileImage, auth_middleware_1.authenticateUser, this.userController.updateMyProfileImage); // TODO: change the patch
         // Public routes
         this.router.get(`${this.path}/:id`, validation_1.getUserValidator, this.userController.getUser);
     }

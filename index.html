@@ -29,48 +29,15 @@
         let taskId = ''
         let userId = "6531fb0c4b050167705db4a5"
         let accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTMxZmIwYzRiMDUwMTY3NzA1ZGI0YTUiLCJpYXQiOjE3MDc1ODIzNjQsImV4cCI6MTcxMzYzMDM2NH0.2TEflqi8uT01D9gmIpPI94J6oAU461Ps5NKj_UJ91RI'
+
         const socket = io('ws://localhost:8080', {
+            withCredentials: true,
             // extraHeaders: {
             //     "Authorization": `Bearer ${accessToken}`
-            // } // send Bearer token to the server
-        }); // Connect to the Socket.io server  
+            // }  
+        });
 
 
-        function createTask() {
-            // axios enable cors and credentials add the Bearer token to the request header
-            axios.post('http://localhost:8080/api/v1/tasks', {
-                "title": "new task for socket.io",
-                "city": "cairo",
-                "details": "Dusting, mopping and vacuuming",
-                "category": "5f9d5f6b0f0a7e2a3c9d3b1a",
-                "dueDate": {
-                    "flexible": true
-                },
-                "location": {
-                    "type": "Point",
-                    "coordinates": [
-                        34.781767,
-                        32.0853
-                    ]
-                },
-                "budget": 100
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            })
-                .then((response) => {
-                    console.log(response);
-                    taskId = response.data.data._id
-                    console.log(taskId);
-                    // socket.emit("join", taskId)
-
-
-                }, (error) => {
-                    console.log(error);
-                });
-        }
         function login() {
             // axios enable cors and credentials
             axios.post('http://localhost:8080/api/v1/auth/login', {
@@ -92,7 +59,6 @@
         }
 
         function getMe() {
-            // axios enable cors and credentials add the Bearer token to the request header
             axios.get('http://localhost:8080/api/v1/users/me', {
                 withCredentials: true,
                 // headers: {
@@ -110,25 +76,25 @@
         // send Bearer token to the server
 
         // const socket = io('http://localhost:8080'); // Connect to the Socket.io server
-        socket.on('connect', () => {
+        socket.on('connect', (sockt) => {
             console.log('Connected to server');
-            console.log(socket.request)
+            console.log(socket)
             // join my room where room name is my user id
             socket.emit('joinMyRoom', userId)
         });
 
         // client-side
         socket.on("connect_error", (err) => {
-            console.log(err.message); // prints the message associated with the error
+            console.log(err.message);
         });
 
         socket.on('message', (data) => {
             console.log(data.message);
         });
 
-        // socket.on('disconnect', () => {
-        //     console.log('Disconnected from server');
-        // });
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+        });
 
         // socket.on(taskId, (data) => {
         //     console.log(data);
