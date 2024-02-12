@@ -27,16 +27,12 @@ class SocketService {
   }
 
   private initializeSocket() {
-    // check if the user is authenticated and get the user id from the token and add it to the socket
     this.io.use(async (socket: Socket, next) => {
       try {
-        // use the cookie parser to parse the cookies from the request
         cookieParser()(socket.request as Request, {} as Response, () => {});
-        // let bearer = socket.request.headers.authorization?.split(' ')[1];
-        // let cookies = socket.request.cookies?.access_token;
-        // console.log(bearer);
-        // console.log(cookies);
+
         if (socket.request.user) socket.request.user = null;
+
         await authenticateUser(socket.request as Request, {} as Response, next as NextFunction);
 
         if (!socket.request.user) {
@@ -50,12 +46,11 @@ class SocketService {
 
     this.io.on('connection', (socket: Socket) => {
       if (!socket.request.user) socket.disconnect();
-      console.log('User connected ', socket.id);
-      console.log(socket.request.user);
+      console.log('User connected', socket.id);
+      // console.log(socket.request.user);
 
       socket.on('message', data => {
         console.log(data);
-        // log the socket id of the sender
         console.log(socket.id);
         socket.broadcast.emit('message', data);
       });
@@ -98,13 +93,6 @@ class SocketService {
     this.io.close();
   }
 }
-
-// To handle the errors in the socket.io we can use the error event on the io instance
-// this.io.on('error', (error: Error) => {
-//   console.log('Socket error:', error);
-// });
-// this will handle all the errors that occur in the socket.io server
-// you can make middleware to handle the errors with use next(new Error('error message')) and use the error handler middleware to handle the errors
 
 export { SocketService };
 
