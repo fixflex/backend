@@ -1,4 +1,3 @@
-import { NextFunction } from 'express';
 import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
