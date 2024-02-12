@@ -23,7 +23,7 @@ class MessageRoute implements Routes {
     // get chat for logged in user
     // this.router.get(`${this.path}`, this.messageController.getMessages);
     this.router.get(`${this.path}/:id`, isMongoId, this.messageController.getMessageById);
-    // this.router.get(`${this.path}/chat/:id`, isMongoId, this.messageController.getMessagesByChatId);
+    this.router.get(`${this.path}/chat/:id`, isMongoId, this.messageController.getMessagesByChatId);
     // this.router.delete(`${this.path}/:id`, isMongoId, this.messageController.deleteMessage);
   }
 }

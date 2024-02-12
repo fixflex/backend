@@ -33,7 +33,7 @@ class MessageService implements IMessageService {
     return this.messageDao.getOneById(id);
   }
   getMessagesByChatId(chatId: string): Promise<IMessage[] | null> {
-    throw new Error('Method not implemented.');
+    return this.messageDao.getMany({ chatId });
   }
 
   deleteMessage(messageId: string): Promise<any> {

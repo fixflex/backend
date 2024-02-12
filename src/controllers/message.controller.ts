@@ -21,9 +21,12 @@ class MessageController implements IMessageController {
     res.status(200).json(customResponse<IMessage>({ data: chat, success: true, message: 'Chat found' }));
   });
 
-  getMessagesByChatId(req: Request<Record<string, any>>, res: Response, next: NextFunction): void {
-    throw new Error('Method not implemented.');
-  }
+  getMessagesByChatId = asyncHandler(async (req: Request, res: Response) => {
+    let messages = await this.messageService.getMessagesByChatId(req.params.id);
+    if (!messages) throw new HttpException(404, 'No chat found');
+    res.status(200).json({ results: messages.length, data: messages });
+  });
+
   deleteMessage(req: Request<Record<string, any>>, res: Response, next: NextFunction): void {
     throw new Error('Method not implemented.');
   }
