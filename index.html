@@ -28,6 +28,8 @@
     <script>
         let baseUrlProd = 'https://fixflex.onrender.com/api/v1'
         let baseUrlDev = 'http://localhost:8080/api/v1'
+        let baseUrl = Intl.DateTimeFormat().resolvedOptions().timeZone === "Africa/Cairo" ? baseUrlDev : baseUrlProd
+        console.log(baseUrl);
         let userId = "6531fb0c4b050167705db4a5"
         let accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTMxZmIwYzRiMDUwMTY3NzA1ZGI0YTUiLCJpYXQiOjE3MDc1ODIzNjQsImV4cCI6MTcxMzYzMDM2NH0.2TEflqi8uT01D9gmIpPI94J6oAU461Ps5NKj_UJ91RI'
 
@@ -117,7 +119,7 @@
         // ================== AXIOS ================== //
 
         function login() {
-            axios.post(`${baseUrlDev}/auth/login`, {
+            axios.post(`${baseUrl}/auth/login`, {
                 email: "user1@gmail.com",
                 password: "password"
             }, {
@@ -136,7 +138,7 @@
 
         // to check if the user is authenticated
         function getMe() {
-            axios.get(`${baseUrlDev}/users/me`, {
+            axios.get(`${baseUrl}/users/me`, {
                 withCredentials: true,
                 // headers: {
                 //     'Content-Type': 'application/json',

@@ -62,7 +62,7 @@ class SocketService {
 
           socket.on('joinMyRoom', _ => {
             try {
-              console.log('User joined his room:', socket.request.user._id);
+              console.log('User joined his room:', socket.request.user._id.toString());
               socket.join(socket.request.user._id.toString());
               // emit event to the user when he join his room
               socket.emit(socket.request.user._id.toString(), { message: 'Welcome to your room' });
