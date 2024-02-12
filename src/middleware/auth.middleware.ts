@@ -1,12 +1,11 @@
 import { NextFunction, Response } from 'express';
-import { Request } from 'express';
 import asyncHandler from 'express-async-handler';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 import UserModel from '../DB/models/user.model';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
-import { AuthRequest } from '../interfaces/auth.interface';
+import { Request } from '../helpers';
 import { UserType } from '../interfaces/user.interface';
 
 const checkAccessTokenExists = (req: Request) => {
@@ -36,9 +35,10 @@ const isPasswordChanged = (passwordChangedAt: Date, tokenIssuedAt: number) => {
   return false;
 };
 
-const authenticateUser = asyncHandler(async (req: AuthRequest, _res: Response, next: NextFunction) => {
+const authenticateUser = asyncHandler(async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
   // 1- check if the token exists
   const token = checkAccessTokenExists(req);
+  console.log('token', token);
   if (!token) {
     return next(new HttpException(401, 'unauthorized'));
   }
@@ -68,7 +68,7 @@ const authenticateUser = asyncHandler(async (req: AuthRequest, _res: Response, n
 // Authorization (User permissions)
 const allowedTo =
   (...roles: UserType[]) =>
-  (req: AuthRequest, _res: Response, next: NextFunction) => {
+  (req: Request, _res: Response, next: NextFunction) => {
     if (!roles.includes(req.user!.role)) {
       return next(new HttpException(403, 'permission_denied'));
     }

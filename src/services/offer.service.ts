@@ -1,6 +1,7 @@
 import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
+import io from '..';
 import { TaskerDao } from '../DB/dao';
 import { OfferDao } from '../DB/dao/offer.dao';
 import { TaskDao } from '../DB/dao/task.dao';
@@ -23,14 +24,19 @@ class OfferService implements IOfferService {
     if (!task) throw new HttpException(400, 'Task_not_found');
     if (task.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
     // 3. check if the tasker already made an offer on this task, if yes return an error
-    let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });
-    if (isOfferExist) throw new HttpException(400, 'You_already_made_an_offer_on_this_task');
+    // let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });
+    // if (isOfferExist) throw new HttpException(400, 'You_already_made_an_offer_on_this_task');
     // 4. create the offer and add the tasker id to it
     offer.taskerId = tasker._id;
     let newOffer = await this.offerDao.create(offer);
     // 5. update the task offers array with the new offer
     await this.taskDao.updateOneById(offer.taskId, { $push: { offers: newOffer._id } });
-    // TODO: 6. send notification to the owner of the task
+    // TODO: 6. send notification to the owner of the task using 1- socket.io 2- firebase cloud messaging
+    // 6.1 send the offer to the owner of the task using socket.io
+    // io.to(newOffer.taskId).emit('newOffer', newOffer);
+    io.to(task.userId).emit('newOffer', newOffer);
+
+    // socketIO.to(taskCreatorSocketId).emit('newOffer', newOffer);
     // 7. return the offer
     return newOffer;
   }

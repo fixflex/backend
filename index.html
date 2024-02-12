@@ -8,6 +8,9 @@
 </head>
 
 <body>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <div id="messages"></div>
     <input type="text" id="messageInput">
     <button onclick="sendMessageClient()">sendClient</button>
@@ -15,20 +18,125 @@
     <button onclick="joinRoom()">Join</button>
     <button onclick="leaveRoom()">Leave Room</button>
     <button onclick="leaveAllRooms()">Leave All Rooms</button>
+    <button onclick="login()">Login</button>
+    <button onclick="getMe()">Get Me</button>
+    <button onclick="createTask()">Create Task</button>
 
-    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <dev id="messages"></dev>
+
+
     <script>
-        const socket = io('http://localhost:8080'); // Connect to the Socket.io server
+        let taskId = ''
+        let userId = "6531fb0c4b050167705db4a5"
+        let accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTMxZmIwYzRiMDUwMTY3NzA1ZGI0YTUiLCJpYXQiOjE3MDc1ODIzNjQsImV4cCI6MTcxMzYzMDM2NH0.2TEflqi8uT01D9gmIpPI94J6oAU461Ps5NKj_UJ91RI'
+        const socket = io('ws://localhost:8080', {
+            // extraHeaders: {
+            //     "Authorization": `Bearer ${accessToken}`
+            // } // send Bearer token to the server
+        }); // Connect to the Socket.io server  
+
+
+        function createTask() {
+            // axios enable cors and credentials add the Bearer token to the request header
+            axios.post('http://localhost:8080/api/v1/tasks', {
+                "title": "new task for socket.io",
+                "city": "cairo",
+                "details": "Dusting, mopping and vacuuming",
+                "category": "5f9d5f6b0f0a7e2a3c9d3b1a",
+                "dueDate": {
+                    "flexible": true
+                },
+                "location": {
+                    "type": "Point",
+                    "coordinates": [
+                        34.781767,
+                        32.0853
+                    ]
+                },
+                "budget": 100
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+                .then((response) => {
+                    console.log(response);
+                    taskId = response.data.data._id
+                    console.log(taskId);
+                    // socket.emit("join", taskId)
+
+
+                }, (error) => {
+                    console.log(error);
+                });
+        }
+        function login() {
+            // axios enable cors and credentials
+            axios.post('http://localhost:8080/api/v1/auth/login', {
+                email: "user1@gmail.com",
+                password: "password"
+            }, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then((response) => {
+                    // console.log(response);
+                    userId = response.data.data._id
+                    console.log(userId);
+                }, (error) => {
+                    console.log(error);
+                });
+        }
+
+        function getMe() {
+            // axios enable cors and credentials add the Bearer token to the request header
+            axios.get('http://localhost:8080/api/v1/users/me', {
+                withCredentials: true,
+                // headers: {
+                //     'Content-Type': 'application/json',
+                //     'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTMxZmIwYzRiMDUwMTY3NzA1ZGI0YTUiLCJpYXQiOjE3MDc1ODIzNjQsImV4cCI6MTcxMzYzMDM2NH0.2TEflqi8uT01D9gmIpPI94J6oAU461Ps5NKj_UJ91RI`
+                // }
+            })
+                .then((response) => {
+                    console.log(response);
+                }, (error) => {
+                    console.log(error);
+                });
+
+        }
+        // send Bearer token to the server
+
+        // const socket = io('http://localhost:8080'); // Connect to the Socket.io server
         socket.on('connect', () => {
             console.log('Connected to server');
+            console.log(socket.request)
+            // join my room where room name is my user id
+            socket.emit('joinMyRoom', userId)
+        });
+
+        // client-side
+        socket.on("connect_error", (err) => {
+            console.log(err.message); // prints the message associated with the error
         });
 
         socket.on('message', (data) => {
             console.log(data.message);
         });
 
-        socket.on('disconnect', () => {
-            console.log('Disconnected from server');
+        // socket.on('disconnect', () => {
+        //     console.log('Disconnected from server');
+        // });
+
+        // socket.on(taskId, (data) => {
+        //     console.log(data);
+        // });
+
+        socket.on('newOffer', (data) => {
+            // log the data to the window not the console
+            document.getElementById("messages").innerHTML += `<p>${data}</p>`;
         });
 
         function sendMessageClient() {

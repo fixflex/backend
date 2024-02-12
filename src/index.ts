@@ -26,6 +26,7 @@ let chatRoute = container.resolve(ChatRoute);
 let taskRoute = container.resolve(TaskRoute);
 let offerRoute = container.resolve(OfferRoute);
 let couponRoute = container.resolve(CouponRoute);
+
 // Setup app
 let app = new App([healthzRoute, authRoute, userRoute, taskerRoute, categoryRoute, chatRoute, taskRoute, offerRoute, couponRoute]);
 
@@ -33,12 +34,12 @@ let app = new App([healthzRoute, authRoute, userRoute, taskerRoute, categoryRout
 let client = app.getServer();
 let server = createServer(client);
 
-// Setup socket server
-let socket = new SocketService(server);
-socket.initializeSocket();
-
-server.listen(env.PORT).on('listening', () => {
+let s = server.listen(env.PORT).on('listening', () => {
   logger.info(`🚀 App listening in ${env.NODE_ENV} mode on the port ${env.PORT}`);
 });
 
+// Setup socket server
+let socketService = SocketService.getInstance(s);
+let io = socketService.getSocketIO();
+export default io;
 export { server, client };

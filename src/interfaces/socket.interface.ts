@@ -1,6 +1,10 @@
 // socket interface for authentication
-import { Socket } from 'socket.io';
+import { IncomingMessage } from 'http';
+import { Socket as socketIo } from 'socket.io';
 
-export interface AuthSocket extends Socket {
-  userId?: string;
+export interface Socket extends socketIo {
+  request: IncomingMessage & {
+    user?: any;
+    cookies?: { [key: string]: string };
+  };
 }
