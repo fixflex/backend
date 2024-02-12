@@ -1,13 +1,14 @@
 import { NextFunction } from 'express';
 import { Document } from 'mongoose';
 
-import { Request, Response } from '../helpers/generic';
+import { IUser } from '.';
+import { Request, Response } from '../helpers';
 
 export interface IChat extends Document {
   _id: string;
-  client: string; // ref: User
+  user: string; // ref: User
   tasker: string; // ref: User
-  messages: string[];
+  messages?: string[];
 }
 
 export interface IChatController {
@@ -23,6 +24,6 @@ export interface IChatService {
   getChatById(chatId: string): Promise<IChat | null>;
   getChatByUserId(userId: string): Promise<IChat[] | null>;
 
-  createChat(chat: IChat): Promise<IChat>;
+  createChat(chat: IChat, user: IUser): Promise<IChat>;
   // deleteChat(chatId: string): Promise<any>;
 }

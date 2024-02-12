@@ -1,6 +1,11 @@
+import { IChat } from '../../interfaces';
 import { ChatModel } from '../models/chat.model';
+import BaseDao from './baseDao';
 
-class ChatDao {
+class ChatDao extends BaseDao<IChat> {
+  constructor() {
+    super(ChatModel);
+  }
   static async getChatById(id: string) {
     return await ChatModel.findById(id).populate('messages');
   }
