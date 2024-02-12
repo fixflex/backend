@@ -26,7 +26,8 @@
 
 
     <script>
-        let taskId = ''
+        let baseUrlProd = 'https://fixflex.onrender.com/api/v1'
+        let baseUrlDev = 'http://localhost:8080/api/v1'
         let userId = "6531fb0c4b050167705db4a5"
         let accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTMxZmIwYzRiMDUwMTY3NzA1ZGI0YTUiLCJpYXQiOjE3MDc1ODIzNjQsImV4cCI6MTcxMzYzMDM2NH0.2TEflqi8uT01D9gmIpPI94J6oAU461Ps5NKj_UJ91RI'
 
@@ -34,53 +35,28 @@
             withCredentials: true,
             // extraHeaders: {
             //     "Authorization": `Bearer ${accessToken}`
-            // }  
+            // } 
         });
 
+        // ================== SOCKET.IO ================== //
 
-        function login() {
-            // axios enable cors and credentials
-            axios.post('http://localhost:8080/api/v1/auth/login', {
-                email: "user1@gmail.com",
-                password: "password"
-            }, {
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-                .then((response) => {
-                    // console.log(response);
-                    userId = response.data.data._id
-                    console.log(userId);
-                }, (error) => {
-                    console.log(error);
-                });
-        }
-
-        function getMe() {
-            axios.get('http://localhost:8080/api/v1/users/me', {
-                withCredentials: true,
-                // headers: {
-                //     'Content-Type': 'application/json',
-                //     'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTMxZmIwYzRiMDUwMTY3NzA1ZGI0YTUiLCJpYXQiOjE3MDc1ODIzNjQsImV4cCI6MTcxMzYzMDM2NH0.2TEflqi8uT01D9gmIpPI94J6oAU461Ps5NKj_UJ91RI`
-                // }
-            })
-                .then((response) => {
-                    console.log(response);
-                }, (error) => {
-                    console.log(error);
-                });
-
-        }
-        // send Bearer token to the server
-
-        // const socket = io('http://localhost:8080'); // Connect to the Socket.io server
         socket.on('connect', (sockt) => {
-            console.log('Connected to server');
-            console.log(socket)
-            // join my room where room name is my user id
-            socket.emit('joinMyRoom', userId)
+            console.log('Connected to server', sockt);
+            socket.emit('joinMyRoom') // this will join the room with the name of the user id and the user will be able to receive messages from the server
+        });
+
+        socket.on("6531fb0c4b050167705db4a5", data => {
+            console.log(data);
+            // io.to(newChat.user).emit('newChatRoom', newChat); // the message from the server 
+            if (data.message === "newChatRoom") {
+                console.log('join the room with the chat id', data._id);
+                socket.emit('joinChatRoom', data._id);
+            }
+
+        });
+
+        socket.on('error', (error) => {
+            console.log(error);
         });
 
         // client-side
@@ -105,27 +81,29 @@
             document.getElementById("messages").innerHTML += `<p>${data}</p>`;
         });
 
-        function sendMessageClient() {
-            let data = {
-                message: document.getElementById("messageInput").value,
-                sender: "653c078a976a85f7b91bbde3",
-                chatId: "653c126cfaa6376e11108809",
-                createdAt: new Date().toISOString()
-            }
-            socket.emit("message", data);
-        }
-        function sendMessageTasker() {
-            let data = {
-                message: document.getElementById("messageInput").value,
-                sender: "653637b1a8a134962aa13456",
-                chatId: "653c126cfaa6376e11108809",
-                createdAt: new Date().toISOString()
-            }
-            socket.emit("message", data);
-        }
+
+
+        // function sendMessageClient() {
+        //     let data = {
+        //         message: document.getElementById("messageInput").value,
+        //         sender: "653c078a976a85f7b91bbde3",
+        //         chatId: "653c126cfaa6376e11108809",
+        //         createdAt: new Date().toISOString()
+        //     }
+        //     socket.emit("message", data);
+        // }
+        // function sendMessageTasker() {
+        //     let data = {
+        //         message: document.getElementById("messageInput").value,
+        //         sender: "653637b1a8a134962aa13456",
+        //         chatId: "653c126cfaa6376e11108809",
+        //         createdAt: new Date().toISOString()
+        //     }
+        //     socket.emit("message", data);
+        // }
 
         function joinRoom() {
-            socket.emit("join", "653c126cfaa6376e11108809"); // 653c126cfaa6376e11108809 chatId
+            socket.emit("joinChatRoom");
         }
 
         function leaveRoom() {
@@ -135,6 +113,43 @@
         function leaveAllRooms() {
             socket.emit("leaveAllRooms");
         }
+
+        // ================== AXIOS ================== //
+
+        function login() {
+            axios.post(`${baseUrlDev}/auth/login`, {
+                email: "user1@gmail.com",
+                password: "password"
+            }, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then((response) => {
+                    userId = response.data.data._id
+                    console.log(userId);
+                }, (error) => {
+                    console.log(error);
+                });
+        }
+
+        // to check if the user is authenticated
+        function getMe() {
+            axios.get(`${baseUrlDev}/users/me`, {
+                withCredentials: true,
+                // headers: {
+                //     'Content-Type': 'application/json',
+                //     'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTMxZmIwYzRiMDUwMTY3NzA1ZGI0YTUiLCJpYXQiOjE3MDc1ODIzNjQsImV4cCI6MTcxMzYzMDM2NH0.2TEflqi8uT01D9gmIpPI94J6oAU461Ps5NKj_UJ91RI`
+                // } 
+            })
+                .then((response) => {
+                    console.log(response);
+                }, (error) => {
+                    console.log(error);
+                });
+        }
+
     </script>
 </body>
 
