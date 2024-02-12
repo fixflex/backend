@@ -8,6 +8,7 @@ import logger from './helpers/log';
 import { UserRoute } from './routes';
 import { AuthRoute } from './routes';
 import { CategoryRoute } from './routes';
+import { MessageRoute } from './routes';
 import { ChatRoute } from './routes/chat.route';
 import { CouponRoute } from './routes/coupon.route';
 import HealthzRoute from './routes/healthz.route';
@@ -23,12 +24,24 @@ let categoryRoute = container.resolve(CategoryRoute);
 let taskerRoute = container.resolve(TaskerRoute);
 let healthzRoute = container.resolve(HealthzRoute);
 let chatRoute = container.resolve(ChatRoute);
+let messageRoute = container.resolve(MessageRoute);
 let taskRoute = container.resolve(TaskRoute);
 let offerRoute = container.resolve(OfferRoute);
 let couponRoute = container.resolve(CouponRoute);
 
 // Setup app
-let app = new App([healthzRoute, authRoute, userRoute, taskerRoute, categoryRoute, chatRoute, taskRoute, offerRoute, couponRoute]);
+let app = new App([
+  healthzRoute,
+  authRoute,
+  userRoute,
+  taskerRoute,
+  categoryRoute,
+  chatRoute,
+  taskRoute,
+  offerRoute,
+  couponRoute,
+  messageRoute,
+]);
 
 // Setup http server
 let client = app.getServer();
