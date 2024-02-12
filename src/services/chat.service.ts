@@ -9,7 +9,7 @@ import { IChat, IChatService, IUser } from '../interfaces';
 class ChatService implements IChatService {
   constructor(private chatDao: ChatDao) {}
   async getChatById(id: string) {
-    return await ChatDao.getChatById(id);
+    return await this.chatDao.getOneByIdPopulate(id, { path: 'messages' }, '', false);
   }
 
   async getChatsByUserId(id: string) {

@@ -12,7 +12,6 @@ class ChatController implements IChatController {
   constructor(private readonly chatService: ChatService) {}
 
   getChatById = asyncHandler(async (req: Request, res: Response) => {
-    // console.log('from chat controller');
     let chat = await this.chatService.getChatById(req.params.id);
     if (!chat) throw new HttpException(404, 'No chat found');
     res.status(200).json(customResponse<IChat>({ data: chat, success: true, message: 'Chat found' }));
