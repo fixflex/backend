@@ -38,7 +38,7 @@ const isPasswordChanged = (passwordChangedAt: Date, tokenIssuedAt: number) => {
 const authenticateUser = asyncHandler(async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
   // 1- check if the token exists
   const token = checkAccessTokenExists(req);
-  console.log('token', token);
+  // console.log('token', token);
   if (!token) {
     return next(new HttpException(401, 'unauthorized'));
   }

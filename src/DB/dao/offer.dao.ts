@@ -3,9 +3,9 @@ import { Query } from 'express-serve-static-core';
 import { QueryBuilder } from '../../helpers';
 import { IOffer, IPagination } from '../../interfaces';
 import OfferModel from '../models/offer.model';
-import CommonDAO from './baseDao';
+import BaseDao from './baseDao';
 
-class OfferDao extends CommonDAO<IOffer> {
+class OfferDao extends BaseDao<IOffer> {
   constructor() {
     super(OfferModel);
   }

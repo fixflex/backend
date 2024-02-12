@@ -1,7 +1,7 @@
 import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
-import io from '..';
+import { io } from '..';
 import { TaskerDao } from '../DB/dao';
 import { OfferDao } from '../DB/dao/offer.dao';
 import { TaskDao } from '../DB/dao/task.dao';
