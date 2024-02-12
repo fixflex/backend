@@ -6,3 +6,4 @@ export * from './task.dao';
 export * from './tasker.dao';
 export * from './user.dao';
 export * from './coupon.dao';
+export * from './message.dao';
