@@ -8,27 +8,6 @@ import { IMessage, IMessageService, IUser } from '../interfaces';
 
 @autoInjectable()
 class MessageService implements IMessageService {
-  constructor(private chatDao: ChatDao, private messageDao: MessageDao) {}
-  getMessages(reqQuery: any): Promise<IMessage[] | null> {
-    throw new Error('Method not implemented.');
-  }
-  getMessageById(messageId: string): Promise<IMessage | null> {
-    throw new Error('Method not implemented.');
-  }
-  getMessagesByChatId(chatId: string): Promise<IMessage[] | null> {
-    throw new Error('Method not implemented.');
-  }
-  deleteMessage(messageId: string): Promise<any> {
-    throw new Error('Method not implemented.');
-  }
-  async getChatById(id: string) {
-    return await this.chatDao.getOneByIdPopulate(id, { path: 'messages' }, '', false);
-  }
-
-  async getChatsByUserId(id: string) {
-    return await this.chatDao.getMany({ $or: [{ user: id }, { tasker: id }] });
-  }
-
   async createMessage(data: IMessage, user: IUser) {
     // 1. check if chat exists
     let chat = await this.chatDao.getOne({ _id: data.chatId });
@@ -44,6 +23,28 @@ class MessageService implements IMessageService {
     io.to(chat._id.toString()).emit('message', message);
     // 7. return message
     return message;
+  }
+  constructor(private chatDao: ChatDao, private messageDao: MessageDao) {}
+  getMessages(reqQuery: any): Promise<IMessage[] | null> {
+    throw new Error('Method not implemented.');
+  }
+
+  getMessageById(id: string): Promise<IMessage | null> {
+    return this.messageDao.getOneById(id);
+  }
+  getMessagesByChatId(chatId: string): Promise<IMessage[] | null> {
+    throw new Error('Method not implemented.');
+  }
+
+  deleteMessage(messageId: string): Promise<any> {
+    throw new Error('Method not implemented.');
+  }
+  async getChatById(id: string) {
+    return await this.chatDao.getOneByIdPopulate(id, { path: 'messages' }, '', false);
+  }
+
+  async getChatsByUserId(id: string) {
+    return await this.chatDao.getMany({ $or: [{ user: id }, { tasker: id }] });
   }
 }
 
