@@ -11,6 +11,7 @@ class MessageService implements IMessageService {
   constructor(private chatDao: ChatDao, private messageDao: MessageDao) {}
 
   async createMessage(data: IMessage, user: IUser) {
+    data.sender = user._id.toString();
     // 1. check if chat exists
     let chat = await this.chatDao.getOneById(data.chatId);
     if (!chat) throw new HttpException(404, 'Chat not found');

@@ -53,6 +53,7 @@
         socket.on('connect', _ => {
             console.log('Connected to server');
             socket.emit('joinMyRoom') //   join the room with the name of the user id and the user will be able to receive messages from the server
+            getMyChatRooms()
         });
 
         socket.on('newChatRoom', data => {
@@ -70,7 +71,7 @@
 
 
         socket.on('message', (data) => {
-            console.log(data.message);
+            console.log(data);
         });
 
         socket.on('error', (error) => {
@@ -148,6 +149,7 @@
 
 </html>
 
+<!-- 
 // socket.on(taskId, (data) => {
 // console.log(data);
 // });
@@ -184,4 +186,4 @@
 
 // function leaveAllRooms() {
 // socket.emit("leaveAllRooms");
-// }
+// } -->
