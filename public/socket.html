@@ -13,25 +13,27 @@
 
     <div id="messages"></div>
     <input type="text" id="messageInput">
+    <!-- email and passowr -->
     <button onclick="sendMessageClient()">sendClient</button>
     <button onclick="sendMessageTasker()">sendTasker</button>
     <button onclick="joinRoom()">Join</button>
     <button onclick="leaveRoom()">Leave Room</button>
     <button onclick="leaveAllRooms()">Leave All Rooms</button>
-    <button onclick="login()">Login</button>
+    <!-- <button onclick="login()">Login</button> -->
     <button onclick="getMe()">Get Me</button>
     <button onclick="createTask()">Create Task</button>
 
-    <dev id="messages"></dev>
+    <input type="email" id="email" value="user1@gmail.com">
+    <input type="password" id="password" value="password">
+    <button onclick="login()">Login</button>
+
 
 
     <script>
-        let baseUrlProd = 'https://fixflex.onrender.com/api/v1'
-        let baseUrlDev = 'http://localhost:8080/api/v1'
-        let baseUrl = Intl.DateTimeFormat().resolvedOptions().timeZone === "Africa/Cairo" ? baseUrlDev : baseUrlProd
-        console.log(baseUrl);
-        let userId = "6531fb0c4b050167705db4a5"
-        let accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTMxZmIwYzRiMDUwMTY3NzA1ZGI0YTUiLCJpYXQiOjE3MDc1ODIzNjQsImV4cCI6MTcxMzYzMDM2NH0.2TEflqi8uT01D9gmIpPI94J6oAU461Ps5NKj_UJ91RI'
+        let baseUrlProd = 'wss://fixflex.onrender.com/api/v1'
+        let baseUrlDev = 'ws://localhost:8080/api/v1'
+        let baseUrl = baseUrlDev
+        let userId = ''
 
         const socket = io('ws://localhost:8080', {
             withCredentials: true,
@@ -40,11 +42,13 @@
             // } 
         });
 
+        // =============================================== //
         // ================== SOCKET.IO ================== //
+        // =============================================== //
 
         socket.on('connect', (sockt) => {
             console.log('Connected to server', sockt);
-            socket.emit('joinMyRoom') // this will join the room with the name of the user id and the user will be able to receive messages from the server
+            socket.emit('joinMyRoom') //   join the room with the name of the user id and the user will be able to receive messages from the server
         });
 
         socket.on("6531fb0c4b050167705db4a5", data => {
@@ -117,13 +121,17 @@
         function leaveAllRooms() {
             socket.emit("leaveAllRooms");
         }
-
+        // =========================================== //
         // ================== AXIOS ================== //
+        // =========================================== //
 
         function login() {
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+
             axios.post(`${baseUrl}/auth/login`, {
-                email: "user1@gmail.com",
-                password: "password"
+                email,
+                password
             }, {
                 withCredentials: true,
                 headers: {
