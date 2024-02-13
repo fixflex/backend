@@ -41,8 +41,10 @@ class SocketService {
 
           await authenticateUser(socket.request as Request, {} as Response, next as NextFunction);
           if (!socket.request.user) {
-            next(new Error('Authentication error'));
+            return next(new Error('Authentication error'));
           }
+
+          socket.request.user._id = socket.request.user._id.toString();
         } catch (error: any) {
           console.log(error);
         }
@@ -62,10 +64,10 @@ class SocketService {
 
           socket.on('joinMyRoom', _ => {
             try {
-              console.log('User joined his room:', socket.request.user._id.toString(), socket.request.user.lastName);
-              socket.join(socket.request.user._id.toString());
+              console.log('User joined his room:', socket.request.user._id, socket.request.user.lastName);
+              socket.join(socket.request.user._id);
               // emit event to the user when he join his room
-              socket.emit(socket.request.user._id.toString(), { message: 'Welcome to your room' });
+              socket.emit(socket.request.user._id, { message: 'Welcome to your room' });
             } catch (error) {
               console.log(error);
             }
@@ -92,10 +94,11 @@ class SocketService {
             console.log('User joined chat room:', room);
             // check if the user is a participant in the chat room and the chat room exists
             let chatRoom = await new ChatDao().getOneById(room);
-            console.log(chatRoom);
+            // console.log(chatRoom);
             if (!chatRoom) return socket.emit('error', { message: 'Chat room not found' });
             if (chatRoom.user !== socket.request.user._id && chatRoom.tasker !== socket.request.user._id)
               return socket.emit('error', { message: 'You are not a participant in this chat room' });
+            console.log(`User ${socket.request.user._id} joined chat room:`, room);
             socket.join(room);
           });
 
