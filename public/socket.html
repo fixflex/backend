@@ -14,14 +14,15 @@
     <div id="messages"></div>
     <input type="text" id="messageInput">
     <!-- email and passowr -->
-    <button onclick="sendMessageClient()">sendClient</button>
-    <button onclick="sendMessageTasker()">sendTasker</button>
-    <button onclick="joinRoom()">Join</button>
+    <!-- <button onclick="sendMessageClient()">sendClient</button> -->
+    <!-- <button onclick="sendMessageTasker()">sendTasker</button> -->
+    <!-- <button onclick="joinRoom()">Join</button>
     <button onclick="leaveRoom()">Leave Room</button>
-    <button onclick="leaveAllRooms()">Leave All Rooms</button>
-    <!-- <button onclick="login()">Login</button> -->
+    <button onclick="leaveAllRooms()">Leave All Rooms</button> -->
+    <!-- <button onclick="createTask()">Create Task</button> -->
     <button onclick="getMe()">Get Me</button>
-    <button onclick="createTask()">Create Task</button>
+    <button onclick="getMyChatRooms()">Get My Chat Rooms</button>
+
 
     <input type="email" id="email" value="user1@gmail.com">
     <input type="password" id="password" value="password">
@@ -160,6 +161,19 @@
             })
                 .then((response) => {
                     console.log(response);
+                }, (error) => {
+                    console.log(error);
+                });
+        }
+
+        function getMyChatRooms() {
+            axios.get(`${baseUrl}/chats`)
+                .then((response) => {
+                    // loop through the response and join the rooms
+                    response.data.data.forEach(chat => {
+                        socket.emit('joinChatRoom', chat._id);
+                    });
+
                 }, (error) => {
                     console.log(error);
                 });
