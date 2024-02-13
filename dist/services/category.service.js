@@ -24,7 +24,7 @@ let CategoryService = class CategoryService {
         this.categoryDao = categoryDao;
     }
     async getCategories(reqLanguage) {
-        const categories = await this.categoryDao.getMany({}, false);
+        const categories = await this.categoryDao.getMany({}, '', false);
         let localizedDocs = null;
         if (categories.length)
             localizedDocs = this.categoryDao.toJSONLocalizedOnly(categories, reqLanguage);

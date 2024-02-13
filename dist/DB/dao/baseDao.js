@@ -17,8 +17,11 @@ class BaseDAO {
     async getOne(filter = {}, useLean = true) {
         return await this.model.findOne(filter).lean(useLean);
     }
-    async getMany(filter = {}, useLean = true) {
-        return await this.model.find(filter).lean(useLean);
+    async getMany(filter = {}, select = '', useLean = true) {
+        return await this.model.find(filter).select(select).lean(useLean);
+    }
+    async getManyPopulate(filter = {}, populate = { path: '', select: '' }, select = '', useLean = true) {
+        return await this.model.find(filter).populate(populate.path, populate.select).select(select).lean(useLean);
     }
     async updateOneById(id, payload) {
         return await this.model.findByIdAndUpdate(id, payload, { new: true }).lean();

@@ -25,7 +25,7 @@ let ChatService = class ChatService {
         return await this.chatDao.getOneByIdPopulate(id, { path: 'messages' }, '', false);
     }
     async getChatsByUserId(id) {
-        return await this.chatDao.getMany({ $or: [{ user: id }, { tasker: id }] });
+        return await this.chatDao.getMany({ $or: [{ user: id }, { tasker: id }] }, '-messages', false);
     }
     async createChat(data, user) {
         // 1. set data.user to user._id
