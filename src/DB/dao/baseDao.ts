@@ -27,8 +27,17 @@ export default abstract class BaseDAO<T> {
     return await this.model.findOne(filter).lean(useLean);
   }
 
-  async getMany(filter: FilterQuery<T> = {}, useLean: boolean = true) {
-    return await this.model.find(filter).lean(useLean);
+  async getMany(filter: FilterQuery<T> = {}, select: string = '', useLean: boolean = true) {
+    return await this.model.find(filter).select(select).lean(useLean);
+  }
+
+  async getManyPopulate(
+    filter: FilterQuery<T> = {},
+    populate: IPopulate = { path: '', select: '' },
+    select: string = '',
+    useLean: boolean = true
+  ) {
+    return await this.model.find(filter).populate(populate.path, populate.select).select(select).lean(useLean);
   }
 
   async updateOneById(id: string | ObjectId, payload: UpdateQuery<T>) {
