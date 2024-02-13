@@ -27,6 +27,7 @@ class SocketService {
         // origin: NODE_ENV === 'production' ? 'https://fixflex.com' : '*',
         origin: '*',
         methods: ['GET', 'POST'],
+        credentials: true,
       },
     });
     this.initializeSocket();

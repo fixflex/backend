@@ -33,17 +33,12 @@
     <script>
         let baseUrlProd = 'https://fixflex.onrender.com/api/v1'
         let baseUrlDev = 'http://localhost:8080/api/v1'
-        let wsUrlProd = 'wss://fixflex.onrender.com'
+        let wsUrlProd = 'ws://fixflex.onrender.com'
         let wsUrlDev = 'ws://localhost:8080'
-
+        let userId = ''
 
         let baseUrl = window.location.hostname === 'localhost' ? baseUrlDev : baseUrlProd;
         let wsUrl = window.location.hostname === 'localhost' ? wsUrlDev : wsUrlProd;
-
-        console.log(baseUrl);
-        console.log(wsUrl);
-
-        let userId = ''
 
         const socket = io(wsUrlDev, {
             withCredentials: true,
