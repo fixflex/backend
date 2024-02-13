@@ -40,7 +40,7 @@
         let baseUrl = window.location.hostname === 'localhost' ? baseUrlDev : baseUrlProd;
         let wsUrl = window.location.hostname === 'localhost' ? wsUrlDev : wsUrlProd;
 
-        const socket = io(wsUrlDev, {
+        const socket = io(wsUrl, {
             withCredentials: true,
             // extraHeaders: {
             //     "Authorization": `Bearer ${accessToken}`
