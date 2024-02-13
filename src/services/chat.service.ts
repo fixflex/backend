@@ -13,7 +13,7 @@ class ChatService implements IChatService {
   }
 
   async getChatsByUserId(id: string) {
-    return await this.chatDao.getMany({ $or: [{ user: id }, { tasker: id }] });
+    return await this.chatDao.getMany({ $or: [{ user: id }, { tasker: id }] }, '-messages', false);
   }
 
   async createChat(data: IChat, user: IUser) {

@@ -132,6 +132,7 @@
         function getMyChatRooms() {
             axios.get(`${baseUrl}/chats`)
                 .then((response) => {
+                    console.log(response.data.data);
                     // loop through the response and join the rooms
                     response.data.data.forEach(chat => {
                         socket.emit('joinChatRoom', chat._id);
