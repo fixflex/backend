@@ -22,20 +22,19 @@ let ChatController = class ChatController {
     constructor(chatService) {
         this.chatService = chatService;
         this.getChatById = (0, express_async_handler_1.default)(async (req, res) => {
-            // console.log('from chat controller');
             let chat = await this.chatService.getChatById(req.params.id);
             if (!chat)
                 throw new HttpException_1.default(404, 'No chat found');
             res.status(200).json((0, customResponse_1.default)({ data: chat, success: true, message: 'Chat found' }));
         });
-        this.getChatByUserId = (0, express_async_handler_1.default)(async (req, res) => {
-            let chat = await this.chatService.getChatByUserId(req.user?._id);
+        this.getChatsByUserId = (0, express_async_handler_1.default)(async (req, res) => {
+            let chat = await this.chatService.getChatsByUserId(req.user._id);
             if (!chat)
                 throw new HttpException_1.default(404, 'No chat found');
             res.status(200).json({ results: chat.length, data: chat });
         });
         this.createChat = (0, express_async_handler_1.default)(async (req, res) => {
-            const chat = await this.chatService.createChat(req.body);
+            const chat = await this.chatService.createChat(req.body, req.user);
             res.status(201).json((0, customResponse_1.default)({ data: chat, success: true, message: 'Chat created' }));
         });
     }

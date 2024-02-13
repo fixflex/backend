@@ -57,5 +57,8 @@ let userSchema = new mongoose_1.Schema({
     },
     ipAddress: String,
 }, { timestamps: true });
+// TODO: add a pre save hook to hash the password before saving the user
+// TODO: change the passwordChangedAt field when the user changes his password or when the user resets his password
+// TODO: change user._id from ObjectId to string
 let User = (0, mongoose_1.model)('User', userSchema);
 exports.default = User;

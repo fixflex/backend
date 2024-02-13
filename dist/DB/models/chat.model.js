@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChatModel = void 0;
 const mongoose_1 = require("mongoose");
 const chatSchema = new mongoose_1.Schema({
-    client: { type: String, ref: 'User', required: true },
+    user: { type: String, ref: 'User', required: true },
     tasker: { type: String, ref: 'User', required: true },
     messages: [{ type: String, ref: 'Message' }],
 });

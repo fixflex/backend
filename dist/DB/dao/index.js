@@ -22,3 +22,4 @@ __exportStar(require("./task.dao"), exports);
 __exportStar(require("./tasker.dao"), exports);
 __exportStar(require("./user.dao"), exports);
 __exportStar(require("./coupon.dao"), exports);
+__exportStar(require("./message.dao"), exports);

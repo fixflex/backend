@@ -17,6 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./auth.route"), exports);
 __exportStar(require("./chat.route"), exports);
 __exportStar(require("./healthz.route"), exports);
+__exportStar(require("./message.route"), exports);
 __exportStar(require("./offer.route"), exports);
 __exportStar(require("./category.route"), exports);
 __exportStar(require("./task.route"), exports);

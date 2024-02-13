@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.client = exports.server = void 0;
+exports.io = exports.client = exports.server = void 0;
 const http_1 = require("http");
 require("reflect-metadata");
 const tsyringe_1 = require("tsyringe");
@@ -13,6 +13,7 @@ const log_1 = __importDefault(require("./helpers/log"));
 const routes_1 = require("./routes");
 const routes_2 = require("./routes");
 const routes_3 = require("./routes");
+const routes_4 = require("./routes");
 const chat_route_1 = require("./routes/chat.route");
 const coupon_route_1 = require("./routes/coupon.route");
 const healthz_route_1 = __importDefault(require("./routes/healthz.route"));
@@ -27,11 +28,23 @@ let categoryRoute = tsyringe_1.container.resolve(routes_3.CategoryRoute);
 let taskerRoute = tsyringe_1.container.resolve(tasker_route_1.TaskerRoute);
 let healthzRoute = tsyringe_1.container.resolve(healthz_route_1.default);
 let chatRoute = tsyringe_1.container.resolve(chat_route_1.ChatRoute);
+let messageRoute = tsyringe_1.container.resolve(routes_4.MessageRoute);
 let taskRoute = tsyringe_1.container.resolve(task_route_1.TaskRoute);
 let offerRoute = tsyringe_1.container.resolve(offer_route_1.OfferRoute);
 let couponRoute = tsyringe_1.container.resolve(coupon_route_1.CouponRoute);
 // Setup app
-let app = new app_1.default([healthzRoute, authRoute, userRoute, taskerRoute, categoryRoute, chatRoute, taskRoute, offerRoute, couponRoute]);
+let app = new app_1.default([
+    healthzRoute,
+    authRoute,
+    userRoute,
+    taskerRoute,
+    categoryRoute,
+    chatRoute,
+    taskRoute,
+    offerRoute,
+    couponRoute,
+    messageRoute,
+]);
 // Setup http server
 let client = app.getServer();
 exports.client = client;
@@ -43,4 +56,4 @@ let s = server.listen(validateEnv_1.default.PORT).on('listening', () => {
 // Setup socket server
 let socketService = socket_1.SocketService.getInstance(s);
 let io = socketService.getSocketIO();
-exports.default = io;
+exports.io = io;

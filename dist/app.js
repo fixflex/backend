@@ -44,7 +44,8 @@ class App {
         this.app.use((0, cors_1.default)({ origin: true, credentials: true, exposedHeaders: ['set-cookie'] }));
         this.app.use(express_1.default.json());
         this.app.use((0, cookie_parser_1.default)());
-        this.app.use(express_1.default.static(path_1.default.join(__dirname, '../public')));
+        if (this.env !== 'production')
+            this.app.use(express_1.default.static(path_1.default.join(__dirname, '../public')));
         i18next_1.default
             .use(i18next_fs_backend_1.default)
             .use(i18next_http_middleware_1.default.LanguageDetector)
@@ -69,9 +70,9 @@ class App {
     }
     initializeRoutes(routes) {
         // serve the static files (index.html)
-        this.app.get('/index.html', (_req, res) => {
-            res.sendFile(path_1.default.join(__dirname, '../index.html'));
-        });
+        // if (this.env !== 'production') {
+        //   this.app.use(express.static(path.join(__dirname, '../public')));
+        // }
         routes.forEach(route => {
             this.app.use('/api/v1', route.router);
         });

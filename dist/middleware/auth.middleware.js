@@ -18,7 +18,7 @@ const checkAccessTokenExists = (req) => {
     return token;
 };
 const checkUserExists = async (userId) => {
-    const user = await user_model_1.default.findById(userId);
+    const user = await user_model_1.default.findById(userId).lean(true);
     if (!user) {
         return;
     }
@@ -36,7 +36,7 @@ const isPasswordChanged = (passwordChangedAt, tokenIssuedAt) => {
 const authenticateUser = (0, express_async_handler_1.default)(async (req, _res, next) => {
     // 1- check if the token exists
     const token = checkAccessTokenExists(req);
-    console.log('token', token);
+    // console.log('token', token);
     if (!token) {
         return next(new HttpException_1.default(401, 'unauthorized'));
     }
@@ -53,10 +53,13 @@ const authenticateUser = (0, express_async_handler_1.default)(async (req, _res, 
         // iat is the time the token was issued
         return next(new HttpException_1.default(401, 'unauthorized'));
     }
-    //  // 5- check if the user is active
+    // 5- check if the user is active
     if (!user.active) {
         return next(new HttpException_1.default(401, 'user_not_active'));
     }
+    // TODO: change _id to be string instead of object
+    // user._id = user._id.toString()
+    // console.log(user._id);
     req.user = user;
     next();
 });

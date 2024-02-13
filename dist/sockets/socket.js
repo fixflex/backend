@@ -6,13 +6,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SocketService = void 0;
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const socket_io_1 = require("socket.io");
+const dao_1 = require("../DB/dao");
 // import Error
 const middleware_1 = require("../middleware");
 class SocketService {
     constructor(httpServer) {
         this.httpServer = httpServer;
         this.io = new socket_io_1.Server(this.httpServer, {
+            // add options here
+            // pingTimeout: 30000, // this is the time to wait for the pong response before disconnecting the client 30 seconds
             cors: {
+                // TODO: change this to the client url in production
+                // origin: NODE_ENV === 'production' ? 'https://fixflex.com' : '*',
                 origin: '*',
                 methods: ['GET', 'POST'],
             },
@@ -20,44 +25,88 @@ class SocketService {
         this.initializeSocket();
     }
     initializeSocket() {
-        this.io.use(async (socket, next) => {
-            try {
-                (0, cookie_parser_1.default)()(socket.request, {}, () => { });
-                if (socket.request.user)
-                    socket.request.user = null;
-                await (0, middleware_1.authenticateUser)(socket.request, {}, next);
-                if (!socket.request.user) {
-                    next(new Error('Authentication error'));
+        try {
+            this.io.use(async (socket, next) => {
+                try {
+                    (0, cookie_parser_1.default)()(socket.request, {}, () => { });
+                    if (socket.request.user)
+                        socket.request.user = null;
+                    await (0, middleware_1.authenticateUser)(socket.request, {}, next);
+                    if (!socket.request.user) {
+                        return next(new Error('Authentication error'));
+                    }
+                    // change the user id to string
+                    socket.request.user._id = socket.request.user._id.toString();
                 }
-            }
-            catch (error) {
-                console.log(error);
-            }
-        });
-        this.io.on('connection', (socket) => {
-            if (!socket.request.user)
-                socket.disconnect();
-            console.log('User connected', socket.id);
-            // console.log(socket.request.user);
-            socket.on('message', data => {
-                console.log(data);
-                console.log(socket.id);
-                socket.broadcast.emit('message', data);
+                catch (error) {
+                    console.log(error);
+                }
             });
-            socket.on('joinMyRoom', room => {
-                // console.log('User joined room:', room);
-                socket.join(room);
+            this.io.on('connection', (socket) => {
+                try {
+                    if (!socket.request.user)
+                        socket.disconnect();
+                    // console.log('User connected', socket.id);
+                    // console.log(socket.request.user);
+                    // socket.on('message', data => {
+                    //   console.log(data);
+                    //   console.log(socket.id);
+                    //   socket.broadcast.emit('message', data);
+                    // });
+                    socket.on('joinMyRoom', _ => {
+                        try {
+                            console.log('User joined his room:', socket.request.user._id, socket.request.user.lastName);
+                            socket.join(socket.request.user._id);
+                            // emit event to the user when he join his room
+                            socket.emit(socket.request.user._id, { message: 'Welcome to your room' });
+                        }
+                        catch (error) {
+                            console.log(error);
+                        }
+                    });
+                    // handle the message event
+                    // socket.on('message', async (data: any) => {
+                    //   try {
+                    //     // check if the user is a participant in the chat room and the chat room exists
+                    //     let chatRoom = await new ChatDao().getOneById(data.chatId);
+                    //     if (!chatRoom) return socket.emit('error', { message: 'Chat room not found' });
+                    //     if (chatRoom.user !== socket.request.user._id && chatRoom.tasker !== socket.request.user._id)
+                    //       return socket.emit('error', { message: 'You are not a participant in this chat room' });
+                    //     // emit the message to the tasker in the chat room
+                    //     // broadcast to all clients in the chat room except the sender
+                    //     socket.broadcast.to(data.chatId).emit('message', data);
+                    //   } catch (error: any) {
+                    //     console.log(error);
+                    //     socket.emit('error', { message: error.message });
+                    //   }
+                    // });
+                    socket.on('joinChatRoom', async (room) => {
+                        console.log('User joined chat room:', room);
+                        // check if the user is a participant in the chat room and the chat room exists
+                        let chatRoom = await new dao_1.ChatDao().getOneById(room);
+                        // console.log(chatRoom);
+                        if (!chatRoom)
+                            return socket.emit('error', { message: 'Chat room not found' });
+                        if (chatRoom.user !== socket.request.user._id && chatRoom.tasker !== socket.request.user._id)
+                            return socket.emit('error', { message: 'You are not a participant in this chat room' });
+                        console.log(`User ${socket.request.user._id} joined chat room:`, room);
+                        socket.join(room);
+                    });
+                    socket.on('disconnect', () => {
+                        console.log('User disconnected from socket:', socket.id);
+                    });
+                    socket.on('error', (error) => {
+                        console.log('Socket error:', error);
+                    });
+                }
+                catch (error) {
+                    console.log(error);
+                }
             });
-            socket.on('disconnect', () => {
-                console.log('User disconnected from socket:', socket.id);
-            });
-            socket.on('error', (error) => {
-                console.log('Socket error:', error);
-            });
-        });
-        this.io.on('error', (error) => {
-            console.log('Socket error:', error);
-        });
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
     static getInstance(httpServer) {
         if (!SocketService.instance) {

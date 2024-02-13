@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OfferService = void 0;
 const tsyringe_1 = require("tsyringe");
-const __1 = __importDefault(require(".."));
+const __1 = require("..");
 const dao_1 = require("../DB/dao");
 const offer_dao_1 = require("../DB/dao/offer.dao");
 const task_dao_1 = require("../DB/dao/task.dao");
@@ -51,7 +51,7 @@ let OfferService = class OfferService {
         // TODO: 6. send notification to the owner of the task using 1- socket.io 2- firebase cloud messaging
         // 6.1 send the offer to the owner of the task using socket.io
         // io.to(newOffer.taskId).emit('newOffer', newOffer);
-        __1.default.to(task.userId).emit('newOffer', newOffer);
+        __1.io.to(task.userId).emit('newOffer', newOffer);
         // socketIO.to(taskCreatorSocketId).emit('newOffer', newOffer);
         // 7. return the offer
         return newOffer;
