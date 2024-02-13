@@ -36,7 +36,13 @@
         let wsUrlProd = 'wss://fixflex.onrender.com'
         let wsUrlDev = 'ws://localhost:8080'
 
-        let baseUrl = baseUrlDev
+
+        let baseUrl = window.location.hostname === 'localhost' ? baseUrlDev : baseUrlProd;
+        let wsUrl = window.location.hostname === 'localhost' ? wsUrlDev : wsUrlProd;
+
+        console.log(baseUrl);
+        console.log(wsUrl);
+
         let userId = ''
 
         const socket = io(wsUrlDev, {
@@ -52,16 +58,13 @@
 
         socket.on('connect', _ => {
             console.log('Connected to server');
-            socket.emit('joinMyRoom') //   join the room with the name of the user id and the user will be able to receive messages from the server
+            socket.emit('joinMyRoom') //  join the room with the name of the user id and the user will be able to receive messages from the server
             getMyChatRooms()
         });
 
         socket.on('newChatRoom', data => {
             console.log(data);
             socket.emit('joinChatRoom', data._id);
-            // io.to(newChat.user).emit('newChatRoom', newChat); // the message from the server 
-            // console.log('join the room with the chat id', data._id);
-            // socket.emit('joinChatRoom', data._id);
         });
 
         socket.on('newOffer', (data) => {
