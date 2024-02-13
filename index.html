@@ -57,6 +57,10 @@
 
         });
 
+        socket.on('message', (data) => {
+            console.log(data.message);
+        });
+
         socket.on('error', (error) => {
             console.log(error);
         });
@@ -66,9 +70,7 @@
             console.log(err.message);
         });
 
-        socket.on('message', (data) => {
-            console.log(data.message);
-        });
+
 
         socket.on('disconnect', () => {
             console.log('Disconnected from server');
