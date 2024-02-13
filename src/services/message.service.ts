@@ -12,7 +12,7 @@ class MessageService implements IMessageService {
 
   async createMessage(data: IMessage, user: IUser) {
     // 1. check if chat exists
-    let chat = await this.chatDao.getOne({ _id: data.chatId });
+    let chat = await this.chatDao.getOneById(data.chatId);
     if (!chat) throw new HttpException(404, 'Chat not found');
     // 2. check if user is part of the chat
     if (chat.user !== user._id.toString() && chat.tasker !== user._id.toString())

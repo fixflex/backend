@@ -12,8 +12,8 @@ class MessageController implements IMessageController {
   constructor(private readonly messageService: MessageService) {}
 
   createMessage = asyncHandler(async (req: Request<IMessage>, res: Response) => {
-    const chat = await this.messageService.createMessage(req.body, req.user);
-    res.status(201).json(customResponse<IMessage>({ data: chat, success: true, message: 'Message created' }));
+    const message = await this.messageService.createMessage(req.body, req.user);
+    res.status(201).json(customResponse<IMessage>({ data: message, success: true, message: 'Message created' }));
   });
 
   getMessagesByChatId = asyncHandler(async (req: Request, res: Response) => {

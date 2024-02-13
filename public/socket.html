@@ -88,43 +88,7 @@
             console.log('Disconnected from server');
         });
 
-        // socket.on(taskId, (data) => {
-        //     console.log(data);
-        // });
 
-
-
-
-        // function sendMessageClient() {
-        //     let data = {
-        //         message: document.getElementById("messageInput").value,
-        //         sender: "653c078a976a85f7b91bbde3",
-        //         chatId: "653c126cfaa6376e11108809",
-        //         createdAt: new Date().toISOString()
-        //     }
-        //     socket.emit("message", data);
-        // }
-        // function sendMessageTasker() {
-        //     let data = {
-        //         message: document.getElementById("messageInput").value,
-        //         sender: "653637b1a8a134962aa13456",
-        //         chatId: "653c126cfaa6376e11108809",
-        //         createdAt: new Date().toISOString()
-        //     }
-        //     socket.emit("message", data);
-        // }
-
-        function joinRoom() {
-            socket.emit("joinChatRoom");
-        }
-
-        function leaveRoom() {
-            socket.emit("leaveRoom", "653c126cfaa6376e11108809")
-        }
-
-        function leaveAllRooms() {
-            socket.emit("leaveAllRooms");
-        }
         // =========================================== //
         // ================== AXIOS ================== //
         // =========================================== //
@@ -183,3 +147,41 @@
 </body>
 
 </html>
+
+// socket.on(taskId, (data) => {
+// console.log(data);
+// });
+
+
+
+
+// function sendMessageClient() {
+// let data = {
+// message: document.getElementById("messageInput").value,
+// sender: "653c078a976a85f7b91bbde3",
+// chatId: "653c126cfaa6376e11108809",
+// createdAt: new Date().toISOString()
+// }
+// socket.emit("message", data);
+// }
+// function sendMessageTasker() {
+// let data = {
+// message: document.getElementById("messageInput").value,
+// sender: "653637b1a8a134962aa13456",
+// chatId: "653c126cfaa6376e11108809",
+// createdAt: new Date().toISOString()
+// }
+// socket.emit("message", data);
+// }
+
+// function joinRoom() {
+// socket.emit("joinChatRoom");
+// }
+
+// function leaveRoom() {
+// socket.emit("leaveRoom", "653c126cfaa6376e11108809")
+// }
+
+// function leaveAllRooms() {
+// socket.emit("leaveAllRooms");
+// }

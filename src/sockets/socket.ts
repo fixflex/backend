@@ -43,7 +43,7 @@ class SocketService {
           if (!socket.request.user) {
             return next(new Error('Authentication error'));
           }
-
+          // change the user id to string
           socket.request.user._id = socket.request.user._id.toString();
         } catch (error: any) {
           console.log(error);
