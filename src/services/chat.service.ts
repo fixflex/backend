@@ -17,16 +17,18 @@ class ChatService implements IChatService {
   }
 
   async createChat(data: IChat, user: IUser) {
-    // 1. check that the user and tasker are not the same && that they exist && user === req.user._id
+    // 1. set data.user to user._id
+    data.user = user._id.toString();
+    // 2. check that the user and tasker are not the same
     if (data.user === data.tasker) throw new HttpException(400, 'User and tasker cannot be the same');
-    if (data.user !== user._id) throw new HttpException(403, 'Unauthorized');
-    // 2. check if chat already  exists
+    // 3. check if chat already  exists
     let chat = await this.chatDao.getOne({ user: data.user, tasker: data.tasker });
     if (chat) return chat;
-    // 3. create chat and return it
+    // 4. create chat and return it
     let newChat = await this.chatDao.create(data);
     // make user and tasker join the chat room where the room name is the newChat._id
     io.to(newChat.user).emit('newChatRoom', newChat);
+    console.log(newChat.user);
     io.to(newChat.tasker).emit('newChatRoom', newChat);
 
     return newChat;

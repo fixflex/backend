@@ -18,7 +18,7 @@ const checkAccessTokenExists = (req: Request) => {
 };
 
 const checkUserExists = async (userId: string) => {
-  const user = await UserModel.findById(userId);
+  const user = await UserModel.findById(userId).lean(true);
   if (!user) {
     return;
   }
@@ -56,12 +56,14 @@ const authenticateUser = asyncHandler(async (req: Request, _res: Response, next:
     // iat is the time the token was issued
     return next(new HttpException(401, 'unauthorized'));
   }
-  //  // 5- check if the user is active
+  // 5- check if the user is active
   if (!user.active) {
     return next(new HttpException(401, 'user_not_active'));
   }
-
-  req.user = user!;
+  // TODO: change _id to be string instead of object
+  // user._id = user._id.toString()
+  // console.log(user._id);
+  req.user = user;
   next();
 });
 
