@@ -64,7 +64,8 @@
 
         socket.on('newOffer', (data) => {
             // log the data to the window not the console
-            document.getElementById("messages").innerHTML += `<p>${data}</p>`;
+            // document.getElementById("messages").innerHTML += `<p>${data}</p>`;
+            console.log('newOffer', data);
         });
 
 

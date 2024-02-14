@@ -56,7 +56,9 @@ export class AuthServie implements IAuthService {
   async googleLogin(authorizationCode: string) {
     // 1. get the user data using jwt
     const decoded = jwt.decode(authorizationCode) as JwtPayload;
+    if (!decoded) throw new HttpException(400, 'invalid_authorization_code');
     // 2. check if the user exists
+
     let user = await this.userDao.getUserByEmail(decoded.email);
     // 3. if the user exists, return the user and the token (login)
     if (user) {
@@ -142,7 +144,10 @@ export class AuthServie implements IAuthService {
 
   async verifyPassResetCode(resetCode: string) {
     // 1- check if the user exists
-    let user: any = await this.userDao.getOne({ passwordResetCode: hashCode(resetCode), passwordResetCodeExpiration: { $gt: Date.now() } }, false);
+    let user: any = await this.userDao.getOne(
+      { passwordResetCode: hashCode(resetCode), passwordResetCodeExpiration: { $gt: Date.now() } },
+      false
+    );
     if (!user) {
       throw new HttpException(400, 'invalid_reset_code');
     }
