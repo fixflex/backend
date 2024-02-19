@@ -6,13 +6,20 @@ import { TaskerDao } from '../DB/dao';
 import { OfferDao } from '../DB/dao/offer.dao';
 import { TaskDao } from '../DB/dao/task.dao';
 import HttpException from '../exceptions/HttpException';
+import { NotificationOptions } from '../helpers/onesignal';
+import { OneSignalApiHandler } from '../helpers/onesignal';
 import { IOffer, IOfferService, OfferStatus } from '../interfaces';
 import { TaskStatus } from '../interfaces/task.interface';
 import { IPagination } from './../interfaces/pagination.interface';
 
 @autoInjectable()
 class OfferService implements IOfferService {
-  constructor(private offerDao: OfferDao, private taskerDao: TaskerDao, private taskDao: TaskDao) {}
+  constructor(
+    private offerDao: OfferDao,
+    private taskerDao: TaskerDao,
+    private taskDao: TaskDao,
+    private oneSignalApiHandler: OneSignalApiHandler
+  ) {}
 
   async createOffer(offer: IOffer, userId: string) {
     // 1. check if the user is a tasker & notPaidTask array is empty
@@ -32,10 +39,15 @@ class OfferService implements IOfferService {
     // 5. update the task offers array with the new offer
     await this.taskDao.updateOneById(offer.taskId, { $push: { offers: newOffer._id } });
     // TODO: 6. send notification to the owner of the task using 1- socket.io 2- firebase cloud messaging
-    // 6.1 send the offer to the owner of the task using socket.io
-    // io.to(newOffer.taskId).emit('newOffer', newOffer);
+    let notificationOptions: NotificationOptions = {
+      headings: { en: 'New Offer' },
+      contents: { en: 'You have a new offer' },
+      data: { task: task._id },
+      external_ids: [task.userId],
+    };
+    let notification = this.oneSignalApiHandler.createNotification(notificationOptions);
+    console.log(notification);
     io.to(task.userId).emit('newOffer', newOffer);
-
     // socketIO.to(taskCreatorSocketId).emit('newOffer', newOffer);
     // 7. return the offer
     return newOffer;

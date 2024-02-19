@@ -30,6 +30,9 @@ const validateEnv = cleanEnv(process.env, {
   DEVELOPER_EMAIL: str(),
   defaultLocale: str(),
   COMMISSION_RATE: num(),
+  APP_ID: str(),
+  API_KEY: str(),
+  USER_AUTH_KEY: str(),
 });
 
 export default validateEnv;
