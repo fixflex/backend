@@ -35,7 +35,7 @@ class QueryBuilder {
                         $maxDistance: maxDistance * 1000,
                         $geometry: {
                             type: 'Point',
-                            coordinates: [longitude, latitude], // [longitude, latitude] [x, y]
+                            coordinates: [longitude, latitude], // [longitude, latitude]
                         },
                     },
                 },

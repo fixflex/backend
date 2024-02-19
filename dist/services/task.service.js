@@ -17,25 +17,19 @@ const tsyringe_1 = require("tsyringe");
 const dao_1 = require("../DB/dao");
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
 const cloudinary_1 = require("../helpers/cloudinary");
+const onesignal_1 = require("../helpers/onesignal");
 const interfaces_1 = require("../interfaces");
 const transaction_interface_1 = require("../interfaces/transaction.interface");
 let TaskService = class TaskService {
-    constructor(taskDao, categoryDao, offerDao, taskerDao) {
+    constructor(taskDao, categoryDao, offerDao, taskerDao, oneSignalApiHandler) {
         this.taskDao = taskDao;
         this.categoryDao = categoryDao;
         this.offerDao = offerDao;
         this.taskerDao = taskerDao;
+        this.oneSignalApiHandler = oneSignalApiHandler;
         this.taskPopulate = {
             path: 'userId offers',
             select: '-__v -password -active -role',
-        };
-        this.getTasks = async (query) => {
-            const { tasks, pagination } = await this.taskDao.getTasks(query);
-            return { pagination, tasks };
-        };
-        this.getTaskById = async (id) => {
-            let task = await this.taskDao.getOneByIdPopulate(id, this.taskPopulate);
-            return task;
         };
         this.createTask = async (task) => {
             // if there is categoryId, check if it exists
@@ -45,7 +39,36 @@ let TaskService = class TaskService {
                     throw new HttpException_1.default(404, 'Category not found');
             }
             const newTask = await this.taskDao.create(task);
+            // send push notification to all taskers where the task is in their service area and the task category is in their categories list
+            let query = {
+                location: `${task.location.coordinates[0]},${task.location.coordinates[1]}`,
+                categories: task.categoryId,
+                maxDistance: '60',
+            };
+            let taskers = await this.taskerDao.getTaskers(query);
+            // loop through the taskers and collect their userIds and but them in an array of external_ids to send the push notification to them
+            // @ts-ignore
+            let taskersIds = taskers.taskers.map(tasker => tasker.userId._id.toString());
+            // console.log(taskersIds);
+            // send push notification to the taskers
+            let notificationOptions = {
+                headings: { en: 'New Task' },
+                contents: { en: 'A new task is available' },
+                data: { task: task._id },
+                external_ids: taskersIds,
+            };
+            // let notification =
+            await this.oneSignalApiHandler.createNotification(notificationOptions);
+            // console.log(notification);
             return newTask;
+        };
+        this.getTasks = async (query) => {
+            const { tasks, pagination } = await this.taskDao.getTasks(query);
+            return { pagination, tasks };
+        };
+        this.getTaskById = async (id) => {
+            let task = await this.taskDao.getOneByIdPopulate(id, this.taskPopulate);
+            return task;
         };
         this.updateTask = async (id, payload, userId) => {
             // check if the user is the owner of the task
@@ -114,7 +137,7 @@ let TaskService = class TaskService {
         // ==================== offer status ==================== //
         this.cancelTask = async (id, userId) => {
             // 1. Check if the task exists
-            let task = await this.taskDao.getOneById(id, '', false);
+            let task = await this.taskDao.getOneByIdPopulate(id, { path: 'acceptedOffer', select: '-__v' }, '', false);
             if (!task)
                 throw new HttpException_1.default(404, 'resource_not_found');
             // 2. Check if the user is the owner of the task
@@ -126,9 +149,22 @@ let TaskService = class TaskService {
             // 4. Check if the task status is ASSIGNED
             if (task.status === interfaces_1.TaskStatus.ASSIGNED) {
                 // TODO: send notification to the tasker who his offer is accepted that the task is canceled
+                //@ts-ignore
+                let tasker = await this.taskerDao.getOneById(task.acceptedOffer.taskerId, '', false);
+                console.log(tasker);
+                let notificationOptions = {
+                    headings: { en: 'Task Canceled' },
+                    contents: { en: 'The task is canceled' },
+                    data: { task: task._id },
+                    external_ids: [tasker.userId],
+                };
+                // let notification =
+                await this.oneSignalApiHandler.createNotification(notificationOptions);
+                // console.log(notification);
             }
             // 5. Update the task status to CANCELED
             task.status = interfaces_1.TaskStatus.CANCELLED;
+            // @ts-ignore
             task = await task.save();
             return task;
         };
@@ -187,8 +223,29 @@ let TaskService = class TaskService {
             tasker.completedTasks.push(task._id);
             // Step 7: Update task status to COMPLETED
             task.status = interfaces_1.TaskStatus.COMPLETED;
+            console.log(tasker.userId, task.userId);
             // Step 8: Save changes and return the updated task
             await Promise.all([task.save(), tasker.save()]);
+            // Step 9.1 Send push notification to the tasker that the task is completed and the payment is pending
+            let notificationOptionsTasker = {
+                headings: { en: 'Task Completed' },
+                contents: { en: 'The task is completed and the payment is pending' },
+                data: { task: task._id },
+                external_ids: [tasker.userId],
+            };
+            // 9.2 Send push notification to the task owner that the task is completed and the payment is pending , thank him for using the app and ask him to rate the tasker, rate the app and share the app with his friends , rate the tasker and the app and share the app with his friends
+            let notificationOptionsUser = {
+                headings: { en: 'Task Completed' },
+                contents: { en: 'Thank you for using the app' },
+                data: { task: task._id },
+                external_ids: [task.userId],
+            };
+            // wait for both notifications to be sent and log the results
+            let [notificationTasker, notificationUser] = await Promise.all([
+                this.oneSignalApiHandler.createNotification(notificationOptionsTasker),
+                this.oneSignalApiHandler.createNotification(notificationOptionsUser),
+            ]);
+            console.log(notificationTasker, notificationUser);
             return task;
         };
     }
@@ -199,5 +256,6 @@ exports.TaskService = TaskService = __decorate([
     __metadata("design:paramtypes", [dao_1.TaskDao,
         dao_1.CategoryDao,
         dao_1.OfferDao,
-        dao_1.TaskerDao])
+        dao_1.TaskerDao,
+        onesignal_1.OneSignalApiHandler])
 ], TaskService);

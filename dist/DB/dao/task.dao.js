@@ -26,6 +26,7 @@ class TaskDao extends baseDao_1.default {
     //     .select('-__v -password');
     // }
     async getTasks(query) {
+        // console.log(query);
         const countDocments = await task_model_1.default.countDocuments();
         if (!query.status)
             query.status = { $nin: ['CANCELLED'] };
@@ -38,6 +39,7 @@ class TaskDao extends baseDao_1.default {
             .paginate(countDocments);
         const pagination = apiFeatures.pagination;
         const tasks = await apiFeatures.mongooseQuery
+            // TODO: Make apiFeatures more generic to handle all the populate and select methods , by removing the select and populate methods from the apiFeatures and make them as a method in the QueryBuilder class
             .select('-__v  -images  -imageCover  -details')
             .populate('userId', 'firstName lastName  profilePicture');
         return { tasks, pagination };

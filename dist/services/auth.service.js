@@ -61,6 +61,8 @@ let AuthServie = exports.AuthServie = class AuthServie {
     async googleLogin(authorizationCode) {
         // 1. get the user data using jwt
         const decoded = jsonwebtoken_1.default.decode(authorizationCode);
+        if (!decoded)
+            throw new HttpException_1.default(400, 'invalid_authorization_code');
         // 2. check if the user exists
         let user = await this.userDao.getUserByEmail(decoded.email);
         // 3. if the user exists, return the user and the token (login)

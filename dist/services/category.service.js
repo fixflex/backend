@@ -23,6 +23,15 @@ let CategoryService = class CategoryService {
     constructor(categoryDao) {
         this.categoryDao = categoryDao;
     }
+    async createCategory(category) {
+        let isServiceExists = await this.categoryDao.getCategoryByName(category.name);
+        if (isServiceExists) {
+            throw new HttpException_1.default(409, `Service ${category.name} is already exists, please pick a different one.`);
+        }
+        let newCategory = await this.categoryDao.create(category);
+        // oneSignal create tag for the new category to add tasker who are interested in this category to the tag list to send them notifications
+        return newCategory;
+    }
     async getCategories(reqLanguage) {
         const categories = await this.categoryDao.getMany({}, '', false);
         let localizedDocs = null;
@@ -35,14 +44,6 @@ let CategoryService = class CategoryService {
         if (!category)
             throw new HttpException_1.default(404, 'No service found');
         return this.categoryDao.toJSONLocalizedOnly(category, reqLanguage);
-    }
-    async createCategory(service) {
-        let isServiceExists = await this.categoryDao.getCategoryByName(service.name);
-        if (isServiceExists) {
-            throw new HttpException_1.default(409, `Service ${service.name} is already exists, please pick a different one.`);
-        }
-        let newService = await this.categoryDao.create(service);
-        return newService;
     }
     async updateCategory(serviceId, service) {
         let isServiceExists = await this.categoryDao.getOneById(serviceId);

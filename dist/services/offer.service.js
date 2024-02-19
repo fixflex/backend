@@ -19,13 +19,15 @@ const dao_1 = require("../DB/dao");
 const offer_dao_1 = require("../DB/dao/offer.dao");
 const task_dao_1 = require("../DB/dao/task.dao");
 const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
+const onesignal_1 = require("../helpers/onesignal");
 const interfaces_1 = require("../interfaces");
 const task_interface_1 = require("../interfaces/task.interface");
 let OfferService = class OfferService {
-    constructor(offerDao, taskerDao, taskDao) {
+    constructor(offerDao, taskerDao, taskDao, oneSignalApiHandler) {
         this.offerDao = offerDao;
         this.taskerDao = taskerDao;
         this.taskDao = taskDao;
+        this.oneSignalApiHandler = oneSignalApiHandler;
     }
     async createOffer(offer, userId) {
         // 1. check if the user is a tasker & notPaidTask array is empty
@@ -49,8 +51,14 @@ let OfferService = class OfferService {
         // 5. update the task offers array with the new offer
         await this.taskDao.updateOneById(offer.taskId, { $push: { offers: newOffer._id } });
         // TODO: 6. send notification to the owner of the task using 1- socket.io 2- firebase cloud messaging
-        // 6.1 send the offer to the owner of the task using socket.io
-        // io.to(newOffer.taskId).emit('newOffer', newOffer);
+        let notificationOptions = {
+            headings: { en: 'New Offer' },
+            contents: { en: 'You have a new offer' },
+            data: { task: task._id },
+            external_ids: [task.userId],
+        };
+        this.oneSignalApiHandler.createNotification(notificationOptions);
+        // console.log(notification);
         __1.io.to(task.userId).emit('newOffer', newOffer);
         // socketIO.to(taskCreatorSocketId).emit('newOffer', newOffer);
         // 7. return the offer
@@ -124,6 +132,19 @@ let OfferService = class OfferService {
             // @ts-ignore
             commission: offer.price * offer.taskerId.commissionRate,
         });
+        // 6. send notification to the tasker that his offer is accepted
+        let notificationOptions = {
+            headings: { en: 'Offer Accepted' },
+            contents: { en: 'Your offer has been accepted' },
+            // @ts-ignore
+            data: { task: offer.taskId._id.toString() },
+            // @ts-ignore
+            external_ids: [offer.taskerId.userId],
+        };
+        //@ts-ignore
+        console.log(offer.taskerId.userId, offer.taskId._id.toString());
+        let notification = await this.oneSignalApiHandler.createNotification(notificationOptions);
+        console.log(notification);
         // in mongoDB if the field doesn't exist it will be created, to make it update only if the field exists, we need to use $set but it's not working with the updateOneById method so we need to use the updateOne method
         // 6. TODO: send notification to the tasker that his offer is accepted
         // 7. return the accepted offer
@@ -133,5 +154,8 @@ let OfferService = class OfferService {
 exports.OfferService = OfferService;
 exports.OfferService = OfferService = __decorate([
     (0, tsyringe_1.autoInjectable)(),
-    __metadata("design:paramtypes", [offer_dao_1.OfferDao, dao_1.TaskerDao, task_dao_1.TaskDao])
+    __metadata("design:paramtypes", [offer_dao_1.OfferDao,
+        dao_1.TaskerDao,
+        task_dao_1.TaskDao,
+        onesignal_1.OneSignalApiHandler])
 ], OfferService);
