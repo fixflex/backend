@@ -45,8 +45,8 @@ class OfferService implements IOfferService {
       data: { task: task._id },
       external_ids: [task.userId],
     };
-    let notification = this.oneSignalApiHandler.createNotification(notificationOptions);
-    console.log(notification);
+    this.oneSignalApiHandler.createNotification(notificationOptions);
+    // console.log(notification);
     io.to(task.userId).emit('newOffer', newOffer);
     // socketIO.to(taskCreatorSocketId).emit('newOffer', newOffer);
     // 7. return the offer
