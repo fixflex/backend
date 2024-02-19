@@ -37,7 +37,7 @@ export class QueryBuilder<T> {
             $maxDistance: maxDistance * 1000, // Convert km to meters (MongoDB uses meters)
             $geometry: {
               type: 'Point',
-              coordinates: [longitude, latitude], // [longitude, latitude] [x, y]
+              coordinates: [longitude, latitude], // [longitude, latitude]
             },
           },
         },

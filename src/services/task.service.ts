@@ -6,6 +6,7 @@ import { CategoryDao, OfferDao, TaskDao, TaskerDao } from '../DB/dao';
 import HttpException from '../exceptions/HttpException';
 import { IPopulate } from '../helpers';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
+import { NotificationOptions, OneSignalApiHandler } from '../helpers/onesignal';
 import { IPagination, ITask, ITaskService, OfferStatus, TaskStatus } from '../interfaces';
 import { PaymentMethod } from '../interfaces/transaction.interface';
 
@@ -15,12 +16,47 @@ class TaskService implements ITaskService {
     private readonly taskDao: TaskDao,
     private readonly categoryDao: CategoryDao,
     private readonly offerDao: OfferDao,
-    private readonly taskerDao: TaskerDao
+    private readonly taskerDao: TaskerDao,
+    private readonly oneSignalApiHandler: OneSignalApiHandler
   ) {}
 
   private taskPopulate: IPopulate = {
     path: 'userId offers',
     select: '-__v -password -active -role',
+  };
+
+  createTask = async (task: ITask) => {
+    // if there is categoryId, check if it exists
+    if (task.categoryId) {
+      const category = await this.categoryDao.getOneById(task.categoryId);
+      if (!category) throw new HttpException(404, 'Category not found');
+    }
+    const newTask = await this.taskDao.create(task);
+    // send push notification to all taskers where the task is in their service area and the task category is in their categories list
+
+    let query: Query = {
+      location: `${task.location.coordinates[0]},${task.location.coordinates[1]}`,
+      categories: task.categoryId,
+      maxDistance: '60',
+    };
+    let taskers = await this.taskerDao.getTaskers(query);
+    // loop through the taskers and collect their userIds and but them in an array of external_ids to send the push notification to them
+    // @ts-ignore
+    let taskersIds = taskers.taskers.map(tasker => tasker.userId._id.toString());
+    // console.log(taskersIds);
+
+    // send push notification to the taskers
+    let notificationOptions: NotificationOptions = {
+      headings: { en: 'New Task' },
+      contents: { en: 'A new task is available' },
+      data: { task: task._id }, // send the task id to the tasker to use it to navigate to the task details
+      external_ids: taskersIds,
+    };
+
+    let notification = await this.oneSignalApiHandler.createNotification(notificationOptions);
+    console.log(notification);
+
+    return newTask;
   };
 
   getTasks = async (query: Query): Promise<{ tasks: ITask[]; pagination: IPagination | undefined }> => {
@@ -31,16 +67,6 @@ class TaskService implements ITaskService {
   getTaskById = async (id: string) => {
     let task = await this.taskDao.getOneByIdPopulate(id, this.taskPopulate);
     return task;
-  };
-
-  createTask = async (task: ITask) => {
-    // if there is categoryId, check if it exists
-    if (task.categoryId) {
-      const category = await this.categoryDao.getOneById(task.categoryId);
-      if (!category) throw new HttpException(404, 'Category not found');
-    }
-    const newTask = await this.taskDao.create(task);
-    return newTask;
   };
 
   updateTask = async (id: string, payload: ITask, userId: string) => {
