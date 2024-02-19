@@ -58,7 +58,7 @@ class OneSignalApiHandler {
 
     try {
       const data = await this.makeRequest(`${this.baseUrl}notifications`, 'POST', { data: JSON.stringify(notification) });
-      console.log(data);
+      // console.log(data);
       return data;
     } catch (error) {
       // console.error('Error creating OneSignal notification:', error);
