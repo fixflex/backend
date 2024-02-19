@@ -53,8 +53,9 @@ class TaskService implements ITaskService {
       external_ids: taskersIds,
     };
 
-    let notification = await this.oneSignalApiHandler.createNotification(notificationOptions);
-    console.log(notification);
+    // let notification =
+    await this.oneSignalApiHandler.createNotification(notificationOptions);
+    // console.log(notification);
 
     return newTask;
   };
@@ -164,8 +165,10 @@ class TaskService implements ITaskService {
         data: { task: task._id },
         external_ids: [tasker!.userId],
       };
-      let notification = await this.oneSignalApiHandler.createNotification(notificationOptions);
-      console.log(notification);
+
+      // let notification =
+      await this.oneSignalApiHandler.createNotification(notificationOptions);
+      // console.log(notification);
     }
     // 5. Update the task status to CANCELED
     task.status = TaskStatus.CANCELLED;
