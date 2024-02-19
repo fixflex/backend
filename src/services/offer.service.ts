@@ -116,7 +116,19 @@ class OfferService implements IOfferService {
       // @ts-ignore
       commission: offer.price * offer.taskerId.commissionRate,
     });
-
+    // 6. send notification to the tasker that his offer is accepted
+    let notificationOptions: NotificationOptions = {
+      headings: { en: 'Offer Accepted' },
+      contents: { en: 'Your offer has been accepted' },
+      // @ts-ignore
+      data: { task: offer.taskId._id.toString() },
+      // @ts-ignore
+      external_ids: [offer.taskerId.userId],
+    };
+    //@ts-ignore
+    console.log(offer.taskerId.userId, offer.taskId._id.toString());
+    let notification = await this.oneSignalApiHandler.createNotification(notificationOptions);
+    console.log(notification);
     // in mongoDB if the field doesn't exist it will be created, to make it update only if the field exists, we need to use $set but it's not working with the updateOneById method so we need to use the updateOne method
 
     // 6. TODO: send notification to the tasker that his offer is accepted

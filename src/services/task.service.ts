@@ -146,7 +146,7 @@ class TaskService implements ITaskService {
 
   cancelTask = async (id: string, userId: string) => {
     // 1. Check if the task exists
-    let task = await this.taskDao.getOneById(id, '', false);
+    let task = await this.taskDao.getOneByIdPopulate(id, { path: 'acceptedOffer', select: '-__v' }, '', false);
     if (!task) throw new HttpException(404, 'resource_not_found');
     // 2. Check if the user is the owner of the task
     if (task.userId !== userId.toString()) throw new HttpException(403, 'forbidden');
@@ -155,9 +155,21 @@ class TaskService implements ITaskService {
     // 4. Check if the task status is ASSIGNED
     if (task.status === TaskStatus.ASSIGNED) {
       // TODO: send notification to the tasker who his offer is accepted that the task is canceled
+      //@ts-ignore
+      let tasker = await this.taskerDao.getOneById(task.acceptedOffer!.taskerId, '', false);
+      console.log(tasker);
+      let notificationOptions: NotificationOptions = {
+        headings: { en: 'Task Canceled' },
+        contents: { en: 'The task is canceled' },
+        data: { task: task._id },
+        external_ids: [tasker!.userId],
+      };
+      let notification = await this.oneSignalApiHandler.createNotification(notificationOptions);
+      console.log(notification);
     }
     // 5. Update the task status to CANCELED
     task.status = TaskStatus.CANCELLED;
+    // @ts-ignore
     task = await task.save();
     return task;
   };
