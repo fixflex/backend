@@ -231,8 +231,29 @@ class TaskService implements ITaskService {
     // Step 7: Update task status to COMPLETED
     task.status = TaskStatus.COMPLETED;
 
+    console.log(tasker.userId, task.userId);
     // Step 8: Save changes and return the updated task
     await Promise.all([task.save(), tasker.save()]);
+    // Step 9.1 Send push notification to the tasker that the task is completed and the payment is pending
+    let notificationOptionsTasker: NotificationOptions = {
+      headings: { en: 'Task Completed' },
+      contents: { en: 'The task is completed and the payment is pending' },
+      data: { task: task._id },
+      external_ids: [tasker.userId],
+    };
+    // 9.2 Send push notification to the task owner that the task is completed and the payment is pending , thank him for using the app and ask him to rate the tasker, rate the app and share the app with his friends , rate the tasker and the app and share the app with his friends
+    let notificationOptionsUser: NotificationOptions = {
+      headings: { en: 'Task Completed' },
+      contents: { en: 'Thank you for using the app' },
+      data: { task: task._id }, // send the task id to the user to use it to navigate to the task details, Note: this data will not appear in the notification but it will be sent with the notification
+      external_ids: [task.userId],
+    };
+    // wait for both notifications to be sent and log the results
+    let [notificationTasker, notificationUser] = await Promise.all([
+      this.oneSignalApiHandler.createNotification(notificationOptionsTasker),
+      this.oneSignalApiHandler.createNotification(notificationOptionsUser),
+    ]);
+    console.log(notificationTasker, notificationUser);
     return task;
   };
 }
