@@ -14,13 +14,13 @@ export default abstract class BaseDAO<T> {
     return await this.model.findById(id).select(select).lean(useLean);
   }
 
-  async getOneByIdPopulate(
+  async getOneByIdPopulate<T>( // <T> is the type of the populated field for example:  < filedName: IType > ==>> <taskerId: ITasker>
     id: string | ObjectId,
     populate: IPopulate = { path: '', select: '' },
     select: string = '',
     useLean: boolean = true
   ) {
-    return await this.model.findById(id).populate(populate.path, populate.select).select(select).lean(useLean);
+    return await this.model.findById(id).populate<T>(populate.path, populate.select).select(select).lean(useLean);
   }
 
   async getOne(filter: FilterQuery<T> = {}, useLean: boolean = true) {

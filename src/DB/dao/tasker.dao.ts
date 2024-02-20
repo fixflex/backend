@@ -25,7 +25,11 @@ class TaskerDao extends CommonDAO<ITasker> {
     const pagination: IPagination | undefined = apiFeatures.pagination;
     const taskers = await apiFeatures.mongooseQuery
       .select('-__v  -availability  -isVerified -workingHours  -phoneNumber  -location')
-      .populate('userId', 'firstName lastName  profilePicture');
+      .populate(
+        // <{ userId: IUser }>
+        'userId',
+        'firstName lastName  profilePicture'
+      );
 
     return { taskers, pagination };
   }

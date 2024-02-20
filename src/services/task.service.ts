@@ -9,6 +9,7 @@ import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudin
 import { NotificationOptions, OneSignalApiHandler } from '../helpers/onesignal';
 import { IPagination, ITask, ITaskService, OfferStatus, TaskStatus } from '../interfaces';
 import { PaymentMethod } from '../interfaces/transaction.interface';
+import { IOffer } from './../interfaces/offer.interface';
 
 @autoInjectable()
 class TaskService implements ITaskService {
@@ -41,7 +42,7 @@ class TaskService implements ITaskService {
     };
     let taskers = await this.taskerDao.getTaskers(query);
     // loop through the taskers and collect their userIds and but them in an array of external_ids to send the push notification to them
-    // @ts-ignore
+    // @ts-ignore // TODO: fix the taskersIds type
     let taskersIds = taskers.taskers.map(tasker => tasker.userId._id.toString());
     // console.log(taskersIds);
 
@@ -147,7 +148,7 @@ class TaskService implements ITaskService {
 
   cancelTask = async (id: string, userId: string) => {
     // 1. Check if the task exists
-    let task = await this.taskDao.getOneByIdPopulate(id, { path: 'acceptedOffer', select: '-__v' }, '', false);
+    let task = await this.taskDao.getOneByIdPopulate<{ acceptedOffer: IOffer }>(id, { path: 'acceptedOffer', select: '-__v' }, '', false);
     if (!task) throw new HttpException(404, 'resource_not_found');
     // 2. Check if the user is the owner of the task
     if (task.userId !== userId.toString()) throw new HttpException(403, 'forbidden');
@@ -156,7 +157,6 @@ class TaskService implements ITaskService {
     // 4. Check if the task status is ASSIGNED
     if (task.status === TaskStatus.ASSIGNED) {
       // TODO: send notification to the tasker who his offer is accepted that the task is canceled
-      //@ts-ignore
       let tasker = await this.taskerDao.getOneById(task.acceptedOffer!.taskerId, '', false);
       console.log(tasker);
       let notificationOptions: NotificationOptions = {
@@ -172,9 +172,8 @@ class TaskService implements ITaskService {
     }
     // 5. Update the task status to CANCELED
     task.status = TaskStatus.CANCELLED;
-    // @ts-ignore
-    task = await task.save();
-    return task;
+
+    return await task.save();
   };
 
   openTask = async (id: string, userId: string) => {
@@ -199,7 +198,7 @@ class TaskService implements ITaskService {
 
   completeTask = async (id: string, userId: string) => {
     // Step 1: Check if the task exists
-    const task = await this.taskDao.getOneByIdPopulate(id, { path: 'acceptedOffer', select: '-__v' }, '', false);
+    const task = await this.taskDao.getOneByIdPopulate<{ acceptedOffer: IOffer }>(id, { path: 'acceptedOffer', select: '-__v' }, '', false);
     if (!task) throw new HttpException(404, 'resource_not_found');
 
     // Step 2: Check if the user is the owner of the task
@@ -211,23 +210,22 @@ class TaskService implements ITaskService {
     if (task.status !== TaskStatus.ASSIGNED) throw new HttpException(400, 'bad_request');
 
     // Step 4: Get the tasker who has the accepted offer
-    // @ts-ignore
+
     const tasker = await this.taskerDao.getOneById(task.acceptedOffer.taskerId, '', false);
     if (!tasker) throw new HttpException(404, 'resource_not_found');
 
     // Step 5: Handle the task payment method
     if (task.paymentMethod === PaymentMethod.CASH) {
-      // @ts-ignore
-      const commission: number = (task.acceptedOffer.price * tasker.commissionRate).toFixed(2);
+      const commission: number = parseFloat((task.acceptedOffer.price * tasker.commissionRate).toFixed(2));
       task.commission = commission;
       tasker.notPaidTasks.push(task._id);
     }
     // TODO: Implement online payment method
 
     // Step 6: Update tasker's earnings and completed tasks
-    // @ts-ignore
+
     tasker.totalEarnings += task.acceptedOffer.price;
-    // @ts-ignore
+
     tasker.netEarnings = (tasker.netEarnings || 0) + (task.acceptedOffer.price - task.commission);
     tasker.completedTasks.push(task._id);
 

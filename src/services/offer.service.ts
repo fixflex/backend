@@ -11,6 +11,8 @@ import { OneSignalApiHandler } from '../helpers/onesignal';
 import { IOffer, IOfferService, OfferStatus } from '../interfaces';
 import { TaskStatus } from '../interfaces/task.interface';
 import { IPagination } from './../interfaces/pagination.interface';
+import { ITask } from './../interfaces/task.interface';
+import { ITasker } from './../interfaces/tasker.interface';
 
 @autoInjectable()
 class OfferService implements IOfferService {
@@ -31,8 +33,8 @@ class OfferService implements IOfferService {
     if (!task) throw new HttpException(400, 'Task_not_found');
     if (task.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
     // 3. check if the tasker already made an offer on this task, if yes return an error
-    // let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });
-    // if (isOfferExist) throw new HttpException(400, 'You_already_made_an_offer_on_this_task');
+    let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });
+    if (isOfferExist) throw new HttpException(400, 'You_already_made_an_offer_on_this_task');
     // 4. create the offer and add the tasker id to it
     offer.taskerId = tasker._id;
     let newOffer = await this.offerDao.create(offer);
@@ -97,35 +99,41 @@ class OfferService implements IOfferService {
 
   async acceptOffer(id: string, userId: string) {
     // 1. get the offer by id
-    let offer = await this.offerDao.getOneByIdPopulate(id, { path: 'taskId taskerId', select: '' }, '', false);
+    let offer = await this.offerDao.getOneByIdPopulate<{ taskId: ITask; taskerId: ITasker }>(
+      id,
+      { path: 'taskId taskerId', select: '' },
+      '',
+      false
+    );
     if (!offer) throw new HttpException(404, 'resource_not_found');
     // 2. check if the user is the owner of the task
-    // @ts-ignore
+
     if (offer.taskId.userId.toString() !== userId.toString()) throw new HttpException(403, 'forbidden');
     // 3. check if task status is open
-    // @ts-ignore
+
     if (offer.taskId.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
     //  4. update the offer status to accepted
     offer.status = OfferStatus.ACCEPTED;
     await offer.save();
     // 5. update the task status to assigned and add the accepted offer id to it
-    // @ts-ignore
-    let updatedTask = await this.taskDao.updateOneById(offer.taskId._id, {
+
+    await this.taskDao.updateOneById(offer.taskId._id, {
       status: TaskStatus.ASSIGNED,
       acceptedOffer: offer._id,
-      // @ts-ignore
+
       commission: offer.price * offer.taskerId.commissionRate,
     });
     // 6. send notification to the tasker that his offer is accepted
+
     let notificationOptions: NotificationOptions = {
       headings: { en: 'Offer Accepted' },
       contents: { en: 'Your offer has been accepted' },
-      // @ts-ignore
+
       data: { task: offer.taskId._id.toString() },
-      // @ts-ignore
+
       external_ids: [offer.taskerId.userId],
     };
-    //@ts-ignore
+
     console.log(offer.taskerId.userId, offer.taskId._id.toString());
     let notification = await this.oneSignalApiHandler.createNotification(notificationOptions);
     console.log(notification);
