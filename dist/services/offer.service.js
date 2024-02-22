@@ -211,7 +211,7 @@ let OfferService = class OfferService {
         // 3. get the order id from the payment details
         // 4. update the order status to paid
         console.log('webhook received');
-        console.log('req.body ==========================>>', req.body);
+        // console.log('req.body ==========================>>', req.body);
         // console.log('req.query ==========================>>', req.query);
         // console.log('req.params ==========================>>', req.params);
         // console.log('req.headers ==========================>>', req.headers);

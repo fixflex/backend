@@ -223,7 +223,7 @@ class OfferService implements IOfferService {
     // 4. update the order status to paid
 
     console.log('webhook received');
-    console.log('req.body ==========================>>', req.body);
+    // console.log('req.body ==========================>>', req.body);
     // console.log('req.query ==========================>>', req.query);
     // console.log('req.params ==========================>>', req.params);
     // console.log('req.headers ==========================>>', req.headers);
