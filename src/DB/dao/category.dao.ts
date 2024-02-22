@@ -1,7 +1,7 @@
 import env from '../../config/validateEnv';
 import { ICategory } from '../../interfaces/category.interface';
 import CategoryModel from '../models/category.model';
-import CommonDAO from './baseDao';
+import CommonDAO from './base.dao';
 
 class CategoryDao extends CommonDAO<ICategory> {
   // private readonly categoryModel = CategoryModel;

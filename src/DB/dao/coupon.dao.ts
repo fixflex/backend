@@ -1,6 +1,6 @@
 import { ICoupon } from '../../interfaces';
 import { CouponModel } from '../models';
-import BaseDAO from './baseDao';
+import BaseDAO from './base.dao';
 
 class CouponDao extends BaseDAO<ICoupon> {
   constructor() {

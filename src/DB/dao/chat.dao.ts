@@ -1,6 +1,6 @@
 import { IChat } from '../../interfaces';
 import { ChatModel } from '../models/chat.model';
-import BaseDao from './baseDao';
+import BaseDao from './base.dao';
 
 class ChatDao extends BaseDao<IChat> {
   constructor() {

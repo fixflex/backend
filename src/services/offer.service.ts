@@ -23,6 +23,18 @@ class OfferService implements IOfferService {
     private oneSignalApiHandler: OneSignalApiHandler
   ) {}
 
+  //  // 4-   Decrement product quantity, increment product sold
+  //  if (order) {
+  //   const bulkOption = cart.cartItems.map((item) => ({
+  //       updateOne: {
+  //           filter: { _id: item.product },
+  //           update: {
+  //               $inc: { quantity: -item.quantity, sold: item.quantity },
+  //           },
+  //       },
+  //   }));
+  //   await Product.bulkWrite(bulkOption, {});
+
   async createOffer(offer: IOffer, userId: string) {
     // 1. check if the user is a tasker & notPaidTask array is empty
     let tasker = await this.taskerDao.getOne({ userId });
@@ -112,9 +124,17 @@ class OfferService implements IOfferService {
     // 3. check if task status is open
 
     if (offer.taskId.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
+
     //  4. update the offer status to accepted
     offer.status = OfferStatus.ACCEPTED;
     await offer.save();
+
+    // 5. check the PaymentMethod of the offer
+    // 5.1 if the payment method is cash, update the task status to assigned and add the accepted offer id to it
+
+    // 5.2 if the payment method is card then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
+    // 5.3 if the payment method is wallet then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
+
     // 5. update the task status to assigned and add the accepted offer id to it
 
     await this.taskDao.updateOneById(offer.taskId._id, {
@@ -134,9 +154,10 @@ class OfferService implements IOfferService {
       external_ids: [offer.taskerId.userId],
     };
 
-    console.log(offer.taskerId.userId, offer.taskId._id.toString());
-    let notification = await this.oneSignalApiHandler.createNotification(notificationOptions);
-    console.log(notification);
+    // console.log(offer.taskerId.userId, offer.taskId._id.toString());
+    // let notification =
+    await this.oneSignalApiHandler.createNotification(notificationOptions);
+    // console.log(notification);
     // in mongoDB if the field doesn't exist it will be created, to make it update only if the field exists, we need to use $set but it's not working with the updateOneById method so we need to use the updateOne method
 
     // 6. TODO: send notification to the tasker that his offer is accepted

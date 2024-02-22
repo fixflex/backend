@@ -1,6 +1,6 @@
 import { IMessage } from '../../interfaces';
 import { MessageModel } from '../models';
-import BaseDao from './baseDao';
+import BaseDao from './base.dao';
 
 class MessageDao extends BaseDao<IMessage> {
   constructor() {

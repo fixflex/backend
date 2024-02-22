@@ -3,7 +3,7 @@ import { Query } from 'express-serve-static-core';
 import { QueryBuilder } from '../../helpers';
 import { IPagination, ITask } from '../../interfaces';
 import TaskModel from '../models/task.model';
-import CommonDAO from './baseDao';
+import CommonDAO from './base.dao';
 
 class TaskDao extends CommonDAO<ITask> {
   constructor() {

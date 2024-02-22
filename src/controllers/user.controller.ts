@@ -15,9 +15,7 @@ class UserController implements IUserController {
   constructor(private readonly userService: UserService) {}
 
   // public Routes
-
   uploadProfileImage = uploadSingleFile('image');
-
   public getUser = asyncHandler(async (req: Request, res: Response) => {
     let user = await this.userService.getUser(req.params.id);
     if (!user) throw new HttpException(404, 'user_not_found');
@@ -25,7 +23,11 @@ class UserController implements IUserController {
     res.status(200).json(customResponse<IUser>({ data: user, success: true, message: req.t('user_found') }));
   });
 
-  // user profile routes (authenticated)
+  /**
+   *  @desc    Get logged in user
+   *  @route   GET /api/v1/auth/me
+   *  @access  Private
+   */
   public getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
     // console.log(req.headers);
     res.status(200).json(customResponse({ data: req.user, success: true, message: req.t('user_found') }));

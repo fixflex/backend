@@ -3,7 +3,7 @@ import { Query } from 'express-serve-static-core';
 import { QueryBuilder } from '../../helpers';
 import { IOffer, IPagination, ITasker } from '../../interfaces';
 import OfferModel from '../models/offer.model';
-import BaseDao from './baseDao';
+import BaseDao from './base.dao';
 
 class OfferDao extends BaseDao<IOffer> {
   constructor() {

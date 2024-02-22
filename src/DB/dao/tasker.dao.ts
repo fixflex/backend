@@ -4,7 +4,7 @@ import { QueryBuilder } from '../../helpers';
 import { IPagination } from '../../interfaces';
 import { ITasker } from '../../interfaces/tasker.interface';
 import TaskerModel from '../models/tasker.model';
-import CommonDAO from './baseDao';
+import CommonDAO from './base.dao';
 
 class TaskerDao extends CommonDAO<ITasker> {
   constructor() {

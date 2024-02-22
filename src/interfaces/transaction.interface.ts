@@ -15,7 +15,8 @@ export enum TransactionStatus {
 export enum PaymentMethod {
   CASH = 'CASH',
   CARD = 'CARD',
-  VODAFONE_CASH = 'VODAFONE_CASH',
+  WALLET = 'WALLET',
+  // VODAFONE_CASH = 'VODAFONE_CASH',
   // ETISALAT_CASH = 'ETISALAT_CASH',
   // ORANGE_CASH = 'ORANGE_CASH',
   // FAWRY = 'FAWRY',

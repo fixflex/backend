@@ -1,5 +1,5 @@
 export * from './chat.dao';
-export * from './baseDao';
+export * from './base.dao';
 export * from './offer.dao';
 export * from './category.dao';
 export * from './task.dao';

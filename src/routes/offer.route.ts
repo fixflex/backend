@@ -21,6 +21,13 @@ class OfferRoute implements Routes {
     // =================================================================== //
     // ====>>>====>>>====>>>  require authentication <<<====<<<====<<<==== //
     // =================================================================== //
+    /**
+     * @description: All routes after this middleware require authentication
+     * @param: authenticateUser
+     * @type: middleware
+     * @see: src/middleware/auth.middleware.ts
+     * @note: All routes after this middleware require authentication
+     */
     this.router.use(`${this.path}`, authenticateUser);
     this.router.post(`${this.path}`, createOfferValidator, this.offerController.createOffer);
     this.router.patch(`${this.path}/:id`, isMongoId, updateOfferValidator, this.offerController.updateOffer);
