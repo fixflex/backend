@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
@@ -5,6 +6,7 @@ import { io } from '..';
 import { TaskerDao } from '../DB/dao';
 import { OfferDao } from '../DB/dao/offer.dao';
 import { TaskDao } from '../DB/dao/task.dao';
+import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import { NotificationOptions } from '../helpers/onesignal';
 import { OneSignalApiHandler } from '../helpers/onesignal';
@@ -158,39 +160,68 @@ class OfferService implements IOfferService {
   }
 
   async checkoutOffer(id: string, userId: string, payload: any) {
-    // 1. get the offer by id
-    let offer = await this.offerDao.getOneByIdPopulate<{ taskId: ITask; taskerId: ITasker }>(
-      id,
-      { path: 'taskId taskerId', select: '' },
-      '',
-      false
-    );
-    if (!offer) throw new HttpException(404, 'resource_not_found');
-    // 2. check if the user is the owner of the task
+    try {
+      // 1. get the offer by id
+      let offer = await this.offerDao.getOneByIdPopulate<{ taskId: ITask; taskerId: ITasker }>(
+        id,
+        { path: 'taskId taskerId', select: '' },
+        '',
+        false
+      );
+      if (!offer) throw new HttpException(404, 'resource_not_found');
+      // 2. check if the user is the owner of the task
 
-    if (offer.taskId.userId.toString() !== userId.toString()) throw new HttpException(403, 'forbidden');
-    // 3. check if task status is open
+      if (offer.taskId.userId.toString() !== userId.toString()) throw new HttpException(403, 'forbidden');
+      // 3. check if task status is open
 
-    if (offer.taskId.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
+      if (offer.taskId.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
 
-    // 5. check the PaymentMethod of the offer
-    // 5.2 if the payment method is card then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
-    if (payload.paymentMethod === 'card') {
-      // call paymob api to create a payment link and send it to the task owner to pay the task price
-      // update the task status to assigned and add the accepted offer id to it
+      // 5. check the PaymentMethod of the offer
+      // 5.2 if the payment method is card then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
+      if (payload.paymentMethod === 'card') {
+        // call paymob api to create a payment link and send it to the task owner to pay the task price
+        let paymobToken = await this.getPaymobToken();
+        console.log('paymobToken ======================>>');
+        console.log(paymobToken);
+        let order = await this.createOrder(paymobToken, offer);
+        console.log('order ======================>>');
+        console.log(order);
+        let paymentToken = await this.getPaymentToken(paymobToken, order.id);
+        console.log('paymentToken ======================>>');
+        console.log(paymentToken);
+        // https://accept.paymob.com/api/acceptance/iframes/826805?payment_token={payment_key_obtained_previously}
+        let iframe = `https://accept.paymob.com/api/acceptance/iframes/826805?payment_token=${paymentToken.token}`;
+        let iframe2 = `https://accept.paymob.com/api/acceptance/iframes/826806?payment_token=${paymentToken.token}`;
+        console.log('iframes');
+        console.log('iframe1', iframe);
+        console.log('iframe2', iframe2);
+
+        // send the payment link to the task owner
+
+        // update the task status to assigned and add the accepted offer id to it
+      }
+      // 5.3 if the payment method is wallet then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
+      else if (payload.paymentMethod === 'wallet') {
+        // call paymob api to create a payment link and send it to the task owner to pay the task price
+        // update the task status to assigned and add the accepted offer id to it
+      }
+
+      // 5. update the task status to assigned and add the accepted offer id to it
+
+      return 'offer';
+    } catch (error: any) {
+      console.log('error ======================>>');
+      console.log(error.response.data);
     }
-    // 5.3 if the payment method is wallet then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
-    else if (payload.paymentMethod === 'wallet') {
-      // call paymob api to create a payment link and send it to the task owner to pay the task price
-      // update the task status to assigned and add the accepted offer id to it
-    }
-
-    // 5. update the task status to assigned and add the accepted offer id to it
-
-    return 'offer';
   }
 
   async webhookCheckout(req: any) {
+    // paymob api will send a webhook to this endpoint after the payment is done
+    // 1. get the payment id from the request body
+    // 2. get the payment details from paymob api
+    // 3. get the order id from the payment details
+    // 4. update the order status to paid
+
     console.log('webhook received');
     console.log('req.body ==========================');
     console.log(req.body);
@@ -199,8 +230,72 @@ class OfferService implements IOfferService {
     console.log('req.params ==========================');
     console.log(req.params);
     console.log('req.headers ==========================');
-    console.log(req.headers);
+    // console.log(req.headers);
     return 'received';
+  }
+
+  // private async sendNotification() {
+  //   // send notification to the owner of the task using 1- socket.io 2- firebase cloud messaging
+  // }
+
+  private async getPaymobToken() {
+    // get the paymob token using axios
+    let paymobToken = await axios.post('https://accept.paymob.com/api/auth/tokens', {
+      api_key: env.PAYMOB_API_KEY,
+    });
+
+    return paymobToken.data.token;
+  }
+
+  private async createOrder(paymobToken: string, offer: any) {
+    // create an order using paymob api
+    let order = {
+      auth_token: paymobToken,
+      delivery_needed: 'false',
+      amount_cents: offer.price * 100,
+      currency: 'EGP',
+      merchant_order_id: Math.floor(Math.random() * 1000).toString() + offer._id, // TODO: fix this to be unique
+      items: [
+        {
+          name: 'task',
+          amount_cents: offer.price * 100,
+          description: 'task',
+          quantity: '1',
+        },
+      ],
+      notify_user_with_email: true,
+    };
+    let orderResponse = await axios.post('https://accept.paymob.com/api/ecommerce/orders', order);
+    return orderResponse.data;
+  }
+
+  private async getPaymentToken(paymobToken: string, orderId: string) {
+    let paymentToken = await axios.post('https://accept.paymob.com/api/acceptance/payment_keys', {
+      auth_token: paymobToken,
+      amount_cents: 96000,
+      currency: 'EGP',
+      // concatenate the orderId with rundom number to make it unique
+      order_id: orderId,
+      billing_data: {
+        apartment: '803',
+        email: 'ahmed4321mustafa5@gmail.com',
+        floor: '42',
+        first_name: 'Mohamed',
+        street: 'Ethan Land',
+        building: '8028',
+        phone_number: '+201111111111',
+        shipping_method: 'PKG',
+        postal_code: '01898',
+        city: 'Jaskolskiburgh',
+        country: 'CR',
+        last_name: 'Ali',
+        state: 'Utah',
+      },
+      integration_id: env.PAYMOB_INTEGRATION_ID,
+      lock_order_when_paid: 'false', // if true, the order will be locked and can't be paid again
+    });
+
+    return paymentToken.data;
   }
 }
 export { OfferService };

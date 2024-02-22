@@ -34,5 +34,7 @@ const validateEnv = (0, envalid_1.cleanEnv)(process.env, {
     APP_ID: (0, envalid_1.str)(),
     API_KEY: (0, envalid_1.str)(),
     USER_AUTH_KEY: (0, envalid_1.str)(),
+    PAYMOB_API_KEY: (0, envalid_1.str)(),
+    PAYMOB_INTEGRATION_ID: (0, envalid_1.num)(),
 });
 exports.default = validateEnv;
