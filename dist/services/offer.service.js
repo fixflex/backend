@@ -211,11 +211,11 @@ let OfferService = class OfferService {
         // 3. get the order id from the payment details
         // 4. update the order status to paid
         console.log('webhook received');
-        // console.log('req.body ==========================>>', req.body);
-        // console.log('req.query ==========================>>', req.query);
-        // console.log('req.params ==========================>>', req.params);
-        // console.log('req.headers ==========================>>', req.headers);
-        return { 'req.body': req.body, 'req.query': req.query, 'req.params': req.params, 'req.headers': req.headers };
+        console.log('req.body ==========================>>', req.body);
+        console.log('req.query ==========================>>', req.query);
+        console.log('req.params ==========================>>', req.params);
+        console.log('req.headers ==========================>>', req.headers);
+        return 'webhook received successfully';
     }
     // private async sendNotification() {
     //   // send notification to the owner of the task using 1- socket.io 2- firebase cloud messaging

@@ -62,10 +62,8 @@ let OfferController = class OfferController {
             res.status(200).json((0, customResponse_1.default)({ data: offer, success: true, message: 'offer_checked_out' }));
         });
         this.webhookCheckout = (0, express_async_handler_1.default)(async (req, res) => {
-            console.log('webhook receiveddddddd');
-            console.log('req.body ==============================>', req.body);
             // call the offerService to handle the paymob webhook
-            let results = await this.offerService.webhookCheckout(req.body);
+            let results = await this.offerService.webhookCheckout(req);
             res.status(200).json({ received: true, results });
         });
     }
