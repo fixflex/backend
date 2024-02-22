@@ -15,7 +15,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./chat.dao"), exports);
-__exportStar(require("./baseDao"), exports);
+__exportStar(require("./base.dao"), exports);
 __exportStar(require("./offer.dao"), exports);
 __exportStar(require("./category.dao"), exports);
 __exportStar(require("./task.dao"), exports);

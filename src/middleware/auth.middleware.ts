@@ -6,7 +6,7 @@ import UserModel from '../DB/models/user.model';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import { Request } from '../helpers';
-import { UserType } from '../interfaces/user.interface';
+import { UserType } from '../interfaces';
 
 const checkAccessTokenExists = (req: Request) => {
   // check cookies first then check headers for the token (for the swagger docs)

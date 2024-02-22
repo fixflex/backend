@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoryDao = void 0;
 const validateEnv_1 = __importDefault(require("../../config/validateEnv"));
 const category_model_1 = __importDefault(require("../models/category.model"));
-const baseDao_1 = __importDefault(require("./baseDao"));
-class CategoryDao extends baseDao_1.default {
+const base_dao_1 = __importDefault(require("./base.dao"));
+class CategoryDao extends base_dao_1.default {
     // private readonly categoryModel = CategoryModel;
     // inject the reqLanguage to the constructor to be used in the toJSONLocalizedOnly method
     constructor() {

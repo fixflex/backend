@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TaskerDao = void 0;
 const helpers_1 = require("../../helpers");
 const tasker_model_1 = __importDefault(require("../models/tasker.model"));
-const baseDao_1 = __importDefault(require("./baseDao"));
-class TaskerDao extends baseDao_1.default {
+const base_dao_1 = __importDefault(require("./base.dao"));
+class TaskerDao extends base_dao_1.default {
     constructor() {
         super(tasker_model_1.default);
     }
@@ -23,7 +23,9 @@ class TaskerDao extends baseDao_1.default {
         const pagination = apiFeatures.pagination;
         const taskers = await apiFeatures.mongooseQuery
             .select('-__v  -availability  -isVerified -workingHours  -phoneNumber  -location')
-            .populate('userId', 'firstName lastName  profilePicture');
+            .populate(
+        // <{ userId: IUser }>
+        'userId', 'firstName lastName  profilePicture');
         return { taskers, pagination };
     }
     // get tasker profile with user data and categories data

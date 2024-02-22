@@ -1,4 +1,4 @@
-import { IUser } from '../../interfaces/user.interface';
+import { IUser } from '../../interfaces';
 import UserModel from '../models/user.model';
 import CommonDAO from './base.dao';
 

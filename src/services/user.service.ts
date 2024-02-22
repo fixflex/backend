@@ -5,7 +5,7 @@ import UserDao from '../DB/dao/user.dao';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
-import { IUser, IUserService } from '../interfaces/user.interface';
+import { IUser, IUserService } from '../interfaces';
 
 @autoInjectable()
 class UserService implements IUserService {

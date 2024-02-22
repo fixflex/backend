@@ -5,8 +5,8 @@ import { autoInjectable } from 'tsyringe';
 import HttpException from '../exceptions/HttpException';
 import { Request, Response } from '../helpers';
 import customResponse from '../helpers/customResponse';
+import { IUser, IUserController } from '../interfaces';
 import { AuthRequest } from '../interfaces/auth.interface';
-import { IUser, IUserController } from '../interfaces/user.interface';
 import { uploadSingleFile } from '../middleware/uploadImages.middleware';
 import { UserService } from '../services/user.service';
 

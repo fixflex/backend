@@ -13,4 +13,4 @@ export * from './socket.interface';
 export * from './task.interface';
 export * from './tasker.interface';
 export * from './user.interface';
-export * from './coupon .interface';
+export * from './coupon.interface';

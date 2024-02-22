@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TaskDao = void 0;
 const helpers_1 = require("../../helpers");
 const task_model_1 = __importDefault(require("../models/task.model"));
-const baseDao_1 = __importDefault(require("./baseDao"));
-class TaskDao extends baseDao_1.default {
+const base_dao_1 = __importDefault(require("./base.dao"));
+class TaskDao extends base_dao_1.default {
     constructor() {
         super(task_model_1.default);
     }

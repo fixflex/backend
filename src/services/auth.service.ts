@@ -8,8 +8,8 @@ import HttpException from '../exceptions/HttpException';
 import { createAccessToken, createRefreshToken } from '../helpers/createToken';
 import { hashCode } from '../helpers/hashing';
 import { sendMailer } from '../helpers/nodemailer';
+import { IUser } from '../interfaces';
 import { IAuthService } from '../interfaces/auth.interface';
-import { IUser } from '../interfaces/user.interface';
 
 @autoInjectable()
 export class AuthServie implements IAuthService {

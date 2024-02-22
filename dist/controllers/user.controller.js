@@ -31,7 +31,11 @@ let UserController = class UserController {
             // TODO: remove status from customResponse
             res.status(200).json((0, customResponse_1.default)({ data: user, success: true, message: req.t('user_found') }));
         });
-        // user profile routes (authenticated)
+        /**
+         *  @desc    Get logged in user
+         *  @route   GET /api/v1/auth/me
+         *  @access  Private
+         */
         this.getMe = (0, express_async_handler_1.default)(async (req, res) => {
             // console.log(req.headers);
             res.status(200).json((0, customResponse_1.default)({ data: req.user, success: true, message: req.t('user_found') }));

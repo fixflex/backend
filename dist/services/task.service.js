@@ -47,7 +47,7 @@ let TaskService = class TaskService {
             };
             let taskers = await this.taskerDao.getTaskers(query);
             // loop through the taskers and collect their userIds and but them in an array of external_ids to send the push notification to them
-            // @ts-ignore
+            // @ts-ignore // TODO: fix the taskersIds type
             let taskersIds = taskers.taskers.map(tasker => tasker.userId._id.toString());
             // console.log(taskersIds);
             // send push notification to the taskers
@@ -149,7 +149,6 @@ let TaskService = class TaskService {
             // 4. Check if the task status is ASSIGNED
             if (task.status === interfaces_1.TaskStatus.ASSIGNED) {
                 // TODO: send notification to the tasker who his offer is accepted that the task is canceled
-                //@ts-ignore
                 let tasker = await this.taskerDao.getOneById(task.acceptedOffer.taskerId, '', false);
                 console.log(tasker);
                 let notificationOptions = {
@@ -164,9 +163,7 @@ let TaskService = class TaskService {
             }
             // 5. Update the task status to CANCELED
             task.status = interfaces_1.TaskStatus.CANCELLED;
-            // @ts-ignore
-            task = await task.save();
-            return task;
+            return await task.save();
         };
         this.openTask = async (id, userId) => {
             // 1. Check if the task exists
@@ -203,22 +200,18 @@ let TaskService = class TaskService {
             if (task.status !== interfaces_1.TaskStatus.ASSIGNED)
                 throw new HttpException_1.default(400, 'bad_request');
             // Step 4: Get the tasker who has the accepted offer
-            // @ts-ignore
             const tasker = await this.taskerDao.getOneById(task.acceptedOffer.taskerId, '', false);
             if (!tasker)
                 throw new HttpException_1.default(404, 'resource_not_found');
             // Step 5: Handle the task payment method
             if (task.paymentMethod === transaction_interface_1.PaymentMethod.CASH) {
-                // @ts-ignore
-                const commission = (task.acceptedOffer.price * tasker.commissionRate).toFixed(2);
+                const commission = parseFloat((task.acceptedOffer.price * tasker.commissionRate).toFixed(2));
                 task.commission = commission;
                 tasker.notPaidTasks.push(task._id);
             }
             // TODO: Implement online payment method
             // Step 6: Update tasker's earnings and completed tasks
-            // @ts-ignore
             tasker.totalEarnings += task.acceptedOffer.price;
-            // @ts-ignore
             tasker.netEarnings = (tasker.netEarnings || 0) + (task.acceptedOffer.price - task.commission);
             tasker.completedTasks.push(task._id);
             // Step 7: Update task status to COMPLETED

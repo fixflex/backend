@@ -16,7 +16,8 @@ var PaymentMethod;
 (function (PaymentMethod) {
     PaymentMethod["CASH"] = "CASH";
     PaymentMethod["CARD"] = "CARD";
-    PaymentMethod["VODAFONE_CASH"] = "VODAFONE_CASH";
+    PaymentMethod["WALLET"] = "WALLET";
+    // VODAFONE_CASH = 'VODAFONE_CASH',
     // ETISALAT_CASH = 'ETISALAT_CASH',
     // ORANGE_CASH = 'ORANGE_CASH',
     // FAWRY = 'FAWRY',

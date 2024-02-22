@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
-const user_interface_1 = require("../../interfaces/user.interface");
+const interfaces_1 = require("../../interfaces");
 let userSchema = new mongoose_1.Schema({
     firstName: {
         type: String,
@@ -48,8 +48,8 @@ let userSchema = new mongoose_1.Schema({
     },
     role: {
         type: String,
-        enum: Object.values(user_interface_1.UserType),
-        default: user_interface_1.UserType.USER,
+        enum: Object.values(interfaces_1.UserType),
+        default: interfaces_1.UserType.USER,
     },
     active: {
         type: Boolean,
