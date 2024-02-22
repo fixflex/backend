@@ -42,6 +42,10 @@ let OfferRoute = class OfferRoute {
         this.router.patch(`${this.path}/:id`, isMongoID_validator_1.isMongoId, offer_validator_1.updateOfferValidator, this.offerController.updateOffer);
         this.router.delete(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.offerController.deleteOffer);
         this.router.patch(`${this.path}/:id/accept`, isMongoID_validator_1.isMongoId, this.offerController.acceptOffer);
+        this.router.patch(`${this.path}/:id/accept/checkout 
+    `, isMongoID_validator_1.isMongoId, this.offerController.checkoutOffer);
+        // webhook-checkout
+        this.router.post(`${this.path}/webhook-checkout`, this.offerController.webhookCheckout);
     }
 };
 exports.OfferRoute = OfferRoute;

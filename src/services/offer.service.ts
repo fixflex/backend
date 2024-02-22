@@ -129,14 +129,6 @@ class OfferService implements IOfferService {
     offer.status = OfferStatus.ACCEPTED;
     await offer.save();
 
-    // 5. check the PaymentMethod of the offer
-    // 5.1 if the payment method is cash, update the task status to assigned and add the accepted offer id to it
-
-    // 5.2 if the payment method is card then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
-    // 5.3 if the payment method is wallet then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
-
-    // 5. update the task status to assigned and add the accepted offer id to it
-
     await this.taskDao.updateOneById(offer.taskId._id, {
       status: TaskStatus.ASSIGNED,
       acceptedOffer: offer._id,
@@ -163,6 +155,52 @@ class OfferService implements IOfferService {
     // 6. TODO: send notification to the tasker that his offer is accepted
     // 7. return the accepted offer
     return offer;
+  }
+
+  async checkoutOffer(id: string, userId: string, payload: any) {
+    // 1. get the offer by id
+    let offer = await this.offerDao.getOneByIdPopulate<{ taskId: ITask; taskerId: ITasker }>(
+      id,
+      { path: 'taskId taskerId', select: '' },
+      '',
+      false
+    );
+    if (!offer) throw new HttpException(404, 'resource_not_found');
+    // 2. check if the user is the owner of the task
+
+    if (offer.taskId.userId.toString() !== userId.toString()) throw new HttpException(403, 'forbidden');
+    // 3. check if task status is open
+
+    if (offer.taskId.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
+
+    // 5. check the PaymentMethod of the offer
+    // 5.2 if the payment method is card then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
+    if (payload.paymentMethod === 'card') {
+      // call paymob api to create a payment link and send it to the task owner to pay the task price
+      // update the task status to assigned and add the accepted offer id to it
+    }
+    // 5.3 if the payment method is wallet then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
+    else if (payload.paymentMethod === 'wallet') {
+      // call paymob api to create a payment link and send it to the task owner to pay the task price
+      // update the task status to assigned and add the accepted offer id to it
+    }
+
+    // 5. update the task status to assigned and add the accepted offer id to it
+
+    return 'offer';
+  }
+
+  async webhookCheckout(req: any) {
+    console.log('webhook received');
+    console.log('req.body ==========================');
+    console.log(req.body);
+    console.log('req.query ==========================');
+    console.log(req.query);
+    console.log('req.params ==========================');
+    console.log(req.params);
+    console.log('req.headers ==========================');
+    console.log(req.headers);
+    return 'received';
   }
 }
 export { OfferService };

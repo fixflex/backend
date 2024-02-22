@@ -160,12 +160,49 @@ let OfferService = class OfferService {
         // 7. return the accepted offer
         return offer;
     }
+    async checkoutOffer(id, userId, payload) {
+        // 1. get the offer by id
+        let offer = await this.offerDao.getOneByIdPopulate(id, { path: 'taskId taskerId', select: '' }, '', false);
+        if (!offer)
+            throw new HttpException_1.default(404, 'resource_not_found');
+        // 2. check if the user is the owner of the task
+        if (offer.taskId.userId.toString() !== userId.toString())
+            throw new HttpException_1.default(403, 'forbidden');
+        // 3. check if task status is open
+        if (offer.taskId.status !== task_interface_1.TaskStatus.OPEN)
+            throw new HttpException_1.default(400, 'Task_is_not_open');
+        // 5. check the PaymentMethod of the offer
+        // 5.2 if the payment method is card then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
+        if (payload.paymentMethod === 'card') {
+            // call paymob api to create a payment link and send it to the task owner to pay the task price
+            // update the task status to assigned and add the accepted offer id to it
+        }
+        // 5.3 if the payment method is wallet then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
+        else if (payload.paymentMethod === 'wallet') {
+            // call paymob api to create a payment link and send it to the task owner to pay the task price
+            // update the task status to assigned and add the accepted offer id to it
+        }
+        // 5. update the task status to assigned and add the accepted offer id to it
+        return 'offer';
+    }
+    async webhookCheckout(req) {
+        console.log('webhook received');
+        console.log('req.body ==========================');
+        console.log(req.body);
+        console.log('req.query ==========================');
+        console.log(req.query);
+        console.log('req.params ==========================');
+        console.log(req.params);
+        console.log('req.headers ==========================');
+        console.log(req.headers);
+        return 'received';
+    }
 };
 exports.OfferService = OfferService;
 exports.OfferService = OfferService = __decorate([
     (0, tsyringe_1.autoInjectable)(),
     __metadata("design:paramtypes", [offer_dao_1.OfferDao,
-        dao_1.TaskerDao,
-        task_dao_1.TaskDao,
-        onesignal_1.OneSignalApiHandler])
+    dao_1.TaskerDao,
+    task_dao_1.TaskDao,
+    onesignal_1.OneSignalApiHandler])
 ], OfferService);
