@@ -79,6 +79,13 @@ class App {
     // if (this.env !== 'production') {
     //   this.app.use(express.static(path.join(__dirname, '../public')));
     // }
+    this.app.use('/api/v1/callback', (req, res) => {
+      // log the request body
+      console.log(req.body);
+      // return the response
+      res.status(200).json({ message: 'callback received' });
+    });
+
     routes.forEach(route => {
       this.app.use('/api/v1', route.router);
     });
