@@ -30,11 +30,22 @@ let OfferRoute = class OfferRoute {
         // =================================================================== //
         // ====>>>====>>>====>>>  require authentication <<<====<<<====<<<==== //
         // =================================================================== //
+        /**
+         * @description: All routes after this middleware require authentication
+         * @param: authenticateUser
+         * @type: middleware
+         * @see: src/middleware/auth.middleware.ts
+         * @note: All routes after this middleware require authentication
+         */
         this.router.use(`${this.path}`, auth_middleware_1.authenticateUser);
         this.router.post(`${this.path}`, offer_validator_1.createOfferValidator, this.offerController.createOffer);
         this.router.patch(`${this.path}/:id`, isMongoID_validator_1.isMongoId, offer_validator_1.updateOfferValidator, this.offerController.updateOffer);
         this.router.delete(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.offerController.deleteOffer);
         this.router.patch(`${this.path}/:id/accept`, isMongoID_validator_1.isMongoId, this.offerController.acceptOffer);
+        this.router.patch(`${this.path}/:id/accept/checkout 
+    `, isMongoID_validator_1.isMongoId, this.offerController.checkoutOffer);
+        // webhook-checkout
+        this.router.post(`${this.path}/webhook-checkout`, this.offerController.webhookCheckout);
     }
 };
 exports.OfferRoute = OfferRoute;

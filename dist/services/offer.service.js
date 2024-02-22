@@ -29,6 +29,17 @@ let OfferService = class OfferService {
         this.taskDao = taskDao;
         this.oneSignalApiHandler = oneSignalApiHandler;
     }
+    //  // 4-   Decrement product quantity, increment product sold
+    //  if (order) {
+    //   const bulkOption = cart.cartItems.map((item) => ({
+    //       updateOne: {
+    //           filter: { _id: item.product },
+    //           update: {
+    //               $inc: { quantity: -item.quantity, sold: item.quantity },
+    //           },
+    //       },
+    //   }));
+    //   await Product.bulkWrite(bulkOption, {});
     async createOffer(offer, userId) {
         // 1. check if the user is a tasker & notPaidTask array is empty
         let tasker = await this.taskerDao.getOne({ userId });
@@ -43,8 +54,9 @@ let OfferService = class OfferService {
         if (task.status !== task_interface_1.TaskStatus.OPEN)
             throw new HttpException_1.default(400, 'Task_is_not_open');
         // 3. check if the tasker already made an offer on this task, if yes return an error
-        // let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });
-        // if (isOfferExist) throw new HttpException(400, 'You_already_made_an_offer_on_this_task');
+        let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });
+        if (isOfferExist)
+            throw new HttpException_1.default(400, 'You_already_made_an_offer_on_this_task');
         // 4. create the offer and add the tasker id to it
         offer.taskerId = tasker._id;
         let newOffer = await this.offerDao.create(offer);
@@ -114,41 +126,71 @@ let OfferService = class OfferService {
         if (!offer)
             throw new HttpException_1.default(404, 'resource_not_found');
         // 2. check if the user is the owner of the task
-        // @ts-ignore
         if (offer.taskId.userId.toString() !== userId.toString())
             throw new HttpException_1.default(403, 'forbidden');
         // 3. check if task status is open
-        // @ts-ignore
         if (offer.taskId.status !== task_interface_1.TaskStatus.OPEN)
             throw new HttpException_1.default(400, 'Task_is_not_open');
         //  4. update the offer status to accepted
         offer.status = interfaces_1.OfferStatus.ACCEPTED;
         await offer.save();
-        // 5. update the task status to assigned and add the accepted offer id to it
-        // @ts-ignore
-        let updatedTask = await this.taskDao.updateOneById(offer.taskId._id, {
+        await this.taskDao.updateOneById(offer.taskId._id, {
             status: task_interface_1.TaskStatus.ASSIGNED,
             acceptedOffer: offer._id,
-            // @ts-ignore
             commission: offer.price * offer.taskerId.commissionRate,
         });
         // 6. send notification to the tasker that his offer is accepted
         let notificationOptions = {
             headings: { en: 'Offer Accepted' },
             contents: { en: 'Your offer has been accepted' },
-            // @ts-ignore
             data: { task: offer.taskId._id.toString() },
-            // @ts-ignore
             external_ids: [offer.taskerId.userId],
         };
-        //@ts-ignore
-        console.log(offer.taskerId.userId, offer.taskId._id.toString());
-        let notification = await this.oneSignalApiHandler.createNotification(notificationOptions);
-        console.log(notification);
+        // console.log(offer.taskerId.userId, offer.taskId._id.toString());
+        // let notification =
+        await this.oneSignalApiHandler.createNotification(notificationOptions);
+        // console.log(notification);
         // in mongoDB if the field doesn't exist it will be created, to make it update only if the field exists, we need to use $set but it's not working with the updateOneById method so we need to use the updateOne method
         // 6. TODO: send notification to the tasker that his offer is accepted
         // 7. return the accepted offer
         return offer;
+    }
+    async checkoutOffer(id, userId, payload) {
+        // 1. get the offer by id
+        let offer = await this.offerDao.getOneByIdPopulate(id, { path: 'taskId taskerId', select: '' }, '', false);
+        if (!offer)
+            throw new HttpException_1.default(404, 'resource_not_found');
+        // 2. check if the user is the owner of the task
+        if (offer.taskId.userId.toString() !== userId.toString())
+            throw new HttpException_1.default(403, 'forbidden');
+        // 3. check if task status is open
+        if (offer.taskId.status !== task_interface_1.TaskStatus.OPEN)
+            throw new HttpException_1.default(400, 'Task_is_not_open');
+        // 5. check the PaymentMethod of the offer
+        // 5.2 if the payment method is card then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
+        if (payload.paymentMethod === 'card') {
+            // call paymob api to create a payment link and send it to the task owner to pay the task price
+            // update the task status to assigned and add the accepted offer id to it
+        }
+        // 5.3 if the payment method is wallet then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
+        else if (payload.paymentMethod === 'wallet') {
+            // call paymob api to create a payment link and send it to the task owner to pay the task price
+            // update the task status to assigned and add the accepted offer id to it
+        }
+        // 5. update the task status to assigned and add the accepted offer id to it
+        return 'offer';
+    }
+    async webhookCheckout(req) {
+        console.log('webhook received');
+        console.log('req.body ==========================');
+        console.log(req.body);
+        console.log('req.query ==========================');
+        console.log(req.query);
+        console.log('req.params ==========================');
+        console.log(req.params);
+        console.log('req.headers ==========================');
+        console.log(req.headers);
+        return 'received';
     }
 };
 exports.OfferService = OfferService;

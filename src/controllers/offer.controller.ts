@@ -52,6 +52,13 @@ class OfferController implements IOfferController {
     if (!offer) return next(new HttpException(400, 'something_went_wrong'));
     res.status(200).json(customResponse({ data: offer, success: true, message: 'offer_checked_out' }));
   });
+
+  webhookCheckout = asyncHandler(async (req: Request, res: Response) => {
+    console.log('webhook received');
+    // call the offerService to handle the paymob webhook
+    this.offerService.webhookCheckout(req);
+    res.status(200).json({ received: true });
+  });
 }
 
 export { OfferController };

@@ -189,5 +189,18 @@ class OfferService implements IOfferService {
 
     return 'offer';
   }
+
+  async webhookCheckout(req: any) {
+    console.log('webhook received');
+    console.log('req.body ==========================');
+    console.log(req.body);
+    console.log('req.query ==========================');
+    console.log(req.query);
+    console.log('req.params ==========================');
+    console.log(req.params);
+    console.log('req.headers ==========================');
+    console.log(req.headers);
+    return 'received';
+  }
 }
 export { OfferService };
