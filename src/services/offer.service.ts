@@ -224,11 +224,11 @@ class OfferService implements IOfferService {
 
     console.log('webhook received');
     console.log('req.body ==========================>>', req.body);
-    console.log('req.query ==========================>>', req.query);
-    console.log('req.params ==========================>>', req.params);
-    console.log('req.headers ==========================>>', req.headers);
+    // console.log('req.query ==========================>>', req.query);
+    // console.log('req.params ==========================>>', req.params);
+    // console.log('req.headers ==========================>>', req.headers);
 
-    return 'received';
+    return { 'req.body': req.body, 'req.query': req.query, 'req.params': req.params, 'req.headers': req.headers };
   }
 
   // private async sendNotification() {

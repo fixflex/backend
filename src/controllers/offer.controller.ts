@@ -56,8 +56,8 @@ class OfferController implements IOfferController {
   webhookCheckout = asyncHandler(async (req: Request, res: Response) => {
     console.log('webhook received');
     // call the offerService to handle the paymob webhook
-    this.offerService.webhookCheckout(req);
-    res.status(200).json({ received: true });
+    let results = await this.offerService.webhookCheckout(req.body);
+    res.status(200).json({ received: true, results });
   });
 }
 
