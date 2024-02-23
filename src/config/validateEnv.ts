@@ -35,6 +35,9 @@ const validateEnv = cleanEnv(process.env, {
   USER_AUTH_KEY: str(),
   PAYMOB_API_KEY: str(),
   PAYMOB_INTEGRATION_ID: num(),
+  PAYMOB_INTEGRATION_ID_WALLET: num(),
+  PAYMOB_PUBLIC_KEY: str(),
+  PAYMOB_SECRET_KEY: str(),
 });
 
 export default validateEnv;

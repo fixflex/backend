@@ -58,6 +58,29 @@ class OfferController implements IOfferController {
     let results = await this.offerService.webhookCheckout(req);
     res.status(200).json({ received: true, results });
   });
+
+  webhookCheckoutWallet = asyncHandler(async (req: Request, res: Response) => {
+    // call the offerService to handle the paymob webhook
+    console.log('webhookCheckoutWallet ===================>> ', req.query);
+    console.log('webhookCheckoutWallet ===================>> ', req.body);
+    // let results = await this.offerService.webhookCheckout(req);
+    res.status(200).json({ received: true });
+  });
+
+  webhookCheckoutSuccess = asyncHandler(async (req: Request, res: Response) => {
+    // call the offerService to handle the paymob webhook
+    // let results = await this.offerService.webhookCheckoutSuccess(req);
+    console.log('webhookCheckoutSuccess ===================>> ', req.query);
+    res.status(200).json({ message: 'webhookCheckoutSuccess', query: req.query });
+  });
+  webhookCheckoutSuccessWallet = asyncHandler(async (req: Request, res: Response) => {
+    // call the offerService to handle the paymob webhook
+    // let results = await this.offerService.webhookCheckoutSuccess(req);
+    // console.log('webhookCheckoutSuccess ===================>> ', req.query);
+    console.log('webhookCheckoutSuccessWallet ===================>> ', req.query);
+    console.log('webhookCheckoutSuccessWallet ===================>> ', req.body);
+    res.status(200).json({ message: 'webhookCheckoutSuccessWallet', query: req.query });
+  });
 }
 
 export { OfferController };
