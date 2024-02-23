@@ -36,7 +36,7 @@ class OfferRoute implements Routes {
     this.router.patch(`${this.path}/:id/accept/checkout`, isMongoId, this.offerController.checkoutOffer);
 
     // webhook-checkout
-    this.router.post(`${this.path}/webhook-checkout`, this.offerController.webhookCheckout);
+    this.router.get(`${this.path}/webhook-checkout`, this.offerController.webhookCheckout);
   }
 }
 
