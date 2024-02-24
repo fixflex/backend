@@ -16,7 +16,7 @@ class PaymobService {
       delivery_needed: 'false',
       amount_cents: offer.price * 100,
       currency: 'EGP',
-      merchant_order_id: `${Math.floor(Math.random() * 1000)}${offer._id}`,
+      merchant_order_id: `${Math.floor(Math.random() * 1000)}${offer._id.toString()}`, // TODO: fix this
       items: [
         {
           name: 'task',
@@ -37,6 +37,7 @@ class PaymobService {
       amount_cents: 96000,
       currency: 'EGP',
       order_id: order.id,
+      merchant_order_id: order.merchant_order_id,
       billing_data: {
         first_name: 'Mohamed',
         last_name: 'Ali',
@@ -77,7 +78,7 @@ class PaymobService {
   public static async initiateCardPayment(offer: any) {
     const paymobToken = await this.getPaymobToken();
     const order = await this.createOrder(paymobToken, offer);
-    // console.log('order card ====>> ', order);
+    console.log('order card ====>> ', order);
     const paymentToken = await this.getPaymentToken(paymobToken, order.id, env.PAYMOB_INTEGRATION_ID);
     return `https://accept.paymob.com/api/acceptance/iframes/826805?payment_token=${paymentToken.token}`;
   }
@@ -85,7 +86,7 @@ class PaymobService {
   public static async initiateWalletPayment(offer: any) {
     const paymobToken = await this.getPaymobToken();
     const order = await this.createOrder(paymobToken, offer);
-    // console.log('order wallet ====>> ', order);
+    console.log('order wallet ====>> ', order);
     const paymentToken = await this.getPaymentToken(paymobToken, order, env.PAYMOB_INTEGRATION_ID_WALLET);
     const walletPayment = await this.getPaymentTokenWallet(paymentToken.token);
     if (walletPayment) {
