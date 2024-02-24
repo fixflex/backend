@@ -66,6 +66,12 @@ let OfferController = class OfferController {
             let results = await this.offerService.webhookCheckout(req);
             res.status(200).json({ received: true, results });
         });
+        this.webhookCheckoutSuccess = (0, express_async_handler_1.default)(async (req, res) => {
+            // call the offerService to handle the paymob webhook
+            // let results = await this.offerService.webhookCheckoutSuccess(req);
+            console.log('webhookCheckoutSuccess ===================>> ', req.query);
+            res.status(200).json({ message: 'webhookCheckoutSuccess', query: req.query });
+        });
     }
 };
 exports.OfferController = OfferController;

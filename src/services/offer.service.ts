@@ -1,5 +1,3 @@
-import axios from 'axios';
-import crypto from 'crypto';
 import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
@@ -7,7 +5,6 @@ import { io } from '..';
 import { TaskerDao } from '../DB/dao';
 import { OfferDao } from '../DB/dao/offer.dao';
 import { TaskDao } from '../DB/dao/task.dao';
-import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import { NotificationOptions } from '../helpers/onesignal';
 import { OneSignalApiHandler } from '../helpers/onesignal';
@@ -16,6 +13,7 @@ import { TaskStatus } from '../interfaces/task.interface';
 import { IPagination } from './../interfaces/pagination.interface';
 import { ITask } from './../interfaces/task.interface';
 import { ITasker } from './../interfaces/tasker.interface';
+import { PaymobService } from './paymob.service';
 
 @autoInjectable()
 class OfferService implements IOfferService {
@@ -75,9 +73,6 @@ class OfferService implements IOfferService {
   }
 
   async getOffers(reqQuery: Query): Promise<{ offers: IOffer[]; pagination: IPagination | undefined }> {
-    // this.createHeader('GET', 'https://accept.paymob.com/api/auth/tokens', env.PAYMOB_PUBLIC_KEY, env.PAYMOB_INTEGRATION_ID, {});
-    let signature = this.createHeader('GET', '/api/v1/balance/', env.PAYMOB_SECRET_KEY, env.PAYMOB_PUBLIC_KEY, {});
-    console.log('signature ======================>>', signature);
     const { offers, pagination } = await this.offerDao.getOffers(reqQuery);
     return { offers, pagination };
   }
@@ -181,69 +176,20 @@ class OfferService implements IOfferService {
 
     // 5. check the PaymentMethod of the offer
     // 5.2 if the payment method is card then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
-    try {
-      if (payload.paymentMethod === 'card') {
-        // call paymob api to create a payment link and send it to the task owner to pay the task price
-        let paymobToken = await this.getPaymobToken();
-        console.log('paymobToken ======================>>');
-        console.log(paymobToken);
-        let order = await this.createOrder(paymobToken, offer);
-        console.log('order ======================>>');
-        console.log(order);
-        let paymentToken = await this.getPaymentToken(paymobToken, order.id);
-        console.log('paymentToken ======================>>');
-        console.log(paymentToken);
-        // https://accept.paymob.com/api/acceptance/iframes/826805?payment_token={payment_key_obtained_previously}
-        let iframe = `https://accept.paymob.com/api/acceptance/iframes/826805?payment_token=${paymentToken.token}`;
-        let iframe2 = `https://accept.paymob.com/api/acceptance/iframes/826806?payment_token=${paymentToken.token}`;
-        console.log('iframes');
-        console.log('iframe1', iframe);
-        console.log('iframe2', iframe2);
-        // send the payment link to the task owner
-        // update the task status to assigned and add the accepted offer id to it
-      }
-      // 5.3 if the payment method is wallet then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
-      else if (payload.paymentMethod === 'wallet') {
-        //   // 1. get paymobToken
-        //   let paymobToken = await this.getPaymobToken();
-        //   // 2  create order using paymob api and get the order id
-        //   let order = await this.createOrder(paymobToken, offer);
-        //   // 3. create payment token using paymob api and get the payment token
-        //   let paymentToken = await this.getPaymentToken(paymobToken, order.id);
-        //   // 4. send the payment link to the task owner
-        //   // 5. update the task status to assigned and add the accepted offer id to it
-
-        let paymobToken = await this.getPaymobToken();
-        console.log('paymobToken ======================>>');
-        console.log(paymobToken);
-        let order = await this.createOrder(paymobToken, offer);
-        console.log('order ======================>>');
-        console.log(order);
-
-        let paymentToken = await this.getPaymentToken(paymobToken, order.id);
-        console.log('paymentToken ======================>>');
-        console.log(paymentToken);
-        // https://accept.paymob.com/api/acceptance/iframes/826805?payment_token={payment_key_obtained_previously}
-        let iframe = `https://accept.paymob.com/api/acceptance/iframes/826805?payment_token=${paymentToken.token}`;
-        let iframe2 = `https://accept.paymob.com/api/acceptance/iframes/826806?payment_token=${paymentToken.token}`;
-        // let iframeForWallet = `https://accept.paymob.com/api/acceptance/iframes/01010101010?payment_token=${paymentToken.token}`;
-        // let iframeForWallet = `https://accept.paymobsolutions.com/api/acceptance/iframes/01066032817?payment_token=${paymentToken.token}`;
-        console.log('iframes');
-        console.log('iframe1 ==========>>> ', iframe);
-        console.log('iframe2 ============>>> ', iframe2);
-        // console.log('iframeForWallet ========>>> ', iframeForWallet);
-
-        let paymentTokenWallet = await this.getPaymentTokenWallet(paymentToken.token, order.id);
-        console.log('paymentTokenWallet ======================>>');
-        console.log(paymentTokenWallet.redirect_url);
-      }
-      // 5. update the task status to assigned and add the accepted offer id to it
-
-      return 'offer';
-    } catch (error: any) {
-      console.log('error ======================>>');
-      console.log(error);
+    if (payload.paymentMethod === 'card') {
+      const paymentLink = await PaymobService.initiateCardPayment(offer);
+      console.log('paymentLink ======================>>', paymentLink);
+    } else if (payload.paymentMethod === 'wallet') {
+      const walletPaymentLink = await PaymobService.initiateWalletPayment(offer);
+      console.log('walletPaymentLink ======================>>', walletPaymentLink.redirect_url);
     }
+    // 5. update the task status to assigned and add the accepted offer id to it
+
+    return 'offer';
+  }
+  catch(error: any) {
+    console.log('error ======================>>');
+    console.log(error);
   }
 
   async webhookCheckout(req: any) {
@@ -266,95 +212,95 @@ class OfferService implements IOfferService {
   //   // send notification to the owner of the task using 1- socket.io 2- firebase cloud messaging
   // }
 
-  private async getPaymobToken() {
-    // get the paymob token using axios
-    let paymobToken = await axios.post('https://accept.paymob.com/api/auth/tokens', {
-      api_key: env.PAYMOB_API_KEY,
-    });
+  // private async getPaymobToken() {
+  //   // get the paymob token using axios
+  //   let paymobToken = await axios.post('https://accept.paymob.com/api/auth/tokens', {
+  //     api_key: env.PAYMOB_API_KEY,
+  //   });
 
-    return paymobToken.data.token;
-  }
+  //   return paymobToken.data.token;
+  // }
 
-  private async createOrder(paymobToken: string, offer: any) {
-    // create an order using paymob api
-    let order = {
-      auth_token: paymobToken,
-      delivery_needed: 'false',
-      amount_cents: offer.price * 100,
-      currency: 'EGP',
-      merchant_order_id: Math.floor(Math.random() * 1000).toString() + offer._id, // TODO: fix this to be unique
-      items: [
-        {
-          name: 'task',
-          amount_cents: offer.price * 100,
-          description: 'task',
-          quantity: '1',
-        },
-      ],
-      notify_user_with_email: true,
-    };
-    let orderResponse = await axios.post('https://accept.paymob.com/api/ecommerce/orders', order);
-    return orderResponse.data;
-  }
+  // private async createOrder(paymobToken: string, offer: any) {
+  //   // create an order using paymob api
+  //   let order = {
+  //     auth_token: paymobToken,
+  //     delivery_needed: 'false',
+  //     amount_cents: offer.price * 100,
+  //     currency: 'EGP',
+  //     merchant_order_id: Math.floor(Math.random() * 1000).toString() + offer._id, // TODO: fix this to be unique
+  //     items: [
+  //       {
+  //         name: 'task',
+  //         amount_cents: offer.price * 100,
+  //         description: 'task',
+  //         quantity: '1',
+  //       },
+  //     ],
+  //     notify_user_with_email: true,
+  //   };
+  //   let orderResponse = await axios.post('https://accept.paymob.com/api/ecommerce/orders', order);
+  //   return orderResponse.data;
+  // }
 
-  private async getPaymentToken(paymobToken: string, orderId: string) {
-    let paymentToken = await axios.post('https://accept.paymob.com/api/acceptance/payment_keys', {
-      auth_token: paymobToken,
-      amount_cents: 96000,
-      currency: 'EGP',
-      // concatenate the orderId with rundom number to make it unique
-      order_id: orderId,
-      billing_data: {
-        apartment: '803',
-        email: 'ahmed4321mustafa5@gmail.com',
-        floor: '42',
-        first_name: 'Mohamed',
-        street: 'Ethan Land',
-        building: '8028',
-        phone_number: '+201111111111',
-        shipping_method: 'PKG',
-        postal_code: '01898',
-        city: 'Jaskolskiburgh',
-        country: 'CR',
-        last_name: 'Ali',
-        state: 'Utah',
-      },
-      // integration_id: env.PAYMOB_INTEGRATION_ID,
-      integration_id: env.PAYMOB_INTEGRATION_ID_WALLET,
-      lock_order_when_paid: 'false', // if true, the order will be locked and can't be paid again
-    });
+  // private async getPaymentToken(paymobToken: string, orderId: string) {
+  //   let paymentToken = await axios.post('https://accept.paymob.com/api/acceptance/payment_keys', {
+  //     auth_token: paymobToken,
+  //     amount_cents: 96000,
+  //     currency: 'EGP',
+  //     // concatenate the orderId with rundom number to make it unique
+  //     order_id: orderId,
+  //     billing_data: {
+  //       apartment: '803',
+  //       email: 'ahmed4321mustafa5@gmail.com',
+  //       floor: '42',
+  //       first_name: 'Mohamed',
+  //       street: 'Ethan Land',
+  //       building: '8028',
+  //       phone_number: '+201111111111',
+  //       shipping_method: 'PKG',
+  //       postal_code: '01898',
+  //       city: 'Jaskolskiburgh',
+  //       country: 'CR',
+  //       last_name: 'Ali',
+  //       state: 'Utah',
+  //     },
+  //     // integration_id: env.PAYMOB_INTEGRATION_ID,
+  //     integration_id: env.PAYMOB_INTEGRATION_ID_WALLET,
+  //     lock_order_when_paid: 'false', // if true, the order will be locked and can't be paid again
+  //   });
 
-    return paymentToken.data;
-  }
+  //   return paymentToken.data;
+  // }
 
-  private async getPaymentTokenWallet(paymentToken: string, _orderId: string) {
-    try {
-      // console.log('paymentToken ======================>>', paymentToken);
-      let response = await axios.post(`https://accept.paymob.com/api/acceptance/payments/pay`, {
-        source: {
-          identifier: '01010101010',
-          subtype: 'WALLET',
-        },
-        payment_token: paymentToken,
-      });
-      // console.log(response.data.redirect_url);
-      return response.data;
-    } catch (error: any) {
-      throw new Error(error);
-    }
-  }
-  // this.createHeader('GET', '/api/v1/balance/',env.PAYMOB_SECRET_KEY , env.PAYMOB_PUBLIC_KEY, env.PAYMOB_INTEGRATION_ID, {});
+  // private async getPaymentTokenWallet(paymentToken: string, _orderId: string) {
+  //   try {
+  //     // console.log('paymentToken ======================>>', paymentToken);
+  //     let response = await axios.post(`https://accept.paymob.com/api/acceptance/payments/pay`, {
+  //       source: {
+  //         identifier: '01010101010',
+  //         subtype: 'WALLET',
+  //       },
+  //       payment_token: paymentToken,
+  //     });
+  //     // console.log(response.data.redirect_url);
+  //     return response.data;
+  //   } catch (error: any) {
+  //     throw new Error(error);
+  //   }
+  // }
+  // // this.createHeader('GET', '/api/v1/balance/',env.PAYMOB_SECRET_KEY , env.PAYMOB_PUBLIC_KEY, env.PAYMOB_INTEGRATION_ID, {});
 
-  createHeader(requestMethod: any, url: any, secretKey: any, publicKey: any, payload: any) {
-    // const TIMESTAMP_FMT = "yyyyMMddTHHmm";
-    const timestamp = new Date().toISOString().slice(0, -5).replace(/[-:]/g, '');
-    const nonce = crypto.randomBytes(16).toString('hex');
-    const signatureString = requestMethod + url + publicKey + timestamp + (payload['service_id'] || '') + nonce;
-    // const signatureString = requestMethod + url + publicKey + timestamp + nonce;
-    const hmacSignature = crypto.createHmac('sha256', secretKey).update(signatureString).digest('hex');
-    const header = `${publicKey}.${timestamp}.${hmacSignature}.${nonce}`;
-    return Buffer.from(header).toString('base64');
-  }
+  // createHeader(requestMethod: any, url: any, secretKey: any, publicKey: any, payload: any) {
+  //   // const TIMESTAMP_FMT = "yyyyMMddTHHmm";
+  //   const timestamp = new Date().toISOString().slice(0, -5).replace(/[-:]/g, '');
+  //   const nonce = crypto.randomBytes(16).toString('hex');
+  //   const signatureString = requestMethod + url + publicKey + timestamp + (payload['service_id'] || '') + nonce;
+  //   // const signatureString = requestMethod + url + publicKey + timestamp + nonce;
+  //   const hmacSignature = crypto.createHmac('sha256', secretKey).update(signatureString).digest('hex');
+  //   const header = `${publicKey}.${timestamp}.${hmacSignature}.${nonce}`;
+  //   return Buffer.from(header).toString('base64');
+  // }
 }
 
 export { OfferService };

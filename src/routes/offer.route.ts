@@ -37,9 +37,10 @@ class OfferRoute implements Routes {
 
     // webhook-checkout
     this.router.post(`/webhook-checkout`, this.offerController.webhookCheckout);
+    this.router.get(`/webhook-checkout/success`, this.offerController.webhookCheckoutSuccess);
+
     // this.router.post(`/webhook-checkout/wallet`, this.offerController.webhookCheckoutWallet);
     // webhook success
-    // this.router.get(`/webhook-checkout/success`, this.offerController.webhookCheckoutSuccess);
     // this.router.get(`/webhook-checkout/success/wallet`, this.offerController.webhookCheckoutSuccessWallet);
     // webhook fail
     // this.router.get(`webhook-checkout/fail`, this.offerController.webhookCheckoutFail);

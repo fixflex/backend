@@ -25,8 +25,6 @@ let OfferRoute = class OfferRoute {
     }
     initializerRoutes() {
         //### offers routes that don't require authentication
-        // webhook-checkout
-        this.router.get(`${this.path}/webhook-checkout`, this.offerController.webhookCheckout);
         this.router.get(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.offerController.getOfferById);
         this.router.get(`${this.path}`, this.offerController.getOffers);
         // =================================================================== //
@@ -45,6 +43,14 @@ let OfferRoute = class OfferRoute {
         this.router.delete(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.offerController.deleteOffer);
         this.router.patch(`${this.path}/:id/accept`, isMongoID_validator_1.isMongoId, this.offerController.acceptOffer);
         this.router.patch(`${this.path}/:id/accept/checkout`, isMongoID_validator_1.isMongoId, this.offerController.checkoutOffer);
+        // webhook-checkout
+        this.router.post(`/webhook-checkout`, this.offerController.webhookCheckout);
+        this.router.get(`/webhook-checkout/success`, this.offerController.webhookCheckoutSuccess);
+        // this.router.post(`/webhook-checkout/wallet`, this.offerController.webhookCheckoutWallet);
+        // webhook success
+        // this.router.get(`/webhook-checkout/success/wallet`, this.offerController.webhookCheckoutSuccessWallet);
+        // webhook fail
+        // this.router.get(`webhook-checkout/fail`, this.offerController.webhookCheckoutFail);
     }
 };
 exports.OfferRoute = OfferRoute;
