@@ -39,4 +39,6 @@ let transactionSchema: Schema<ITransaction> = new Schema(
   { timestamps: true }
 );
 
-export default model<ITransaction>('Transaction', transactionSchema);
+let TransactionModel = model<ITransaction>('Transaction', transactionSchema);
+
+export { TransactionModel };
