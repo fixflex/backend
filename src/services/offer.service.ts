@@ -8,7 +8,7 @@ import { TaskDao } from '../DB/dao/task.dao';
 import HttpException from '../exceptions/HttpException';
 import { NotificationOptions } from '../helpers/onesignal';
 import { OneSignalApiHandler } from '../helpers/onesignal';
-import { IOffer, IOfferService, OfferStatus } from '../interfaces';
+import { IOffer, IOfferService, IUser, OfferStatus } from '../interfaces';
 import { TaskStatus } from '../interfaces/task.interface';
 import { IPagination } from './../interfaces/pagination.interface';
 import { ITask } from './../interfaces/task.interface';
@@ -158,7 +158,7 @@ class OfferService implements IOfferService {
     return offer;
   }
 
-  async checkoutOffer(id: string, userId: string, payload: any) {
+  async checkoutOffer(id: string, user: IUser, payload: any) {
     // 1. get the offer by id
     let offer = await this.offerDao.getOneByIdPopulate<{ taskId: ITask; taskerId: ITasker }>(
       id,
@@ -169,7 +169,7 @@ class OfferService implements IOfferService {
     if (!offer) throw new HttpException(404, 'resource_not_found');
     // 2. check if the user is the owner of the task
 
-    if (offer.taskId.userId.toString() !== userId.toString()) throw new HttpException(403, 'forbidden');
+    if (offer.taskId.userId.toString() !== user._id.toString()) throw new HttpException(403, 'forbidden');
     // 3. check if task status is open
 
     if (offer.taskId.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
@@ -177,10 +177,13 @@ class OfferService implements IOfferService {
     // 5. check the PaymentMethod of the offer
     // 5.2 if the payment method is card then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
     if (payload.paymentMethod === 'card') {
-      const paymentLink = await PaymobService.initiateCardPayment(offer);
+      let paymobService = new PaymobService();
+      const paymentLink = await paymobService.initiateCardPayment(offer, user);
       console.log('paymentLink ======================>>', paymentLink);
     } else if (payload.paymentMethod === 'wallet') {
-      const walletPaymentLink = await PaymobService.initiateWalletPayment(offer);
+      if (!payload.phoneNumber) throw new HttpException(400, 'phone_number_is_required'); // TODO: validate the phone number
+      let paymobService = new PaymobService();
+      const walletPaymentLink = await paymobService.initiateWalletPayment(offer, user, payload.phoneNumber);
       console.log('walletPaymentLink ======================>>', walletPaymentLink.redirect_url);
     }
     // 5. update the task status to assigned and add the accepted offer id to it

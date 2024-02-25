@@ -25,6 +25,7 @@ export interface IUser extends Document {
     publicId: string | null;
   };
   active: boolean;
+  phoneNumber: string;
   // ip address of the user when he registered or logged in
   ipAddress: string;
   createdAt?: string;
