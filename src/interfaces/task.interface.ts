@@ -1,9 +1,18 @@
 import { NextFunction } from 'express';
 import { Document } from 'mongoose';
 
-import { IPagination } from '.';
+import { IPagination, IUser } from '.';
 import { Request, Response } from '../helpers/generic';
-import { PaymentMethod } from './transaction.interface';
+import { PaymentMethod, TransactionType } from './transaction.interface';
+
+export interface PaymobTaskDetails {
+  taskId: string;
+  amount: number;
+  tasker: string;
+  user: IUser;
+  transactionType: TransactionType;
+  phoneNumber: string;
+}
 
 export enum TaskStatus {
   OPEN = 'OPEN',

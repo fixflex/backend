@@ -7,9 +7,10 @@ import HttpException from '../exceptions/HttpException';
 import { IPopulate } from '../helpers';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { NotificationOptions, OneSignalApiHandler } from '../helpers/onesignal';
-import { IPagination, ITask, ITaskService, OfferStatus, TaskStatus } from '../interfaces';
-import { PaymentMethod } from '../interfaces/transaction.interface';
+import { IPagination, ITask, ITaskService, IUser, OfferStatus, PaymobTaskDetails, TaskStatus } from '../interfaces';
+import { PaymentMethod, TransactionType } from '../interfaces/transaction.interface';
 import { IOffer } from './../interfaces/offer.interface';
+import { PaymobService } from './paymob.service';
 
 @autoInjectable()
 class TaskService implements ITaskService {
@@ -256,6 +257,67 @@ class TaskService implements ITaskService {
     ]);
     console.log(notificationTasker, notificationUser);
     return task;
+  };
+
+  // checkoutTask = async (id: string, userId: string, payload: { paymentMethod: PaymentMethod }) => {
+  //   // Step 1: Check if the task exists
+  //   const task = await this.taskDao.getOneByIdPopulate<{ acceptedOffer: IOffer }>(id, { path: 'acceptedOffer', select: '-__v' }, '', false);
+  //   if (!task) throw new HttpException(404, 'resource_not_found');
+
+  //   // Step 2: Check if the user is the owner of the task
+  //   if (task.userId !== userId.toString()) throw new HttpException(403, 'forbidden');
+
+  //   // Step 3: Check if the task is assigned to a tasker and not completed or canceled
+  //   if (task.status === TaskStatus.CANCELLED || task.status === TaskStatus.COMPLETED)
+  //     throw new HttpException(400, 'task is already completed or canceled');
+  //   if (task.status !== TaskStatus.ASSIGNED) throw new HttpException(400, 'bad_request');
+
+  //   // Step 4: Get the tasker who has the accepted offer
+
+  //   const tasker = await this.taskerDao.getOneById(task.acceptedOffer.taskerId, '', false);
+  //   if (!tasker) throw new HttpException(404, 'resource_not_found');
+
+  //   // Step 5: Handle the task payment method
+  //   if (payload.paymentMethod === PaymentMethod.CASH) {
+  //     const commission: number = parseFloat((task.acceptedOffer.price * tasker.commissionRate).toFixed(2));
+  //     task.commission = commission;
+  //     tasker.notPaidTasks.push(task._id);
+  //   }
+
+  // }
+
+  checkoutTask = async (id: string, user: IUser, payload: any) => {
+    // step 1: get the task by id and populate the acceptedOffer field
+    let task = await this.taskDao.getOneByIdPopulate<{ acceptedOffer: IOffer }>(id, { path: 'acceptedOffer', select: '-__v' }, '', false);
+    // step 2: check if the task exists
+    if (!task) throw new HttpException(404, 'resource_not_found');
+    // step 3: check if the user is the owner of the task
+    if (task.userId !== user._id.toString()) throw new HttpException(403, 'forbidden');
+    // step 4: check if the task is not completed, canceled or open (it should be assigned)
+    if (task.status !== TaskStatus.ASSIGNED) throw new HttpException(400, 'You should assign the task to a tasker first');
+    // step 5: create the order additonal data
+    let orderDetails: PaymobTaskDetails = {
+      taskId: task._id.toString(),
+      amount: task.acceptedOffer.price,
+      tasker: task.acceptedOffer.taskerId,
+      user: user,
+      transactionType: TransactionType.ONLINE_TASK_PAYMENT,
+      phoneNumber: payload.phoneNumber,
+    };
+
+    // step 6: check if the payment method in the payload is wallet
+    if (payload.paymentMethod === 'wallet') {
+      // step 6.1: check if there phone number in the payload object
+      if (!payload.phoneNumber) throw new HttpException(400, 'phone_number_required');
+      // step 6.2: call the paymob service to create the order and get the payment key
+      let paymobService = new PaymobService();
+      let paymentLink = await paymobService.initiateWalletPayment(orderDetails);
+      console.log('paymentLink ====================> ', paymentLink);
+      // step 6.3: return the payment link
+      return paymentLink;
+    }
+
+    throw new HttpException(400, 'invalid_payment_method');
   };
 }
 
