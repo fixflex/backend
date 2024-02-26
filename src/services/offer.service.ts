@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
@@ -5,6 +6,7 @@ import { io } from '..';
 import { TaskerDao } from '../DB/dao';
 import { OfferDao } from '../DB/dao/offer.dao';
 import { TaskDao } from '../DB/dao/task.dao';
+import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import { Request } from '../helpers';
 import { NotificationOptions } from '../helpers/onesignal';
@@ -201,30 +203,47 @@ class OfferService implements IOfferService {
   }
 
   async webhookCheckout(req: Request) {
-    // created_at
-    // currency
-    // error_occured
-    // has_parent_transaction
-    // obj.id
-    // integration_id
-    // is_3d_secure
-    // is_auth
-    // is_capture
-    // is_refunded
-    // is_standalone_payment
-    // is_voided
-    // order.id
-    // owner
-    // pending
-    // source_data.pan
-    // source_data.sub_type
-    // source_data.type
-    // success
-    // 1. extract the this fields [created_at, currency, error_occured, has_parent_transaction, obj.id, integration_id, is_3d_secure, is_auth, is_capture, is_refunded, is_standalone_payment, is_voided, order.id, owner, pending, source_data.pan, source_data.sub_type, source_data.type, success] from the request body to calculate the hmac signature and compare it with the signature in the request header to verify the request is coming from paymob
-    // if the signature is verified then continue to the next step
-    // save the transaction in the database in transactions collection
+    if (req.body.type === 'TRANSACTION') {
+      let obj = req.body.obj;
 
-    return 'webhook received successfully';
+      let amount_cents = obj.amount_cents;
+      let created_at = obj.created_at;
+      let currency = obj.currency;
+      let error_occured = obj.error_occured;
+      let has_parent_transaction = obj.has_parent_transaction;
+      let objId = obj.id;
+      let integration_id = obj.integration_id;
+      let is_3d_secure = obj.is_3d_secure;
+      let is_auth = obj.is_auth;
+      let is_capture = obj.is_capture;
+      let is_refunded = obj.is_refunded;
+      let is_standalone_payment = obj.is_standalone_payment;
+      let is_voided = obj.is_voided;
+      let order_id = obj.order.id;
+      let owner = obj.owner;
+      let pending = obj.pending;
+      let source_data_pan = obj.source_data.pan;
+      let source_data_sub_type = obj.source_data.sub_type;
+      let source_data_type = obj.source_data.type;
+      let success = obj.success;
+
+      let concatenedString = `${amount_cents}${created_at}${currency}${error_occured}${has_parent_transaction}${objId}${integration_id}${is_3d_secure}${is_auth}${is_capture}${is_refunded}${is_standalone_payment}${is_voided}${order_id}${owner}${pending}${source_data_pan}${source_data_sub_type}${source_data_type}${success}`;
+      // console.log('concatenedString ======================>>', { concatenedString });
+      let hmac = env.PAYMOB_HMAC_SECRET;
+      let hash = crypto.createHmac('sha512', hmac).update(concatenedString).digest('hex');
+      // console.log('hash ======================>>', hash);
+      // console.log('signature ======================>>', req.query.hmac);
+
+      if (hash !== req.query.hmac) {
+        console.log('hash !== req.query.hmac ======================>>');
+        return 'webhook received successfully';
+      }
+
+      console.log('printe 3 empty lines \n\n\n');
+      console.log('obj ======================>>', obj);
+
+      return 'webhook received successfully';
+    }
   }
 }
 

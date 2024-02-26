@@ -38,6 +38,7 @@ const validateEnv = cleanEnv(process.env, {
   PAYMOB_INTEGRATION_ID_WALLET: num(),
   PAYMOB_PUBLIC_KEY: str(),
   PAYMOB_SECRET_KEY: str(),
+  PAYMOB_HMAC_SECRET: str(),
 });
 
 export default validateEnv;
