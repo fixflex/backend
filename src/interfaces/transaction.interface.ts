@@ -8,7 +8,7 @@ export enum TransactionType {
 
 export enum PaymentMethod {
   CASH = 'CASH',
-  ONLINE = 'ONLINE',
+  ONLINE_PAYMENT = 'ONLINE_PAYMENT',
   // CARD = 'CARD',
   // WALLET = 'WALLET',
 }
@@ -17,9 +17,9 @@ export interface ITransaction {
   transactionId: string;
   amount: number;
   transactionType: TransactionType;
-  wallet?: {
-    phoneNumber: string;
-  };
+  // wallet?: {
+  //   phoneNumber: string;
+  // };
   pinding: boolean;
   success: boolean;
   orderId: string;
