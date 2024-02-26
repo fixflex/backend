@@ -6,10 +6,12 @@ import { TaskerDao } from '../DB/dao';
 import { OfferDao } from '../DB/dao/offer.dao';
 import { TaskDao } from '../DB/dao/task.dao';
 import HttpException from '../exceptions/HttpException';
+import { Request } from '../helpers';
 import { NotificationOptions } from '../helpers/onesignal';
 import { OneSignalApiHandler } from '../helpers/onesignal';
 import { IOffer, IOfferService, IUser, OfferStatus } from '../interfaces';
 import { TaskStatus } from '../interfaces/task.interface';
+import { TransactionType } from '../interfaces/transaction.interface';
 import { IPagination } from './../interfaces/pagination.interface';
 import { ITask } from './../interfaces/task.interface';
 import { ITasker } from './../interfaces/tasker.interface';
@@ -176,14 +178,17 @@ class OfferService implements IOfferService {
 
     // 5. check the PaymentMethod of the offer
     // 5.2 if the payment method is card then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
+    let orderData = {
+      TransactionType: TransactionType.ONLINE_TASK_PAYMENT,
+    };
     if (payload.paymentMethod === 'card') {
       let paymobService = new PaymobService();
-      const paymentLink = await paymobService.initiateCardPayment(offer, user);
+      const paymentLink = await paymobService.initiateCardPayment(offer, user, orderData);
       console.log('paymentLink ======================>>', paymentLink);
     } else if (payload.paymentMethod === 'wallet') {
       if (!payload.phoneNumber) throw new HttpException(400, 'phone_number_is_required'); // TODO: validate the phone number
       let paymobService = new PaymobService();
-      const walletPaymentLink = await paymobService.initiateWalletPayment(offer, user, payload.phoneNumber);
+      const walletPaymentLink = await paymobService.initiateWalletPayment(offer, user, orderData, payload.phoneNumber);
       console.log('walletPaymentLink ======================>>', walletPaymentLink.redirect_url);
     }
     // 5. update the task status to assigned and add the accepted offer id to it
@@ -195,18 +200,29 @@ class OfferService implements IOfferService {
     console.log(error);
   }
 
-  async webhookCheckout(req: any) {
-    // paymob api will send a webhook to this endpoint after the payment is done
-    // 1. get the payment id from the request body
-    // 2. get the payment details from paymob api
-    // 3. get the order id from the payment details
-    // 4. update the order status to paid
-
-    console.log('webhook received');
-    console.log('req.body ==========================>>', req.body);
-    console.log('req.query ==========================>>', req.query);
-    console.log('req.params ==========================>>', req.params);
-    // console.log('req.headers ==========================>>', req.headers);
+  async webhookCheckout(req: Request) {
+    // created_at
+    // currency
+    // error_occured
+    // has_parent_transaction
+    // obj.id
+    // integration_id
+    // is_3d_secure
+    // is_auth
+    // is_capture
+    // is_refunded
+    // is_standalone_payment
+    // is_voided
+    // order.id
+    // owner
+    // pending
+    // source_data.pan
+    // source_data.sub_type
+    // source_data.type
+    // success
+    // 1. extract the this fields [created_at, currency, error_occured, has_parent_transaction, obj.id, integration_id, is_3d_secure, is_auth, is_capture, is_refunded, is_standalone_payment, is_voided, order.id, owner, pending, source_data.pan, source_data.sub_type, source_data.type, success] from the request body to calculate the hmac signature and compare it with the signature in the request header to verify the request is coming from paymob
+    // if the signature is verified then continue to the next step
+    // save the transaction in the database in transactions collection
 
     return 'webhook received successfully';
   }
