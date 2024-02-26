@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose';
 
-import { ITransaction, PaymentMethod, TransactionStatus, TransactionType } from '../../interfaces/transaction.interface';
+import { ITransactionDocument, TransactionType } from '../../interfaces/transaction.interface';
 
-let transactionSchema: Schema<ITransaction> = new Schema(
+let transactionSchema: Schema<ITransactionDocument> = new Schema(
   {
     transactionId: {
       type: String,
@@ -18,16 +18,6 @@ let transactionSchema: Schema<ITransaction> = new Schema(
       enum: TransactionType,
       required: true,
     },
-    status: {
-      type: String,
-      enum: TransactionStatus,
-      required: true,
-    },
-    paymentMethod: {
-      type: String,
-      enum: PaymentMethod,
-      required: true,
-    },
     wallet: {
       phoneNumber: {
         type: String,
@@ -35,10 +25,22 @@ let transactionSchema: Schema<ITransaction> = new Schema(
         maxlength: 11,
       },
     },
+    pinding: {
+      type: Boolean,
+      required: true,
+    },
+    success: {
+      type: Boolean,
+      required: true,
+    },
+    orderId: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-let TransactionModel = model<ITransaction>('Transaction', transactionSchema);
+let TransactionModel = model<ITransactionDocument>('Transaction', transactionSchema);
 
 export { TransactionModel };

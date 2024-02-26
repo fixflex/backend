@@ -15,17 +15,6 @@ export enum TaskStatus {
   // CANCELED = 'CANCELED',
 }
 
-// type Address = {
-//   apartment: string;
-//   floor: string;
-//   building: string;
-//   street: string;
-//   city: string;
-//   country: string;
-//   state: string;
-//   zip_code: string;
-// };
-
 export enum TaskTime {
   MORNING = 'MORNING',
   MIDDAY = 'MIDDAY',
@@ -36,7 +25,6 @@ export enum TaskTime {
 export interface ITask extends Document {
   _id: string;
   userId: string;
-  // taskerId: { type: Schema.Types.ObjectId; ref: 'Tasker' };
   dueDate: {
     on: Date;
     before: Date;
@@ -69,24 +57,9 @@ export interface ITask extends Document {
   acceptedOffer: string | undefined;
   createdAt?: string;
   updatedAt?: string;
-  // ======================================================================================================== //
-  transcactionId: string;
   paymentMethod: PaymentMethod;
   commission: number;
   commissionAfterDescount: number;
-  // paymentMethod: {
-  //   type: string;
-  //   card: {
-  //     cardNumber: string;
-  //     cardHolderName: string;
-  //     expiryDate: string;
-  //     cvc: string;
-  //   };
-  //   vodafoneCash: {
-  //     phoneNumber: string;
-  //     pin: string;
-  //   };
-  // };
 }
 
 export interface ITaskController {

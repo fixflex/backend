@@ -39,7 +39,7 @@ export interface ITasker extends Document {
   netEarnings: number;
   completedTasks: string[];
   commissionRate: number;
-
+  balance: number; // the amount of money that the tasker has in his account (wallet)
   createdAt: Date;
   updatedAt: Date;
 

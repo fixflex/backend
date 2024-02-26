@@ -6,6 +6,7 @@ import { io } from '..';
 import { TaskerDao } from '../DB/dao';
 import { OfferDao } from '../DB/dao/offer.dao';
 import { TaskDao } from '../DB/dao/task.dao';
+import { TransactionDao } from '../DB/dao/transaction.dao';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import { Request } from '../helpers';
@@ -13,7 +14,7 @@ import { NotificationOptions } from '../helpers/onesignal';
 import { OneSignalApiHandler } from '../helpers/onesignal';
 import { IOffer, IOfferService, IUser, OfferStatus } from '../interfaces';
 import { TaskStatus } from '../interfaces/task.interface';
-import { TransactionType } from '../interfaces/transaction.interface';
+import { ITransaction, TransactionType } from '../interfaces/transaction.interface';
 import { IPagination } from './../interfaces/pagination.interface';
 import { ITask } from './../interfaces/task.interface';
 import { ITasker } from './../interfaces/tasker.interface';
@@ -25,6 +26,7 @@ class OfferService implements IOfferService {
     private offerDao: OfferDao,
     private taskerDao: TaskerDao,
     private taskDao: TaskDao,
+    private transactionDao: TransactionDao,
     private oneSignalApiHandler: OneSignalApiHandler
   ) {}
 
@@ -228,19 +230,46 @@ class OfferService implements IOfferService {
       let success = obj.success;
 
       let concatenedString = `${amount_cents}${created_at}${currency}${error_occured}${has_parent_transaction}${objId}${integration_id}${is_3d_secure}${is_auth}${is_capture}${is_refunded}${is_standalone_payment}${is_voided}${order_id}${owner}${pending}${source_data_pan}${source_data_sub_type}${source_data_type}${success}`;
-      // console.log('concatenedString ======================>>', { concatenedString });
       let hmac = env.PAYMOB_HMAC_SECRET;
       let hash = crypto.createHmac('sha512', hmac).update(concatenedString).digest('hex');
-      // console.log('hash ======================>>', hash);
-      // console.log('signature ======================>>', req.query.hmac);
 
       if (hash !== req.query.hmac) {
-        console.log('hash !== req.query.hmac ======================>>');
-        return 'webhook received successfully';
+        return '';
       }
 
-      console.log('printe 3 empty lines \n\n\n');
-      console.log('obj ======================>>', obj);
+      // 1. check the transaction type
+      // 1.1 if the transaction type is ONLINE_TASK_PAYMENT then update the tasker balance, totalEarnings, netEarnings
+      // promise.all for the 3 updates and save the transaction
+
+      // transactionId: string;
+      // amount: number;
+      // transactionType: TransactionType;
+      // wallet?: {
+      //   phoneNumber: string;
+      // };
+      // pinding: boolean;
+      // success: boolean;
+      // orderId: string;
+
+      let transaction: ITransaction = {
+        transactionId: objId,
+        amount: amount_cents,
+        transactionType: TransactionType.ONLINE_TASK_PAYMENT,
+        wallet: {
+          phoneNumber: source_data_pan,
+        },
+        pinding: pending,
+        success,
+        orderId: order_id,
+      };
+
+      let newTransaction = await this.transactionDao.create(transaction);
+      let updatedTasker = await this.taskerDao.updateOneById(owner, {
+        $inc: { balance: success ? amount_cents : 0, totalEarnings: amount_cents, netEarnings: amount_cents },
+      });
+      console.log('updatedTasker ======================>>', updatedTasker);
+      console.log('newTransaction ======================>>', newTransaction);
+      // 1.2 if the transaction type is PLATFORM_COMMISSION then update the platform balance
 
       return 'webhook received successfully';
     }
