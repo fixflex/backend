@@ -306,14 +306,22 @@ class TaskService implements ITaskService {
     };
 
     // step 6: check if the payment method in the payload is wallet
+    let paymentLink: string = '';
     if (payload.paymentMethod === 'wallet') {
       // step 6.1: check if there phone number in the payload object
       if (!payload.phoneNumber) throw new HttpException(400, 'phone_number_required');
       // step 6.2: call the paymob service to create the order and get the payment key
       let paymobService = new PaymobService();
-      let paymentLink = await paymobService.initiateWalletPayment(orderDetails);
+      paymentLink = await paymobService.initiateWalletPayment(orderDetails);
       console.log('paymentLink ====================> ', paymentLink);
       // step 6.3: return the payment link
+      return paymentLink;
+    } else if (payload.paymentMethod === 'card') {
+      // step 6.4: call the paymob service to create the order and get the payment key
+      let paymobService = new PaymobService();
+      paymentLink = await paymobService.initiateCardPayment(orderDetails);
+      console.log('paymentLink ====================> ', paymentLink);
+      // step 6.5: return the payment link
       return paymentLink;
     }
 
