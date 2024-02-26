@@ -58,6 +58,7 @@ export interface ITask extends Document {
   createdAt?: string;
   updatedAt?: string;
   paymentMethod: PaymentMethod;
+  paid: boolean;
   commission: number;
   commissionAfterDescount: number;
 }

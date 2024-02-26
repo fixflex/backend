@@ -18,7 +18,8 @@ class PaymobService {
         delivery_needed: 'false',
         amount_cents: offer.price * 100,
         currency: 'EGP',
-        merchant_order_id: `${Math.floor(Math.random() * 1000)}${offer._id.toString()}`, // TODO: fix this
+        // merchant_order_id: `${Math.floor(Math.random() * 1000)}${offer._id.toString()}`, // TODO: fix this
+        merchant_order_id: offer._id.toString(),
         items: [],
         notify_user_with_email: true,
         data: orderData,

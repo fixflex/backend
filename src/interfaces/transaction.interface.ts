@@ -6,11 +6,12 @@ export enum TransactionType {
   TASKER_WITHDRAWAL = 'TASKER_WITHDRAWAL',
 }
 
-// export enum PaymentMethod {
-//   CASH = 'CASH',
-//   CARD = 'CARD',
-//   WALLET = 'WALLET',
-// }
+export enum PaymentMethod {
+  CASH = 'CASH',
+  ONLINE = 'ONLINE',
+  // CARD = 'CARD',
+  // WALLET = 'WALLET',
+}
 
 export interface ITransaction {
   transactionId: string;
@@ -22,6 +23,7 @@ export interface ITransaction {
   pinding: boolean;
   success: boolean;
   orderId: string;
+  taskId: string;
 }
 
 export interface ITransactionDocument extends ITransaction, Document {}

@@ -101,25 +101,10 @@ let taskSchema: Schema<ITask> = new Schema(
       type: String,
       ref: 'Offer',
     },
-    // ======================================================================================================== //
-    transcactionId: {
-      type: String,
-      ref: 'Transaction',
-    },
     paymentMethod: {
       type: String,
       enum: Object.values(PaymentMethod),
       default: PaymentMethod.CASH,
-      // card: {
-      //   cardNumber: String,
-      //   cardHolderName: String,
-      //   expiryDate: String,
-      //   cvc: String,
-      // },
-      // vodafoneCash: {
-      //   phoneNumber: String,
-      //   pin: String,
-      // },
     },
     commission: {
       type: Number,
@@ -128,6 +113,10 @@ let taskSchema: Schema<ITask> = new Schema(
     commissionAfterDescount: {
       type: Number,
       // default: 0,
+    },
+    paid: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

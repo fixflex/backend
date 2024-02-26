@@ -73,8 +73,10 @@ export const createTaskValidator = [
   check('status').isEmpty().withMessage('not_allowed'),
   check('offers').isEmpty().withMessage('not_allowed'),
   check('acceptedOffer').isEmpty().withMessage('not_allowed'),
+  check('paid').isEmpty().withMessage('not_allowed'),
   check('createdAt').isEmpty().withMessage('not_allowed'),
   check('updatedAt').isEmpty().withMessage('not_allowed'),
+
   validatorMiddleware,
 ];
 
@@ -143,6 +145,7 @@ export const updateTaskValidator = [
   check('status').isEmpty().withMessage('not_allowed'),
   check('taskerId').isEmpty().withMessage('not_allowed'),
   check('acceptedOffer').isEmpty().withMessage('not_allowed'),
+  check('paid').isEmpty().withMessage('not_allowed'),
   check('createdAt').isEmpty().withMessage('not_allowed'),
   check('updatedAt').isEmpty().withMessage('not_allowed'),
   validatorMiddleware,

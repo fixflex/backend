@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-import { ITransactionDocument, TransactionType } from '../../interfaces/transaction.interface';
+import { ITransaction, ITransactionDocument, TransactionType } from '../../interfaces/transaction.interface';
 
 let transactionSchema: Schema<ITransactionDocument> = new Schema(
   {
@@ -41,6 +41,6 @@ let transactionSchema: Schema<ITransactionDocument> = new Schema(
   { timestamps: true }
 );
 
-let TransactionModel = model<ITransactionDocument>('Transaction', transactionSchema);
+let TransactionModel = model<ITransaction>('Transaction', transactionSchema);
 
 export { TransactionModel };
