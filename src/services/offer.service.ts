@@ -242,14 +242,16 @@ class OfferService implements IOfferService {
           taskId: obj.order.merchant_order_id,
         };
 
-        let newTransaction = await this.transactionDao.create(transaction);
-        console.log('newTransaction ======================>>', newTransaction);
+        // let newTransaction =
+        await this.transactionDao.create(transaction);
+        // console.log('newTransaction ======================>>', newTransaction);
         if (obj.success) {
-          let updatedTask = await this.taskDao.updateOneById(obj.order.merchant_order_id, {
+          // let updatedTask =
+          await this.taskDao.updateOneById(obj.order.merchant_order_id, {
             paid: true,
             paymentMethod: PaymentMethod.ONLINE_PAYMENT,
           });
-          console.log('updatedTask ======================>>', updatedTask);
+          // console.log('updatedTask ======================>>', updatedTask);
         }
 
         return 'webhook received successfully';

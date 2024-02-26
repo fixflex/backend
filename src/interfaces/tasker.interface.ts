@@ -9,7 +9,6 @@ export interface ITasker extends Document {
   userId: string;
   rating: number;
   bio: string;
-  // completedTasks: number;
   categories: string[];
   phoneNumber: string;
   location: {

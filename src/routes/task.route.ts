@@ -27,7 +27,7 @@ class TaskRoute implements Routes {
     // uplaodTaskImages,
     this.router.patch(`${this.path}/:id`, isMongoId, updateTaskValidator, this.taskController.updateTask);
     this.router.patch(`${this.path}/:id/images`, isMongoId, this.taskController.taskImages, this.taskController.uploadTaskImages);
-    this.router.delete(`${this.path}/:id`, isMongoId, this.taskController.deleteTask);
+    // this.router.delete(`${this.path}/:id`, isMongoId, this.taskController.deleteTask);
 
     // checkout
     this.router.patch(`${this.path}/checkout/:id`, isMongoId, this.taskController.checkoutTask);
