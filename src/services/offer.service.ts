@@ -12,13 +12,12 @@ import HttpException from '../exceptions/HttpException';
 import { Request } from '../helpers';
 import { NotificationOptions } from '../helpers/onesignal';
 import { OneSignalApiHandler } from '../helpers/onesignal';
-import { IOffer, IOfferService, IUser, OfferStatus } from '../interfaces';
+import { IOffer, IOfferService, OfferStatus } from '../interfaces';
 import { TaskStatus } from '../interfaces/task.interface';
-import { ITransaction, TransactionType } from '../interfaces/transaction.interface';
+import { ITransaction, PaymentMethod, TransactionType } from '../interfaces/transaction.interface';
 import { IPagination } from './../interfaces/pagination.interface';
 import { ITask } from './../interfaces/task.interface';
 import { ITasker } from './../interfaces/tasker.interface';
-import { PaymobService } from './paymob.service';
 
 @autoInjectable()
 class OfferService implements IOfferService {
@@ -50,6 +49,8 @@ class OfferService implements IOfferService {
     // 2. check if the task is exist and status is open
     let task = await this.taskDao.getOne({ _id: offer.taskId });
     if (!task) throw new HttpException(400, 'Task_not_found');
+    // 2.1 check that the tasker is not the owner of the task
+    if (task.userId === userId) throw new HttpException(400, 'You_cant_make_an_offer_on_your_task');
     if (task.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
     // 3. check if the tasker already made an offer on this task, if yes return an error
     let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });
@@ -164,97 +165,98 @@ class OfferService implements IOfferService {
     return offer;
   }
 
-  async checkoutOffer(id: string, user: IUser, payload: any) {
-    // 1. get the offer by id
-    let offer = await this.offerDao.getOneByIdPopulate<{ taskId: ITask; taskerId: ITasker }>(
-      id,
-      { path: 'taskId taskerId', select: '' },
-      '',
-      false
-    );
-    if (!offer) throw new HttpException(404, 'resource_not_found');
-    // 2. check if the user is the owner of the task
-    if (offer.taskId.userId.toString() !== user._id.toString()) throw new HttpException(403, 'forbidden');
-    // 3. check if task status is open
-    if (offer.taskId.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
-    // 5. check the PaymentMethod of the offer
-    // 5.2 if the payment method is card then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
-    let orderData = {
-      TransactionType: TransactionType.ONLINE_TASK_PAYMENT,
-      taskerId: offer.taskerId,
-    };
-    let paymentLink;
-    if (payload.paymentMethod === 'card') {
-      let paymobService = new PaymobService();
-      paymentLink = await paymobService.initiateCardPayment(offer, user, orderData);
-      console.log('paymentLink ======================>>', paymentLink);
-    } else if (payload.paymentMethod === 'wallet') {
-      if (!payload.phoneNumber) throw new HttpException(400, 'phone_number_is_required'); // TODO: validate the phone number
-      let paymobService = new PaymobService();
-      paymentLink = await paymobService.initiateWalletPayment(offer, user, orderData, payload.phoneNumber);
-      console.log('walletPaymentLink ======================>>', paymentLink.redirect_url);
-    }
-    return paymentLink;
-  }
-  catch(error: any) {
-    console.log('error ======================>>');
-    console.log(error);
-  }
+  // async checkoutOffer(id: string, user: IUser, payload: any) {
+  //   // 1. get the offer by id
+  //   let offer = await this.offerDao.getOneByIdPopulate<{ taskId: ITask; taskerId: ITasker }>(
+  //     id,
+  //     { path: 'taskId taskerId', select: '' },
+  //     '',
+  //     false
+  //   );
+  //   if (!offer) throw new HttpException(404, 'resource_not_found');
+  //   // 2. check if the user is the owner of the task
+  //   if (offer.taskId.userId !== user._id.toString()) throw new HttpException(403, 'forbidden');
+  //   // 3. check if task status is open
+  //   if (offer.taskId.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
+  //   // 5. check the PaymentMethod of the offer
+  //   // 5.2 if the payment method is card then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
+  //   let orderData = {
+  //     TransactionType: TransactionType.ONLINE_TASK_PAYMENT,
+  //     taskerId: offer.taskerId._id,
+  //   };
+  //   let paymentLink;
+  //   if (payload.paymentMethod === 'card') {
+  //     let paymobService = new PaymobService();
+  //     paymentLink = await paymobService.initiateCardPayment(offer, user, orderData);
+  //     console.log('paymentLink ======================>>', paymentLink);
+  //   } else if (payload.paymentMethod === 'wallet') {
+  //     if (!payload.phoneNumber) throw new HttpException(400, 'phone_number_is_required'); // TODO: validate the phone number
+  //     let paymobService = new PaymobService();
+  //     paymentLink = await paymobService.initiateWalletPayment(offer, user, orderData, payload.phoneNumber);
+  //     console.log('walletPaymentLink ======================>>', paymentLink.redirect_url);
+  //   }
+  //   return paymentLink;
+  // }
 
   async webhookCheckout(req: Request) {
-    if (req.body.type === 'TRANSACTION') {
-      let obj = req.body.obj;
+    try {
+      if (req.body.type === 'TRANSACTION') {
+        let obj = req.body.obj;
 
-      let amount_cents = obj.amount_cents;
-      let created_at = obj.created_at;
-      let currency = obj.currency;
-      let error_occured = obj.error_occured;
-      let has_parent_transaction = obj.has_parent_transaction;
-      let objId = obj.id;
-      let integration_id = obj.integration_id;
-      let is_3d_secure = obj.is_3d_secure;
-      let is_auth = obj.is_auth;
-      let is_capture = obj.is_capture;
-      let is_refunded = obj.is_refunded;
-      let is_standalone_payment = obj.is_standalone_payment;
-      let is_voided = obj.is_voided;
-      let order_id = obj.order.id;
-      let owner = obj.owner;
-      let pending = obj.pending;
-      let source_data_pan = obj.source_data.pan;
-      let source_data_sub_type = obj.source_data.sub_type;
-      let source_data_type = obj.source_data.type;
-      let success = obj.success;
+        let amount_cents = obj.amount_cents;
+        let created_at = obj.created_at;
+        let currency = obj.currency;
+        let error_occured = obj.error_occured;
+        let has_parent_transaction = obj.has_parent_transaction;
+        let objId = obj.id;
+        let integration_id = obj.integration_id;
+        let is_3d_secure = obj.is_3d_secure;
+        let is_auth = obj.is_auth;
+        let is_capture = obj.is_capture;
+        let is_refunded = obj.is_refunded;
+        let is_standalone_payment = obj.is_standalone_payment;
+        let is_voided = obj.is_voided;
+        let order_id = obj.order.id;
+        let owner = obj.owner;
+        let pending = obj.pending;
+        let source_data_pan = obj.source_data.pan;
+        let source_data_sub_type = obj.source_data.sub_type;
+        let source_data_type = obj.source_data.type;
+        let success = obj.success;
 
-      let concatenedString = `${amount_cents}${created_at}${currency}${error_occured}${has_parent_transaction}${objId}${integration_id}${is_3d_secure}${is_auth}${is_capture}${is_refunded}${is_standalone_payment}${is_voided}${order_id}${owner}${pending}${source_data_pan}${source_data_sub_type}${source_data_type}${success}`;
-      let hmac = env.PAYMOB_HMAC_SECRET;
-      let hash = crypto.createHmac('sha512', hmac).update(concatenedString).digest('hex');
+        let concatenedString = `${amount_cents}${created_at}${currency}${error_occured}${has_parent_transaction}${objId}${integration_id}${is_3d_secure}${is_auth}${is_capture}${is_refunded}${is_standalone_payment}${is_voided}${order_id}${owner}${pending}${source_data_pan}${source_data_sub_type}${source_data_type}${success}`;
+        let hmac = env.PAYMOB_HMAC_SECRET;
+        let hash = crypto.createHmac('sha512', hmac).update(concatenedString).digest('hex');
 
-      if (hash !== req.query.hmac) {
-        return '';
+        if (hash !== req.query.hmac) {
+          return '';
+        }
+
+        let transaction: ITransaction = {
+          transactionId: objId,
+          amount: amount_cents,
+          transactionType: TransactionType.ONLINE_TASK_PAYMENT,
+          pinding: pending,
+          success,
+          orderId: order_id,
+          taskId: obj.order.merchant_order_id,
+        };
+
+        let newTransaction = await this.transactionDao.create(transaction);
+        console.log('newTransaction ======================>>', newTransaction);
+        if (obj.success) {
+          let updatedTask = await this.taskDao.updateOneById(obj.order.merchant_order_id, {
+            paid: true,
+            paymentMethod: PaymentMethod.ONLINE_PAYMENT,
+          });
+          console.log('updatedTask ======================>>', updatedTask);
+        }
+
+        return 'webhook received successfully';
       }
-
-      let transaction: ITransaction = {
-        transactionId: objId,
-        amount: amount_cents,
-        transactionType: TransactionType.ONLINE_TASK_PAYMENT,
-        wallet: {
-          phoneNumber: source_data_pan,
-        },
-        pinding: pending,
-        success,
-        orderId: order_id,
-        taskId: obj.order.merchant_order_id,
-      };
-
-      let newTransaction = await this.transactionDao.create(transaction);
-      console.log('newTransaction ======================>>', newTransaction);
-      if (obj.success) {
-        // update the task paid field to true and the task payment method to card
-        await this.taskDao.updateOneById(order_id, { paid: true, paymentMethod: 'CARD' });
-      }
-
-      return 'webhook received successfully';
+    } catch (error: any) {
+      console.log('error ======================>>');
+      console.log(error);
     }
   }
 }

@@ -13,7 +13,7 @@ class OfferController implements IOfferController {
   constructor(private readonly offerService: OfferService) {}
 
   createOffer = asyncHandler(async (req: Request<IOffer>, res: Response, next: NextFunction) => {
-    const offer = await this.offerService.createOffer(req.body, req.user._id);
+    const offer = await this.offerService.createOffer(req.body, req.user._id.toString());
     if (!offer) return next(new HttpException(400, 'something_went_wrong'));
     res.status(201).json(customResponse({ data: offer, success: true, message: req.t('created_success') }));
   });
@@ -47,11 +47,11 @@ class OfferController implements IOfferController {
     res.status(200).json(customResponse({ data: offer, success: true, message: 'offer_accepted' }));
   });
 
-  checkoutOffer = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const offer = await this.offerService.checkoutOffer(req.params.id, req.user, req.body);
-    if (!offer) return next(new HttpException(400, 'something_went_wrong'));
-    res.status(200).json(customResponse({ data: offer, success: true, message: 'offer_checked_out' }));
-  });
+  // checkoutOffer = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  //   const offer = await this.offerService.checkoutOffer(req.params.id, req.user, req.body);
+  //   if (!offer) return next(new HttpException(400, 'something_went_wrong'));
+  //   res.status(200).json(customResponse({ data: offer, success: true, message: 'offer_checked_out' }));
+  // });
 
   webhookCheckout = asyncHandler(async (req: Request, res: Response) => {
     // call the offerService to handle the paymob webhook
@@ -59,12 +59,12 @@ class OfferController implements IOfferController {
     res.status(200).json({ received: true, results });
   });
 
-  webhookCheckoutSuccess = asyncHandler(async (_req: Request, res: Response) => {
+  webhookCheckoutSuccess = asyncHandler(async (req: Request, res: Response) => {
     // call the offerService to handle the paymob webhook
     // let results = await this.offerService.webhookCheckoutSuccess(req);
     // console.log('webhookCheckoutSuccess ===================>> ', req.query);
     // res.status(200).json({ message: 'webhookCheckoutSuccess', query: req.query, body: req.body, params: req.params });
-    res.status(200).json({ message: 'webhookCheckoutSuccess' });
+    res.status(200).json({ message: 'webhookCheckoutSuccess', query: req.query });
   });
   // webhookCheckoutWallet = asyncHandler(async (req: Request, res: Response) => {
   //   // call the offerService to handle the paymob webhook
