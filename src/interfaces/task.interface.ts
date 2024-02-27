@@ -32,7 +32,7 @@ export enum TaskTime {
 }
 //  TODO: Add question and answer to the task model
 export interface ITask extends Document {
-  _id: string;
+  // _id: string;
   userId: string;
   dueDate: {
     on: Date;
