@@ -154,7 +154,6 @@ class OfferService implements IOfferService {
       external_ids: [offer.taskerId.userId],
     };
 
-    // console.log(offer.taskerId.userId, offer.taskId._id.toString());
     // let notification =
     await this.oneSignalApiHandler.createNotification(notificationOptions);
     // console.log(notification);
@@ -165,44 +164,12 @@ class OfferService implements IOfferService {
     return offer;
   }
 
-  // async checkoutOffer(id: string, user: IUser, payload: any) {
-  //   // 1. get the offer by id
-  //   let offer = await this.offerDao.getOneByIdPopulate<{ taskId: ITask; taskerId: ITasker }>(
-  //     id,
-  //     { path: 'taskId taskerId', select: '' },
-  //     '',
-  //     false
-  //   );
-  //   if (!offer) throw new HttpException(404, 'resource_not_found');
-  //   // 2. check if the user is the owner of the task
-  //   if (offer.taskId.userId !== user._id.toString()) throw new HttpException(403, 'forbidden');
-  //   // 3. check if task status is open
-  //   if (offer.taskId.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
-  //   // 5. check the PaymentMethod of the offer
-  //   // 5.2 if the payment method is card then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
-  //   let orderData = {
-  //     TransactionType: TransactionType.ONLINE_TASK_PAYMENT,
-  //     taskerId: offer.taskerId._id,
-  //   };
-  //   let paymentLink;
-  //   if (payload.paymentMethod === 'card') {
-  //     let paymobService = new PaymobService();
-  //     paymentLink = await paymobService.initiateCardPayment(offer, user, orderData);
-  //     console.log('paymentLink ======================>>', paymentLink);
-  //   } else if (payload.paymentMethod === 'wallet') {
-  //     if (!payload.phoneNumber) throw new HttpException(400, 'phone_number_is_required'); // TODO: validate the phone number
-  //     let paymobService = new PaymobService();
-  //     paymentLink = await paymobService.initiateWalletPayment(offer, user, orderData, payload.phoneNumber);
-  //     console.log('walletPaymentLink ======================>>', paymentLink.redirect_url);
-  //   }
-  //   return paymentLink;
-  // }
-
   async webhookCheckout(req: Request) {
     try {
       if (req.body.type === 'TRANSACTION') {
         let obj = req.body.obj;
 
+        console.log('req.body ======================>>', req.body);
         let amount_cents = obj.amount_cents;
         let created_at = obj.created_at;
         let currency = obj.currency;
@@ -229,12 +196,21 @@ class OfferService implements IOfferService {
         let hash = crypto.createHmac('sha512', hmac).update(concatenedString).digest('hex');
 
         if (hash !== req.query.hmac) {
+          console.log('hash !== req.query.hmac');
           return '';
         }
 
+        // 1. check if the transaction is voided or refunded
+        // if (is_voided || is_refunded) {
+        //   let transaction = {
+
+        //   }
+        //   return 'webhook received successfully';
+        // }
+
         let transaction: ITransaction = {
           transactionId: objId,
-          amount: amount_cents,
+          amount: amount_cents / 100, // convert cents to EGP
           transactionType: TransactionType.ONLINE_TASK_PAYMENT,
           pinding: pending,
           success,
@@ -246,8 +222,9 @@ class OfferService implements IOfferService {
         await this.transactionDao.create(transaction);
         // console.log('newTransaction ======================>>', newTransaction);
         if (obj.success) {
+          let taskId = obj.order.merchant_order_id.slice(3); //  TODO: remove this line
           // let updatedTask =
-          await this.taskDao.updateOneById(obj.order.merchant_order_id, {
+          await this.taskDao.updateOneById(taskId, {
             paid: true,
             paymentMethod: PaymentMethod.ONLINE_PAYMENT,
           });
