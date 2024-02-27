@@ -174,26 +174,34 @@ class TaskService implements ITaskService {
       if (task.paid) {
         // 1. Get the transaction using paymob service
         let transaction = await this.paymobService.getTransactionInquiry(task._id.toString());
+        // let transaction = await this.paymobService.getTransactionInquiry('57365dd7c7e564c2af317434e16');
         if (!transaction) throw new HttpException(404, 'transaction_not_found');
-        console.log('transaction ====================> ', transaction);
+
         // 2. check if the transaction can be voided, if the transaction is in the same day void it, if not refund it
+        let refundOrVoid;
+        console.log('task.acceptedOffer.price ====================> ', task.acceptedOffer.price);
+        console.log('transaction.amount_cents ====================> ', transaction.amount_cents);
+        console.log(transaction.amount_cents - transaction.amount_cents * (1.75 / 100));
         if (new Date(transaction.created_at).toDateString() === new Date().toDateString()) {
           // 2.1 void the transaction
-          let voidResponse = await this.paymobService.voidTransaction(transaction.id);
-          console.log('voidResponse ====================> ', voidResponse);
+          refundOrVoid = await this.paymobService.voidTransaction(transaction.id);
+          console.log('voidResponse ====================> ', refundOrVoid);
         } else {
           // 2.2 refund the transaction and deduct 1.75% from the amount as a refund fee and send the rest to the user
-          let refundResponse = await this.paymobService.refundTransaction(
+
+          refundOrVoid = await this.paymobService.refundTransaction(
             transaction.id,
-            task.acceptedOffer.price - task.acceptedOffer.price * (1.75 / 100)
+            Math.round(transaction.amount_cents - transaction.amount_cents * (1.75 / 100))
           );
-          console.log('refundResponse ====================> ', refundResponse);
+          console.log('refundResponse ====================> ', refundOrVoid);
         }
 
+        let afds = await this.paymobService.handleTransactionWebhook(refundOrVoid);
+        console.log('afds ====================> ', afds);
         // change the paid field to false
         task.paid = false;
         // change the paymentMethod to CASH
-        task.paymentMethod = PaymentMethod.CASH;
+        // task.paymentMethod = PaymentMethod.CASH;
       }
     }
     // 5. Update the task status to CANCELED
@@ -243,7 +251,6 @@ class TaskService implements ITaskService {
       if (task.status !== TaskStatus.ASSIGNED) throw new HttpException(400, 'bad_request');
 
       // Step 4: Get the tasker who has the accepted offer
-
       const tasker = await this.taskerDao.getOneById(task.acceptedOffer.taskerId, '', false);
       if (!tasker) throw new HttpException(404, 'resource_not_found');
 
