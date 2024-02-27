@@ -17,13 +17,6 @@ let transactionSchema: Schema<ITransactionDocument> = new Schema(
       enum: TransactionType,
       required: true,
     },
-    // wallet: {
-    //   phoneNumber: {
-    //     type: String,
-    //     minlength: 11,
-    //     maxlength: 11,
-    //   },
-    // },
     pinding: {
       type: Boolean,
       required: true,

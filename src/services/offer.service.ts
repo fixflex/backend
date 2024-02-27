@@ -191,13 +191,37 @@ class OfferService implements IOfferService {
         let source_data_type = obj.source_data.type;
         let success = obj.success;
 
+        console.log('amount_cents ======================>>', amount_cents);
+        console.log('created_at ======================>>', created_at);
+        console.log('currency ======================>>', currency);
+        console.log('error_occured ======================>>', error_occured);
+        console.log('has_parent_transaction ======================>>', has_parent_transaction);
+        console.log('objId ======================>>', objId);
+        console.log('integration_id ======================>>', integration_id);
+        console.log('is_3d_secure ======================>>', is_3d_secure);
+        console.log('is_auth ======================>>', is_auth);
+        console.log('is_capture ======================>>', is_capture);
+        console.log('is_refunded ======================>>', is_refunded);
+        console.log('is_standalone_payment ======================>>', is_standalone_payment);
+        console.log('is_voided ======================>>', is_voided);
+        console.log('order_id ======================>>', order_id);
+        console.log('owner ======================>>', owner);
+        console.log('pending ======================>>', pending);
+        console.log('source_data_pan ======================>>', source_data_pan);
+        console.log('source_data_sub_type ======================>>', source_data_sub_type);
+        console.log('source_data_type ======================>>', source_data_type);
+        console.log('success ======================>>', success);
+
         let concatenedString = `${amount_cents}${created_at}${currency}${error_occured}${has_parent_transaction}${objId}${integration_id}${is_3d_secure}${is_auth}${is_capture}${is_refunded}${is_standalone_payment}${is_voided}${order_id}${owner}${pending}${source_data_pan}${source_data_sub_type}${source_data_type}${success}`;
+        console.log('concatenedString ======================>>', { concatenedString });
         let hmac = env.PAYMOB_HMAC_SECRET;
         let hash = crypto.createHmac('sha512', hmac).update(concatenedString).digest('hex');
 
         if (hash !== req.query.hmac) {
           console.log('hash !== req.query.hmac');
-          return '';
+          console.log('hash ======================>>', hash);
+          console.log('req.query.hmac ======================>>', req.query.hmac);
+          throw new HttpException(400, 'hash !== req.query.hmac');
         }
 
         // 1. check if the transaction is voided or refunded
@@ -205,24 +229,29 @@ class OfferService implements IOfferService {
         //   let transaction = {
 
         //   }
+
         //   return 'webhook received successfully';
         // }
 
         let transaction: ITransaction = {
           transactionId: objId,
           amount: amount_cents / 100, // convert cents to EGP
-          transactionType: TransactionType.ONLINE_TASK_PAYMENT,
+          transactionType: is_voided
+            ? TransactionType.VOID_TRANSACTION
+            : is_refunded
+            ? TransactionType.REFUND_TRANSACTION
+            : TransactionType.ONLINE_TASK_PAYMENT,
           pinding: pending,
           success,
           orderId: order_id,
           taskId: obj.order.merchant_order_id,
         };
 
-        // let newTransaction =
-        await this.transactionDao.create(transaction);
-        // console.log('newTransaction ======================>>', newTransaction);
+        let newTransaction = await this.transactionDao.create(transaction);
+        console.log('newTransaction ======================>>', newTransaction);
         if (obj.success) {
-          let taskId = obj.order.merchant_order_id.slice(3); //  TODO: remove this line
+          // let taskId = obj.order.merchant_order_id.slice(3); //  TODO: remove this line
+          let taskId = obj.order.merchant_order_id;
           // let updatedTask =
           await this.taskDao.updateOneById(taskId, {
             paid: true,

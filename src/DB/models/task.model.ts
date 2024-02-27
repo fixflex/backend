@@ -10,10 +10,6 @@ let taskSchema: Schema<ITask> = new Schema(
       ref: 'User',
       required: true,
     },
-    // taskerId: {
-    //   type: String,
-    //   ref: 'Tasker',
-    // },
     dueDate: {
       on: {
         type: Date,

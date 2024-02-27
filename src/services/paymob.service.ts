@@ -32,8 +32,8 @@ class PaymobService {
         delivery_needed: 'false',
         amount_cents: orderDetails.amount * 100,
         currency: 'EGP',
-        merchant_order_id: `${Math.floor(Math.random() * 1000)}${orderDetails.taskId}`, // TODO: fix this
-        // merchant_order_id: orderDetails.taskId,
+        // merchant_order_id: `${Math.floor(Math.random() * 1000)}${orderDetails.taskId}`, // TODO: fix this
+        merchant_order_id: orderDetails.taskId,
         items: [],
         notify_user_with_email: true,
         data: orderDetails,
