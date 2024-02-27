@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+// import crypto from 'crypto';
 import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
@@ -6,18 +6,19 @@ import { io } from '..';
 import { TaskerDao } from '../DB/dao';
 import { OfferDao } from '../DB/dao/offer.dao';
 import { TaskDao } from '../DB/dao/task.dao';
-import { TransactionDao } from '../DB/dao/transaction.dao';
-import env from '../config/validateEnv';
+// import { TransactionDao } from '../DB/dao/transaction.dao';
+// import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import { Request } from '../helpers';
 import { NotificationOptions } from '../helpers/onesignal';
 import { OneSignalApiHandler } from '../helpers/onesignal';
 import { IOffer, IOfferService, OfferStatus } from '../interfaces';
 import { TaskStatus } from '../interfaces/task.interface';
-import { ITransaction, PaymentMethod, TransactionType } from '../interfaces/transaction.interface';
+// import { ITransaction, PaymentMethod, TransactionType } from '../interfaces/transaction.interface';
 import { IPagination } from './../interfaces/pagination.interface';
 import { ITask } from './../interfaces/task.interface';
 import { ITasker } from './../interfaces/tasker.interface';
+import { PaymobService } from './paymob.service';
 
 @autoInjectable()
 class OfferService implements IOfferService {
@@ -25,7 +26,8 @@ class OfferService implements IOfferService {
     private offerDao: OfferDao,
     private taskerDao: TaskerDao,
     private taskDao: TaskDao,
-    private transactionDao: TransactionDao,
+    // private transactionDao: TransactionDao,
+    private paymobService: PaymobService,
     private oneSignalApiHandler: OneSignalApiHandler
   ) {}
 
@@ -165,108 +167,99 @@ class OfferService implements IOfferService {
   }
 
   async webhookCheckout(req: Request) {
-    try {
-      if (req.body.type === 'TRANSACTION') {
-        let obj = req.body.obj;
-
-        console.log('req.body ======================>>', req.body);
-        let amount_cents = obj.amount_cents;
-        let created_at = obj.created_at;
-        let currency = obj.currency;
-        let error_occured = obj.error_occured;
-        let has_parent_transaction = obj.has_parent_transaction;
-        let objId = obj.id;
-        let integration_id = obj.integration_id;
-        let is_3d_secure = obj.is_3d_secure;
-        let is_auth = obj.is_auth;
-        let is_capture = obj.is_capture;
-        let is_refunded = obj.is_refunded;
-        let is_standalone_payment = obj.is_standalone_payment;
-        let is_voided = obj.is_voided;
-        let order_id = obj.order.id;
-        let owner = obj.owner;
-        let pending = obj.pending;
-        let source_data_pan = obj.source_data.pan;
-        let source_data_sub_type = obj.source_data.sub_type;
-        let source_data_type = obj.source_data.type;
-        let success = obj.success;
-
-        console.log('amount_cents ======================>>', amount_cents);
-        console.log('created_at ======================>>', created_at);
-        console.log('currency ======================>>', currency);
-        console.log('error_occured ======================>>', error_occured);
-        console.log('has_parent_transaction ======================>>', has_parent_transaction);
-        console.log('objId ======================>>', objId);
-        console.log('integration_id ======================>>', integration_id);
-        console.log('is_3d_secure ======================>>', is_3d_secure);
-        console.log('is_auth ======================>>', is_auth);
-        console.log('is_capture ======================>>', is_capture);
-        console.log('is_refunded ======================>>', is_refunded);
-        console.log('is_standalone_payment ======================>>', is_standalone_payment);
-        console.log('is_voided ======================>>', is_voided);
-        console.log('order_id ======================>>', order_id);
-        console.log('owner ======================>>', owner);
-        console.log('pending ======================>>', pending);
-        console.log('source_data_pan ======================>>', source_data_pan);
-        console.log('source_data_sub_type ======================>>', source_data_sub_type);
-        console.log('source_data_type ======================>>', source_data_type);
-        console.log('success ======================>>', success);
-
-        let concatenedString = `${amount_cents}${created_at}${currency}${error_occured}${has_parent_transaction}${objId}${integration_id}${is_3d_secure}${is_auth}${is_capture}${is_refunded}${is_standalone_payment}${is_voided}${order_id}${owner}${pending}${source_data_pan}${source_data_sub_type}${source_data_type}${success}`;
-        console.log('concatenedString ======================>>', { concatenedString });
-        let hmac = env.PAYMOB_HMAC_SECRET;
-        let hash = crypto.createHmac('sha512', hmac).update(concatenedString).digest('hex');
-
-        if (hash !== req.query.hmac) {
-          console.log('hash !== req.query.hmac');
-          console.log('hash ======================>>', hash);
-          console.log('req.query.hmac ======================>>', req.query.hmac);
-          throw new HttpException(400, 'hash !== req.query.hmac');
-        }
-
-        // 1. check if the transaction is voided or refunded
-        // if (is_voided || is_refunded) {
-        //   let transaction = {
-
-        //   }
-
-        //   return 'webhook received successfully';
-        // }
-
-        let transaction: ITransaction = {
-          transactionId: objId,
-          amount: amount_cents / 100, // convert cents to EGP
-          transactionType: is_voided
-            ? TransactionType.VOID_TRANSACTION
-            : is_refunded
-            ? TransactionType.REFUND_TRANSACTION
-            : TransactionType.ONLINE_TASK_PAYMENT,
-          pinding: pending,
-          success,
-          orderId: order_id,
-          taskId: obj.order.merchant_order_id,
-        };
-
-        let newTransaction = await this.transactionDao.create(transaction);
-        console.log('newTransaction ======================>>', newTransaction);
-        if (obj.success) {
-          // let taskId = obj.order.merchant_order_id.slice(3); //  TODO: remove this line
-          let taskId = obj.order.merchant_order_id;
-          // let updatedTask =
-          await this.taskDao.updateOneById(taskId, {
-            paid: true,
-            paymentMethod: PaymentMethod.ONLINE_PAYMENT,
-          });
-          // console.log('updatedTask ======================>>', updatedTask);
-        }
-
-        return 'webhook received successfully';
-      }
-    } catch (error: any) {
-      console.log('error ======================>>');
-      console.log(error);
-    }
+    if (!req.body.obj.is_voided && !req.body.obj.is_refunded) this.paymobService.handleTransactionWebhook(req.body.obj, req.query.hmac); // Only handle the transaction if it's not voided or refunded
   }
 }
 
 export { OfferService };
+
+// try {
+//   if (req.body.type === 'TRANSACTION') {
+//     let obj = req.body.obj;
+//     // console.log('req.body ======================>>', req.body);
+//     let amount_cents = obj.amount_cents;
+//     let created_at = obj.created_at;
+//     let currency = obj.currency;
+//     let error_occured = obj.error_occured;
+//     let has_parent_transaction = obj.has_parent_transaction;
+//     let objId = obj.id;
+//     let integration_id = obj.integration_id;
+//     let is_3d_secure = obj.is_3d_secure;
+//     let is_auth = obj.is_auth;
+//     let is_capture = obj.is_capture;
+//     let is_refunded = obj.is_refunded;
+//     let is_standalone_payment = obj.is_standalone_payment;
+//     let is_voided = obj.is_voided;
+//     let order_id = obj.order.id;
+//     let owner = obj.owner;
+//     let pending = obj.pending;
+//     let source_data_pan = obj.source_data.pan;
+//     let source_data_sub_type = obj.source_data.sub_type;
+//     let source_data_type = obj.source_data.type;
+//     let success = obj.success;
+//     // console.log('amount_cents ======================>>', amount_cents);
+//     // console.log('created_at ======================>>', created_at);
+//     // console.log('currency ======================>>', currency);
+//     // console.log('error_occured ======================>>', error_occured);
+//     // console.log('has_parent_transaction ======================>>', has_parent_transaction);
+//     // console.log('objId ======================>>', objId);
+//     // console.log('integration_id ======================>>', integration_id);
+//     // console.log('is_3d_secure ======================>>', is_3d_secure);
+//     // console.log('is_auth ======================>>', is_auth);
+//     // console.log('is_capture ======================>>', is_capture);
+//     // console.log('is_refunded ======================>>', is_refunded);
+//     // console.log('is_standalone_payment ======================>>', is_standalone_payment);
+//     // console.log('is_voided ======================>>', is_voided);
+//     // console.log('order_id ======================>>', order_id);
+//     // console.log('owner ======================>>', owner);
+//     // console.log('pending ======================>>', pending);
+//     // console.log('source_data_pan ======================>>', source_data_pan);
+//     // console.log('source_data_sub_type ======================>>', source_data_sub_type);
+//     // console.log('source_data_type ======================>>', source_data_type);
+//     // console.log('success ======================>>', success);
+//     let concatenedString = `${amount_cents}${created_at}${currency}${error_occured}${has_parent_transaction}${objId}${integration_id}${is_3d_secure}${is_auth}${is_capture}${is_refunded}${is_standalone_payment}${is_voided}${order_id}${owner}${pending}${source_data_pan}${source_data_sub_type}${source_data_type}${success}`;
+//     console.log('concatenedString ======================>>', { concatenedString });
+//     let hmac = env.PAYMOB_HMAC_SECRET;
+//     let hash = crypto.createHmac('sha512', hmac).update(concatenedString).digest('hex');
+//     if (hash !== req.query.hmac) {
+//       console.log('hash !== req.query.hmac');
+//       console.log('hash ======================>>', hash);
+//       console.log('req.query.hmac ======================>>', req.query.hmac);
+//       throw new HttpException(400, 'hash !== req.query.hmac');
+//     }
+//     let transaction: ITransaction = {
+//       transactionId: objId,
+//       amount: amount_cents / 100, // convert cents to EGP
+//       transactionType: is_voided
+//         ? TransactionType.VOID_TRANSACTION
+//         : is_refunded
+//         ? TransactionType.REFUND_TRANSACTION
+//         : TransactionType.ONLINE_TASK_PAYMENT,
+//       pinding: pending,
+//       success,
+//       orderId: order_id,
+//       taskId: obj.order.merchant_order_id,
+//     };
+//     let newTransaction = await this.transactionDao.create(transaction);
+//     console.log('newTransaction ======================>>', newTransaction);
+//     if (obj.success) {
+//       let taskId = obj.order.merchant_order_id;
+//       console.log('taskId ======================>>', taskId);
+//       if (!taskId.match(/^[0-9a-fA-F]{24}$/)) {
+//         taskId = obj.order.merchant_order_id.slice(3); //  TODO: remove this line
+//         console.log('taskId ======================>>', taskId);
+//       }
+//       // let updatedTask =
+//       await this.taskDao.updateOneById(taskId, {
+//         paid: true,
+//         paymentMethod: PaymentMethod.ONLINE_PAYMENT,
+//       });
+//       // console.log('updatedTask ======================>>', updatedTask);
+//     }
+//     return 'webhook received successfully';
+//   }
+// } catch (error: any) {
+//   console.log('error ======================>>');
+//   console.log(error);
+// }
+//  }
