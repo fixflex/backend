@@ -19,7 +19,8 @@ class TaskService implements ITaskService {
     private readonly categoryDao: CategoryDao,
     private readonly offerDao: OfferDao,
     private readonly taskerDao: TaskerDao,
-    private readonly oneSignalApiHandler: OneSignalApiHandler
+    private readonly oneSignalApiHandler: OneSignalApiHandler,
+    private readonly paymobService: PaymobService
   ) {}
 
   private taskPopulate: IPopulate = {
@@ -157,24 +158,49 @@ class TaskService implements ITaskService {
     if (task.status === TaskStatus.CANCELLED || task.status === TaskStatus.COMPLETED) throw new HttpException(400, 'bad_request');
     // 4. Check if the task status is ASSIGNED
     if (task.status === TaskStatus.ASSIGNED) {
-      // TODO: send notification to the tasker who his offer is accepted that the task is canceled
+      // 4.1. Notify the tasker that the task is canceled
       let tasker = await this.taskerDao.getOneById(task.acceptedOffer!.taskerId, '', false);
-      console.log(tasker);
+      // console.log(tasker);
       let notificationOptions: NotificationOptions = {
         headings: { en: 'Task Canceled' },
         contents: { en: 'The task is canceled' },
         data: { task: task._id },
         external_ids: [tasker!.userId],
       };
-
       // let notification =
       await this.oneSignalApiHandler.createNotification(notificationOptions);
       // console.log(notification);
+      // 4.2 check if the paid field is true, try to void the transaction if the it in the same day if not refund the payment and change the paid field to false and the paymentMethod to CASH
+      if (task.paid) {
+        // 1. Get the transaction using paymob service
+        let transaction = await this.paymobService.getTransactionInquiry(task._id.toString());
+        if (!transaction) throw new HttpException(404, 'transaction_not_found');
+        console.log('transaction ====================> ', transaction);
+        // 2. check if the transaction can be voided, if the transaction is in the same day void it, if not refund it
+        if (new Date(transaction.created_at).toDateString() === new Date().toDateString()) {
+          // 2.1 void the transaction
+          let voidResponse = await this.paymobService.voidTransaction(transaction.id);
+          console.log('voidResponse ====================> ', voidResponse);
+        } else {
+          // 2.2 refund the transaction and deduct 1.75% from the amount as a refund fee and send the rest to the user
+          let refundResponse = await this.paymobService.refundTransaction(
+            transaction.id,
+            task.acceptedOffer.price - task.acceptedOffer.price * (1.75 / 100)
+          );
+          console.log('refundResponse ====================> ', refundResponse);
+        }
+
+        // change the paid field to false
+        task.paid = false;
+        // change the paymentMethod to CASH
+        task.paymentMethod = PaymentMethod.CASH;
+      }
     }
     // 5. Update the task status to CANCELED
     task.status = TaskStatus.CANCELLED;
 
-    return await task.save();
+    // return await task.save();
+    return task;
   };
 
   openTask = async (id: string, userId: string) => {
@@ -241,7 +267,6 @@ class TaskService implements ITaskService {
 
       // Step 7: Update task status to COMPLETED
       task.status = TaskStatus.COMPLETED;
-
       // console.log(tasker.userId, task.userId);
       // Step 8: Save changes and return the updated task
       await Promise.all([task.save(), tasker.save()]);
@@ -275,12 +300,13 @@ class TaskService implements ITaskService {
   checkoutTask = async (id: string, user: IUser, payload: any) => {
     // step 1: get the task by id and populate the acceptedOffer field
     let task = await this.taskDao.getOneByIdPopulate<{ acceptedOffer: IOffer }>(id, { path: 'acceptedOffer', select: '-__v' }, '', false);
-    // step 2: check if the task exists
+    // step 2: check if the task exists & there is an accepted offer
     if (!task) throw new HttpException(404, 'resource_not_found');
+    if (!task.acceptedOffer) throw new HttpException(400, 'You have to accept an offer first');
     // step 3: check if the user is the owner of the task
     if (task.userId !== user._id.toString()) throw new HttpException(403, 'forbidden');
     // step 4: check if the task is not completed, canceled or open (it should be assigned)
-    if (task.status !== TaskStatus.ASSIGNED) throw new HttpException(400, 'You should assign the task to a tasker first');
+    if (task.status !== TaskStatus.ASSIGNED) throw new HttpException(400, 'bad_request');
     // step 5: create the order additonal data
     let orderDetails: PaymobTaskDetails = {
       taskId: task._id.toString(),
@@ -297,15 +323,15 @@ class TaskService implements ITaskService {
       // step 6.1: check if there phone number in the payload object
       if (!payload.phoneNumber) throw new HttpException(400, 'phone_number_required');
       // step 6.2: call the paymob service to create the order and get the payment key
-      let paymobService = new PaymobService();
-      paymentLink = await paymobService.initiateWalletPayment(orderDetails);
+
+      paymentLink = await this.paymobService.initiateWalletPayment(orderDetails);
       console.log('paymentLink ====================> ', paymentLink);
       // step 6.3: return the payment link
       return paymentLink;
     } else if (payload.paymentMethod === 'card') {
       // step 6.4: call the paymob service to create the order and get the payment key
-      let paymobService = new PaymobService();
-      paymentLink = await paymobService.initiateCardPayment(orderDetails);
+
+      paymentLink = await this.paymobService.initiateCardPayment(orderDetails);
       console.log('paymentLink ====================> ', paymentLink);
       // step 6.5: return the payment link
       return paymentLink;
