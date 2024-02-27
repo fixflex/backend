@@ -13,12 +13,6 @@ class PaymobService {
 
   private async createOrder(paymobToken: string, orderDetails: PaymobTaskDetails) {
     // check if the order is already created
-    // ​https://accept.paymobsolutions.com/api/ecommerce/orders/transaction_inquiry​"
-    // {
-    //   "auth_token": "Your Auth Token",
-    //   "merchant_order_id":  "your merchant order ID",
-    //   "order_id":  "Your Order ID"
-    // }
     try {
       let existingOrder = await axios.post('https://accept.paymob.com/api/ecommerce/orders/transaction_inquiry', {
         auth_token: paymobToken,
@@ -26,7 +20,6 @@ class PaymobService {
       });
 
       if (existingOrder.data.id) {
-        // console.log('order already exists ====>> ', existingOrder.data.order);
         return existingOrder.data.order;
       }
     } catch (error: any) {
@@ -39,8 +32,8 @@ class PaymobService {
         delivery_needed: 'false',
         amount_cents: orderDetails.amount * 100,
         currency: 'EGP',
-        // merchant_order_id: `${Math.floor(Math.random() * 1000)}${offer._id.toString()}`, // TODO: fix this
-        merchant_order_id: orderDetails.taskId,
+        merchant_order_id: `${Math.floor(Math.random() * 1000)}${orderDetails.taskId}`, // TODO: fix this
+        // merchant_order_id: orderDetails.taskId,
         items: [],
         notify_user_with_email: true,
         data: orderDetails,
@@ -98,6 +91,70 @@ class PaymobService {
       payment_token: paymentToken,
     });
     return response;
+  }
+
+  public async getTransactionInquiry(merchantOrderId: string) {
+    const paymobToken = await this.authenticate();
+    try {
+      const response = await axios.post('https://accept.paymob.com/api/ecommerce/orders/transaction_inquiry', {
+        auth_token: paymobToken,
+        merchant_order_id: merchantOrderId,
+        // order_id: orderId,
+      });
+      return response.data;
+    } catch (error: any) {
+      console.log('from getTransactionInquiry', error.response.data);
+      throw new Error(error);
+    }
+  }
+
+  public async getTransactionById(transactionId: string) {
+    const paymobToken = await this.authenticate();
+    try {
+      const response = await axios.get(`https://accept.paymob.com/api/acceptance/transactions/${transactionId}`, {
+        headers: {
+          Authorization: `Bearer ${paymobToken}`,
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      console.log('from getTransactionById', error.response.data);
+      throw new Error(error);
+    }
+  }
+
+  public async voidTransaction(transactionId: string) {
+    const paymobToken = await this.authenticate();
+    try {
+      const response = await axios.post(`https://accept.paymob.com/api/acceptance/void_refund/void?token=${paymobToken}`, {
+        transaction_id: transactionId,
+      });
+      return response.data;
+    } catch (error: any) {
+      console.log('from voidTransaction', error.response.data);
+      throw new Error(error);
+    }
+  }
+  // https://accept.paymob.com/api/acceptance/void_refund/refund
+  // {
+  //   "auth_token": "auth_token_from_step1",
+  //   "transaction_id": 655,
+  //   "amount_cents": 1000
+  //   }
+
+  public async refundTransaction(transactionId: string, amount: number) {
+    const paymobToken = await this.authenticate();
+    try {
+      const response = await axios.post(`https://accept.paymob.com/api/acceptance/void_refund/refund`, {
+        auth_token: paymobToken,
+        transaction_id: transactionId,
+        amount_cents: amount * 100,
+      });
+      return response.data;
+    } catch (error: any) {
+      console.log('from refundTransaction', error.response.data);
+      throw new Error(error);
+    }
   }
 
   public async initiateCardPayment(orderDetails: PaymobTaskDetails) {
