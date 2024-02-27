@@ -167,28 +167,6 @@ class PaymobService {
         success,
       } = transactionData;
 
-      console.log('amount_cents ======================>>', amount_cents);
-      console.log('created_at ======================>>', created_at);
-      console.log('currency ======================>>', currency);
-      console.log('error_occured ======================>>', error_occured);
-      console.log('has_parent_transaction ======================>>', has_parent_transaction);
-      console.log('objId ======================>>', objId);
-      console.log('integration_id ======================>>', integration_id);
-      console.log('is_3d_secure ======================>>', is_3d_secure);
-      console.log('is_auth ======================>>', is_auth);
-      console.log('is_capture ======================>>', is_capture);
-      console.log('is_refunded ======================>>', is_refunded);
-      console.log('is_standalone_payment ======================>>', is_standalone_payment);
-      console.log('is_voided ======================>>', is_voided);
-      console.log('order_id ======================>>', order_id);
-      console.log('owner ======================>>', owner);
-      console.log('pending ======================>>', pending);
-      console.log('source_data_pan ======================>>', source_data_pan);
-      console.log('source_data_sub_type ======================>>', source_data_sub_type);
-      console.log('source_data_type ======================>>', source_data_type);
-      console.log('success ======================>>', success);
-
-      // console.log('transactionData ======================>>', transactionData);
       if (hmac) {
         const concatenedString = `${amount_cents}${created_at}${currency}${error_occured}${has_parent_transaction}${objId}${integration_id}${is_3d_secure}${is_auth}${is_capture}${is_refunded}${is_standalone_payment}${is_voided}${order_id}${owner}${pending}${source_data_pan}${source_data_sub_type}${source_data_type}${success}`;
         console.log('concatenedString ======================>>', { concatenedString });
@@ -203,33 +181,35 @@ class PaymobService {
       }
       const transaction: ITransaction = {
         transactionId: objId,
-        amount: amount_cents / 100, // convert cents to EGP
+        amount: amount_cents / 100,
         transactionType: transactionData.is_void
           ? TransactionType.VOID_TRANSACTION
           : transactionData.is_refund
           ? TransactionType.REFUND_TRANSACTION
           : TransactionType.ONLINE_TASK_PAYMENT,
-        pinding: pending, // Typo: Should be 'pending' instead of 'pinding' according to your original code
+        pinding: pending,
         success,
         orderId: order_id,
-        taskId: merchant_order_id, // Replace with your actual logic to get taskId
+        taskId: merchant_order_id,
       };
-      const newTransaction = await this.transactionDao.create(transaction);
-      console.log('newTransaction ======================>>', newTransaction);
+      // const newTransaction =
+      await this.transactionDao.create(transaction);
+      // console.log('newTransaction ======================>>', newTransaction);
 
       if (success && transaction.transactionType === TransactionType.ONLINE_TASK_PAYMENT) {
         // Replace with your actual logic to update the task
         let taskId = transactionData.order.merchant_order_id;
-        console.log('taskId ======================>>', taskId);
-        if (!taskId.match(/^[0-9a-fA-F]{24}$/)) {
-          taskId = transactionData.order.merchant_order_id.slice(3); //  TODO: remove this line
-          console.log('taskId ======================>>', taskId);
-        }
-        const updatedTask = await this.taskDao.updateOneById(taskId, {
+        // console.log('taskId ======================>>', taskId);
+        // if (!taskId.match(/^[0-9a-fA-F]{24}$/)) {
+        //   taskId = transactionData.order.merchant_order_id.slice(3); //  TODO: remove this line
+        //   console.log('taskId ======================>>', taskId);
+        // }
+        // const updatedTask =
+        await this.taskDao.updateOneById(taskId, {
           paid: true,
           paymentMethod: PaymentMethod.ONLINE_PAYMENT,
         });
-        console.log('updatedTask ======================>>', updatedTask);
+        // console.log('updatedTask ======================>>', updatedTask);
       }
 
       return 'webhook received successfully';
@@ -263,7 +243,7 @@ class PaymobService {
       const paymentToken = await this.generatePaymentToken(paymobToken, order, env.PAYMOB_INTEGRATION_ID, orderDetails.user);
       return `https://accept.paymob.com/api/acceptance/iframes/826805?payment_token=${paymentToken}`;
     } catch (error: any) {
-      // console.log(error.response.data);
+      console.log(error.response.data);
       throw new Error(error);
     }
   }

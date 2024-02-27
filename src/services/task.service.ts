@@ -196,10 +196,9 @@ class TaskService implements ITaskService {
           console.log('refundResponse ====================> ', refundOrVoid);
         }
 
-        let afds = await this.paymobService.handleTransactionWebhook(refundOrVoid);
-        console.log('afds ====================> ', afds);
+        await this.paymobService.handleTransactionWebhook(refundOrVoid);
         // change the paid field to false
-        task.paid = false;
+        // task.paid = false;
         // change the paymentMethod to CASH
         // task.paymentMethod = PaymentMethod.CASH;
       }
@@ -207,8 +206,7 @@ class TaskService implements ITaskService {
     // 5. Update the task status to CANCELED
     task.status = TaskStatus.CANCELLED;
 
-    // return await task.save();
-    return task;
+    return await task.save();
   };
 
   openTask = async (id: string, userId: string) => {
