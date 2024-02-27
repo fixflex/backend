@@ -1,9 +1,18 @@
 import axios from 'axios';
+import crypto from 'crypto';
+import { autoInjectable } from 'tsyringe';
 
+import { TaskDao } from '../DB/dao';
+import { TransactionDao } from '../DB/dao/transaction.dao';
 import env from '../config/validateEnv';
+import HttpException from '../exceptions/HttpException';
 import { IUser, PaymobTaskDetails } from '../interfaces';
+import { ITransaction, PaymentMethod, TransactionType } from '../interfaces/transaction.interface';
 
+@autoInjectable()
 class PaymobService {
+  constructor(private readonly transactionDao: TransactionDao, private readonly taskDao: TaskDao) {} // Replace with your actual DAO
+
   private async authenticate(): Promise<string> {
     const paymobToken = await axios.post('https://accept.paymob.com/api/auth/tokens', {
       api_key: env.PAYMOB_API_KEY,
@@ -12,7 +21,6 @@ class PaymobService {
   }
 
   private async createOrder(paymobToken: string, orderDetails: PaymobTaskDetails) {
-    // check if the order is already created
     try {
       let existingOrder = await axios.post('https://accept.paymob.com/api/ecommerce/orders/transaction_inquiry', {
         auth_token: paymobToken,
@@ -135,20 +143,109 @@ class PaymobService {
       throw new Error(error);
     }
   }
-  // https://accept.paymob.com/api/acceptance/void_refund/refund
-  // {
-  //   "auth_token": "auth_token_from_step1",
-  //   "transaction_id": 655,
-  //   "amount_cents": 1000
-  //   }
 
-  public async refundTransaction(transactionId: string, amount: number) {
+  public async handleTransactionWebhook(transactionData: any, hmac: any = '') {
+    try {
+      const {
+        amount_cents,
+        created_at,
+        currency,
+        error_occured,
+        has_parent_transaction,
+        id: objId,
+        integration_id,
+        is_3d_secure,
+        is_auth,
+        is_capture,
+        is_refunded,
+        is_standalone_payment,
+        is_voided,
+        order: { id: order_id, merchant_order_id },
+        owner,
+        pending,
+        source_data: { pan: source_data_pan, sub_type: source_data_sub_type, type: source_data_type },
+        success,
+      } = transactionData;
+
+      console.log('amount_cents ======================>>', amount_cents);
+      console.log('created_at ======================>>', created_at);
+      console.log('currency ======================>>', currency);
+      console.log('error_occured ======================>>', error_occured);
+      console.log('has_parent_transaction ======================>>', has_parent_transaction);
+      console.log('objId ======================>>', objId);
+      console.log('integration_id ======================>>', integration_id);
+      console.log('is_3d_secure ======================>>', is_3d_secure);
+      console.log('is_auth ======================>>', is_auth);
+      console.log('is_capture ======================>>', is_capture);
+      console.log('is_refunded ======================>>', is_refunded);
+      console.log('is_standalone_payment ======================>>', is_standalone_payment);
+      console.log('is_voided ======================>>', is_voided);
+      console.log('order_id ======================>>', order_id);
+      console.log('owner ======================>>', owner);
+      console.log('pending ======================>>', pending);
+      console.log('source_data_pan ======================>>', source_data_pan);
+      console.log('source_data_sub_type ======================>>', source_data_sub_type);
+      console.log('source_data_type ======================>>', source_data_type);
+      console.log('success ======================>>', success);
+
+      // console.log('transactionData ======================>>', transactionData);
+      if (hmac) {
+        const concatenedString = `${amount_cents}${created_at}${currency}${error_occured}${has_parent_transaction}${objId}${integration_id}${is_3d_secure}${is_auth}${is_capture}${is_refunded}${is_standalone_payment}${is_voided}${order_id}${owner}${pending}${source_data_pan}${source_data_sub_type}${source_data_type}${success}`;
+        console.log('concatenedString ======================>>', { concatenedString });
+        const hash = crypto.createHmac('sha512', env.PAYMOB_HMAC_SECRET).update(concatenedString).digest('hex');
+
+        if (hash !== hmac) {
+          console.log('hash !== req.query.hmac');
+          console.log('hash ======================>>', hash);
+          console.log('req.query.hmac ======================>>', hmac);
+          throw new HttpException(400, 'hash !== req.query.hmac');
+        }
+      }
+      const transaction: ITransaction = {
+        transactionId: objId,
+        amount: amount_cents / 100, // convert cents to EGP
+        transactionType: transactionData.is_void
+          ? TransactionType.VOID_TRANSACTION
+          : transactionData.is_refund
+          ? TransactionType.REFUND_TRANSACTION
+          : TransactionType.ONLINE_TASK_PAYMENT,
+        pinding: pending, // Typo: Should be 'pending' instead of 'pinding' according to your original code
+        success,
+        orderId: order_id,
+        taskId: merchant_order_id, // Replace with your actual logic to get taskId
+      };
+      const newTransaction = await this.transactionDao.create(transaction);
+      console.log('newTransaction ======================>>', newTransaction);
+
+      if (success && transaction.transactionType === TransactionType.ONLINE_TASK_PAYMENT) {
+        // Replace with your actual logic to update the task
+        let taskId = transactionData.order.merchant_order_id;
+        console.log('taskId ======================>>', taskId);
+        if (!taskId.match(/^[0-9a-fA-F]{24}$/)) {
+          taskId = transactionData.order.merchant_order_id.slice(3); //  TODO: remove this line
+          console.log('taskId ======================>>', taskId);
+        }
+        const updatedTask = await this.taskDao.updateOneById(taskId, {
+          paid: true,
+          paymentMethod: PaymentMethod.ONLINE_PAYMENT,
+        });
+        console.log('updatedTask ======================>>', updatedTask);
+      }
+
+      return 'webhook received successfully';
+    } catch (error: any) {
+      console.log('error ======================>>', error);
+      throw new Error(error);
+    }
+  }
+
+  public async refundTransaction(transactionId: string, amount_cents: number) {
     const paymobToken = await this.authenticate();
     try {
       const response = await axios.post(`https://accept.paymob.com/api/acceptance/void_refund/refund`, {
         auth_token: paymobToken,
         transaction_id: transactionId,
-        amount_cents: amount * 100,
+        amount_cents,
       });
       return response.data;
     } catch (error: any) {
