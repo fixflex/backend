@@ -51,7 +51,6 @@ let taskerSchema: Schema<ITasker> = new Schema(
       minlength: 11,
       maxlength: 11,
     },
-    // ======================================================================================================== //
     notPaidTasks: [
       {
         type: String,

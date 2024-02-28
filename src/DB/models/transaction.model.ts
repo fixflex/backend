@@ -7,6 +7,7 @@ let transactionSchema: Schema<ITransactionDocument> = new Schema(
     transactionId: {
       type: String,
       required: true,
+      unique: true,
     },
     amount: {
       type: Number,

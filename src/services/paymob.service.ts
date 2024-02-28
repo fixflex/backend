@@ -169,7 +169,7 @@ class PaymobService {
 
       if (hmac) {
         const concatenedString = `${amount_cents}${created_at}${currency}${error_occured}${has_parent_transaction}${objId}${integration_id}${is_3d_secure}${is_auth}${is_capture}${is_refunded}${is_standalone_payment}${is_voided}${order_id}${owner}${pending}${source_data_pan}${source_data_sub_type}${source_data_type}${success}`;
-        console.log('concatenedString ======================>>', { concatenedString });
+        // console.log('concatenedString ======================>>', { concatenedString });
         const hash = crypto.createHmac('sha512', env.PAYMOB_HMAC_SECRET).update(concatenedString).digest('hex');
 
         if (hash !== hmac) {
@@ -243,7 +243,7 @@ class PaymobService {
       const paymentToken = await this.generatePaymentToken(paymobToken, order, env.PAYMOB_INTEGRATION_ID, orderDetails.user);
       return `https://accept.paymob.com/api/acceptance/iframes/826805?payment_token=${paymentToken}`;
     } catch (error: any) {
-      console.log(error.response.data);
+      console.log('from initiateCardPayment', error.response.data);
       throw new Error(error);
     }
   }
