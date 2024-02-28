@@ -15,6 +15,7 @@ import HealthzRoute from './routes/healthz.route';
 import { OfferRoute } from './routes/offer.route';
 import { TaskRoute } from './routes/task.route';
 import { TaskerRoute } from './routes/tasker.route';
+import { WebhooksRoute } from './routes/webhooks.route';
 import { SocketService } from './sockets/socket';
 
 // Setup routes
@@ -28,6 +29,7 @@ let messageRoute = container.resolve(MessageRoute);
 let taskRoute = container.resolve(TaskRoute);
 let offerRoute = container.resolve(OfferRoute);
 let couponRoute = container.resolve(CouponRoute);
+let webhooks = container.resolve(WebhooksRoute);
 
 // Setup app
 let app = new App([
@@ -41,6 +43,7 @@ let app = new App([
   offerRoute,
   couponRoute,
   messageRoute,
+  webhooks,
 ]);
 
 // Setup http server
