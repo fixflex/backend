@@ -80,6 +80,9 @@ class TaskService implements ITaskService {
     if (!task) throw new HttpException(404, 'Task not found');
     // convert the id to string to compare it with the userId
     if (task.userId !== userId?.toString()) throw new HttpException(403, 'unauthorized');
+
+    // check the task status, if it is not open, return an error
+    if (task.status !== TaskStatus.OPEN) throw new HttpException(400, 'bad_request');
     const updatedTask = await this.taskDao.updateOneById(id, payload);
     return updatedTask;
   };
@@ -92,6 +95,7 @@ class TaskService implements ITaskService {
     const task = await this.taskDao.getOneById(id);
     if (!task) throw new HttpException(404, 'Task not found');
     if (task.userId !== userId?.toString()) throw new HttpException(403, 'unauthorized');
+    if (task.status !== TaskStatus.OPEN) throw new HttpException(400, 'bad_request');
 
     let imageCover: UploadApiResponse;
     let images: UploadApiResponse[];
@@ -179,9 +183,6 @@ class TaskService implements ITaskService {
 
         // 2. check if the transaction can be voided, if the transaction is in the same day void it, if not refund it
         let refundOrVoid;
-        console.log('task.acceptedOffer.price ====================> ', task.acceptedOffer.price);
-        console.log('transaction.amount_cents ====================> ', transaction.amount_cents);
-        console.log(transaction.amount_cents - transaction.amount_cents * (1.75 / 100));
         if (new Date(transaction.created_at).toDateString() === new Date().toDateString()) {
           // 2.1 void the transaction
           refundOrVoid = await this.paymobService.voidTransaction(transaction.id);
@@ -211,7 +212,7 @@ class TaskService implements ITaskService {
 
   openTask = async (id: string, userId: string) => {
     // 1. Check if the task exists
-    let task = await this.taskDao.getOneById(id, '', false);
+    let task = await this.taskDao.getOneByIdPopulate<{ acceptedOffer: IOffer }>(id, { path: 'acceptedOffer', select: '-__v' }, '', false);
     if (!task) throw new HttpException(404, 'resource_not_found');
     // 2. Check if the user is the owner of the task
     if (task.userId !== userId.toString()) throw new HttpException(403, 'forbidden');
@@ -219,13 +220,53 @@ class TaskService implements ITaskService {
     if (task.status === TaskStatus.COMPLETED || task.status === TaskStatus.CANCELLED) throw new HttpException(400, 'bad_request');
     // 4. if the task is ASSIGNED then remove the acceptedOffer and update the task status to OPEN and update the offers status to PENDING instead of ACCEPTED
     if (task.status === TaskStatus.ASSIGNED) {
-      await this.offerDao.updateOneById(task.acceptedOffer as string, { status: OfferStatus.PENDING });
+      // 4.1 change the offer status to PENDING
+      await this.offerDao.updateOneById(task.acceptedOffer._id.toString(), { status: OfferStatus.PENDING });
+      // 4.2 notify the tasker that the task is open
+      let tasker = await this.taskerDao.getOneById(task.acceptedOffer.taskerId, '', false);
+      let notificationOptions: NotificationOptions = {
+        headings: { en: 'Task Canceled' },
+        contents: { en: 'The task is canceled' },
+        data: { task: task._id },
+        external_ids: [tasker!.userId],
+      };
+      // let notification =
+      await this.oneSignalApiHandler.createNotification(notificationOptions);
+      // console.log(notification);
+      // 4.3 check if the paid field is true, try to void the transaction if the it in the same day if not refund the payment and change the paid field to false and the paymentMethod to CASH
+      if (task.paid) {
+        // 1. Get the transaction using paymob service
+        let transaction = await this.paymobService.getTransactionInquiry(task._id.toString());
+        // let transaction = await this.paymobService.getTransactionInquiry('57365dd7c7e564c2af317434e16');
+        if (!transaction) throw new HttpException(404, 'transaction_not_found');
+        // 2. check if the transaction can be voided, if the transaction is in the same day void it, if not refund it
+        let refundOrVoid;
+        if (new Date(transaction.created_at).toDateString() === new Date().toDateString()) {
+          // 2.1 void the transaction
+          refundOrVoid = await this.paymobService.voidTransaction(transaction.id);
+          // console.log('voidResponse ====================> ', refundOrVoid);
+        } else {
+          // 2.2 refund the transaction and deduct 1.75% from the amount as a refund fee and send the rest to the user
+          refundOrVoid = await this.paymobService.refundTransaction(
+            transaction.id,
+            Math.round(transaction.amount_cents - transaction.amount_cents * (1.75 / 100))
+          );
+          // console.log('refundResponse ====================> ', refundOrVoid);
+        }
+
+        await this.paymobService.handleTransactionWebhook(refundOrVoid, '');
+        // change the paid field to false
+        task.paid = false;
+        // change the paymentMethod to CASH
+        task.paymentMethod = PaymentMethod.CASH;
+      }
       // await this.offerDao.updateMany({ _id: { $in: task.offers } }, { status: OfferStatus.PENDING });
     }
-
+    // @ts-ignore
     task.acceptedOffer = undefined;
     task.status = TaskStatus.OPEN;
     await task.save();
+
     return task;
   };
 
