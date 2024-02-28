@@ -33,17 +33,6 @@ class OfferRoute implements Routes {
     this.router.patch(`${this.path}/:id`, isMongoId, updateOfferValidator, this.offerController.updateOffer);
     this.router.delete(`${this.path}/:id`, isMongoId, this.offerController.deleteOffer);
     this.router.patch(`${this.path}/:id/accept`, isMongoId, this.offerController.acceptOffer);
-    // this.router.patch(`${this.path}/:id/accept/checkout`, isMongoId, this.offerController.checkoutOffer);
-
-    // webhook-checkout
-    this.router.post(`/webhook-checkout`, this.offerController.webhookCheckout);
-    this.router.get(`/webhook-checkout/success`, this.offerController.webhookCheckoutSuccess);
-
-    // this.router.post(`/webhook-checkout/wallet`, this.offerController.webhookCheckoutWallet);
-    // webhook success
-    // this.router.get(`/webhook-checkout/success/wallet`, this.offerController.webhookCheckoutSuccessWallet);
-    // webhook fail
-    // this.router.get(`webhook-checkout/fail`, this.offerController.webhookCheckoutFail);
   }
 }
 

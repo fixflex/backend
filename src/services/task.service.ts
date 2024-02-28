@@ -196,7 +196,7 @@ class TaskService implements ITaskService {
           console.log('refundResponse ====================> ', refundOrVoid);
         }
 
-        await this.paymobService.handleTransactionWebhook(refundOrVoid);
+        await this.paymobService.handleTransactionWebhook(refundOrVoid, '');
         // change the paid field to false
         // task.paid = false;
         // change the paymentMethod to CASH
@@ -230,76 +230,66 @@ class TaskService implements ITaskService {
   };
 
   completeTask = async (id: string, userId: string) => {
-    try {
-      // Step 1: Check if the task exists
-      const task = await this.taskDao.getOneByIdPopulate<{ acceptedOffer: IOffer }>(
-        id,
-        { path: 'acceptedOffer', select: '-__v' },
-        '',
-        false
-      );
-      if (!task) throw new HttpException(404, 'resource_not_found');
+    // Step 1: Check if the task exists
+    const task = await this.taskDao.getOneByIdPopulate<{ acceptedOffer: IOffer }>(id, { path: 'acceptedOffer', select: '-__v' }, '', false);
+    if (!task) throw new HttpException(404, 'resource_not_found');
 
-      // Step 2: Check if the user is the owner of the task
-      if (task.userId !== userId.toString()) throw new HttpException(403, 'forbidden');
+    // Step 2: Check if the user is the owner of the task
+    if (task.userId !== userId.toString()) throw new HttpException(403, 'forbidden');
 
-      // Step 3: Check if the task is assigned to a tasker and not completed or canceled
-      if (task.status === TaskStatus.CANCELLED || task.status === TaskStatus.COMPLETED)
-        throw new HttpException(400, 'task is already completed or canceled');
-      if (task.status !== TaskStatus.ASSIGNED) throw new HttpException(400, 'bad_request');
+    // Step 3: Check if the task is assigned to a tasker and not completed or canceled
+    if (task.status === TaskStatus.CANCELLED || task.status === TaskStatus.COMPLETED)
+      throw new HttpException(400, 'task is already completed or canceled');
+    if (task.status !== TaskStatus.ASSIGNED) throw new HttpException(400, 'bad_request');
 
-      // Step 4: Get the tasker who has the accepted offer
-      const tasker = await this.taskerDao.getOneById(task.acceptedOffer.taskerId, '', false);
-      if (!tasker) throw new HttpException(404, 'resource_not_found');
+    // Step 4: Get the tasker who has the accepted offer
+    const tasker = await this.taskerDao.getOneById(task.acceptedOffer.taskerId, '', false);
+    if (!tasker) throw new HttpException(404, 'resource_not_found');
 
-      // Step 5: Handle the task payment method
-      const commission: number = parseFloat((task.acceptedOffer.price * tasker.commissionRate).toFixed(2));
-      task.commission = commission;
-      // Step 5.1: If the payment method is CASH, calculate the commission and add the task to the tasker's notPaidTasks
-      if (task.paymentMethod === PaymentMethod.CASH) {
-        tasker.notPaidTasks.push(task._id);
-      }
-      // TODO: Implement online payment method
-      // Step 5.2: If the payment method is ONLINE, update the balance of the tasker and the tasker's earnings and completed tasks
-      if (task.paymentMethod === PaymentMethod.ONLINE_PAYMENT) {
-        // 1. update the tasker's balance where the tasker's balance = tasker's balance + task price - commission
-        tasker.balance += task.acceptedOffer.price - task.commission;
-      }
-      // Step 6: Update tasker's earnings and completed tasks
-      tasker.totalEarnings += task.acceptedOffer.price;
-      tasker.netEarnings = (tasker.netEarnings || 0) + (task.acceptedOffer.price - task.commission);
-      tasker.completedTasks.push(task._id.toString());
-
-      // Step 7: Update task status to COMPLETED
-      task.status = TaskStatus.COMPLETED;
-      // console.log(tasker.userId, task.userId);
-      // Step 8: Save changes and return the updated task
-      await Promise.all([task.save(), tasker.save()]);
-      // Step 9.1 Send push notification to the tasker that the task is completed and the payment is pending
-      let notificationOptionsTasker: NotificationOptions = {
-        headings: { en: 'Task Completed' },
-        contents: { en: 'The task is completed and the payment is pending' },
-        data: { task: task._id },
-        external_ids: [tasker.userId],
-      };
-      // 9.2 Send push notification to the task owner that the task is completed and the payment is pending , thank him for using the app and ask him to rate the tasker, rate the app and share the app with his friends , rate the tasker and the app and share the app with his friends
-      let notificationOptionsUser: NotificationOptions = {
-        headings: { en: 'Task Completed' },
-        contents: { en: 'Thank you for using the app' },
-        data: { task: task._id }, // send the task id to the user to use it to navigate to the task details, Note: this data will not appear in the notification but it will be sent with the notification
-        external_ids: [task.userId],
-      };
-      // wait for both notifications to be sent and log the results
-      let [notificationTasker, notificationUser] = await Promise.all([
-        this.oneSignalApiHandler.createNotification(notificationOptionsTasker),
-        this.oneSignalApiHandler.createNotification(notificationOptionsUser),
-      ]);
-      console.log(notificationTasker, notificationUser);
-      return task;
-    } catch (error) {
-      console.log(error);
-      throw new HttpException(500, 'something_went_wrong');
+    // Step 5: Handle the task payment method
+    const commission: number = parseFloat((task.acceptedOffer.price * tasker.commissionRate).toFixed(2));
+    task.commission = commission;
+    // Step 5.1: If the payment method is CASH, calculate the commission and add the task to the tasker's notPaidTasks
+    if (task.paymentMethod === PaymentMethod.CASH) {
+      tasker.notPaidTasks.push(task._id);
     }
+    // TODO: Implement online payment method
+    // Step 5.2: If the payment method is ONLINE, update the balance of the tasker and the tasker's earnings and completed tasks
+    if (task.paymentMethod === PaymentMethod.ONLINE_PAYMENT) {
+      // 1. update the tasker's balance where the tasker's balance = tasker's balance + task price - commission
+      tasker.balance += task.acceptedOffer.price - task.commission;
+    }
+    // Step 6: Update tasker's earnings and completed tasks
+    tasker.totalEarnings += task.acceptedOffer.price;
+    tasker.netEarnings = (tasker.netEarnings || 0) + (task.acceptedOffer.price - task.commission);
+    tasker.completedTasks.push(task._id.toString());
+
+    // Step 7: Update task status to COMPLETED
+    task.status = TaskStatus.COMPLETED;
+    // console.log(tasker.userId, task.userId);
+    // Step 8: Save changes and return the updated task
+    await Promise.all([task.save(), tasker.save()]);
+    // Step 9.1 Send push notification to the tasker that the task is completed and the payment is pending
+    let notificationOptionsTasker: NotificationOptions = {
+      headings: { en: 'Task Completed' },
+      contents: { en: 'The task is completed and the payment is pending' },
+      data: { task: task._id },
+      external_ids: [tasker.userId],
+    };
+    // 9.2 Send push notification to the task owner that the task is completed and the payment is pending , thank him for using the app and ask him to rate the tasker, rate the app and share the app with his friends , rate the tasker and the app and share the app with his friends
+    let notificationOptionsUser: NotificationOptions = {
+      headings: { en: 'Task Completed' },
+      contents: { en: 'Thank you for using the app' },
+      data: { task: task._id }, // send the task id to the user to use it to navigate to the task details, Note: this data will not appear in the notification but it will be sent with the notification
+      external_ids: [task.userId],
+    };
+    // wait for both notifications to be sent and log the results
+    let [notificationTasker, notificationUser] = await Promise.all([
+      this.oneSignalApiHandler.createNotification(notificationOptionsTasker),
+      this.oneSignalApiHandler.createNotification(notificationOptionsUser),
+    ]);
+    console.log(notificationTasker, notificationUser);
+    return task;
   };
 
   checkoutTask = async (id: string, user: IUser, payload: any) => {

@@ -1,4 +1,3 @@
-// import crypto from 'crypto';
 import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
@@ -6,19 +5,14 @@ import { io } from '..';
 import { TaskerDao } from '../DB/dao';
 import { OfferDao } from '../DB/dao/offer.dao';
 import { TaskDao } from '../DB/dao/task.dao';
-// import { TransactionDao } from '../DB/dao/transaction.dao';
-// import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
-import { Request } from '../helpers';
 import { NotificationOptions } from '../helpers/onesignal';
 import { OneSignalApiHandler } from '../helpers/onesignal';
 import { IOffer, IOfferService, OfferStatus } from '../interfaces';
 import { TaskStatus } from '../interfaces/task.interface';
-// import { ITransaction, PaymentMethod, TransactionType } from '../interfaces/transaction.interface';
 import { IPagination } from './../interfaces/pagination.interface';
 import { ITask } from './../interfaces/task.interface';
 import { ITasker } from './../interfaces/tasker.interface';
-import { PaymobService } from './paymob.service';
 
 @autoInjectable()
 class OfferService implements IOfferService {
@@ -27,7 +21,6 @@ class OfferService implements IOfferService {
     private taskerDao: TaskerDao,
     private taskDao: TaskDao,
     // private transactionDao: TransactionDao,
-    private paymobService: PaymobService,
     private oneSignalApiHandler: OneSignalApiHandler
   ) {}
 
@@ -159,15 +152,8 @@ class OfferService implements IOfferService {
     // let notification =
     await this.oneSignalApiHandler.createNotification(notificationOptions);
     // console.log(notification);
-    // in mongoDB if the field doesn't exist it will be created, to make it update only if the field exists, we need to use $set but it's not working with the updateOneById method so we need to use the updateOne method
 
-    // 6. TODO: send notification to the tasker that his offer is accepted
-    // 7. return the accepted offer
     return offer;
-  }
-
-  async webhookCheckout(req: Request) {
-    if (!req.body.obj.is_voided && !req.body.obj.is_refunded) this.paymobService.handleTransactionWebhook(req.body.obj, req.query.hmac); // Only handle the transaction if it's not voided or refunded
   }
 }
 

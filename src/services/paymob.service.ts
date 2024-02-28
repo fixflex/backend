@@ -144,7 +144,7 @@ class PaymobService {
     }
   }
 
-  public async handleTransactionWebhook(transactionData: any, hmac: any = '') {
+  public async handleTransactionWebhook(transactionData: any, hmac: any) {
     try {
       const {
         amount_cents,
