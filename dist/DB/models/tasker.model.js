@@ -24,10 +24,6 @@ let taskerSchema = new mongoose_1.Schema({
         min: 0,
         default: 0,
     },
-    // completedTasks: {
-    //   type: Number,
-    //   default: 0,
-    // },
     location: {
         type: {
             type: String,
@@ -52,7 +48,6 @@ let taskerSchema = new mongoose_1.Schema({
         minlength: 11,
         maxlength: 11,
     },
-    // ======================================================================================================== //
     notPaidTasks: [
         {
             type: String,

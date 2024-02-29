@@ -82,6 +82,12 @@ let TaskController = class TaskController {
                 return next(new HttpException_1.default(404, 'resource_not_found'));
             res.status(200).json((0, customResponse_1.default)({ data: task, success: true, message: req.t('task_completed') }));
         });
+        this.checkoutTask = (0, express_async_handler_1.default)(async (req, res, next) => {
+            const offer = await this.taskService.checkoutTask(req.params.id, req.user, req.body);
+            if (!offer)
+                return next(new HttpException_1.default(400, 'something_went_wrong'));
+            res.status(200).json((0, customResponse_1.default)({ data: offer, success: true, message: 'offer_checked_out' }));
+        });
     }
 };
 exports.TaskController = TaskController;

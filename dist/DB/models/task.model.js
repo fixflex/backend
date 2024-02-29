@@ -9,10 +9,6 @@ let taskSchema = new mongoose_1.Schema({
         ref: 'User',
         required: true,
     },
-    // taskerId: {
-    //   type: String,
-    //   ref: 'Tasker',
-    // },
     dueDate: {
         on: {
             type: Date,
@@ -100,25 +96,10 @@ let taskSchema = new mongoose_1.Schema({
         type: String,
         ref: 'Offer',
     },
-    // ======================================================================================================== //
-    transcactionId: {
-        type: String,
-        ref: 'Transaction',
-    },
     paymentMethod: {
         type: String,
         enum: Object.values(transaction_interface_1.PaymentMethod),
         default: transaction_interface_1.PaymentMethod.CASH,
-        // card: {
-        //   cardNumber: String,
-        //   cardHolderName: String,
-        //   expiryDate: String,
-        //   cvc: String,
-        // },
-        // vodafoneCash: {
-        //   phoneNumber: String,
-        //   pin: String,
-        // },
     },
     commission: {
         type: Number,
@@ -127,6 +108,10 @@ let taskSchema = new mongoose_1.Schema({
     commissionAfterDescount: {
         type: Number,
         // default: 0,
+    },
+    paid: {
+        type: Boolean,
+        default: false,
     },
 }, { timestamps: true });
 // Apply the geospatial index to the coordinates field inside the location object

@@ -11,16 +11,6 @@ var TaskStatus;
     // IN_PROGRESS = 'IN_PROGRESS',
     // CANCELED = 'CANCELED',
 })(TaskStatus || (exports.TaskStatus = TaskStatus = {}));
-// type Address = {
-//   apartment: string;
-//   floor: string;
-//   building: string;
-//   street: string;
-//   city: string;
-//   country: string;
-//   state: string;
-//   zip_code: string;
-// };
 var TaskTime;
 (function (TaskTime) {
     TaskTime["MORNING"] = "MORNING";

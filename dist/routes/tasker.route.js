@@ -30,6 +30,9 @@ let TaskerRoute = class TaskerRoute {
         this.router.get(`${this.path}/me`, auth_middleware_1.authenticateUser, this.taskerController.getMe);
         this.router.patch(`${this.path}/me`, auth_middleware_1.authenticateUser, tasker_validator_1.updateTaskerValidator, this.taskerController.updateMe);
         // this.router.delete(`${this.path}/me`, authenticateUser, this.taskerController.deleteTasker);
+        this.router.post(`${this.path}/commission-pay`, auth_middleware_1.authenticateUser, this.taskerController.checkout);
+        // this.router.post(`${this.path}/checkout`, authenticateUser, this.taskerController.checkout);
+        // this.router.post(`${this.path}/withdraw-earnings`, authenticateUser, this.taskerController.withdrawEarnings)
         // apply coupon
         this.router.post(`${this.path}/apply-coupon`, auth_middleware_1.authenticateUser, this.taskerController.applyCoupon);
         // Public routes

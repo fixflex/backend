@@ -72,6 +72,13 @@ let TaskerController = class TaskerController {
                 return next(new HttpException_1.default(400, 'coupon_not_applied'));
             res.status(200).json((0, customResponse_1.default)({ data: null, success: true, message: req.t('coupon_applied') }));
         });
+        // ====================== payment ====================== //
+        this.checkout = (0, express_async_handler_1.default)(async (req, res, next) => {
+            let paymentLink = await this.taskerService.checkout(req.user, req.body);
+            if (!paymentLink)
+                return next(new HttpException_1.default(400, 'something_went_wrong'));
+            res.status(200).json((0, customResponse_1.default)({ data: paymentLink, success: true, message: req.t('payment_link_generated') }));
+        });
     }
 };
 exports.TaskerController = TaskerController;

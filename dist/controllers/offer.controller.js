@@ -22,7 +22,7 @@ let OfferController = class OfferController {
     constructor(offerService) {
         this.offerService = offerService;
         this.createOffer = (0, express_async_handler_1.default)(async (req, res, next) => {
-            const offer = await this.offerService.createOffer(req.body, req.user._id);
+            const offer = await this.offerService.createOffer(req.body, req.user._id.toString());
             if (!offer)
                 return next(new HttpException_1.default(400, 'something_went_wrong'));
             res.status(201).json((0, customResponse_1.default)({ data: offer, success: true, message: req.t('created_success') }));
@@ -54,23 +54,6 @@ let OfferController = class OfferController {
             if (!offer)
                 return next(new HttpException_1.default(400, 'something_went_wrong'));
             res.status(200).json((0, customResponse_1.default)({ data: offer, success: true, message: 'offer_accepted' }));
-        });
-        this.checkoutOffer = (0, express_async_handler_1.default)(async (req, res, next) => {
-            const offer = await this.offerService.checkoutOffer(req.params.id, req.user._id, req.body);
-            if (!offer)
-                return next(new HttpException_1.default(400, 'something_went_wrong'));
-            res.status(200).json((0, customResponse_1.default)({ data: offer, success: true, message: 'offer_checked_out' }));
-        });
-        this.webhookCheckout = (0, express_async_handler_1.default)(async (req, res) => {
-            // call the offerService to handle the paymob webhook
-            let results = await this.offerService.webhookCheckout(req);
-            res.status(200).json({ received: true, results });
-        });
-        this.webhookCheckoutSuccess = (0, express_async_handler_1.default)(async (req, res) => {
-            // call the offerService to handle the paymob webhook
-            // let results = await this.offerService.webhookCheckoutSuccess(req);
-            console.log('webhookCheckoutSuccess ===================>> ', req.query);
-            res.status(200).json({ message: 'webhookCheckoutSuccess', query: req.query });
         });
     }
 };

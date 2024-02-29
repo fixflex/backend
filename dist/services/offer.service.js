@@ -22,9 +22,10 @@ const HttpException_1 = __importDefault(require("../exceptions/HttpException"));
 const onesignal_1 = require("../helpers/onesignal");
 const interfaces_1 = require("../interfaces");
 const task_interface_1 = require("../interfaces/task.interface");
-const paymob_service_1 = require("./paymob.service");
 let OfferService = class OfferService {
-    constructor(offerDao, taskerDao, taskDao, oneSignalApiHandler) {
+    constructor(offerDao, taskerDao, taskDao, 
+    // private transactionDao: TransactionDao,
+    oneSignalApiHandler) {
         this.offerDao = offerDao;
         this.taskerDao = taskerDao;
         this.taskDao = taskDao;
@@ -47,11 +48,14 @@ let OfferService = class OfferService {
         if (!tasker)
             throw new HttpException_1.default(403, 'You_are_not_a_tasker');
         if (tasker.notPaidTasks && tasker.notPaidTasks.length > 0)
-            throw new HttpException_1.default(403, 'You_have_not_paid_tasks');
+            throw new HttpException_1.default(403, 'You must pay the previous tasks commissions');
         // 2. check if the task is exist and status is open
         let task = await this.taskDao.getOne({ _id: offer.taskId });
         if (!task)
             throw new HttpException_1.default(400, 'Task_not_found');
+        // 2.1 check that the tasker is not the owner of the task
+        if (task.userId === userId)
+            throw new HttpException_1.default(400, 'You_cant_make_an_offer_on_your_task');
         if (task.status !== task_interface_1.TaskStatus.OPEN)
             throw new HttpException_1.default(400, 'Task_is_not_open');
         // 3. check if the tasker already made an offer on this task, if yes return an error
@@ -63,7 +67,6 @@ let OfferService = class OfferService {
         let newOffer = await this.offerDao.create(offer);
         // 5. update the task offers array with the new offer
         await this.taskDao.updateOneById(offer.taskId, { $push: { offers: newOffer._id } });
-        // TODO: 6. send notification to the owner of the task using 1- socket.io 2- firebase cloud messaging
         let notificationOptions = {
             headings: { en: 'New Offer' },
             contents: { en: 'You have a new offer' },
@@ -74,7 +77,6 @@ let OfferService = class OfferService {
         // console.log(notification);
         __1.io.to(task.userId).emit('newOffer', newOffer);
         // socketIO.to(taskCreatorSocketId).emit('newOffer', newOffer);
-        // 7. return the offer
         return newOffer;
     }
     async getOfferById(id) {
@@ -147,55 +149,10 @@ let OfferService = class OfferService {
             data: { task: offer.taskId._id.toString() },
             external_ids: [offer.taskerId.userId],
         };
-        // console.log(offer.taskerId.userId, offer.taskId._id.toString());
         // let notification =
         await this.oneSignalApiHandler.createNotification(notificationOptions);
         // console.log(notification);
-        // in mongoDB if the field doesn't exist it will be created, to make it update only if the field exists, we need to use $set but it's not working with the updateOneById method so we need to use the updateOne method
-        // 6. TODO: send notification to the tasker that his offer is accepted
-        // 7. return the accepted offer
         return offer;
-    }
-    async checkoutOffer(id, userId, payload) {
-        // 1. get the offer by id
-        let offer = await this.offerDao.getOneByIdPopulate(id, { path: 'taskId taskerId', select: '' }, '', false);
-        if (!offer)
-            throw new HttpException_1.default(404, 'resource_not_found');
-        // 2. check if the user is the owner of the task
-        if (offer.taskId.userId.toString() !== userId.toString())
-            throw new HttpException_1.default(403, 'forbidden');
-        // 3. check if task status is open
-        if (offer.taskId.status !== task_interface_1.TaskStatus.OPEN)
-            throw new HttpException_1.default(400, 'Task_is_not_open');
-        // 5. check the PaymentMethod of the offer
-        // 5.2 if the payment method is card then call paymob api to create a payment link and send it to the task owner to pay the task price then update the task status to assigned and add the accepted offer id to it
-        if (payload.paymentMethod === 'card') {
-            const paymentLink = await paymob_service_1.PaymobService.initiateCardPayment(offer);
-            console.log('paymentLink ======================>>', paymentLink);
-        }
-        else if (payload.paymentMethod === 'wallet') {
-            const walletPaymentLink = await paymob_service_1.PaymobService.initiateWalletPayment(offer);
-            console.log('walletPaymentLink ======================>>', walletPaymentLink.redirect_url);
-        }
-        // 5. update the task status to assigned and add the accepted offer id to it
-        return 'offer';
-    }
-    catch(error) {
-        console.log('error ======================>>');
-        console.log(error);
-    }
-    async webhookCheckout(req) {
-        // paymob api will send a webhook to this endpoint after the payment is done
-        // 1. get the payment id from the request body
-        // 2. get the payment details from paymob api
-        // 3. get the order id from the payment details
-        // 4. update the order status to paid
-        console.log('webhook received');
-        console.log('req.body ==========================>>', req.body);
-        console.log('req.query ==========================>>', req.query);
-        console.log('req.params ==========================>>', req.params);
-        // console.log('req.headers ==========================>>', req.headers);
-        return 'webhook received successfully';
     }
 };
 exports.OfferService = OfferService;

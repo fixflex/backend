@@ -35,7 +35,9 @@ let TaskRoute = class TaskRoute {
         // uplaodTaskImages,
         this.router.patch(`${this.path}/:id`, isMongoID_validator_1.isMongoId, tasks_validator_1.updateTaskValidator, this.taskController.updateTask);
         this.router.patch(`${this.path}/:id/images`, isMongoID_validator_1.isMongoId, this.taskController.taskImages, this.taskController.uploadTaskImages);
-        this.router.delete(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.taskController.deleteTask);
+        // this.router.delete(`${this.path}/:id`, isMongoId, this.taskController.deleteTask);
+        // checkout
+        this.router.patch(`${this.path}/checkout/:id`, isMongoID_validator_1.isMongoId, this.taskController.checkoutTask);
         // ==================== offer status ==================== //
         this.router.patch(`${this.path}/:id/open`, isMongoID_validator_1.isMongoId, this.taskController.openTask);
         this.router.patch(`${this.path}/:id/cancel`, isMongoID_validator_1.isMongoId, this.taskController.cancelTask);
