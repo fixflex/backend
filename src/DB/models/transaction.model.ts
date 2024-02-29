@@ -34,6 +34,10 @@ let transactionSchema: Schema<ITransactionDocument> = new Schema(
       type: String,
       ref: 'Task',
     },
+    taskerId: {
+      type: String,
+      ref: 'Tasker',
+    },
   },
   { timestamps: true }
 );

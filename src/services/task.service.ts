@@ -7,7 +7,7 @@ import HttpException from '../exceptions/HttpException';
 import { IPopulate } from '../helpers';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { NotificationOptions, OneSignalApiHandler } from '../helpers/onesignal';
-import { IPagination, ITask, ITaskService, IUser, OfferStatus, PaymobTaskDetails, TaskStatus } from '../interfaces';
+import { IPagination, ITask, ITaskService, IUser, OfferStatus, PaymobOrderDetails, TaskStatus } from '../interfaces';
 import { PaymentMethod, TransactionType } from '../interfaces/transaction.interface';
 import { IOffer } from './../interfaces/offer.interface';
 import { PaymobService } from './paymob.service';
@@ -344,11 +344,11 @@ class TaskService implements ITaskService {
     // step 4: check if the task is not completed, canceled or open (it should be assigned)
     if (task.status !== TaskStatus.ASSIGNED) throw new HttpException(400, 'bad_request');
     // step 5: create the order additonal data
-    let orderDetails: PaymobTaskDetails = {
+    let orderDetails: PaymobOrderDetails = {
       taskId: task._id.toString(),
+      taskerId: task.acceptedOffer.taskerId,
       amount: task.acceptedOffer.price,
-      tasker: task.acceptedOffer.taskerId,
-      user: user,
+      user,
       transactionType: TransactionType.ONLINE_TASK_PAYMENT,
       phoneNumber: payload.phoneNumber,
     };

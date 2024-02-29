@@ -23,10 +23,6 @@ let taskerSchema: Schema<ITasker> = new Schema(
       min: 0,
       default: 0,
     },
-    // completedTasks: {
-    //   type: Number,
-    //   default: 0,
-    // },
     location: {
       type: {
         type: String,

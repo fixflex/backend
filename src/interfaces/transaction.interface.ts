@@ -7,6 +7,9 @@ export enum TransactionType {
 
   VOID_TRANSACTION = 'VOID_TRANSACTION',
   REFUND_TRANSACTION = 'REFUND_TRANSACTION',
+
+  COMMISSION_PAYMENT = 'COMMISSION_PAYMENT',
+  WITHDRAWAL = 'WITHDRAWAL',
 }
 
 export enum PaymentMethod {
@@ -20,13 +23,11 @@ export interface ITransaction {
   transactionId: string;
   amount: number;
   transactionType: TransactionType;
-  // wallet?: {
-  //   phoneNumber: string;
-  // };
   pinding: boolean;
   success: boolean;
   orderId: string;
-  taskId: string;
+  taskId?: string;
+  taskerId?: string;
 }
 
 export interface ITransactionDocument extends ITransaction, Document {}

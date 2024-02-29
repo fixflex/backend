@@ -5,13 +5,14 @@ import { IPagination, IUser } from '.';
 import { Request, Response } from '../helpers/generic';
 import { PaymentMethod, TransactionType } from './transaction.interface';
 
-export interface PaymobTaskDetails {
-  taskId: string;
+export interface PaymobOrderDetails {
   amount: number;
-  tasker: string;
   user: IUser;
   transactionType: TransactionType;
-  phoneNumber: string;
+  taskerId?: string;
+  taskId?: string;
+  phoneNumber?: string;
+  merchant_order_id?: string;
 }
 
 export enum TaskStatus {

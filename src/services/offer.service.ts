@@ -40,7 +40,7 @@ class OfferService implements IOfferService {
     // 1. check if the user is a tasker & notPaidTask array is empty
     let tasker = await this.taskerDao.getOne({ userId });
     if (!tasker) throw new HttpException(403, 'You_are_not_a_tasker');
-    if (tasker.notPaidTasks && tasker.notPaidTasks.length > 0) throw new HttpException(403, 'You_have_not_paid_tasks');
+    if (tasker.notPaidTasks && tasker.notPaidTasks.length > 0) throw new HttpException(403, 'You must pay the previous tasks commissions');
     // 2. check if the task is exist and status is open
     let task = await this.taskDao.getOne({ _id: offer.taskId });
     if (!task) throw new HttpException(400, 'Task_not_found');
@@ -55,7 +55,6 @@ class OfferService implements IOfferService {
     let newOffer = await this.offerDao.create(offer);
     // 5. update the task offers array with the new offer
     await this.taskDao.updateOneById(offer.taskId, { $push: { offers: newOffer._id } });
-    // TODO: 6. send notification to the owner of the task using 1- socket.io 2- firebase cloud messaging
     let notificationOptions: NotificationOptions = {
       headings: { en: 'New Offer' },
       contents: { en: 'You have a new offer' },
@@ -66,7 +65,6 @@ class OfferService implements IOfferService {
     // console.log(notification);
     io.to(task.userId).emit('newOffer', newOffer);
     // socketIO.to(taskCreatorSocketId).emit('newOffer', newOffer);
-    // 7. return the offer
     return newOffer;
   }
 
