@@ -63,6 +63,14 @@ class TaskerController implements ITaskerController {
     if (!appliedCoupon) return next(new HttpException(400, 'coupon_not_applied'));
     res.status(200).json(customResponse({ data: null, success: true, message: req.t('coupon_applied') }));
   });
+
+  // ====================== payment ====================== //
+
+  checkout = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    let paymentLink = await this.taskerService.checkout(req.user, req.body);
+    if (!paymentLink) return next(new HttpException(400, 'something_went_wrong'));
+    res.status(200).json(customResponse({ data: paymentLink, success: true, message: req.t('payment_link_generated') }));
+  });
 }
 
 export { TaskerController };

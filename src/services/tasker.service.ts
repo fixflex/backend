@@ -4,8 +4,10 @@ import { autoInjectable } from 'tsyringe';
 import { CategoryDao, CouponDao, TaskDao } from '../DB/dao';
 import { TaskerDao } from '../DB/dao';
 import HttpException from '../exceptions/HttpException';
-import { IPagination } from '../interfaces';
+import { IPagination, IUser, PaymobOrderDetails } from '../interfaces';
 import { ITasker, ITaskerService } from '../interfaces/tasker.interface';
+import { TransactionType } from '../interfaces/transaction.interface';
+import { PaymobService } from './paymob.service';
 
 @autoInjectable()
 class TaskerService implements ITaskerService {
@@ -13,7 +15,8 @@ class TaskerService implements ITaskerService {
     private readonly categoryDao: CategoryDao,
     private readonly taskerDao: TaskerDao,
     private readonly couponeDao: CouponDao,
-    private readonly taskDao: TaskDao
+    private readonly taskDao: TaskDao,
+    private readonly paymobService: PaymobService
   ) {}
   async createTasker(userId: string, tasker: ITasker) {
     // check if service is exists in DB
@@ -82,6 +85,73 @@ class TaskerService implements ITaskerService {
     await coupon.save();
     return true;
   }
+
+  // ====================== payment ====================== //
+
+  async checkout(user: IUser, payload: any) {
+    let tasker = await this.taskerDao.getOne({ userId: user._id }, false);
+    if (!tasker) throw new HttpException(404, 'tasker_not_found');
+    let totalCommissions = 0;
+    const totalCommissionsPromises = tasker.notPaidTasks.map(async taskId => {
+      let task = await this.taskDao.getOneById(taskId);
+      if (task) {
+        return task.commissionAfterDescount ? task.commissionAfterDescount : task.commission;
+      }
+      return 0; // return 0 if task is not found
+    });
+
+    // wait for all promises to resolve and get the total commissions
+    totalCommissions = (await Promise.all(totalCommissionsPromises)).reduce((a, b) => a + b, 0); // a is the accumulator and  b is the current value of array's element 0 is the initial value of the accumulator
+
+    // i want to generat 6 rundom numbers and add the tasker id to it to make it unique :
+
+    let orderDetails: PaymobOrderDetails = {
+      user,
+      amount: totalCommissions,
+      taskId: '',
+      taskerId: `${Math.floor(100000 + Math.random() * 90000)}-${tasker._id.toString()}`,
+      transactionType: TransactionType.COMMISSION_PAYMENT,
+      phoneNumber: payload.phoneNumber ? payload.phoneNumber : tasker.phoneNumber,
+      merchant_order_id: tasker._id.toString(),
+    };
+
+    if (totalCommissions <= 0) throw new HttpException(400, 'no_commissions_to_pay');
+
+    let paymentLink: string = '';
+    if (payload.paymentMethod === 'wallet') {
+      // step 6.1: check if there phone number in the payload object
+      if (!payload.phoneNumber) throw new HttpException(400, 'phone_number_required');
+      // step 6.2: call the paymob service to create the order and get the payment key
+
+      paymentLink = await this.paymobService.initiateWalletPayment(orderDetails);
+      console.log('paymentLink ====================> ', paymentLink);
+      // step 6.3: return the payment link
+      return paymentLink;
+    } else if (payload.paymentMethod === 'card') {
+      // step 6.4: call the paymob service to create the order and get the payment key
+
+      paymentLink = await this.paymobService.initiateCardPayment(orderDetails);
+      console.log('paymentLink ====================> ', paymentLink);
+      // step 6.5: return the payment link
+      return paymentLink;
+    }
+
+    throw new HttpException(400, 'invalid_payment_method');
+  }
 }
 
 export { TaskerService };
+
+// tasker.notPaidTasks.forEach(async taskId => {
+//   let task = await this.taskDao.getOneById(taskId);
+//   if (task) {
+//     totalCommissions += task.commissionAfterDescount > 0 ? task.commissionAfterDescount : task.commission;
+
+//     // task.paidAt = new Date();
+//     // task.paidMethod = 'paypal';
+//     // task.paid = true;
+//     // tasker!.notPaidTasks = tasker!.notPaidTasks.filter(t => t != taskId);
+//     // tasker!.paidTasks.push(taskId);
+//     // await Promise.all([task.save(), tasker!.save()]);
+//   }
+// });
