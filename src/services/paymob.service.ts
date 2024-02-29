@@ -2,16 +2,16 @@ import axios from 'axios';
 import crypto from 'crypto';
 import { autoInjectable } from 'tsyringe';
 
-import { TaskDao } from '../DB/dao';
+import { TaskDao, TaskerDao } from '../DB/dao';
 import { TransactionDao } from '../DB/dao/transaction.dao';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
-import { IUser, PaymobTaskDetails } from '../interfaces';
+import { IUser, PaymobOrderDetails } from '../interfaces';
 import { ITransaction, PaymentMethod, TransactionType } from '../interfaces/transaction.interface';
 
 @autoInjectable()
 class PaymobService {
-  constructor(private readonly transactionDao: TransactionDao, private readonly taskDao: TaskDao) {} // Replace with your actual DAO
+  constructor(private readonly transactionDao: TransactionDao, private readonly taskerDao: TaskerDao, private readonly taskDao: TaskDao) {} // Replace with your actual DAO
 
   private async authenticate(): Promise<string> {
     const paymobToken = await axios.post('https://accept.paymob.com/api/auth/tokens', {
@@ -20,11 +20,11 @@ class PaymobService {
     return paymobToken.data.token as string;
   }
 
-  private async createOrder(paymobToken: string, orderDetails: PaymobTaskDetails) {
+  private async createOrder(paymobToken: string, orderDetails: PaymobOrderDetails) {
     try {
       let existingOrder = await axios.post('https://accept.paymob.com/api/ecommerce/orders/transaction_inquiry', {
         auth_token: paymobToken,
-        merchant_order_id: orderDetails.taskId,
+        merchant_order_id: orderDetails.taskId ? orderDetails.taskId : orderDetails.taskerId,
       });
 
       if (existingOrder.data.id) {
@@ -41,7 +41,7 @@ class PaymobService {
         amount_cents: orderDetails.amount * 100,
         currency: 'EGP',
         // merchant_order_id: `${Math.floor(Math.random() * 1000)}${orderDetails.taskId}`, // TODO: fix this
-        merchant_order_id: orderDetails.taskId,
+        merchant_order_id: orderDetails.taskId ? orderDetails.taskId : orderDetails.taskerId,
         items: [],
         notify_user_with_email: true,
         data: orderDetails,
@@ -80,10 +80,7 @@ class PaymobService {
         },
         integration_id: integrationId,
         lock_order_when_paid: 'false',
-        // to add additional data to the payment token request body you can add it here as key value pairs and it will be added to the payment token request body
-        transaction_type: 'for generation of payment token',
       });
-      // console.log(paymentToken.data);
       return paymentToken.data.token as string;
     } catch (error: any) {
       console.log('from generatePaymentToken', error.response.data);
@@ -160,7 +157,7 @@ class PaymobService {
         is_refunded,
         is_standalone_payment,
         is_voided,
-        order: { id: order_id, merchant_order_id },
+        order: { id: order_id },
         owner,
         pending,
         source_data: { pan: source_data_pan, sub_type: source_data_sub_type, type: source_data_type },
@@ -182,15 +179,12 @@ class PaymobService {
       const transaction: ITransaction = {
         transactionId: objId,
         amount: amount_cents / 100,
-        transactionType: transactionData.is_void
-          ? TransactionType.VOID_TRANSACTION
-          : transactionData.is_refund
-          ? TransactionType.REFUND_TRANSACTION
-          : TransactionType.ONLINE_TASK_PAYMENT,
+        transactionType: transactionData.order.data.transactionType,
         pinding: pending,
         success,
         orderId: order_id,
-        taskId: merchant_order_id,
+        taskId: transactionData.order.data.taskId,
+        taskerId: transactionData.order.data.merchant_order_id,
       };
       // const newTransaction =
       await this.transactionDao.create(transaction);
@@ -198,7 +192,7 @@ class PaymobService {
 
       if (success && transaction.transactionType === TransactionType.ONLINE_TASK_PAYMENT) {
         // Replace with your actual logic to update the task
-        let taskId = transactionData.order.merchant_order_id;
+        let taskId = transactionData.order.data.taskId;
         // console.log('taskId ======================>>', taskId);
         // if (!taskId.match(/^[0-9a-fA-F]{24}$/)) {
         //   taskId = transactionData.order.merchant_order_id.slice(3); //  TODO: remove this line
@@ -210,6 +204,14 @@ class PaymobService {
           paymentMethod: PaymentMethod.ONLINE_PAYMENT,
         });
         // console.log('updatedTask ======================>>', updatedTask);
+      } else if (success && transaction.transactionType === TransactionType.COMMISSION_PAYMENT) {
+        // get the tasker by id and update the notPaidTasks to be empty array
+        const tasker = await this.taskerDao.updateOneById(transaction.taskerId!, {
+          $set: { notPaidTasks: [] },
+        });
+
+        // console.log('tasker ======================>>', tasker);
+        if (!tasker) throw new HttpException(400, 'tasker_not_found');
       }
 
       return 'webhook received successfully';
@@ -234,7 +236,7 @@ class PaymobService {
     }
   }
 
-  public async initiateCardPayment(orderDetails: PaymobTaskDetails) {
+  public async initiateCardPayment(orderDetails: PaymobOrderDetails) {
     try {
       const paymobToken = await this.authenticate();
       const order = await this.createOrder(paymobToken, orderDetails);
@@ -248,13 +250,13 @@ class PaymobService {
     }
   }
 
-  public async initiateWalletPayment(orderDetails: PaymobTaskDetails) {
+  public async initiateWalletPayment(orderDetails: PaymobOrderDetails) {
     try {
       const paymobToken = await this.authenticate();
       const order = await this.createOrder(paymobToken, orderDetails);
       // console.log('order wallet ====>> ', order);
       const paymentToken = await this.generatePaymentToken(paymobToken, order, env.PAYMOB_INTEGRATION_ID_WALLET, orderDetails.user);
-      const walletPayment = await this.getWalletPaymentLink(paymentToken, orderDetails.phoneNumber);
+      const walletPayment = await this.getWalletPaymentLink(paymentToken, orderDetails.phoneNumber!);
       if (walletPayment) {
         return walletPayment.data.redirect_url;
       }
