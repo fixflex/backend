@@ -7,3 +7,4 @@ export * from './tasker.model';
 export * from './user.model';
 export * from './coupon.model';
 export * from './transaction.model';
+export * from './review.model';

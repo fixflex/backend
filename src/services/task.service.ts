@@ -70,6 +70,9 @@ class TaskService implements ITaskService {
 
   getTaskById = async (id: string) => {
     let task = await this.taskDao.getOneByIdPopulate(id, this.taskPopulate);
+    if (!task) throw new HttpException(404, 'Task not found');
+    // console.log('extract time from _id=> ', task._id.getTimestamp());
+    // console.log('extract time from _id=> ', task._id.getTimestamp().toISOString());
     return task;
   };
 
@@ -269,7 +272,7 @@ class TaskService implements ITaskService {
 
     return task;
   };
-
+  // TODO: send number to tasker and this number the user should use it to can make review
   completeTask = async (id: string, userId: string) => {
     // Step 1: Check if the task exists
     const task = await this.taskDao.getOneByIdPopulate<{ acceptedOffer: IOffer }>(id, { path: 'acceptedOffer', select: '-__v' }, '', false);

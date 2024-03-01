@@ -14,3 +14,4 @@ export * from './task.interface';
 export * from './tasker.interface';
 export * from './user.interface';
 export * from './coupon.interface';
+export * from './review.interface';

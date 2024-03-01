@@ -5,6 +5,17 @@ import { PaymentMethod } from '../../interfaces/transaction.interface';
 
 let taskSchema: Schema<ITask> = new Schema(
   {
+    // _id: {
+    //   type: String,
+    //   // make mongooes to generate the id instead of the default id
+    //   default: () => {
+    //     // return new Date().getTime().toString();
+    //     // user mongoose types to generate the id
+    //     return new Types.ObjectId().toString();
+    //     // toHexString(); // 24 character hex string hexString means a string of 24 characters as a string if you remove the toHexString() it will return an object
+    //     // toString vs toHexString => toString will return the object id as an object and toHexString will return the object id as a string
+    //   },
+    // },
     userId: {
       type: String,
       ref: 'User',
