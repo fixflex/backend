@@ -133,7 +133,7 @@ class OfferService implements IOfferService {
     await this.taskDao.updateOneById(offer.taskId._id, {
       status: TaskStatus.ASSIGNED,
       acceptedOffer: offer._id,
-
+      taskerId: offer.taskerId._id.toString(),
       commission: offer.price * offer.taskerId.commissionRate,
     });
     // 6. send notification to the tasker that his offer is accepted

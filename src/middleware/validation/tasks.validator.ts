@@ -5,6 +5,7 @@ import validatorMiddleware from '../errors/validation.middleware';
 
 export const createTaskValidator = [
   // ====================>>>>>>>> is required <<<<<<<<<<<==================== //
+  check('id').isMongoId().withMessage('invalid_MongoId'),
   check('title').isString().withMessage('invalid_input').isLength({ max: 300, min: 5 }).withMessage('title_lenght'),
   check('location')
     .notEmpty()
@@ -75,6 +76,7 @@ export const createTaskValidator = [
   check('acceptedOffer').isEmpty().withMessage('not_allowed'),
   check('paid').isEmpty().withMessage('not_allowed'),
   check('commission').isEmpty().withMessage('not_allowed'),
+  check('taskerId').isEmpty().withMessage('not_allowed'),
   check('commissionAfterDescount').isEmpty().withMessage('not_allowed'),
   check('paymentMethod').isEmpty().withMessage('not_allowed'),
   check('createdAt').isEmpty().withMessage('not_allowed'),
@@ -152,6 +154,7 @@ export const updateTaskValidator = [
   check('commission').isEmpty().withMessage('not_allowed'),
   check('commissionAfterDescount').isEmpty().withMessage('not_allowed'),
   check('paymentMethod').isEmpty().withMessage('not_allowed'),
+  check('taskerId').isEmpty().withMessage('not_allowed'),
   check('createdAt').isEmpty().withMessage('not_allowed'),
   check('updatedAt').isEmpty().withMessage('not_allowed'),
   validatorMiddleware,
