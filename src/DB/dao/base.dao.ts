@@ -10,7 +10,7 @@ export default abstract class BaseDAO<T> {
     return await this.model.create(entity);
   }
 
-  async getOneById(id: string, select: string = '', useLean: boolean = true): Promise<T | null> {
+  async getOneById(id: string, select: string = '', useLean: boolean = true) {
     return await this.model.findById(id).select(select).lean(useLean);
   }
 

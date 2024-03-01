@@ -5,8 +5,8 @@ import validatorMiddleware from '../errors/validation.middleware';
 
 export const createTaskValidator = [
   // ====================>>>>>>>> is required <<<<<<<<<<<==================== //
-  check('id').isMongoId().withMessage('invalid_MongoId'),
   check('title').isString().withMessage('invalid_input').isLength({ max: 300, min: 5 }).withMessage('title_lenght'),
+  check('categoryId').isMongoId().withMessage('invalid_MongoId'),
   check('location')
     .notEmpty()
     .withMessage('is_required')
@@ -29,7 +29,6 @@ export const createTaskValidator = [
     .withMessage('invalid_budget'),
 
   // ====================>>>>>>>> is optional <<<<<<<<<<<==================== //
-  check('category').optional().isMongoId().withMessage('invalid_MongoId'),
   check('details')
     .notEmpty()
     .withMessage('is_required')

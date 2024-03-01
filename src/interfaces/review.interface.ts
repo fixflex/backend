@@ -11,13 +11,13 @@ export interface IReview extends Document {
 }
 
 export interface IReviewController {
-  createReview(req: Request, res: Response, next: NextFunction): Promise<void>;
+  createReview(req: Request, res: Response, next: NextFunction): void;
 }
 
 export interface IReviewService {
-  createReview?(review: IReview): Promise<IReview>;
+  createReview(review: IReview, userId: string): Promise<IReview>;
   getReviews?(query: any): Promise<{ reviews: IReview[]; pagination: IPagination | undefined }>;
   getReview?(reviewId: string): Promise<IReview | null>;
-  updateReview?(reviewId: string, review: IReview): Promise<IReview | null>;
-  deleteReview?(reviewId: string): Promise<IReview | null>;
+  // updateReview?(reviewId: string, review: IReview, userId: string) : Promise<IReview | null>;
+  // deleteReview?(reviewId: string): Promise<IReview | null>;
 }
