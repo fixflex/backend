@@ -8,3 +8,4 @@ export * from './user.validator';
 export * from './tasker.validator';
 export * from './coupon.validator';
 export * from './message.validator';
+export * from './review.validator';

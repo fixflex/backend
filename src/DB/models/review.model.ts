@@ -9,11 +9,6 @@ let reviewSchema: Schema<IReview> = new Schema(
       ref: 'User',
       required: true,
     },
-    taskerId: {
-      type: String,
-      ref: 'Tasker',
-      required: true,
-    },
     taskId: {
       type: String,
       ref: 'Task',
@@ -33,6 +28,6 @@ let reviewSchema: Schema<IReview> = new Schema(
   { timestamps: true }
 );
 
-let Review = model<IReview>('Review', reviewSchema);
+let ReviewModel = model<IReview>('Review', reviewSchema);
 
-export default Review;
+export { ReviewModel };

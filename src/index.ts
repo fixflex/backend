@@ -13,6 +13,7 @@ import { ChatRoute } from './routes/chat.route';
 import { CouponRoute } from './routes/coupon.route';
 import HealthzRoute from './routes/healthz.route';
 import { OfferRoute } from './routes/offer.route';
+import { ReviewRoute } from './routes/review.route';
 import { TaskRoute } from './routes/task.route';
 import { TaskerRoute } from './routes/tasker.route';
 import { WebhooksRoute } from './routes/webhooks.route';
@@ -29,7 +30,8 @@ let messageRoute = container.resolve(MessageRoute);
 let taskRoute = container.resolve(TaskRoute);
 let offerRoute = container.resolve(OfferRoute);
 let couponRoute = container.resolve(CouponRoute);
-let webhooks = container.resolve(WebhooksRoute);
+let webhooksRoute = container.resolve(WebhooksRoute);
+let reviewRouite = container.resolve(ReviewRoute);
 
 // Setup app
 let app = new App([
@@ -43,7 +45,8 @@ let app = new App([
   offerRoute,
   couponRoute,
   messageRoute,
-  webhooks,
+  webhooksRoute,
+  reviewRouite,
 ]);
 
 // Setup http server

@@ -7,3 +7,4 @@ export * from './tasker.service';
 export * from './user.service';
 export * from './coupon.service';
 export * from './message.service';
+export * from './review.service';
