@@ -35,6 +35,7 @@ export enum TaskTime {
 export interface ITask extends Document {
   // _id: string;
   userId: string;
+  taskerId: string | null;
   dueDate: {
     on: Date;
     before: Date;

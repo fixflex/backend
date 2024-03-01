@@ -209,7 +209,7 @@ class TaskService implements ITaskService {
     }
     // 5. Update the task status to CANCELED
     task.status = TaskStatus.CANCELLED;
-
+    task.taskerId = null;
     return await task.save();
   };
 
@@ -268,6 +268,8 @@ class TaskService implements ITaskService {
     // @ts-ignore
     task.acceptedOffer = undefined;
     task.status = TaskStatus.OPEN;
+    task.taskerId = null;
+
     await task.save();
 
     return task;
