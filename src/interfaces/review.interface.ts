@@ -6,6 +6,7 @@ import { NextFunction, Request, Response } from '../helpers';
 export interface IReview extends Document {
   userId: string;
   taskId: string;
+  taskerId: string;
   rating: number;
   review: string;
 }

@@ -76,11 +76,18 @@ let taskerSchema: Schema<ITasker> = new Schema(
       default: env.COMMISSION_RATE,
     },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 // Apply the geospatial index to the coordinates field inside the location object
 // taskerSchema.index({ 'location.coordinates': '2dsphere' });
 taskerSchema.index({ location: '2dsphere' });
+
+// Virtual Properties
+taskerSchema.virtual('reviews', {
+  ref: 'Review',
+  localField: '_id',
+  foreignField: 'taskerId',
+});
 
 let Tasker = model<ITasker>('Tasker', taskerSchema);
 

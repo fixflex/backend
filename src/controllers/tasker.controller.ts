@@ -29,9 +29,9 @@ class TaskerController implements ITaskerController {
   // get tasker profile by user id
   getMe = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     let userId = req.user?._id;
-    let tasker = await this.taskerService.getMyProfile(userId!);
+    let tasker = await this.taskerService.getMyProfile(userId);
     if (!tasker) return next(new HttpException(404, 'tasker_not_found'));
-    res.status(200).json(customResponse<ITasker>({ data: tasker, success: true, message: req.t('tasker_found') }));
+    res.status(200).json(customResponse({ data: tasker, success: true, message: req.t('tasker_found') }));
   });
   getTaskers = asyncHandler(async (req: Request, res: Response) => {
     let { taskers, pagination } = await this.taskerService.getTaskers(req.query);
@@ -57,9 +57,9 @@ class TaskerController implements ITaskerController {
   });
 
   applyCoupon = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    let userId = req.user?._id;
+    let userId = req.user._id;
     let couponCode = req.body.couponCode;
-    let appliedCoupon = await this.taskerService.applyCoupon(userId!, couponCode);
+    let appliedCoupon = await this.taskerService.applyCoupon(userId, couponCode);
     if (!appliedCoupon) return next(new HttpException(400, 'coupon_not_applied'));
     res.status(200).json(customResponse({ data: null, success: true, message: req.t('coupon_applied') }));
   });

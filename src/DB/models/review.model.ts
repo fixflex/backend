@@ -9,6 +9,11 @@ let reviewSchema: Schema<IReview> = new Schema(
       ref: 'User',
       required: true,
     },
+    taskerId: {
+      type: String,
+      ref: 'Tasker',
+      required: true,
+    },
     taskId: {
       type: String,
       ref: 'Task',

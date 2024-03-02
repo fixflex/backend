@@ -37,7 +37,7 @@ class TaskerService implements ITaskerService {
   }
 
   async getMyProfile(userId: string) {
-    return await this.taskerDao.getOne({ userId });
+    return await this.taskerDao.getOnePopulate({ userId }, { path: 'reviews', select: '-__v' });
   }
 
   async getTaskers(reqQuery: Query): Promise<{ taskers: ITasker[]; pagination: IPagination | undefined }> {
@@ -68,7 +68,7 @@ class TaskerService implements ITaskerService {
     if (!tasker) throw new HttpException(404, 'tasker_not_found');
     // step 2: check coupon is exists & valid
     let coupon = await this.couponeDao.getOne({ code: couponCode, expirationDate: { $gte: new Date() }, remainingUses: { $gt: 0 } }, false);
-    if (!coupon) throw new HttpException(404, 'coupon_not_found');
+    if (!coupon) throw new HttpException(404, 'coupon_not_found_or_expired');
     // step 3: apply coupon to tasker
     tasker.notPaidTasks.forEach(async taskId => {
       let task = await this.taskDao.getOneById(taskId, '', false);
@@ -141,17 +141,3 @@ class TaskerService implements ITaskerService {
 }
 
 export { TaskerService };
-
-// tasker.notPaidTasks.forEach(async taskId => {
-//   let task = await this.taskDao.getOneById(taskId);
-//   if (task) {
-//     totalCommissions += task.commissionAfterDescount > 0 ? task.commissionAfterDescount : task.commission;
-
-//     // task.paidAt = new Date();
-//     // task.paidMethod = 'paypal';
-//     // task.paid = true;
-//     // tasker!.notPaidTasks = tasker!.notPaidTasks.filter(t => t != taskId);
-//     // tasker!.paidTasks.push(taskId);
-//     // await Promise.all([task.save(), tasker!.save()]);
-//   }
-// });

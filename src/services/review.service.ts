@@ -21,6 +21,7 @@ class ReviewServiec implements IReviewService {
     // if (reviewed) throw new HttpException(400, 'already_reviewed');
     // Step 4: create the review and return it
     review.userId = userId;
+    review.taskerId = task.taskerId!;
     return await this.reviewDao.create(review);
   }
 
