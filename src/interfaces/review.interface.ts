@@ -16,7 +16,7 @@ export interface IReviewController {
 
 export interface IReviewService {
   createReview(review: IReview, userId: string): Promise<IReview>;
-  getReviews?(query: any): Promise<{ reviews: IReview[]; pagination: IPagination | undefined }>;
+  getReviews(query: any): Promise<{ reviews: IReview[]; pagination: IPagination | undefined }>;
   getReview?(reviewId: string): Promise<IReview | null>;
   // updateReview?(reviewId: string, review: IReview, userId: string) : Promise<IReview | null>;
   // deleteReview?(reviewId: string): Promise<IReview | null>;

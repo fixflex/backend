@@ -6,6 +6,13 @@ export class QueryBuilder<T> {
   pagination: IPagination | undefined;
   constructor(public mongooseQuery: Query<T[], T>, public queryString: any) {}
 
+  /**
+   *
+   * @param extraExcludesFields
+   * @description This method filters the mongoose query based on the provided query string and excludes fields.
+   * and returns the QueryBuilder instance.
+   * @returns
+   */
   filter(extraExcludesFields: string[] = []) {
     const queryStringObj = { ...this.queryString };
     const defaultExcludesFields = ['limit', 'page', 'fields', 'sort', 'keyword'];
