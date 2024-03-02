@@ -16,6 +16,7 @@ const couponSchema = new Schema<ICoupon>(
       default: CouponType.PERCENTAGE,
     },
     value: {
+      // example: 10 for 10% or 100 for 100$
       type: Number,
       required: true,
     },
@@ -33,6 +34,7 @@ const couponSchema = new Schema<ICoupon>(
       required: true,
     },
     minOrderAmount: {
+      // minimum order amount required to apply the coupon
       type: Number,
     },
     createdBy: {
