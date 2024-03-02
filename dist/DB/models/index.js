@@ -23,3 +23,4 @@ __exportStar(require("./tasker.model"), exports);
 __exportStar(require("./user.model"), exports);
 __exportStar(require("./coupon.model"), exports);
 __exportStar(require("./transaction.model"), exports);
+__exportStar(require("./review.model"), exports);

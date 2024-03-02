@@ -18,6 +18,7 @@ const chat_route_1 = require("./routes/chat.route");
 const coupon_route_1 = require("./routes/coupon.route");
 const healthz_route_1 = __importDefault(require("./routes/healthz.route"));
 const offer_route_1 = require("./routes/offer.route");
+const review_route_1 = require("./routes/review.route");
 const task_route_1 = require("./routes/task.route");
 const tasker_route_1 = require("./routes/tasker.route");
 const webhooks_route_1 = require("./routes/webhooks.route");
@@ -33,7 +34,8 @@ let messageRoute = tsyringe_1.container.resolve(routes_4.MessageRoute);
 let taskRoute = tsyringe_1.container.resolve(task_route_1.TaskRoute);
 let offerRoute = tsyringe_1.container.resolve(offer_route_1.OfferRoute);
 let couponRoute = tsyringe_1.container.resolve(coupon_route_1.CouponRoute);
-let webhooks = tsyringe_1.container.resolve(webhooks_route_1.WebhooksRoute);
+let webhooksRoute = tsyringe_1.container.resolve(webhooks_route_1.WebhooksRoute);
+let reviewRouite = tsyringe_1.container.resolve(review_route_1.ReviewRoute);
 // Setup app
 let app = new app_1.default([
     healthzRoute,
@@ -46,7 +48,8 @@ let app = new app_1.default([
     offerRoute,
     couponRoute,
     messageRoute,
-    webhooks,
+    webhooksRoute,
+    reviewRouite,
 ]);
 // Setup http server
 let client = app.getServer();

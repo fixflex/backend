@@ -23,3 +23,4 @@ __exportStar(require("./tasker.controller"), exports);
 __exportStar(require("./user.controller"), exports);
 __exportStar(require("./coupon.controller"), exports);
 __exportStar(require("./message.controller"), exports);
+__exportStar(require("./review.controller"), exports);

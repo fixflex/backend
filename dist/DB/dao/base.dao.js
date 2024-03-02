@@ -18,6 +18,10 @@ class BaseDAO {
     async getOne(filter = {}, useLean = true) {
         return await this.model.findOne(filter).lean(useLean);
     }
+    async getOnePopulate(// <T> is the type of the populated field for example:  <T> ==>> <ITasker>
+    filter = {}, populate = { path: '', select: '' }, select = '', useLean = true) {
+        return await this.model.findOne(filter).populate(populate.path, populate.select).select(select).lean(useLean);
+    }
     async getMany(filter = {}, select = '', useLean = true) {
         return await this.model.find(filter).select(select).lean(useLean);
     }

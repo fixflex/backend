@@ -10,6 +10,7 @@ const validation_middleware_1 = __importDefault(require("../errors/validation.mi
 exports.createTaskValidator = [
     // ====================>>>>>>>> is required <<<<<<<<<<<==================== //
     (0, express_validator_1.check)('title').isString().withMessage('invalid_input').isLength({ max: 300, min: 5 }).withMessage('title_lenght'),
+    (0, express_validator_1.check)('categoryId').isMongoId().withMessage('invalid_MongoId'),
     (0, express_validator_1.check)('location')
         .notEmpty()
         .withMessage('is_required')
@@ -32,7 +33,6 @@ exports.createTaskValidator = [
         .isInt({ min: 10 })
         .withMessage('invalid_budget'),
     // ====================>>>>>>>> is optional <<<<<<<<<<<==================== //
-    (0, express_validator_1.check)('category').optional().isMongoId().withMessage('invalid_MongoId'),
     (0, express_validator_1.check)('details')
         .notEmpty()
         .withMessage('is_required')
@@ -78,6 +78,7 @@ exports.createTaskValidator = [
     (0, express_validator_1.check)('acceptedOffer').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('paid').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('commission').isEmpty().withMessage('not_allowed'),
+    (0, express_validator_1.check)('taskerId').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('commissionAfterDescount').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('paymentMethod').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('createdAt').isEmpty().withMessage('not_allowed'),
@@ -150,6 +151,7 @@ exports.updateTaskValidator = [
     (0, express_validator_1.check)('commission').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('commissionAfterDescount').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('paymentMethod').isEmpty().withMessage('not_allowed'),
+    (0, express_validator_1.check)('taskerId').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('createdAt').isEmpty().withMessage('not_allowed'),
     (0, express_validator_1.check)('updatedAt').isEmpty().withMessage('not_allowed'),
     validation_middleware_1.default,

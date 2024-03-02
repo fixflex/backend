@@ -18,10 +18,14 @@ let taskerSchema = new mongoose_1.Schema({
             ref: 'Category',
         },
     ],
-    rating: {
+    ratingAverage: {
         type: Number,
         max: 5,
         min: 0,
+        default: 0,
+    },
+    ratingQuantity: {
+        type: Number,
         default: 0,
     },
     location: {
@@ -76,9 +80,15 @@ let taskerSchema = new mongoose_1.Schema({
         type: Number,
         default: validateEnv_1.default.COMMISSION_RATE,
     },
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } });
 // Apply the geospatial index to the coordinates field inside the location object
 // taskerSchema.index({ 'location.coordinates': '2dsphere' });
 taskerSchema.index({ location: '2dsphere' });
+// Virtual Properties
+taskerSchema.virtual('reviews', {
+    ref: 'Review',
+    localField: '_id',
+    foreignField: 'taskerId',
+});
 let Tasker = (0, mongoose_1.model)('Tasker', taskerSchema);
 exports.default = Tasker;

@@ -23,3 +23,4 @@ __exportStar(require("./tasker.service"), exports);
 __exportStar(require("./user.service"), exports);
 __exportStar(require("./coupon.service"), exports);
 __exportStar(require("./message.service"), exports);
+__exportStar(require("./review.service"), exports);

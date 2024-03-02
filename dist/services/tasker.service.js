@@ -42,7 +42,7 @@ let TaskerService = class TaskerService {
         return await this.taskerDao.getTaskerProfile(taskerId);
     }
     async getMyProfile(userId) {
-        return await this.taskerDao.getOne({ userId });
+        return await this.taskerDao.getOnePopulate({ userId }, { path: 'reviews', select: '-__v' });
     }
     async getTaskers(reqQuery) {
         const { taskers, pagination } = await this.taskerDao.getTaskers(reqQuery);
@@ -69,7 +69,7 @@ let TaskerService = class TaskerService {
         // step 2: check coupon is exists & valid
         let coupon = await this.couponeDao.getOne({ code: couponCode, expirationDate: { $gte: new Date() }, remainingUses: { $gt: 0 } }, false);
         if (!coupon)
-            throw new HttpException_1.default(404, 'coupon_not_found');
+            throw new HttpException_1.default(404, 'coupon_not_found_or_expired');
         // step 3: apply coupon to tasker
         tasker.notPaidTasks.forEach(async (taskId) => {
             let task = await this.taskDao.getOneById(taskId, '', false);
@@ -145,15 +145,3 @@ exports.TaskerService = TaskerService = __decorate([
         dao_1.TaskDao,
         paymob_service_1.PaymobService])
 ], TaskerService);
-// tasker.notPaidTasks.forEach(async taskId => {
-//   let task = await this.taskDao.getOneById(taskId);
-//   if (task) {
-//     totalCommissions += task.commissionAfterDescount > 0 ? task.commissionAfterDescount : task.commission;
-//     // task.paidAt = new Date();
-//     // task.paidMethod = 'paypal';
-//     // task.paid = true;
-//     // tasker!.notPaidTasks = tasker!.notPaidTasks.filter(t => t != taskId);
-//     // tasker!.paidTasks.push(taskId);
-//     // await Promise.all([task.save(), tasker!.save()]);
-//   }
-// });

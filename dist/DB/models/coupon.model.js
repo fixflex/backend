@@ -16,6 +16,7 @@ const couponSchema = new mongoose_1.Schema({
         default: interfaces_1.CouponType.PERCENTAGE,
     },
     value: {
+        // example: 10 for 10% or 100 for 100$
         type: Number,
         required: true,
     },
@@ -33,6 +34,7 @@ const couponSchema = new mongoose_1.Schema({
         required: true,
     },
     minOrderAmount: {
+        // minimum order amount required to apply the coupon
         type: Number,
     },
     createdBy: {

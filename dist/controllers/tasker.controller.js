@@ -65,7 +65,7 @@ let TaskerController = class TaskerController {
             res.status(204).json((0, customResponse_1.default)({ data: null, success: true, message: req.t('tasker_deleted') }));
         });
         this.applyCoupon = (0, express_async_handler_1.default)(async (req, res, next) => {
-            let userId = req.user?._id;
+            let userId = req.user._id;
             let couponCode = req.body.couponCode;
             let appliedCoupon = await this.taskerService.applyCoupon(userId, couponCode);
             if (!appliedCoupon)

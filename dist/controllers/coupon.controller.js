@@ -8,8 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CouponController = void 0;
+const express_async_handler_1 = __importDefault(require("express-async-handler"));
 // coupon controller
 const tsyringe_1 = require("tsyringe");
 // import { ICouponController } from '../interfaces';
@@ -17,12 +21,12 @@ const services_1 = require("../services");
 let CouponController = class CouponController {
     constructor(couponService) {
         this.couponService = couponService;
-        this.createCoupon = async (req, res) => {
+        this.createCoupon = (0, express_async_handler_1.default)(async (req, res) => {
             req.body.createdBy = req.user._id;
             req.body.remainingUses = req.body.maxUses;
             const coupon = await this.couponService.createCoupon(req.body);
             res.status(201).json({ data: coupon, success: true, message: 'coupon_created' });
-        };
+        });
     }
 };
 exports.CouponController = CouponController;

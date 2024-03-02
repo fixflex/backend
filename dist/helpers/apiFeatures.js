@@ -6,6 +6,13 @@ class QueryBuilder {
         this.mongooseQuery = mongooseQuery;
         this.queryString = queryString;
     }
+    /**
+     *
+     * @param extraExcludesFields
+     * @description This method filters the mongoose query based on the provided query string and excludes fields.
+     * and returns the QueryBuilder instance.
+     * @returns
+     */
     filter(extraExcludesFields = []) {
         const queryStringObj = { ...this.queryString };
         const defaultExcludesFields = ['limit', 'page', 'fields', 'sort', 'keyword'];

@@ -4,10 +4,25 @@ const mongoose_1 = require("mongoose");
 const interfaces_1 = require("../../interfaces");
 const transaction_interface_1 = require("../../interfaces/transaction.interface");
 let taskSchema = new mongoose_1.Schema({
+    // _id: {
+    //   type: String,
+    //   // make mongooes to generate the id instead of the default id
+    //   default: () => {
+    //     // return new Date().getTime().toString();
+    //     // user mongoose types to generate the id
+    //     return new Types.ObjectId().toString();
+    //     // toHexString(); // 24 character hex string hexString means a string of 24 characters as a string if you remove the toHexString() it will return an object
+    //     // toString vs toHexString => toString will return the object id as an object and toHexString will return the object id as a string
+    //   },
+    // },
     userId: {
         type: String,
         ref: 'User',
         required: true,
+    },
+    taskerId: {
+        type: String,
+        ref: 'Tasker',
     },
     dueDate: {
         on: {
@@ -117,6 +132,18 @@ let taskSchema = new mongoose_1.Schema({
 // Apply the geospatial index to the coordinates field inside the location object
 // taskSchema.index({ 'location.coordinates': '2dsphere' });
 taskSchema.index({ location: '2dsphere' });
+//  Virtual populate the reviews on the task
+taskSchema.virtual('reviews', {
+    ref: 'Review',
+    foreignField: 'taskId',
+    localField: '_id',
+});
+//  Virtual populate the offers on the task.
+// taskSchema.virtual('offers', {
+//   ref: 'Offer',
+//   foreignField: 'taskId',
+//   localField: '_id',
+// });
 let Task = (0, mongoose_1.model)('Task', taskSchema);
 exports.default = Task;
 // TODO

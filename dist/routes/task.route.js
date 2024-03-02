@@ -16,14 +16,34 @@ const task_controller_1 = require("../controllers/task.controller");
 const auth_middleware_1 = require("../middleware/auth.middleware");
 const isMongoID_validator_1 = require("../middleware/validation/isMongoID.validator");
 const tasks_validator_1 = require("../middleware/validation/tasks.validator");
+const review_route_1 = require("./review.route");
 let TaskRoute = class TaskRoute {
-    constructor(taskController) {
+    constructor(taskController, reviewRoute) {
         this.taskController = taskController;
+        this.reviewRoute = reviewRoute;
         this.path = '/tasks';
         this.router = (0, express_1.Router)();
         this.initializerRoutes();
     }
     initializerRoutes() {
+        // Nested route
+        this.router.all(`${this.path}/:id/reviews/:reviewId?`, // the ? means that the param is optional
+        (req, _res, next) => {
+            // Append taskId to req.query
+            req.query = {
+                ...req.query,
+                taskId: req.params.id,
+            };
+            if (req.method === 'POST') {
+                req.body = {
+                    ...req.body,
+                    taskId: req.params.id,
+                };
+            }
+            // Remove '/tasks/:id' from req.url
+            req.url = req.url.replace(`${this.path}/${req.params.id}`, '');
+            next();
+        }, this.reviewRoute.router);
         this.router.get(`${this.path}`, this.taskController.getTasks);
         this.router.get(`${this.path}/:id`, isMongoID_validator_1.isMongoId, this.taskController.getTaskById);
         // this.router.get(`${this.path}/:id/offers`, this.taskController.getTaskOffers);
@@ -47,7 +67,7 @@ let TaskRoute = class TaskRoute {
 exports.TaskRoute = TaskRoute;
 exports.TaskRoute = TaskRoute = __decorate([
     (0, tsyringe_1.autoInjectable)(),
-    __metadata("design:paramtypes", [task_controller_1.TaskController])
+    __metadata("design:paramtypes", [task_controller_1.TaskController, review_route_1.ReviewRoute])
 ], TaskRoute);
 // this.router.get(`${this.path}/:id/images`, this.taskController.getTaskImages);
 // this.router.get(`${this.path}/:id/owner`, this.taskController.getTaskOwner);

@@ -140,6 +140,7 @@ let OfferService = class OfferService {
         await this.taskDao.updateOneById(offer.taskId._id, {
             status: task_interface_1.TaskStatus.ASSIGNED,
             acceptedOffer: offer._id,
+            taskerId: offer.taskerId._id.toString(),
             commission: offer.price * offer.taskerId.commissionRate,
         });
         // 6. send notification to the tasker that his offer is accepted

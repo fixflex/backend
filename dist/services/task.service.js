@@ -30,7 +30,7 @@ let TaskService = class TaskService {
         this.oneSignalApiHandler = oneSignalApiHandler;
         this.paymobService = paymobService;
         this.taskPopulate = {
-            path: 'userId offers',
+            path: 'userId offers reviews',
             select: '-__v -password -active -role',
         };
         this.createTask = async (task) => {
@@ -70,6 +70,10 @@ let TaskService = class TaskService {
         };
         this.getTaskById = async (id) => {
             let task = await this.taskDao.getOneByIdPopulate(id, this.taskPopulate);
+            if (!task)
+                throw new HttpException_1.default(404, 'Task not found');
+            // console.log('extract time from _id=> ', task._id.getTimestamp());
+            // console.log('extract time from _id=> ', task._id.getTimestamp().toISOString());
             return task;
         };
         this.updateTask = async (id, payload, userId) => {
@@ -195,6 +199,7 @@ let TaskService = class TaskService {
             }
             // 5. Update the task status to CANCELED
             task.status = interfaces_1.TaskStatus.CANCELLED;
+            task.taskerId = null;
             return await task.save();
         };
         this.openTask = async (id, userId) => {
@@ -253,9 +258,11 @@ let TaskService = class TaskService {
             // @ts-ignore
             task.acceptedOffer = undefined;
             task.status = interfaces_1.TaskStatus.OPEN;
+            task.taskerId = null;
             await task.save();
             return task;
         };
+        // TODO: send number to tasker and this number the user should use it to can make review
         this.completeTask = async (id, userId) => {
             // Step 1: Check if the task exists
             const task = await this.taskDao.getOneByIdPopulate(id, { path: 'acceptedOffer', select: '-__v' }, '', false);
