@@ -6,7 +6,8 @@ import { Request, Response } from '../helpers/generic';
 
 export interface ITasker extends Document {
   userId: string;
-  rating: number;
+  ratingAverage: number;
+  ratingQuantity: number;
   bio: string;
   categories: string[];
   phoneNumber: string;
@@ -30,7 +31,6 @@ export interface ITasker extends Document {
     start: string;
     end: string;
   };
-
   notPaidTasks: string[]; // taskIds that the tasker has to pay commission for
   totalCanceledTasks: number;
   totalEarnings: number;
@@ -40,48 +40,6 @@ export interface ITasker extends Document {
   balance: number; // the amount of money that the tasker has in his account (wallet)
   createdAt: Date;
   updatedAt: Date;
-
-  // ======================================================================================================== //
-
-  // commissionsToPay: {
-  //   taskId: string;
-  //   ratio: number; // the ratio of the commission that the tasker has to pay  (task price * ratio)
-  //   amount: number; // the amount of the commission that the tasker has to pay (task price * ratio) (task price * commission percentage) (task price * commission ratio) (task price * commission amount) ex: 100 * 0.2 = 20 (20%) (20% of the task price)
-  // }[];
-  // commissions: {
-  //   taskId: string;
-  //   ratio: number;
-  //   amount: number;
-  // }[];
-  // // totalPaidCommission: number;
-  // // totalUnpaidCommission: number;
-
-  // completedTasks: {
-  //   taskId: string;
-  //   commissionToPay: {
-  //     ratio: number;
-  //     amount: number;
-  //     paid: boolean;
-  //     paidAt: Date;
-  //     paidMethod: PaymentMethod;
-  //   }[];
-  //   paidAt: Date;
-  //   paidMethod: PaymentMethod;
-  // }[];
-
-  // totalEarnings: number;
-  // netEarnings: number;
-
-  // pendingCommissions: number;
-  // totalCanceledTasks: number;
-  // totalAcceptedOffers: number;
-  // netIncome: number;
-
-  // earnings: {
-  //   taskId: string;
-  //   ratio: number;
-  //   amount: number;
-  // }[];
 }
 
 export interface ITaskerController {

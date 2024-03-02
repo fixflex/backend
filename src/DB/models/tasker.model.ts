@@ -11,16 +11,21 @@ let taskerSchema: Schema<ITasker> = new Schema(
       ref: 'User',
       required: true,
     },
+
     categories: [
       {
         type: String,
         ref: 'Category',
       },
     ],
-    rating: {
+    ratingAverage: {
       type: Number,
       max: 5,
       min: 0,
+      default: 0,
+    },
+    ratingQuantity: {
+      type: Number,
       default: 0,
     },
     location: {

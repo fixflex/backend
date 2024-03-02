@@ -136,6 +136,20 @@ let taskSchema: Schema<ITask> = new Schema(
 // taskSchema.index({ 'location.coordinates': '2dsphere' });
 taskSchema.index({ location: '2dsphere' });
 
+//  Virtual populate the reviews on the task
+taskSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'taskId',
+  localField: '_id',
+});
+
+//  Virtual populate the offers on the task.
+// taskSchema.virtual('offers', {
+//   ref: 'Offer',
+//   foreignField: 'taskId',
+//   localField: '_id',
+// });
+
 let Task = model<ITask>('Task', taskSchema);
 
 export default Task;

@@ -24,7 +24,7 @@ class TaskService implements ITaskService {
   ) {}
 
   private taskPopulate: IPopulate = {
-    path: 'userId offers',
+    path: 'userId offers reviews',
     select: '-__v -password -active -role',
   };
 
