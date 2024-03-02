@@ -15,7 +15,7 @@ class ReviewRoute implements Routes {
   }
   private initializerRoutes() {
     // public routes
-    // this.router.get(`${this.path}`, this.reviewController.getReviews);
+    this.router.get(`${this.path}`, this.reviewController.getReviews);
     this.router.get(`${this.path}/:id`, isMongoId, this.reviewController.getReviewById);
 
     // =================================================================== //

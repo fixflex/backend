@@ -1,3 +1,4 @@
+import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
 import { TaskDao } from '../DB/dao';
@@ -16,11 +17,16 @@ class ReviewServiec implements IReviewService {
     // Step 2: check if the task is completed
     if (task.status !== TaskStatus.COMPLETED) throw new HttpException(400, 'task_not_completed');
     // Step 3: check if the user has already reviewed the task
-    const reviewed = await this.reviewDao.getOne({ taskId: review.taskId, userId });
-    if (reviewed) throw new HttpException(400, 'already_reviewed');
+    // const reviewed = await this.reviewDao.getOne({ taskId: review.taskId, userId });
+    // if (reviewed) throw new HttpException(400, 'already_reviewed');
     // Step 4: create the review and return it
     review.userId = userId;
     return await this.reviewDao.create(review);
+  }
+
+  async getReviews(query: Query) {
+    const { reviews, pagination } = await this.reviewDao.getReviews(query);
+    return { reviews, pagination };
   }
 
   async getReviewById(reviewId: string) {

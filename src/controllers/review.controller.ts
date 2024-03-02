@@ -16,6 +16,11 @@ class ReviewController implements IReviewController {
     res.status(201).json(customResponse({ data: review, success: true, message: req.t('review_created') }));
   });
 
+  getReviews = asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    let reviews = await this.reviewService.getReviews(req.query);
+    res.status(200).json(customResponse({ data: reviews, success: true, message: req.t('reviews_fetched') }));
+  });
+
   getReviewById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     let review = await this.reviewService.getReviewById(req.params.id);
     if (!review) return next(new HttpException(404, 'review_not_found'));
