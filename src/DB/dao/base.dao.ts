@@ -27,6 +27,15 @@ export default abstract class BaseDAO<T> {
     return await this.model.findOne(filter).lean(useLean);
   }
 
+  async getOnePopulate<T>( // <T> is the type of the populated field for example:  <T> ==>> <ITasker>
+    filter: FilterQuery<T> = {},
+    populate: IPopulate = { path: '', select: '' },
+    select: string = '',
+    useLean: boolean = true
+  ) {
+    return await this.model.findOne(filter).populate<T>(populate.path, populate.select).select(select).lean(useLean);
+  }
+
   async getMany(filter: FilterQuery<T> = {}, select: string = '', useLean: boolean = true) {
     return await this.model.find(filter).select(select).lean(useLean);
   }
