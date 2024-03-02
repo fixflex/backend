@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 import { IReview } from '../../interfaces';
+import TaskerModel from './tasker.model';
 
 let reviewSchema: Schema<IReview> = new Schema(
   {
@@ -32,6 +33,38 @@ let reviewSchema: Schema<IReview> = new Schema(
   },
   { timestamps: true }
 );
+
+reviewSchema.statics.calcAverageRatingsAndQuantity = async function (taskerId: string) {
+  let stats = await this.aggregate([
+    {
+      $match: { taskerId },
+    },
+    {
+      $group: {
+        _id: '$taskerId',
+        nRating: { $sum: 1 },
+        avgRating: { $avg: '$rating' },
+      },
+    },
+  ]);
+  console.log('stats ===>  ', stats);
+  if (stats.length > 0) {
+    await TaskerModel.findByIdAndUpdate(
+      taskerId,
+      {
+        ratingQuantity: stats[0].nRating,
+        ratingAverage: stats[0].avgRating.toFixed(2),
+      },
+      { new: true }
+    );
+  }
+};
+
+// Call calcAverageRatingsAndQuantity after each review is created or updated
+reviewSchema.post('save', async function () {
+  // @ts-ignore // TODO : fix this error
+  this.constructor.calcAverageRatingsAndQuantity(this.taskerId);
+});
 
 let ReviewModel = model<IReview>('Review', reviewSchema);
 
