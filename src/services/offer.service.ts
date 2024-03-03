@@ -8,7 +8,7 @@ import { TaskDao } from '../DB/dao/task.dao';
 import HttpException from '../exceptions/HttpException';
 import { NotificationOptions } from '../helpers/onesignal';
 import { OneSignalApiHandler } from '../helpers/onesignal';
-import { IOffer, IOfferService, OfferStatus } from '../interfaces';
+import { IOffer, IOfferService, IUser, OfferStatus } from '../interfaces';
 import { TaskStatus } from '../interfaces/task.interface';
 import { IPagination } from './../interfaces/pagination.interface';
 import { ITask } from './../interfaces/task.interface';
@@ -39,14 +39,16 @@ class OfferService implements IOfferService {
   // TODO : use mongoose middleware to check if the tasker is paid and verified before creating an offer
   async createOffer(offer: IOffer, userId: string) {
     // 1. check if the user is a tasker & notPaidTask array is empty
-    let tasker = await this.taskerDao.getOne({ userId });
+    let tasker = await this.taskerDao.getOnePopulate<{ userId: IUser }>({ userId }, { path: 'userId' });
     if (!tasker) throw new HttpException(403, 'You_are_not_a_tasker');
     if (tasker.notPaidTasks && tasker.notPaidTasks.length > 0) throw new HttpException(403, 'You must pay the previous tasks commissions');
     // 2. check if the task is exist and status is open
-    let task = await this.taskDao.getOne({ _id: offer.taskId });
+    let task = await this.taskDao.getOne({ _id: offer.taskId }); // TODO: use getOneById
     if (!task) throw new HttpException(400, 'Task_not_found');
     // 2.1 check that the tasker is not the owner of the task
     if (task.userId === userId) throw new HttpException(400, 'You_cant_make_an_offer_on_your_task');
+    // 2.2 check that the tasker phone is verified
+    if (!tasker.userId.phoneNumVerified) throw new HttpException(400, 'You_must_verify_your_phone_number');
     if (task.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
     // 3. check if the tasker already made an offer on this task, if yes return an error
     let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });
