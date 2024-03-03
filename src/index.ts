@@ -52,18 +52,25 @@ let app = new App([
 ]);
 
 const whatsappclient = new Client({
+  // puppeteer: { headless: false }, // If headless = false it will open a browser by default it is true
   authStrategy: new LocalAuth(),
 });
 
 whatsappclient.on('qr', (qr: any) => qrcode.generate(qr, { small: true }));
-whatsappclient.on('ready', () => console.log('Client is ready!'));
+whatsappclient.on('ready', () => {
+  console.log('Client is ready!');
+});
+whatsappclient.on('authenticated', (session: any) => {
+  console.log('Authenticated', session);
+});
 
 whatsappclient.on('message', async (message: any) => {
   try {
     // process.env.PROCCESS_MESSAGE_FROM_CLIENT &&
     if (message.from != 'status@broadcast') {
       const contact = await message.getContact();
-      console.log(contact, message.from);
+      console.log(contact.pushname, message.from);
+      // console.log(message.from);
       if (message.body === 'ping') {
         await message.reply('pong');
         await whatsappclient.sendMessage(message.from, 'pong');

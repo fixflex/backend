@@ -27,8 +27,9 @@ class TaskerRoute implements Routes {
       `${this.path}/verify-phone`,
       asyncHandler(async (req: any, res: any, _next: any) => {
         console.log('phone verification route');
-        whatsappclient.sendMessage(req.body.phoneNumber, `${req.body.message}-${Math.random()}`);
-        res.send();
+        let verificationCode: any = Math.floor(100000 + Math.random() * 900000); // 6 digits random code
+        whatsappclient.sendMessage(req.body.phoneNumber, `Your verification code is: ${verificationCode}`);
+        res.status(200).json({ message: 'Verification code sent' });
       })
     );
     this.router.post(`${this.path}/become-tasker`, authenticateUser, createTaskerValidator, this.taskerController.createTasker);
