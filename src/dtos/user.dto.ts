@@ -7,6 +7,7 @@ export class UserDto {
     this.email = user.email;
     this.firstName = user.firstName;
     this.lastName = user.lastName;
+    this.phoneNumber = user.phoneNumber;
     // this.profilePicture = user.profilePicture.url;
   }
 
@@ -14,5 +15,6 @@ export class UserDto {
   readonly email: string;
   readonly firstName: string;
   readonly lastName: string;
+  readonly phoneNumber: string;
   // readonly profilePicture: string | null;
 }

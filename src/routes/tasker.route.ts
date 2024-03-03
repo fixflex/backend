@@ -1,8 +1,6 @@
 import { Router } from 'express';
-import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
-import { whatsappclient } from '..';
 import { TaskerController } from '../controllers/tasker.controller';
 import { Routes } from '../interfaces/routes.interface';
 // import { UserType } from '../../interfaces/user.interface';
@@ -22,16 +20,6 @@ class TaskerRoute implements Routes {
   private insitializeRoutes() {
     //  Logged in user routes (authenticated)
 
-    // phone number verification
-    this.router.post(
-      `${this.path}/verify-phone`,
-      asyncHandler(async (req: any, res: any, _next: any) => {
-        console.log('phone verification route');
-        let verificationCode: any = Math.floor(100000 + Math.random() * 900000); // 6 digits random code
-        whatsappclient.sendMessage(req.body.phoneNumber, `Your verification code is: ${verificationCode}`);
-        res.status(200).json({ message: 'Verification code sent' });
-      })
-    );
     this.router.post(`${this.path}/become-tasker`, authenticateUser, createTaskerValidator, this.taskerController.createTasker);
     this.router.get(`${this.path}/me`, authenticateUser, this.taskerController.getMe);
     this.router.patch(`${this.path}/me`, authenticateUser, updateTaskerValidator, this.taskerController.updateMe);

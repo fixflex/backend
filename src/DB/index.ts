@@ -35,4 +35,4 @@ const dbConnection = async () => {
     });
 };
 
-export default dbConnection;
+export { dbConnection };
