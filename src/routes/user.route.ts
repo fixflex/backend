@@ -17,6 +17,8 @@ class UserRoute implements Routes {
 
   private insitializeRoutes() {
     // Logged in user routes (authenticated)
+    this.router.get(`${this.path}/send-verification-code`, authenticateUser, this.userController.sendVerificationCode);
+    this.router.post(`${this.path}/verify`, authenticateUser, this.userController.verifyCode);
     this.router
       // TODO: change the route to /profile
       .route(`${this.path}/me`)
