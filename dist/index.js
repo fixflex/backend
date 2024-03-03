@@ -3,10 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.io = exports.client = exports.server = void 0;
+exports.whatsappclient = exports.io = exports.client = exports.server = void 0;
 const http_1 = require("http");
+const qrcode_terminal_1 = __importDefault(require("qrcode-terminal"));
 require("reflect-metadata");
 const tsyringe_1 = require("tsyringe");
+const whatsapp_web_js_1 = require("whatsapp-web.js");
 const app_1 = __importDefault(require("./app"));
 const validateEnv_1 = __importDefault(require("./config/validateEnv"));
 const log_1 = __importDefault(require("./helpers/log"));
@@ -51,6 +53,36 @@ let app = new app_1.default([
     webhooksRoute,
     reviewRouite,
 ]);
+const whatsappclient = new whatsapp_web_js_1.Client({
+    // puppeteer: { headless: false }, // If headless = false it will open a browser by default it is true
+    authStrategy: new whatsapp_web_js_1.LocalAuth(),
+});
+exports.whatsappclient = whatsappclient;
+whatsappclient.on('qr', (qr) => qrcode_terminal_1.default.generate(qr, { small: true }));
+whatsappclient.on('ready', () => {
+    console.log('Client is ready!');
+});
+whatsappclient.on('authenticated', (session) => {
+    console.log('Authenticated', session);
+});
+whatsappclient.on('message', async (message) => {
+    try {
+        // process.env.PROCCESS_MESSAGE_FROM_CLIENT &&
+        if (message.from != 'status@broadcast') {
+            const contact = await message.getContact();
+            console.log(contact.pushname, message.from);
+            // console.log(message.from);
+            if (message.body === 'ping') {
+                await message.reply('pong');
+                await whatsappclient.sendMessage(message.from, 'pong');
+            }
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+});
+whatsappclient.initialize();
 // Setup http server
 let client = app.getServer();
 exports.client = client;

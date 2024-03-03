@@ -8,10 +8,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TaskerRoute = void 0;
 const express_1 = require("express");
+const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const tsyringe_1 = require("tsyringe");
+const __1 = require("..");
 const tasker_controller_1 = require("../controllers/tasker.controller");
 // import { UserType } from '../../interfaces/user.interface';
 const auth_middleware_1 = require("../middleware/auth.middleware");
@@ -26,6 +31,13 @@ let TaskerRoute = class TaskerRoute {
     }
     insitializeRoutes() {
         //  Logged in user routes (authenticated)
+        // phone number verification
+        this.router.post(`${this.path}/verify-phone`, (0, express_async_handler_1.default)(async (req, res, _next) => {
+            console.log('phone verification route');
+            let verificationCode = Math.floor(100000 + Math.random() * 900000); // 6 digits random code
+            __1.whatsappclient.sendMessage(req.body.phoneNumber, `Your verification code is: ${verificationCode}`);
+            res.status(200).json({ message: 'Verification code sent' });
+        }));
         this.router.post(`${this.path}/become-tasker`, auth_middleware_1.authenticateUser, tasker_validator_1.createTaskerValidator, this.taskerController.createTasker);
         this.router.get(`${this.path}/me`, auth_middleware_1.authenticateUser, this.taskerController.getMe);
         this.router.patch(`${this.path}/me`, auth_middleware_1.authenticateUser, tasker_validator_1.updateTaskerValidator, this.taskerController.updateMe);

@@ -42,6 +42,7 @@ let OfferService = class OfferService {
     //       },
     //   }));
     //   await Product.bulkWrite(bulkOption, {});
+    // TODO : use mongoose middleware to check if the tasker is paid and verified before creating an offer
     async createOffer(offer, userId) {
         // 1. check if the user is a tasker & notPaidTask array is empty
         let tasker = await this.taskerDao.getOne({ userId });
