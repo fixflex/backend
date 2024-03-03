@@ -26,6 +26,9 @@ export interface IUser extends Document {
   };
   active: boolean;
   phoneNumber: string;
+  phoneNumVerified: boolean;
+  phoneNumVerificationCode: string | undefined;
+  phoneNumVerificationCodeExpiration: number | undefined;
   // ip address of the user when he registered or logged in
   ipAddress: string;
   createdAt?: string;
