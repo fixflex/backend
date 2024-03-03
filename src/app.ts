@@ -6,10 +6,12 @@ import Backend from 'i18next-fs-backend';
 import i18nextMiddleware from 'i18next-http-middleware';
 import morgan from 'morgan';
 import path from 'path';
+import qrcode from 'qrcode-terminal';
 import 'reflect-metadata';
 import swaggerUi from 'swagger-ui-express';
+import { Client, LocalAuth } from 'whatsapp-web.js';
 
-import dbConnection from './DB';
+import { dbConnection } from './DB';
 import env from './config/validateEnv';
 // Documentation
 import swaggerDocument from './docs/swagger';
@@ -22,6 +24,7 @@ class App {
   public app: express.Application;
   public port: number | string;
   public env: string;
+  public whatsappclient: any;
 
   constructor(routes: Routes[]) {
     this.app = express();
@@ -31,6 +34,7 @@ class App {
     this.connectToDatabase();
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
+    this.initializeWhatsAppWeb();
     this.initializeSwagger();
     this.initializeErrorHandling();
   }
@@ -72,6 +76,36 @@ class App {
         // debug: env.NODE_ENV === 'development',
       });
     this.app.use(i18nextMiddleware.handle(i18next));
+  }
+
+  private initializeWhatsAppWeb() {
+    this.whatsappclient = new Client({
+      authStrategy: new LocalAuth(),
+    });
+    this.whatsappclient.on('qr', (qr: any) => qrcode.generate(qr, { small: true }));
+    this.whatsappclient.on('ready', () => {
+      console.log('Client is ready!');
+      (global as any)['myGlobalVar'] = true;
+    });
+    this.whatsappclient.on('authenticated', () => console.log('Authenticated'));
+    this.whatsappclient.on('message', async (message: any) => {
+      try {
+        // process.env.PROCCESS_MESSAGE_FROM_CLIENT &&
+        if (message.from != 'status@broadcast') {
+          const contact = await message.getContact();
+          console.log(contact.pushname, message.from);
+          // console.log(message.from);
+          if (message.body === 'ping') {
+            await message.reply('pong');
+            await this.whatsappclient.sendMessage(message.from, 'pong');
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    this.whatsappclient.initialize();
   }
 
   private initializeRoutes(routes: Routes[]) {
