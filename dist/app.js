@@ -11,9 +11,11 @@ const i18next_fs_backend_1 = __importDefault(require("i18next-fs-backend"));
 const i18next_http_middleware_1 = __importDefault(require("i18next-http-middleware"));
 const morgan_1 = __importDefault(require("morgan"));
 const path_1 = __importDefault(require("path"));
+const qrcode_terminal_1 = __importDefault(require("qrcode-terminal"));
 require("reflect-metadata");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
-const DB_1 = __importDefault(require("./DB"));
+const whatsapp_web_js_1 = require("whatsapp-web.js");
+const DB_1 = require("./DB");
 const validateEnv_1 = __importDefault(require("./config/validateEnv"));
 // Documentation
 const swagger_1 = __importDefault(require("./docs/swagger"));
@@ -28,6 +30,7 @@ class App {
         this.connectToDatabase();
         this.initializeMiddlewares();
         this.initializeRoutes(routes);
+        this.initializeWhatsAppWeb();
         this.initializeSwagger();
         this.initializeErrorHandling();
     }
@@ -35,7 +38,7 @@ class App {
         return this.app;
     }
     connectToDatabase() {
-        (0, DB_1.default)();
+        (0, DB_1.dbConnection)();
     }
     initializeMiddlewares() {
         if (this.env === 'development') {
@@ -67,6 +70,35 @@ class App {
             // debug: env.NODE_ENV === 'development',
         });
         this.app.use(i18next_http_middleware_1.default.handle(i18next_1.default));
+    }
+    initializeWhatsAppWeb() {
+        this.whatsappclient = new whatsapp_web_js_1.Client({
+            authStrategy: new whatsapp_web_js_1.LocalAuth(),
+        });
+        this.whatsappclient.on('qr', (qr) => qrcode_terminal_1.default.generate(qr, { small: true }));
+        this.whatsappclient.on('ready', () => {
+            console.log('Client is ready!');
+            global['myGlobalVar'] = true;
+        });
+        this.whatsappclient.on('authenticated', () => console.log('Authenticated'));
+        this.whatsappclient.on('message', async (message) => {
+            try {
+                // process.env.PROCCESS_MESSAGE_FROM_CLIENT &&
+                if (message.from != 'status@broadcast') {
+                    const contact = await message.getContact();
+                    console.log(contact.pushname, message.from);
+                    // console.log(message.from);
+                    if (message.body === 'ping') {
+                        await message.reply('pong');
+                        await this.whatsappclient.sendMessage(message.from, 'pong');
+                    }
+                }
+            }
+            catch (error) {
+                console.error(error);
+            }
+        });
+        this.whatsappclient.initialize();
     }
     initializeRoutes(routes) {
         // serve the static files (index.html)

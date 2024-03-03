@@ -60,6 +60,18 @@ let UserController = class UserController {
                 return next(new HttpException_1.default(404, 'No user found'));
             res.status(200).json((0, customResponse_1.default)({ data: user, success: true, message: req.t('user_updated') }));
         });
+        this.sendVerificationCode = (0, express_async_handler_1.default)(async (req, res, next) => {
+            let isSend = await this.userService.sendVerificationCode(req.user);
+            if (!isSend)
+                return next(new HttpException_1.default(500, 'something_went_wrong'));
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, message: req.t('verification_code_sent') }));
+        });
+        this.verifyCode = (0, express_async_handler_1.default)(async (req, res, next) => {
+            let isVerified = await this.userService.verifyCode(req.user, req.body.verificationCode);
+            if (!isVerified)
+                return next(new HttpException_1.default(400, 'invalid_code'));
+            res.status(200).json((0, customResponse_1.default)({ data: null, success: true, message: req.t('phone_verified') }));
+        });
     }
 };
 exports.UserController = UserController;

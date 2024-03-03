@@ -55,6 +55,18 @@ let userSchema = new mongoose_1.Schema({
         type: Boolean,
         default: true,
     },
+    phoneNumber: {
+        type: String,
+        unique: true,
+        trim: true,
+        match: [/^\d{11}$/, 'Please provide a valid phone number (11 digits)'],
+    },
+    phoneNumVerified: {
+        type: Boolean,
+        default: false,
+    },
+    phoneNumVerificationCode: String,
+    phoneNumVerificationCodeExpiration: Date,
     ipAddress: String,
 }, { timestamps: true });
 // TODO: add a pre save hook to hash the password before saving the user

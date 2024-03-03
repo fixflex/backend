@@ -45,18 +45,21 @@ let OfferService = class OfferService {
     // TODO : use mongoose middleware to check if the tasker is paid and verified before creating an offer
     async createOffer(offer, userId) {
         // 1. check if the user is a tasker & notPaidTask array is empty
-        let tasker = await this.taskerDao.getOne({ userId });
+        let tasker = await this.taskerDao.getOnePopulate({ userId }, { path: 'userId' });
         if (!tasker)
             throw new HttpException_1.default(403, 'You_are_not_a_tasker');
         if (tasker.notPaidTasks && tasker.notPaidTasks.length > 0)
             throw new HttpException_1.default(403, 'You must pay the previous tasks commissions');
         // 2. check if the task is exist and status is open
-        let task = await this.taskDao.getOne({ _id: offer.taskId });
+        let task = await this.taskDao.getOne({ _id: offer.taskId }); // TODO: use getOneById
         if (!task)
             throw new HttpException_1.default(400, 'Task_not_found');
         // 2.1 check that the tasker is not the owner of the task
         if (task.userId === userId)
             throw new HttpException_1.default(400, 'You_cant_make_an_offer_on_your_task');
+        // 2.2 check that the tasker phone is verified
+        if (!tasker.userId.phoneNumVerified)
+            throw new HttpException_1.default(400, 'You_must_verify_your_phone_number');
         if (task.status !== task_interface_1.TaskStatus.OPEN)
             throw new HttpException_1.default(400, 'Task_is_not_open');
         // 3. check if the tasker already made an offer on this task, if yes return an error

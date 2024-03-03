@@ -24,6 +24,8 @@ let UserRoute = class UserRoute {
     }
     insitializeRoutes() {
         // Logged in user routes (authenticated)
+        this.router.get(`${this.path}/send-verification-code`, auth_middleware_1.authenticateUser, this.userController.sendVerificationCode);
+        this.router.post(`${this.path}/verify`, auth_middleware_1.authenticateUser, this.userController.verifyCode);
         this.router
             // TODO: change the route to /profile
             .route(`${this.path}/me`)
