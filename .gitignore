@@ -11,7 +11,8 @@ blog-api.postman_collection.json
 z_test
 fortest.js
 missing.json
-
+.wwebjs_auth
+.wwebjs_cache
 
 # uploads
 # Diagnostic reports (https://nodejs.org/api/report.html)

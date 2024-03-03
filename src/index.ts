@@ -1,6 +1,8 @@
 import { createServer } from 'http';
+import qrcode from 'qrcode-terminal';
 import 'reflect-metadata';
 import { container } from 'tsyringe';
+import { Client, LocalAuth } from 'whatsapp-web.js';
 
 import App from './app';
 import env from './config/validateEnv';
@@ -49,6 +51,31 @@ let app = new App([
   reviewRouite,
 ]);
 
+const whatsappclient = new Client({
+  authStrategy: new LocalAuth(),
+});
+
+whatsappclient.on('qr', (qr: any) => qrcode.generate(qr, { small: true }));
+whatsappclient.on('ready', () => console.log('Client is ready!'));
+
+whatsappclient.on('message', async (message: any) => {
+  try {
+    // process.env.PROCCESS_MESSAGE_FROM_CLIENT &&
+    if (message.from != 'status@broadcast') {
+      const contact = await message.getContact();
+      console.log(contact, message.from);
+      if (message.body === 'ping') {
+        await message.reply('pong');
+        await whatsappclient.sendMessage(message.from, 'pong');
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+whatsappclient.initialize();
+
 // Setup http server
 let client = app.getServer();
 let server = createServer(client);
@@ -60,4 +87,4 @@ let s = server.listen(env.PORT).on('listening', () => {
 // Setup socket server
 let socketService = SocketService.getInstance(s);
 let io = socketService.getSocketIO();
-export { server, client, io };
+export { server, client, io, whatsappclient };
