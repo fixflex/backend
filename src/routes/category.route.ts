@@ -24,6 +24,7 @@ export class CategoryRoute implements Routes {
 
     // Admin routes
     this.router.use(`${this.path}`, authenticateUser, allowedTo(UserType.ADMIN));
+
     this.router.post(`${this.path}`, createCategoryValidator, this.categoryController.createCategory);
 
     this.router.route(`${this.path}/category-image/:id`).patch(isMongoId, uploadServiceImage, this.categoryController.uploadCategoryImage);
