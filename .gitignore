@@ -13,7 +13,7 @@ fortest.js
 missing.json
 .wwebjs_auth
 .wwebjs_cache
-
+dist
 # uploads
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
