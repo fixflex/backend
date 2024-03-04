@@ -32,21 +32,21 @@ class UserController implements IUserController {
   });
 
   public updateMe = asyncHandler(async (req: Request, res: Response) => {
-    let user = await this.userService.updateUser(req.user?._id!, req.body);
+    let user = await this.userService.updateUser(req.user._id, req.body);
     if (!user) throw new HttpException(404, 'user_not_found');
     res.status(200).json(customResponse<IUser>({ data: user, success: true, message: req.t('user_updated') }));
   });
 
   public deleteMe = asyncHandler(async (req: Request, res: Response) => {
-    await this.userService.updateUser(req.user?._id!, { active: false });
+    await this.userService.updateUser(req.user._id, { active: false });
     res.status(204).json(customResponse({ data: null, success: true, message: req.t('user_deleted') }));
   });
 
   public updateMyProfileImage = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    let userId = req.user?._id;
+    let userId = req.user._id;
     if (!req.file) return next(new HttpException(400, 'image_required'));
     // console.log(req.file);
-    let user = await this.userService.updateProfileImage(userId!, req.file);
+    let user = await this.userService.updateProfileImage(userId, req.file);
     if (!user) return next(new HttpException(404, 'No user found'));
     res.status(200).json(customResponse({ data: user, success: true, message: req.t('user_updated') }));
   });
