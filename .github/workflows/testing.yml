@@ -1,6 +1,6 @@
-name: Node.js CI
+name: Run tests
 
-on: [pull_request]
+on: [push]
 
 jobs:
   tests:
@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -17,6 +17,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: npm install
-        run: npm ci
-      - name: tests
-        run: npm test
+        run: npm install
+      - name: Run tests
+        run: npm run start:test
