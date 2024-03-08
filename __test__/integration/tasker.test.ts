@@ -28,7 +28,7 @@ beforeAll(async () => {
   const user = await UserModel.create(newUserData);
   token = createAccessToken(user._id);
   // create service
-  service = await ServiceModel.create({ name: 'service1' });
+  service = await ServiceModel.create({ name: { en: 'plumbing', ar: 'السباكة' } });
 });
 
 // afterEach(async () => {

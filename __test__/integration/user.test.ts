@@ -53,10 +53,10 @@ describe('user', () => {
     });
   });
 
-  describe('PATCH /api/v1/users/me/profile-picture-upload', () => {
+  describe('PATCH /api/v1/users/me/profile-picture', () => {
     it('should update user profile picture', async () => {
       const response = await request(server)
-        .patch('/api/v1/users/me/profile-picture-upload')
+        .patch('/api/v1/users/me/profile-picture')
         .set('Authorization', `Bearer ${token}`)
         .attach('profilePicture', '__test__/testFiles/testImage.jpg');
       await cloudinaryDeleteImage(response.body.data.profilePicture.publicId);

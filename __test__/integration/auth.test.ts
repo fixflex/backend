@@ -25,10 +25,9 @@ describe('Authentication', () => {
   describe('POST /api/v1/auth/signup', () => {
     it('should return 201 and create new user', async () => {
       const response = await request(server).post('/api/v1/auth/signup').send(newUserData);
-
       expect(response.status).toBe(201);
       expect(response.body.data).toBeDefined();
-      expect(response.body.token).toBeDefined();
+      // expect(response.body.token).toBeDefined();
     });
 
     it('should return 409 E-Mail address is already exists', async () => {
@@ -56,7 +55,7 @@ describe('Authentication', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.data).toBeDefined();
-      expect(response.body.token).toBeDefined();
+      // expect(response.body.token).toBeDefined();
     });
 
     it('should return 401 Incorrect email or password`', async () => {

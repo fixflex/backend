@@ -17,9 +17,7 @@ describe('app', () => {
           200,
           {
             success: true,
-            error: false,
             message: 'Welcome to Rest API - 👋🌎🌍🌏',
-            status: 200,
             data: null,
           },
           done
