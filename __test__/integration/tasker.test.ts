@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 
 import { server } from '../../src';
-import ServiceModel from '../../src/DB/models/services.model';
-import UserModel from '../../src/DB/models/user/user.model';
-import { createToken } from '../../src/utils/createToken';
+import ServiceModel from '../../src/DB/models/category.model';
+import UserModel from '../../src/DB/models/user.model';
+import { createAccessToken } from '../../src/helpers';
 
 let token: string;
 let service: any;
@@ -26,7 +26,7 @@ afterAll(async () => {
 // create user before all tests
 beforeAll(async () => {
   const user = await UserModel.create(newUserData);
-  token = createToken(user._id);
+  token = createAccessToken(user._id);
   // create service
   service = await ServiceModel.create({ name: 'service1' });
 });
@@ -42,7 +42,7 @@ describe('tasker', () => {
         .post('/api/v1/taskers/become-tasker')
         .set('Authorization', `Bearer ${token}`)
         .send({
-          services: [service._id],
+          categories: [service._id],
           location: {
             coordinates: [31.185277, 27.174436],
           },
@@ -50,11 +50,14 @@ describe('tasker', () => {
         });
       taskerId = response.body.data._id;
       expect(response.status).toBe(201);
-      expect(response.body.data.services).toHaveLength(1);
+      expect(response.body.data.categories).toHaveLength(1);
     });
-    // if no services are provided
-    it('should return 400 if no services are provided', async () => {
-      const response = await request(server).post('/api/v1/taskers/become-tasker').set('Authorization', `Bearer ${token}`).send({ services: [] });
+    // if no categories are provided
+    it('should return 400 if no categories are provided', async () => {
+      const response = await request(server)
+        .post('/api/v1/taskers/become-tasker')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ categories: [] });
       expect(response.status).toBe(400);
     });
 
@@ -63,7 +66,7 @@ describe('tasker', () => {
       const response = await request(server)
         .post('/api/v1/taskers/become-tasker')
         .set('Authorization', `Bearer ${token}`)
-        .send({ services: ['123'] });
+        .send({ categories: ['123'] });
       expect(response.status).toBe(400);
     });
     // if service id not found in DB
@@ -72,7 +75,7 @@ describe('tasker', () => {
         .post('/api/v1/taskers/become-tasker')
         .set('Authorization', `Bearer ${token}`)
         .send({
-          services: ['64f0d1196cbe0251ae16b092'],
+          categories: ['64f0d1196cbe0251ae16b092'],
           location: {
             coordinates: [31.185277, 27.174436],
           },
@@ -111,7 +114,10 @@ describe('tasker', () => {
 
   describe('PATCH /api/v1/taskers/me', () => {
     it('should update tasker data', async () => {
-      const response = await request(server).patch('/api/v1/taskers/me').set('Authorization', `Bearer ${token}`).send({ phoneNumber: '01066032844' });
+      const response = await request(server)
+        .patch('/api/v1/taskers/me')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ phoneNumber: '01066032844' });
       console.log(response.body);
       expect(response.status).toBe(200);
       expect(response.body.data).toBeDefined();
@@ -235,7 +241,7 @@ describe('tasker', () => {
 
 // //   it('should return 403 if user is not an admin', async () => {
 // //     const user = await User.create(newUserData);
-// //     token = createToken(user._id);
+// //     token = createAccessToken(user._id);
 
 // //     const response = await request(server).post('/api/v1/users').set('Authorization', `Bearer ${token}`).send(newUserData);
 

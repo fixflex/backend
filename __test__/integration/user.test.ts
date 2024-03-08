@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 
 import { server } from '../../src';
-import UserModel from '../../src/DB/models/user/user.model';
-import { cloudinaryDeleteImage } from '../../src/utils/cloudinary';
-import { createToken } from '../../src/utils/createToken';
+import UserModel from '../../src/DB/models/user.model';
+import { cloudinaryDeleteImage } from '../../src/helpers';
+import { createAccessToken } from '../../src/helpers';
 
 let token: string;
 
@@ -24,7 +24,7 @@ afterAll(async () => {
 // create user before all tests
 beforeAll(async () => {
   const user = await UserModel.create(newUserData);
-  token = createToken(user._id);
+  token = createAccessToken(user._id);
 });
 
 // afterEach(async () => {
@@ -134,7 +134,7 @@ describe('user', () => {
 
 //   it('should return 403 if user is not an admin', async () => {
 //     const user = await User.create(newUserData);
-//     token = createToken(user._id);
+//     token = createAccessToken(user._id);
 
 //     const response = await request(server).post('/api/v1/users').set('Authorization', `Bearer ${token}`).send(newUserData);
 

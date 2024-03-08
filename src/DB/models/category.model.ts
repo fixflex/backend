@@ -26,6 +26,6 @@ const categorySchema: Schema<ICategory> = new Schema({
 categorySchema.plugin(mongooseI18n, { locales: ['en', 'ar'], defaultLocale: env.defaultLocale });
 
 // Create the Service model
-const Service = model('Category', categorySchema);
+const Category = model('Category', categorySchema);
 
-export default Service;
+export default Category;

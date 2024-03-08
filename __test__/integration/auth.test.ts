@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 
 import { server } from '../../src';
-import User from '../../src/DB/models/user/client.model';
+import User from '../../src/DB/models/user.model';
 
 afterAll(async () => {
   await mongoose.connection.dropDatabase();
@@ -40,7 +40,9 @@ describe('Authentication', () => {
     });
 
     it('fails signup without required fields', async () => {
-      const response = await request(server).post('/api/v1/auth/signup').send({ firstName: newUserData.firstName, email: newUserData.email });
+      const response = await request(server)
+        .post('/api/v1/auth/signup')
+        .send({ firstName: newUserData.firstName, email: newUserData.email });
 
       expect(response.statusCode).toBe(400);
       expect(response.body.errors).toBeDefined();
