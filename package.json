@@ -9,7 +9,8 @@
   "scripts": {
     "nodemon": "nodemon",
     "start:dev": "cross-env NODE_ENV=development nodemon  ./src/index.ts ",
-    "start:test": "cross-env NODE_ENV=testing  jest --detectOpenHandles --runInBand  --verbose  --watchAll",
+    "start:test-watch": "cross-env NODE_ENV=testing  jest --detectOpenHandles --runInBand  --verbose  --watchAll",
+    "start:test": "cross-env NODE_ENV=testing  jest --detectOpenHandles --runInBand  --verbose",
     "start:prod": "cross-env NODE_ENV=production  node  ./dist/index.js",
     "start:prod-build-run": "npm run build-ts && cross-env NODE_ENV=production node ./dist/index.js",
     "start:dev-prod": "cross-env NODE_ENV=production nodemon  ./src/index.ts",
