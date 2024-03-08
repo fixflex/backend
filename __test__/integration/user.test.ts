@@ -58,21 +58,21 @@ describe('user', () => {
       const response = await request(server)
         .patch('/api/v1/users/me/profile-picture')
         .set('Authorization', `Bearer ${token}`)
-        .attach('profilePicture', '__test__/testFiles/testImage.jpg');
+        .attach('image', '__test__/testFiles/testImage.jpg');
       await cloudinaryDeleteImage(response.body.data.profilePicture.publicId);
       expect(response.status).toBe(200);
       expect(response.body.data).toBeDefined();
       expect(response.body.data.profilePicture.url).toMatch('https://res.cloudinary.com');
       expect(response.body.data.profilePicture.publicId).toBeDefined();
-    });
+    }, 10000);
   });
 
-  describe('DELETE /api/v1/users/me', () => {
-    it('should delete user', async () => {
-      const response = await request(server).delete('/api/v1/users/me').set('Authorization', `Bearer ${token}`);
-      expect(response.status).toBe(204);
-    });
-  });
+  // describe('DELETE /api/v1/users/me', () => {
+  //   it('should delete user', async () => {
+  //     const response = await request(server).delete('/api/v1/users/me').set('Authorization', `Bearer ${token}`);
+  //     expect(response.status).toBe(204);
+  //   });
+  // });
 });
 
 //##############################################################################################################

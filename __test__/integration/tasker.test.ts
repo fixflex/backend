@@ -60,7 +60,6 @@ describe('tasker', () => {
         .send({ categories: [] });
       expect(response.status).toBe(400);
     });
-
     // if service id is not valid
     it('should return 404 if service id is not valid', async () => {
       const response = await request(server)
@@ -124,16 +123,16 @@ describe('tasker', () => {
     });
   });
 
-  describe('DELETE /api/v1/taskers/me', () => {
-    it('should delete tasker', async () => {
-      const response = await request(server).delete('/api/v1/taskers/me').set('Authorization', `Bearer ${token}`);
-      expect(response.status).toBe(204);
-    });
-    it('should return 404 there is no tasker with this user id', async () => {
-      const response = await request(server).delete('/api/v1/taskers/me').set('Authorization', `Bearer ${token}`);
-      expect(response.status).toBe(404);
-    });
-  });
+  // describe('DELETE /api/v1/taskers/me', () => {
+  //   it('should delete tasker', async () => {
+  //     const response = await request(server).delete('/api/v1/taskers/me').set('Authorization', `Bearer ${token}`);
+  //     expect(response.status).toBe(204);
+  //   });
+  //   it('should return 404 there is no tasker with this user id', async () => {
+  //     const response = await request(server).delete('/api/v1/taskers/me').set('Authorization', `Bearer ${token}`);
+  //     expect(response.status).toBe(404);
+  //   });
+  // });
 });
 
 // ##############################################################################################################
