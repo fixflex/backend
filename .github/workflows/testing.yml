@@ -21,36 +21,6 @@ jobs:
           node-version: 18.x
       - name: npm install dependencies
         run: npm install
-
-        # ACCESS_TOKEN_KEY_EXPIRE_TIME: undefined
-        # ACCESS_TOKEN_SECRET_KEY: undefined
-        # API_KEY: undefined
-        # APP_ID: undefined
-        # BASE_URL: undefined
-        # CLOUDINARY_API_KEY: undefined
-        # CLOUDINARY_CLOUD_NAME: undefined
-        # COMMISSION_RATE: undefined
-        # DB_URI: undefined
-        # DEVELOPER_EMAIL: undefined
-        # GOOGLE_CLIENT_ID: undefined
-        # GOOGLE_CLIENT_SECRET: undefined
-        # PAYMOB_API_KEY: undefined
-        # PAYMOB_HMAC_SECRET: undefined
-        # PAYMOB_INTEGRATION_ID: undefined
-        # PAYMOB_INTEGRATION_ID_WALLET: undefined
-        # PAYMOB_PUBLIC_KEY: undefined
-        # PAYMOB_SECRET_KEY: undefined
-        # PORT: undefined
-        # REFRESH_TOKEN_KEY_EXPIRE_TIME: undefined
-        # REFRESH_TOKEN_SECRET_KEY: undefined
-        # SALT_ROUNDS: undefined
-        # SMTP_HOST: undefined
-        # SMTP_NAME: undefined
-        # SMTP_PASSWORD: undefined
-        # SMTP_PORT: undefined
-        # SMTP_USERNAME: undefined
-        # USER_AUTH_KEY: undefined
-        # defaultLocale: undefined
       - name: create env file
         run: |
           touch .env.test
@@ -76,6 +46,8 @@ jobs:
           echo REFRESH_TOKEN_KEY_EXPIRE_TIME=${{ secrets.REFRESH_TOKEN_KEY_EXPIRE_TIME }} >> .env.test
           echo REFRESH_TOKEN_SECRET_KEY=${{ secrets.REFRESH_TOKEN_SECRET_KEY }} >> .env.test
           echo SALT_ROUNDS=${{ secrets.SALT_ROUNDS }} >> .env.test
+          echo DB_URI=${{ secrets.DB_URI }} >> .env.test
+          echo CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} >> .env.test
           echo SMTP_HOST=${{ secrets.SMTP_HOST }} >> .env.test
           echo SMTP_NAME=${{ secrets.SMTP_NAME }} >> .env.test
           echo SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }} >> .env.test
