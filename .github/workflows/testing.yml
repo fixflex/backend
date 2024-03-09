@@ -54,36 +54,37 @@ jobs:
       - name: create env file
         run: |
           touch .env.test
-          echo ACCESS_TOKEN_KEY_EXPIRE_TIME=${{ secrets.ACCESS_TOKEN_KEY_EXPIRE_TIME }}
-          echo ACCESS_TOKEN_SECRET_KEY=${{ secrets.ACCESS_TOKEN_SECRET_KEY }}
-          echo API_KEY=${{ secrets.API_KEY }}
-          echo APP_ID=${{ secrets.APP_ID }}
-          echo BASE_URL=${{ secrets.BASE_URL }}
-          echo CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
-          echo CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
-          echo COMMISSION_RATE=${{ secrets.COMMISSION_RATE }}
-          echo DB_URI=${{ secrets.DB_URI }}
-          echo DEVELOPER_EMAIL=${{ secrets.DEVELOPER_EMAIL }}
-          echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
-          echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
-          echo PAYMOB_API_KEY=${{ secrets.PAYMOB_API_KEY }}
-          echo PAYMOB_HMAC_SECRET=${{ secrets.PAYMOB_HMAC_SECRET }}
-          echo PAYMOB_INTEGRATION_ID=${{ secrets.PAYMOB_INTEGRATION_ID }}
-          echo PAYMOB_INTEGRATION_ID_WALLET=${{ secrets.PAYMOB_INTEGRATION_ID_WALLET }}
-          echo PAYMOB_PUBLIC_KEY=${{ secrets.PAYMOB_PUBLIC_KEY }}
-          echo PAYMOB_SECRET_KEY=${{ secrets.PAYMOB_SECRET_KEY }}
-          echo PORT=${{ secrets.PORT }}
-          echo REFRESH_TOKEN_KEY_EXPIRE_TIME=${{ secrets.REFRESH_TOKEN_KEY_EXPIRE_TIME }}
-          echo REFRESH_TOKEN_SECRET_KEY=${{ secrets.REFRESH_TOKEN_SECRET_KEY }}
-          echo SALT_ROUNDS=${{ secrets.SALT_ROUNDS }}
-          echo SMTP_HOST=${{ secrets.SMTP_HOST }}
-          echo SMTP_NAME=${{ secrets.SMTP_NAME }}
-          echo SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
-          echo SMTP_PORT=${{ secrets.SMTP_PORT }}
-          echo SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}
-          echo USER_AUTH_KEY=${{ secrets.USER_AUTH_KEY }}
-          echo defaultLocale=${{ secrets.defaultLocale }}
-          echo > .env.test
+          echo ACCESS_TOKEN_KEY_EXPIRE_TIME=${{ secrets.ACCESS_TOKEN_KEY_EXPIRE_TIME }} >> .env.test
+          echo ACCESS_TOKEN_SECRET_KEY=${{ secrets.ACCESS_TOKEN_SECRET_KEY }} >> .env.test
+          echo API_KEY=${{ secrets.API_KEY }} >> .env.test
+          echo APP_ID=${{ secrets.APP_ID }} >> .env.test
+          echo BASE_URL=${{ secrets.BASE_URL }} >> .env.test
+          echo CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} >> .env.test
+          echo CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} >> .env.test
+          echo COMMISSION_RATE=${{ secrets.COMMISSION_RATE }} >> .env.test
+          echo DB_URI=${{ secrets.DB_URI }} >> .env.test
+          echo DEVELOPER_EMAIL=${{ secrets.DEVELOPER_EMAIL }} >> .env.test
+          echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env.test
+          echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env.test
+          echo PAYMOB_API_KEY=${{ secrets.PAYMOB_API_KEY }} >> .env.test
+          echo PAYMOB_HMAC_SECRET=${{ secrets.PAYMOB_HMAC_SECRET }} >> .env.test
+          echo PAYMOB_INTEGRATION_ID=${{ secrets.PAYMOB_INTEGRATION_ID }} >> .env.test
+          echo PAYMOB_INTEGRATION_ID_WALLET=${{ secrets.PAYMOB_INTEGRATION_ID_WALLET }} >> .env.test
+          echo PAYMOB_PUBLIC_KEY=${{ secrets.PAYMOB_PUBLIC_KEY }} >> .env.test
+          echo PAYMOB_SECRET_KEY=${{ secrets.PAYMOB_SECRET_KEY }} >> .env.test
+          echo PORT=${{ secrets.PORT }} >> .env.test
+          echo REFRESH_TOKEN_KEY_EXPIRE_TIME=${{ secrets.REFRESH_TOKEN_KEY_EXPIRE_TIME }} >> .env.test
+          echo REFRESH_TOKEN_SECRET_KEY=${{ secrets.REFRESH_TOKEN_SECRET_KEY }} >> .env.test
+          echo SALT_ROUNDS=${{ secrets.SALT_ROUNDS }} >> .env.test
+          echo SMTP_HOST=${{ secrets.SMTP_HOST }} >> .env.test
+          echo SMTP_NAME=${{ secrets.SMTP_NAME }} >> .env.test
+          echo SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }} >> .env.test
+          echo SMTP_PORT=${{ secrets.SMTP_PORT }} >> .env.test
+          echo SMTP_USERNAME=${{ secrets.SMTP_USERNAME }} >> .env.test
+          echo USER_AUTH_KEY=${{ secrets.USER_AUTH_KEY }} >> .env.test
+          echo defaultLocale=${{ secrets.defaultLocale }} >> .env.test
+
+          echo "env file created"
 
       - name: Run tests
         run: npm run start:test
