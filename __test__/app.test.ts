@@ -1,8 +1,11 @@
+import mongoose from 'mongoose';
 import request from 'supertest';
 
 import { server } from '../src';
 
 afterAll(async () => {
+  await mongoose.connection.dropDatabase();
+  await mongoose.connection.close();
   server.close();
 });
 

@@ -117,7 +117,6 @@ describe('tasker', () => {
         .patch('/api/v1/taskers/me')
         .set('Authorization', `Bearer ${token}`)
         .send({ phoneNumber: '01066032844' });
-      console.log(response.body);
       expect(response.status).toBe(200);
       expect(response.body.data).toBeDefined();
     });
