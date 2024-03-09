@@ -46,7 +46,6 @@ jobs:
           echo REFRESH_TOKEN_KEY_EXPIRE_TIME=${{ secrets.REFRESH_TOKEN_KEY_EXPIRE_TIME }} >> .env.test
           echo REFRESH_TOKEN_SECRET_KEY=${{ secrets.REFRESH_TOKEN_SECRET_KEY }} >> .env.test
           echo SALT_ROUNDS=${{ secrets.SALT_ROUNDS }} >> .env.test
-          echo DB_URI=${{ secrets.DB_URI }} >> .env.test
           echo CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} >> .env.test
           echo SMTP_HOST=${{ secrets.SMTP_HOST }} >> .env.test
           echo SMTP_NAME=${{ secrets.SMTP_NAME }} >> .env.test
