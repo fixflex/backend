@@ -17,6 +17,7 @@ import env from './config/validateEnv';
 import swaggerDocument from './docs/swagger';
 import { notFound } from './exceptions/notFoundException';
 import './exceptions/shutdownHandler';
+import { sendMailer } from './helpers';
 import { Routes } from './interfaces/routes.interface';
 import { errorMiddleware } from './middleware/errors';
 
@@ -82,11 +83,21 @@ class App {
     this.whatsappclient = new Client({
       authStrategy: new LocalAuth(),
     });
-    this.whatsappclient.on('qr', (qr: any) => qrcode.generate(qr, { small: true }));
-    this.whatsappclient.on('ready', () => {
-      console.log('Client is ready!');
-      (global as any)['myGlobalVar'] = true;
-    });
+    this.whatsappclient.on('qr', async (qr: any) => {
+      qrcode.generate(qr, { small: true });
+      // console.log('QR RECEIVED', qr);
+      try {
+        console.log('New QR code generated');
+        const message = `Scan the QR code to login to whatsapp account \n\nhttps://dashboard.render.com/web/srv-clkt2gsjtl8s73f24g00/logs?m=max\n\n`;
+        await sendMailer(env.DEVELOPER_EMAIL, 'Whatsapp QR Code', message);
+      } catch (err) {
+        console.log(err);
+      }
+    }),
+      this.whatsappclient.on('ready', () => {
+        console.log('Client is ready!');
+        (global as any)['myGlobalVar'] = true;
+      });
     this.whatsappclient.on('authenticated', () => console.log('Authenticated'));
     this.whatsappclient.on('message', async (message: any) => {
       try {

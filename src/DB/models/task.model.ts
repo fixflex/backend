@@ -152,6 +152,8 @@ taskSchema.virtual('reviews', {
 
 let Task = model<ITask>('Task', taskSchema);
 
+// invoiceSchema.plugin(require('mongoose-autopopulate'));
+
 export default Task;
 
 // TODO
