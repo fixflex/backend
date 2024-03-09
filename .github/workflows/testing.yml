@@ -21,5 +21,69 @@ jobs:
           node-version: 18.x
       - name: npm install dependencies
         run: npm install
+
+        # ACCESS_TOKEN_KEY_EXPIRE_TIME: undefined
+        # ACCESS_TOKEN_SECRET_KEY: undefined
+        # API_KEY: undefined
+        # APP_ID: undefined
+        # BASE_URL: undefined
+        # CLOUDINARY_API_KEY: undefined
+        # CLOUDINARY_CLOUD_NAME: undefined
+        # COMMISSION_RATE: undefined
+        # DB_URI: undefined
+        # DEVELOPER_EMAIL: undefined
+        # GOOGLE_CLIENT_ID: undefined
+        # GOOGLE_CLIENT_SECRET: undefined
+        # PAYMOB_API_KEY: undefined
+        # PAYMOB_HMAC_SECRET: undefined
+        # PAYMOB_INTEGRATION_ID: undefined
+        # PAYMOB_INTEGRATION_ID_WALLET: undefined
+        # PAYMOB_PUBLIC_KEY: undefined
+        # PAYMOB_SECRET_KEY: undefined
+        # PORT: undefined
+        # REFRESH_TOKEN_KEY_EXPIRE_TIME: undefined
+        # REFRESH_TOKEN_SECRET_KEY: undefined
+        # SALT_ROUNDS: undefined
+        # SMTP_HOST: undefined
+        # SMTP_NAME: undefined
+        # SMTP_PASSWORD: undefined
+        # SMTP_PORT: undefined
+        # SMTP_USERNAME: undefined
+        # USER_AUTH_KEY: undefined
+        # defaultLocale: undefined
+      - name: create env file
+        run: |
+          touch .env.test
+          echo ACCESS_TOKEN_KEY_EXPIRE_TIME=${{ secrets.ACCESS_TOKEN_KEY_EXPIRE_TIME }}
+          echo ACCESS_TOKEN_SECRET_KEY=${{ secrets.ACCESS_TOKEN_SECRET_KEY }}
+          echo API_KEY=${{ secrets.API_KEY }}
+          echo APP_ID=${{ secrets.APP_ID }}
+          echo BASE_URL=${{ secrets.BASE_URL }}
+          echo CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
+          echo CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          echo COMMISSION_RATE=${{ secrets.COMMISSION_RATE }}
+          echo DB_URI=${{ secrets.DB_URI }}
+          echo DEVELOPER_EMAIL=${{ secrets.DEVELOPER_EMAIL }}
+          echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+          echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+          echo PAYMOB_API_KEY=${{ secrets.PAYMOB_API_KEY }}
+          echo PAYMOB_HMAC_SECRET=${{ secrets.PAYMOB_HMAC_SECRET }}
+          echo PAYMOB_INTEGRATION_ID=${{ secrets.PAYMOB_INTEGRATION_ID }}
+          echo PAYMOB_INTEGRATION_ID_WALLET=${{ secrets.PAYMOB_INTEGRATION_ID_WALLET }}
+          echo PAYMOB_PUBLIC_KEY=${{ secrets.PAYMOB_PUBLIC_KEY }}
+          echo PAYMOB_SECRET_KEY=${{ secrets.PAYMOB_SECRET_KEY }}
+          echo PORT=${{ secrets.PORT }}
+          echo REFRESH_TOKEN_KEY_EXPIRE_TIME=${{ secrets.REFRESH_TOKEN_KEY_EXPIRE_TIME }}
+          echo REFRESH_TOKEN_SECRET_KEY=${{ secrets.REFRESH_TOKEN_SECRET_KEY }}
+          echo SALT_ROUNDS=${{ secrets.SALT_ROUNDS }}
+          echo SMTP_HOST=${{ secrets.SMTP_HOST }}
+          echo SMTP_NAME=${{ secrets.SMTP_NAME }}
+          echo SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}
+          echo SMTP_PORT=${{ secrets.SMTP_PORT }}
+          echo SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}
+          echo USER_AUTH_KEY=${{ secrets.USER_AUTH_KEY }}
+          echo defaultLocale=${{ secrets.defaultLocale }}
+          echo > .env.test
+
       - name: Run tests
         run: npm run start:test
