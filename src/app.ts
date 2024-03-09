@@ -20,22 +20,24 @@ import './exceptions/shutdownHandler';
 import { sendMailer } from './helpers';
 import { Routes } from './interfaces/routes.interface';
 import { errorMiddleware } from './middleware/errors';
+import { routes } from './routes/routes';
 
 class App {
   public app: express.Application;
   public port: number | string;
   public env: string;
   public whatsappclient: any;
-
-  constructor(routes: Routes[]) {
+  private routes: Routes[];
+  constructor() {
     this.app = express();
     this.port = env.PORT || 8000;
     this.env = process.env.NODE_ENV || 'development';
-
+    this.routes = routes;
     this.connectToDatabase();
     this.initializeMiddlewares();
-    this.initializeRoutes(routes);
-    if (process.env.NODE_ENV !== 'testing') this.initializeWhatsAppWeb();
+    this.initializeRoutes(this.routes);
+    // if (process.env.NODE_ENV !== 'testing')
+    this.initializeWhatsAppWeb(); // TODO : fix this
     this.initializeSwagger();
     this.initializeErrorHandling();
   }
@@ -161,4 +163,4 @@ class App {
   }
 }
 
-export default App;
+export default new App();

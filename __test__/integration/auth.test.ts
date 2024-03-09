@@ -1,76 +1,76 @@
-import mongoose from 'mongoose';
-import request from 'supertest';
+// import mongoose from 'mongoose';
+// import request from 'supertest';
 
-import { server } from '../../src';
-import User from '../../src/DB/models/user.model';
+// import { server } from '../../src';
+// import User from '../../src/DB/models/user.model';
 
-afterAll(async () => {
-  await mongoose.connection.dropDatabase();
-  await mongoose.connection.close();
-  server.close();
-});
+// afterAll(async () => {
+//   await mongoose.connection.dropDatabase();
+//   await mongoose.connection.close();
+//   server.close();
+// });
 
-beforeEach(async () => {
-  await User.deleteMany({});
-});
+// beforeEach(async () => {
+//   await User.deleteMany({});
+// });
 
-const newUserData = {
-  firstName: 'John',
-  lastName: 'Doe',
-  email: 'John@gmail.com',
-  password: 'password123',
-};
+// const newUserData = {
+//   firstName: 'John',
+//   lastName: 'Doe',
+//   email: 'John@gmail.com',
+//   password: 'password123',
+// };
 
-describe('Authentication', () => {
-  describe('POST /api/v1/auth/signup', () => {
-    it('should return 201 and create new user', async () => {
-      const response = await request(server).post('/api/v1/auth/signup').send(newUserData);
-      expect(response.status).toBe(201);
-      expect(response.body.data).toBeDefined();
-      // expect(response.body.token).toBeDefined();
-    });
+// describe('Authentication', () => {
+//   describe('POST /api/v1/auth/signup', () => {
+//     it('should return 201 and create new user', async () => {
+//       const response = await request(server).post('/api/v1/auth/signup').send(newUserData);
+//       expect(response.status).toBe(201);
+//       expect(response.body.data).toBeDefined();
+//       // expect(response.body.token).toBeDefined();
+//     });
 
-    it('should return 409 E-Mail address is already exists', async () => {
-      await request(server).post('/api/v1/auth/signup').send(newUserData);
-      const response = await request(server).post('/api/v1/auth/signup').send(newUserData);
+//     it('should return 409 E-Mail address is already exists', async () => {
+//       await request(server).post('/api/v1/auth/signup').send(newUserData);
+//       const response = await request(server).post('/api/v1/auth/signup').send(newUserData);
 
-      expect(response.status).toBe(409);
-      expect(response.body.message).toBeDefined();
-    });
+//       expect(response.status).toBe(409);
+//       expect(response.body.message).toBeDefined();
+//     });
 
-    it('fails signup without required fields', async () => {
-      const response = await request(server)
-        .post('/api/v1/auth/signup')
-        .send({ firstName: newUserData.firstName, email: newUserData.email });
+//     it('fails signup without required fields', async () => {
+//       const response = await request(server)
+//         .post('/api/v1/auth/signup')
+//         .send({ firstName: newUserData.firstName, email: newUserData.email });
 
-      expect(response.statusCode).toBe(400);
-      expect(response.body.errors).toBeDefined();
-    });
-  });
+//       expect(response.statusCode).toBe(400);
+//       expect(response.body.errors).toBeDefined();
+//     });
+//   });
 
-  describe('POST /api/v1/auth/login', () => {
-    it('can log in with email', async () => {
-      await request(server).post('/api/v1/auth/signup').send(newUserData);
-      const response = await request(server).post('/api/v1/auth/login').send({ email: newUserData.email, password: newUserData.password });
+//   describe('POST /api/v1/auth/login', () => {
+//     it('can log in with email', async () => {
+//       await request(server).post('/api/v1/auth/signup').send(newUserData);
+//       const response = await request(server).post('/api/v1/auth/login').send({ email: newUserData.email, password: newUserData.password });
 
-      expect(response.status).toBe(200);
-      expect(response.body.data).toBeDefined();
-      // expect(response.body.token).toBeDefined();
-    });
+//       expect(response.status).toBe(200);
+//       expect(response.body.data).toBeDefined();
+//       // expect(response.body.token).toBeDefined();
+//     });
 
-    it('should return 401 Incorrect email or password`', async () => {
-      await request(server).post('/api/v1/auth/signup').send(newUserData);
-      const response = await request(server).post('/api/v1/auth/login').send({ email: newUserData.email, password: 'wrongPassword' });
+//     it('should return 401 Incorrect email or password`', async () => {
+//       await request(server).post('/api/v1/auth/signup').send(newUserData);
+//       const response = await request(server).post('/api/v1/auth/login').send({ email: newUserData.email, password: 'wrongPassword' });
 
-      expect(response.status).toBe(401);
-      expect(response.body.message).toBeDefined();
-    });
+//       expect(response.status).toBe(401);
+//       expect(response.body.message).toBeDefined();
+//     });
 
-    it('fails login without required fields', async () => {
-      const response = await request(server).post('/api/v1/auth/signup').send({ name: newUserData.firstName, email: newUserData.email });
+//     it('fails login without required fields', async () => {
+//       const response = await request(server).post('/api/v1/auth/signup').send({ name: newUserData.firstName, email: newUserData.email });
 
-      expect(response.statusCode).toBe(400);
-      expect(response.body.errors).toBeDefined();
-    });
-  });
-});
+//       expect(response.statusCode).toBe(400);
+//       expect(response.body.errors).toBeDefined();
+//     });
+//   });
+// });

@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import { autoInjectable } from 'tsyringe';
 
-import { whatsappclient } from '..';
 import UserDao from '../DB/dao/user.dao';
+import app from '../app';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import { hashCode } from '../helpers';
@@ -102,7 +102,7 @@ class UserService implements IUserService {
 
     // Step 6: Send the verification code to the user phone number using the whatsappclient
     let phoneNumber = user.phoneNumber.replace(/^0/, '20') + '@c.us';
-    let mes = await whatsappclient.sendMessage(phoneNumber, `Verification code is: ${verificationCode}`);
+    let mes = await app.whatsappclient.sendMessage(phoneNumber, `Verification code is: ${verificationCode}`);
     console.log('mes.body', mes._data.body);
     console.log('TO =>', mes._data.to);
     return true;
