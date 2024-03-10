@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  tests:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -21,10 +21,10 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: 18.x
-      - name: npm install dependencies
+          node-version: ${{ matrix.node-version }}
+      - name: install dependencies
         run: npm install
-      - name: create env file
+      - name: create .env.test file
         run: |
           touch .env.test
           echo ACCESS_TOKEN_KEY_EXPIRE_TIME=${{ secrets.ACCESS_TOKEN_KEY_EXPIRE_TIME }} >> .env.test
@@ -58,6 +58,5 @@ jobs:
           echo defaultLocale=${{ secrets.defaultLocale }} >> .env.test
           echo DB_URI=${{ secrets.DB_URI }} >> .env.test
 
-          echo "env file created"
       - name: Run tests
         run: npm run start:test
