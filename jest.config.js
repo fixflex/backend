@@ -10,4 +10,5 @@ module.exports = {
   // collectCoverage: true, //this means that jest will collect coverage information
   // only files on __test__ directory
   // TODO: jest.config.js is not working 
+  // TODO: search for jest.config best practices
 };
