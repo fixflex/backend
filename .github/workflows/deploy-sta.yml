@@ -1,0 +1,14 @@
+name: Deploy to render staging server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-sta:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to staging
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.RENDER_API_KEY_STAGING }}
+          api-key: ${{ secrets.RENDER_API_KEY }}
