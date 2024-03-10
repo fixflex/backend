@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import { cleanEnv, num, port, str, url } from 'envalid';
+import { cleanEnv, num, str, url } from 'envalid';
 
 if (process.env.NODE_ENV === 'testing') {
   config({ path: '.env.test' });
@@ -8,7 +8,8 @@ if (process.env.NODE_ENV === 'testing') {
 }
 
 const validateEnv = cleanEnv(process.env, {
-  PORT: port(),
+  // PORT: port(),
+  PORT: num(),
   NODE_ENV: str(),
   BASE_URL: url(),
   DB_URI: str(),
