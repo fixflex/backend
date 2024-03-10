@@ -36,8 +36,7 @@ class App {
     this.connectToDatabase();
     this.initializeMiddlewares();
     this.initializeRoutes(this.routes);
-    // if (process.env.NODE_ENV !== 'testing')
-    this.initializeWhatsAppWeb(); // TODO : fix this
+    if (process.env.NODE_ENV !== 'testing') this.initializeWhatsAppWeb(); // TODO : fix this
     this.initializeSwagger();
     this.initializeErrorHandling();
   }

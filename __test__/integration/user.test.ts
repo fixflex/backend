@@ -1,79 +1,79 @@
-// import mongoose from 'mongoose';
-// import request from 'supertest';
+import mongoose from 'mongoose';
+import request from 'supertest';
 
-// import { server } from '../../src';
-// import UserModel from '../../src/DB/models/user.model';
-// import { cloudinaryDeleteImage } from '../../src/helpers';
-// import { createAccessToken } from '../../src/helpers';
+import { client as app } from '../../src';
+import UserModel from '../../src/DB/models/user.model';
+import { cloudinaryDeleteImage } from '../../src/helpers';
+import { createAccessToken } from '../../src/helpers';
 
-// let token: string;
+let token: string;
 
-// const newUserData = {
-//   firstName: 'john',
-//   lastName: 'doe',
-//   email: 'john@gmail.com',
-//   password: 'password',
-// };
+const newUserData = {
+  firstName: 'john',
+  lastName: 'doe',
+  email: 'john@gmail.com',
+  password: 'password',
+};
 
-// afterAll(async () => {
-//   await mongoose.connection.dropDatabase();
-//   await mongoose.connection.close();
-//   server.close();
+afterAll(async () => {
+  await mongoose.connection.dropDatabase();
+  await mongoose.connection.close();
+  //   app.close();
+});
+
+// create user before all tests
+beforeAll(async () => {
+  const user = await UserModel.create(newUserData);
+  token = createAccessToken(user._id);
+});
+
+// afterEach(async () => {
+//   await User.deleteMany({});
 // });
 
-// // create user before all tests
-// beforeAll(async () => {
-//   const user = await UserModel.create(newUserData);
-//   token = createAccessToken(user._id);
-// });
+describe('user', () => {
+  describe('GET /api/v1/users/me', () => {
+    it('should return 200 and user data', async () => {
+      const response = await request(app).get('/api/v1/users/me').set('Authorization', `Bearer ${token}`);
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeDefined();
+    });
+    it('should return 401 if no token is provided', async () => {
+      const response = await request(app).get('/api/v1/users/me');
+      expect(response.status).toBe(401);
+    });
+  });
 
-// // afterEach(async () => {
-// //   await User.deleteMany({});
-// // });
+  describe('PATCH /api/v1/users/me', () => {
+    it('should update user data', async () => {
+      const response = await request(app).patch('/api/v1/users/me').set('Authorization', `Bearer ${token}`).send({ firstName: 'ahmed' });
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeDefined();
+      expect(response.body.data.firstName).toBe('ahmed');
+    });
+  });
 
-// describe('user', () => {
-//   describe('GET /api/v1/users/me', () => {
-//     it('should return 200 and user data', async () => {
-//       const response = await request(server).get('/api/v1/users/me').set('Authorization', `Bearer ${token}`);
-//       expect(response.status).toBe(200);
-//       expect(response.body.data).toBeDefined();
-//     });
-//     it('should return 401 if no token is provided', async () => {
-//       const response = await request(server).get('/api/v1/users/me');
-//       expect(response.status).toBe(401);
-//     });
-//   });
+  describe('PATCH /api/v1/users/me/profile-picture', () => {
+    it('should update user profile picture', async () => {
+      const response = await request(app)
+        .patch('/api/v1/users/me/profile-picture')
+        .set('Authorization', `Bearer ${token}`)
+        .attach('image', '__test__/testFiles/testImage.jpg');
+      await cloudinaryDeleteImage(response.body.data.profilePicture.publicId);
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBeDefined();
+      expect(response.body.data.profilePicture.url).toMatch('https://res.cloudinary.com');
+      expect(response.body.data.profilePicture.publicId).toBeDefined();
+    }, 10000);
+  });
 
-//   describe('PATCH /api/v1/users/me', () => {
-//     it('should update user data', async () => {
-//       const response = await request(server).patch('/api/v1/users/me').set('Authorization', `Bearer ${token}`).send({ firstName: 'ahmed' });
-//       expect(response.status).toBe(200);
-//       expect(response.body.data).toBeDefined();
-//       expect(response.body.data.firstName).toBe('ahmed');
-//     });
-//   });
-
-//   describe('PATCH /api/v1/users/me/profile-picture', () => {
-//     it('should update user profile picture', async () => {
-//       const response = await request(server)
-//         .patch('/api/v1/users/me/profile-picture')
-//         .set('Authorization', `Bearer ${token}`)
-//         .attach('image', '__test__/testFiles/testImage.jpg');
-//       await cloudinaryDeleteImage(response.body.data.profilePicture.publicId);
-//       expect(response.status).toBe(200);
-//       expect(response.body.data).toBeDefined();
-//       expect(response.body.data.profilePicture.url).toMatch('https://res.cloudinary.com');
-//       expect(response.body.data.profilePicture.publicId).toBeDefined();
-//     }, 10000);
-//   });
-
-//   // describe('DELETE /api/v1/users/me', () => {
-//   //   it('should delete user', async () => {
-//   //     const response = await request(server).delete('/api/v1/users/me').set('Authorization', `Bearer ${token}`);
-//   //     expect(response.status).toBe(204);
-//   //   });
-//   // });
-// });
+  //   // describe('DELETE /api/v1/users/me', () => {
+  //   //   it('should delete user', async () => {
+  //   //     const response = await request(app).delete('/api/v1/users/me').set('Authorization', `Bearer ${token}`);
+  //   //     expect(response.status).toBe(204);
+  //   //   });
+  //   // });
+});
 
 // //##############################################################################################################
 // //##############################################################################################################
@@ -85,7 +85,7 @@
 
 // // describe('POST /api/v1/users', () => {
 // //   it('should create a new user', async () => {
-// //     const response = await request(server).post('/api/v1/users').set('Authorization', `Bearer ${token}`).send(newUserData);
+// //     const response = await request(app).post('/api/v1/users').set('Authorization', `Bearer ${token}`).send(newUserData);
 // //     expect(response.status).toBe(201);
 // //     expect(response.body.user).toBeDefined();
 // //   });
@@ -93,7 +93,7 @@
 // //   it('should return 409 if email already exists', async () => {
 // //     // Create a user with the same email
 // //     await User.create(newUserData);
-// //     const response = await request(server).post('/api/v1/users').set('Authorization', `Bearer ${token}`).send(newUserData);
+// //     const response = await request(app).post('/api/v1/users').set('Authorization', `Bearer ${token}`).send(newUserData);
 
 // //     expect(response.status).toBe(409);
 // //     expect(response.body.message).toMatch('E-Mail address John@gmail.com is already exists');
@@ -103,7 +103,7 @@
 // //     // Create a user with the same username
 // //     await User.create(newUserData);
 
-// //     const response = await request(server).post('/api/v1/users').set('Authorization', `Bearer ${token}`).send({
+// //     const response = await request(app).post('/api/v1/users').set('Authorization', `Bearer ${token}`).send({
 // //       name: 'John Doe',
 // //       email: 'newEmail@gmail.com',
 // //       username: 'JohnDoe',
@@ -116,7 +116,7 @@
 // //   });
 
 // //   it('should return 400 if password and confirmPassword do not match', async () => {
-// //     const response = await request(server).post('/api/v1/users').set('Authorization', `Bearer ${token}`).send({
+// //     const response = await request(app).post('/api/v1/users').set('Authorization', `Bearer ${token}`).send({
 // //       name: 'John Doe',
 // //       email: 'newEmail@gmail.com',
 // //       username: 'JohnDoe',
@@ -127,7 +127,7 @@
 // //   });
 
 // //   it('should return 401 You are not authorized, if no token is provided', async () => {
-// //     const response = await request(server).post('/api/v1/users').send(newUserData);
+// //     const response = await request(app).post('/api/v1/users').send(newUserData);
 // //     expect(response.status).toBe(401);
 // //     expect(response.body.message).toMatch('You are not authorized');
 // //   });
@@ -136,7 +136,7 @@
 // //     const user = await User.create(newUserData);
 // //     token = createAccessToken(user._id);
 
-// //     const response = await request(server).post('/api/v1/users').set('Authorization', `Bearer ${token}`).send(newUserData);
+// //     const response = await request(app).post('/api/v1/users').set('Authorization', `Bearer ${token}`).send(newUserData);
 
 // //     expect(response.status).toBe(403);
 // //   });
@@ -161,7 +161,7 @@
 // //       },
 // //     ]);
 
-// //     const response = await request(server).get('/api/v1/users').set('Authorization', `Bearer ${token}`);
+// //     const response = await request(app).get('/api/v1/users').set('Authorization', `Bearer ${token}`);
 
 // //     expect(response.status).toBe(200);
 // //     expect(response.body.users).toHaveLength(3);
@@ -173,7 +173,7 @@
 // //     // Create a user
 // //     const createdUser = await User.create(newUserData);
 
-// //     const response = await request(server).get(`/api/v1/users/${createdUser._id}`).set('Authorization', `Bearer ${token}`);
+// //     const response = await request(app).get(`/api/v1/users/${createdUser._id}`).set('Authorization', `Bearer ${token}`);
 
 // //     expect(response.status).toBe(200);
 // //     expect(response.body.user).toBeDefined();
@@ -181,7 +181,7 @@
 // //   });
 
 // //   it('should return 404 if user not found', async () => {
-// //     const response = await request(server).get('/api/v1/users/64f0d1196cbe0251ae16b092').set('Authorization', `Bearer ${token}`);
+// //     const response = await request(app).get('/api/v1/users/64f0d1196cbe0251ae16b092').set('Authorization', `Bearer ${token}`);
 
 // //     expect(response.status).toBe(404);
 // //     expect(response.body.message).toBeDefined();
@@ -193,7 +193,7 @@
 // //     // Create a user
 // //     const createdUser = await User.create(newUserData);
 
-// //     const response = await request(server).put(`/api/v1/users/${createdUser._id}`).set('Authorization', `Bearer ${token}`).send({
+// //     const response = await request(app).put(`/api/v1/users/${createdUser._id}`).set('Authorization', `Bearer ${token}`).send({
 // //       name: 'Updated Name',
 // //     });
 
@@ -204,7 +204,7 @@
 // //   });
 
 // //   it('should return 404 if user not found', async () => {
-// //     const response = await request(server).put('/api/v1/users/64f0d1196cbe0251ae16b092').set('Authorization', `Bearer ${token}`).send({
+// //     const response = await request(app).put('/api/v1/users/64f0d1196cbe0251ae16b092').set('Authorization', `Bearer ${token}`).send({
 // //       name: 'Updated Name',
 // //     });
 
@@ -218,14 +218,14 @@
 // //     // Create a user
 // //     const createdUser = await User.create(newUserData);
 
-// //     const response = await request(server).delete(`/api/v1/users/${createdUser._id}`).set('Authorization', `Bearer ${token}`);
+// //     const response = await request(app).delete(`/api/v1/users/${createdUser._id}`).set('Authorization', `Bearer ${token}`);
 
 // //     expect(response.status).toBe(204);
 // //     expect(response.text).toBe('');
 // //   });
 
 // //   it('should return 404 if user not found', async () => {
-// //     const response = await request(server).delete('/api/v1/users/64e3cb9978ed3b58c9b3a653').set('Authorization', `Bearer ${token}`);
+// //     const response = await request(app).delete('/api/v1/users/64e3cb9978ed3b58c9b3a653').set('Authorization', `Bearer ${token}`);
 
 // //     expect(response.status).toBe(404);
 // //     expect(response.body.message).toBeDefined();
@@ -237,7 +237,7 @@
 // //     // Create a user
 // //     const user = await User.create(newUserData);
 
-// //     const response = await request(server)
+// //     const response = await request(app)
 // //       .put(`/api/v1/users/profile-picture-upload/${user._id}`)
 // //       .set('Authorization', `Bearer ${token}`)
 // //       .attach('profilePicture', 'src/__test__/integration/testFiles/testImage.jpg');
