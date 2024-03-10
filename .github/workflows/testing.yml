@@ -1,6 +1,7 @@
 name: Run tests
 
 on:
+  pull_request:
   push:
     branches:
       - main
@@ -34,7 +35,6 @@ jobs:
           echo CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} >> .env.test
           echo CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} >> .env.test
           echo COMMISSION_RATE=${{ secrets.COMMISSION_RATE }} >> .env.test
-          echo DB_URI=${{ secrets.DB_URI }} >> .env.test
           echo DEVELOPER_EMAIL=${{ secrets.DEVELOPER_EMAIL }} >> .env.test
           echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env.test
           echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env.test
@@ -56,6 +56,7 @@ jobs:
           echo SMTP_USERNAME=${{ secrets.SMTP_USERNAME }} >> .env.test
           echo USER_AUTH_KEY=${{ secrets.USER_AUTH_KEY }} >> .env.test
           echo defaultLocale=${{ secrets.defaultLocale }} >> .env.test
+          echo DB_URI=${{ secrets.DB_URI }} >> .env.test
 
           echo "env file created"
       - name: Run tests
