@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
 
+import { client as app } from '../../src/';
 // import { app } from '../../src';
 import User from '../../src/DB/models/user.model';
-import App from '../../src/app';
 
-let app = App.getServer();
+// let app = App.getServer();
 
 afterAll(async () => {
   await mongoose.connection.dropDatabase();

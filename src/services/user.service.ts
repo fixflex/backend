@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import { autoInjectable } from 'tsyringe';
 
+import { app } from '../';
 import UserDao from '../DB/dao/user.dao';
-import app from '../app';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import { hashCode } from '../helpers';

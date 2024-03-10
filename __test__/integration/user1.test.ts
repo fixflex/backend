@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
 
+// let app = App.getServer();
+import { client as app } from '../../src';
 import UserModel from '../../src/DB/models/user.model';
 // import the express app class and pass the routes to it in the constructor to initialize the app
-import App from '../../src/app';
+// import App from '../../src/app';
 import { cloudinaryDeleteImage } from '../../src/helpers';
 import { createAccessToken } from '../../src/helpers';
-
-let app = App.getServer();
 
 let token: string;
 

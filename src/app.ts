@@ -134,9 +134,9 @@ class App {
 
   private initializeRoutes(routes: Routes[]) {
     // serve the static files (index.html)
-    // if (this.env !== 'production') {
-    //   this.app.use(express.static(path.join(__dirname, '../public')));
-    // }
+    if (this.env !== 'production') {
+      this.app.use(express.static(path.join(__dirname, '../public')));
+    }
     //   🤬😡😡🤬 يحمااااار
     // this.app.use('/api/v1/callback', (req, res) => {
     //   // log the request body
@@ -163,4 +163,4 @@ class App {
   }
 }
 
-export default new App();
+export { App };
