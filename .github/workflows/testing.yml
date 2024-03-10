@@ -56,6 +56,5 @@ jobs:
           echo defaultLocale=${{ secrets.defaultLocale }} >> .env.test
 
           echo "env file created"
-          cat .env.test
       - name: Run tests
         run: npm run start:test
