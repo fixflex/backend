@@ -16,7 +16,7 @@ export const errorMiddleware = (err: HttpException, _req: Request, res: Response
       err = handelCastErrorDB(err);
     }
     if (err.code === 11000) {
-      handelDuplicateFieldsDB(err);
+      err = handelDuplicateFieldsDB(err);
     }
     if (err.name === 'ValidationError') {
       err = handelValidationErrorDB(err);
