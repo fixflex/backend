@@ -13,7 +13,7 @@
     "start:test-watch-file": "cross-env NODE_ENV=testing  jest --detectOpenHandles --runInBand  --verbose  --watch  user1.test.ts",
     "start:test-file": "cross-env NODE_ENV=testing  jest  --runInBand  --verbose  user1.test.ts",
     "start:test-watchz": "cross-env NODE_ENV=testing  jest  --runInBand  --verbose  --watchAll",
-    "start:test": "cross-env NODE_ENV=testing  jest --detectOpenHandles --runInBand  --verbose",
+    "start:test": "cross-env NODE_ENV=testing  jest   --runInBand  --verbose",
     "start:testz": "cross-env NODE_ENV=testing  jest --runInBand  --verbose",
     "start:prod": "cross-env NODE_ENV=production  node  ./dist/index.js",
     "start:prod-build-run": "npm run build-ts && cross-env NODE_ENV=production node ./dist/index.js",
