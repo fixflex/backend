@@ -1,10 +1,10 @@
-name: Deploy to render staging server
+name: Deploy to staging server
 
 on:
   workflow_dispatch:
 
 jobs:
-  deploy-sta:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to staging

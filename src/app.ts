@@ -111,15 +111,10 @@ class App {
             await message.reply('pong');
             await this.whatsappclient.sendMessage(message.from, 'pong');
           } else {
-            // to generate random emoji using the following code :
-            // const emoji = String.fromCodePoint(0x1f601 + Math.floor(Math.random() * 50));
-            // console.log(emoji);
-            // console.log(message);
             await this.whatsappclient.sendMessage(
               message.from,
               `👋 Hello ${message._data.notifyName}` +
                 "\n\nNeed help or have questions? Don't hesitate to reach out to our dedicated customer service team – they're here for you!\n📞 Call [phone number] or email [email address] for assistance."
-              // "\n🌟 If you have any questions or need assistance, please don't hesitate to reach out to our dedicated customer service team. They're here to help you every step of the way!. They're ready to help! Call [phone number] or email [email address]. We're here for you!"
             );
           }
         }
@@ -136,14 +131,6 @@ class App {
     if (this.env !== 'production') {
       this.app.use(express.static(path.join(__dirname, '../public')));
     }
-    //   🤬😡😡🤬 يحمااااار
-    // this.app.use('/api/v1/callback', (req, res) => {
-    //   // log the request body
-    //   console.log(req.body);
-    //   // return the response
-    //   res.status(200).json({ message: 'callback received' });
-    // });
-
     routes.forEach(route => {
       this.app.use('/api/v1', route.router);
     });
