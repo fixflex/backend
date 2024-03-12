@@ -114,7 +114,7 @@ class App {
             await this.whatsappclient.sendMessage(
               message.from,
               `👋 Hello ${message._data.notifyName}` +
-                "\n\nNeed help or have questions? Don't hesitate to reach out to our dedicated customer service team – they're here for you!\n📞 Call [phone number] or email [email address] for assistance."
+                "\n\nNeed help or have questions? Don't hesitate to reach out to our dedicated customer service team – they're here for you!\n📞 Call +201146238572 or email support@fixflex.tech for assistance."
             );
           }
         }
