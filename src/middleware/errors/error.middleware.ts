@@ -27,22 +27,27 @@ export const errorMiddleware = (err: HttpException, _req: Request, res: Response
 
     // MulterError
     if (err.name === 'MulterError') err = handleMulterError(err);
+
     sendForProd(err, res, _req);
   }
 };
 
-const handelCastErrorDB = (err: HttpException) => {
+const handelCastErrorDB = (err: any) => {
   const message = `Invalid ${err.path}: ${err.value} `;
   return new HttpException(400, message);
 };
 
-const handelDuplicateFieldsDB = (err: HttpException) => {
-  let value = err.message.match(/(["'])(\\?.)*?\1/)![0];
-  const message = `Duplicate field value: ${value}. Please use another value!`;
+const handelDuplicateFieldsDB = (err: any) => {
+  const keyValue = err.keyValue;
+  const fieldName = Object.keys(keyValue)[0];
+  const value = keyValue[fieldName];
+
+  const message = `Duplicate field value: ${fieldName} => ${value}. Please use another value!`;
+
   return new HttpException(400, message);
 };
 
-const handelValidationErrorDB = (err: HttpException) => {
+const handelValidationErrorDB = (err: any) => {
   const errors = Object.values(err.errors).map((el: any) => el.message);
   const message = `Invalid input data. ${errors.join('. ')}`;
   return new HttpException(400, message);
@@ -52,7 +57,7 @@ const handleJwtInvalidSignture = () => new HttpException(401, 'invalid_signature
 
 const handleJwtExpired = () => new HttpException(401, 'token_expired');
 
-const handleMulterError = (err: HttpException) => {
+const handleMulterError = (err: any) => {
   let message = '';
   let statusCode = 400;
   if (err.code === ('LIMIT_UNEXPECTED_FILE' as number | string)) {
