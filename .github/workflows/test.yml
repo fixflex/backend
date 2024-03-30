@@ -2,10 +2,14 @@ name: Run tests
 
 on:
   pull_request:
-    branches: [main]
+    branches:
+      - stage
+      - develop
+
   push:
-    branches: [main]
-  # Allows you to run this workflow manually from the Actions tab
+    branches:
+      - develop
+
   workflow_dispatch:
 
 jobs:
