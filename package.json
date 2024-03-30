@@ -19,6 +19,7 @@
     "start:dev-stg": "cross-env NODE_ENV=staging nodemon  ./src/index.ts",
     "start:sta": "cross-env NODE_ENV=staging  node  ./dist/index.js",
     "start:sta-build-run": "cross-env npm run build-ts && NODE_ENV=staging  node  ./dist/index.js",
+    "start:dev.js": "cross-env NODE_ENV=development node ./dist/index.js",
     "start": "cross-env NODE_ENV=development node ./dist/index.js",
     "debug": "ndb  ./src/index.ts",
     "build": "npm i",
