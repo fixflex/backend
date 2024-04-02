@@ -4,7 +4,7 @@ import { IPagination } from '../interfaces';
 
 export class QueryBuilder<T> {
   pagination: IPagination | undefined;
-  constructor(public mongooseQuery: Query<T[], T>, public queryString: any) {}
+  constructor(public mongooseQuery: Query<T[], T>, public queryString: any) { }
 
   /**
    *
@@ -31,7 +31,7 @@ export class QueryBuilder<T> {
   locationFilter() {
     if (this.queryString.online === 'true') {
       // return all tasks where location is online
-      this.mongooseQuery = this.mongooseQuery.find({ 'location.online': true });
+      this.mongooseQuery = this.mongooseQuery.find({ 'location.online': true } as unknown as FilterQuery<T>);  // TODO: Fix this type casting
     } else if (this.queryString.location) {
       // return all tasks near by
       const location = this.queryString.location.split(',');

@@ -14,6 +14,7 @@ missing.json
 .wwebjs_auth
 .wwebjs_cache
 dist
+test.env
 # uploads
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json

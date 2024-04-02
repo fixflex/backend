@@ -33,6 +33,7 @@ process.on('SIGINT', () => {
 process.on('unhandledRejection', async (err: Error) => {
   logger.error(err.name, { message: err.message });
   logger.error('UNHANDLED REJECTION! 💥 Shutting down...');
+  console.log("error name", err.name, "error message", err.message);
   // this will cause the server to stop listening to new requests but it will not close the process
   // and the process will still running in the background
   // and this is not what we want so we will use process.exit(1) to exit from the process
