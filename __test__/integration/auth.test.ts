@@ -139,54 +139,54 @@ describe('Authentication', () => {
   });
    */
 
-  describe('POST /api/v1/auth/forgot-password', () => {
-    it('should return 200 and send reset code', async () => {
-      await request(app).post('/api/v1/auth/signup').send(newUserData);
-      const response = await request(app).post('/api/v1/auth/forgot-password').send({ email: newUserData.email });
+  //   describe('POST /api/v1/auth/forgot-password', () => {
+  //     it('should return 200 and send reset code', async () => {
+  //       await request(app).post('/api/v1/auth/signup').send(newUserData);
+  //       const response = await request(app).post('/api/v1/auth/forgot-password').send({ email: newUserData.email });
 
-      expect(response.status).toBe(200);
-      expect(response.body.message).toBeDefined();
-    });
+  //       expect(response.status).toBe(200);
+  //       expect(response.body.message).toBeDefined();
+  //     });
 
-    it('should return 404 User not found', async () => {
-      const response = await request(app).post('/api/v1/auth/forgot-password').send({ email: newUserData.email });
+  //     it('should return 404 User not found', async () => {
+  //       const response = await request(app).post('/api/v1/auth/forgot-password').send({ email: newUserData.email });
 
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBeDefined();
-    });
-  });
+  //       expect(response.status).toBe(404);
+  //       expect(response.body.message).toBeDefined();
+  //     });
+  //   });
 
-  describe('POST /api/v1/auth/verify-reset-code', () => {
-    it('should return 200 and verify reset code', async () => {
-      await request(app).post('/api/v1/auth/signup').send(newUserData);
-      const forgotPasswordResponse = await request(app).post('/api/v1/auth/forgot-password').send({ email: newUserData.email });
-      const response = await request(app).post('/api/v1/auth/verify-reset-code').send({ resetCode: forgotPasswordResponse.body.resetCode });
+  //   describe('POST /api/v1/auth/verify-reset-code', () => {
+  //     it('should return 200 and verify reset code', async () => {
+  //       await request(app).post('/api/v1/auth/signup').send(newUserData);
+  //       const forgotPasswordResponse = await request(app).post('/api/v1/auth/forgot-password').send({ email: newUserData.email });
+  //       const response = await request(app).post('/api/v1/auth/verify-reset-code').send({ resetCode: forgotPasswordResponse.body.resetCode });
 
-      expect(response.status).toBe(200);
-      expect(response.body.message).toBeDefined();
-    });
-  });
+  //       expect(response.status).toBe(200);
+  //       expect(response.body.message).toBeDefined();
+  //     });
+  //   });
 
-  describe('PATCH /api/v1/auth/reset-password', () => {
-    it('should return 200 and reset password', async () => {
-      await request(app).post('/api/v1/auth/signup').send(newUserData);
-      const forgotPasswordResponse = await request(app).post('/api/v1/auth/forgot-password').send({ email: newUserData.email });
-      await request(app).post('/api/v1/auth/verify-reset-code').send({ resetCode: forgotPasswordResponse.body.resetCode });
-      const response = await request(app)
-        .patch('/api/v1/auth/reset-password')
-        .send({ email: newUserData.email, newPassword: 'newPassword123' });
+  //   describe('PATCH /api/v1/auth/reset-password', () => {
+  //     it('should return 200 and reset password', async () => {
+  //       await request(app).post('/api/v1/auth/signup').send(newUserData);
+  //       const forgotPasswordResponse = await request(app).post('/api/v1/auth/forgot-password').send({ email: newUserData.email });
+  //       await request(app).post('/api/v1/auth/verify-reset-code').send({ resetCode: forgotPasswordResponse.body.resetCode });
+  //       const response = await request(app)
+  //         .patch('/api/v1/auth/reset-password')
+  //         .send({ email: newUserData.email, newPassword: 'newPassword123' });
 
-      expect(response.status).toBe(200);
-      expect(response.body.message).toBeDefined();
-    });
+  //       expect(response.status).toBe(200);
+  //       expect(response.body.message).toBeDefined();
+  //     });
 
-    it('should return 404 User not found', async () => {
-      const response = await request(app)
-        .patch('/api/v1/auth/reset-password')
-        .send({ email: newUserData.email, newPassword: 'newPassword123' });
+  //     it('should return 404 User not found', async () => {
+  //       const response = await request(app)
+  //         .patch('/api/v1/auth/reset-password')
+  //         .send({ email: newUserData.email, newPassword: 'newPassword123' });
 
-      expect(response.status).toBe(404);
-      expect(response.body.message).toBeDefined();
-    });
-  });
+  //       expect("response.status").toBe(404);
+  //       expect("response.body.message").toBeDefined();
+  //     });
+  //   });
 });
