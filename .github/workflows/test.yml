@@ -30,7 +30,7 @@ jobs:
         run: npm install
       - name: create .env.test file
         run: |
-          touch .env.test
+          touch test.env
           echo ACCESS_TOKEN_KEY_EXPIRE_TIME=${{ secrets.ACCESS_TOKEN_KEY_EXPIRE_TIME }} >> .env.test
           echo ACCESS_TOKEN_SECRET_KEY=${{ secrets.ACCESS_TOKEN_SECRET_KEY }} >> .env.test
           echo API_KEY=${{ secrets.API_KEY }} >> .env.test
