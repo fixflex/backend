@@ -54,7 +54,7 @@ process.on('unhandledRejection', async (err: Error) => {
   /***** 
    * TODO: Fix the issue of whatsapp-web.js try uninstall it    
    */
-  // process.exit(1); // 0 success 1 failure . // Note if there is any request that is already running it will not be finished and the process will be closed immediately if you want to wait for the requests to finish you can use the above code .
+  process.exit(1); // 0 success 1 failure . // Note if there is any request that is already running it will not be finished and the process will be closed immediately if you want to wait for the requests to finish you can use the above code .
 });
 
 // 2- uncaught exception  - synchronous errors
