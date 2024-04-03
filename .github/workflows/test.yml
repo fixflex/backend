@@ -3,11 +3,14 @@ name: Run tests
 on:
   pull_request:
     branches:
+      - main
       - stage
       - develop
 
   push:
     branches:
+      - main
+      - stage
       - develop
 
   workflow_dispatch:
