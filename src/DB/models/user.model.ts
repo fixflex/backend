@@ -64,6 +64,8 @@ let userSchema: Schema<IUser> = new Schema(
     phoneNumber: {
       type: String,
       unique: true,
+      sparse: true, // use sparse index to allow multiple documents to have no value for the indexed field
+      index: true,
       trim: true,
       match: [/^\d{11}$/, 'Please provide a valid phone number (11 digits)'],
     },

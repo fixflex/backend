@@ -4,7 +4,7 @@ import { IPopulate } from '../../helpers';
 
 // Base DAO
 export default abstract class BaseDAO<T> {
-  constructor(protected readonly model: Model<T>) {}
+  constructor(protected readonly model: Model<T>) { }
 
   async create(entity: T | T[]) {
     return await this.model.create(entity);
@@ -27,13 +27,13 @@ export default abstract class BaseDAO<T> {
     return await this.model.findOne(filter).lean(useLean);
   }
 
-  async getOnePopulate<T>( // <T> is the type of the populated field for example:  <T> ==>> <ITasker>
+  async getOnePopulate<T>(
     filter: FilterQuery<T> = {},
     populate: IPopulate = { path: '', select: '' },
     select: string = '',
     useLean: boolean = true
   ) {
-    return await this.model.findOne(filter).populate<T>(populate.path, populate.select).select(select).lean(useLean);
+    return await this.model.findOne(filter as any).populate<T>(populate.path, populate.select).select(select).lean(useLean);
   }
 
   async getMany(filter: FilterQuery<T> = {}, select: string = '', useLean: boolean = true) {

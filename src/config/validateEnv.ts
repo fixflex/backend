@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import { cleanEnv, num, str, url } from 'envalid';
 
 if (process.env.NODE_ENV === 'testing') {
-  config({ path: '.env.test' });
+  config({ path: 'test.env' });
 } else {
   config();
 }

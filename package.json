@@ -10,6 +10,7 @@
     "nodemon": "nodemon",
     "start:dev": "cross-env NODE_ENV=development nodemon  ./src/index.ts ",
     "start:test-watch": "cross-env NODE_ENV=testing  jest  --runInBand  --verbose  --watchAll",
+    "start:test-onlyChanged": "cross-env NODE_ENV=testing  jest  --runInBand  --verbose --onlyChanged",
     "start:test-watch-file": "cross-env NODE_ENV=testing  jest --detectOpenHandles --runInBand  --verbose  --watch  user.test.ts",
     "start:test": "cross-env NODE_ENV=testing  jest   --runInBand  --verbose",
     "start:test-file": "cross-env NODE_ENV=testing  jest  --verbose   user1.test.ts auth.test.ts",
@@ -29,6 +30,7 @@
   "author": "Ahmed Mostata",
   "license": "ISC",
   "dependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-parser": "^1.4.6",
     "@types/cors": "^2.8.15",
@@ -68,7 +70,7 @@
     "jest": "^29.6.4",
     "jsonwebtoken": "^9.0.1",
     "lodash": "^4.17.21",
-    "mongoose": "^7.4.1",
+    "mongoose": "^8.2.4",
     "mongoose-i18n-localize": "^0.3.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
@@ -90,7 +92,6 @@
     "typescript": "^5.1.6",
     "whatsapp-web.js": "^1.23.0",
     "winston": "^3.10.0",
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "winston-mongodb": "^5.1.1",
     "yamljs": "^0.3.0"
   },
