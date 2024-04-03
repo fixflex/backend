@@ -50,7 +50,11 @@ process.on('unhandledRejection', async (err: Error) => {
     await sendMailer(env.DEVELOPER_EMAIL, 'Unhandled Rejection', message);
   }
   // if you want to close the process without waiting for the server to finish the requests that are already running you can use this code instead of the above code .
-  process.exit(1); // 0 success 1 failure . // Note if there is any request that is already running it will not be finished and the process will be closed immediately if you want to wait for the requests to finish you can use the above code .
+
+  /***** 
+   * TODO: Fix the issue of whatsapp-web.js try uninstall it    
+   */
+  // process.exit(1); // 0 success 1 failure . // Note if there is any request that is already running it will not be finished and the process will be closed immediately if you want to wait for the requests to finish you can use the above code .
 });
 
 // 2- uncaught exception  - synchronous errors

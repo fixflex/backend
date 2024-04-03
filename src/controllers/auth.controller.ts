@@ -13,7 +13,7 @@ import { AuthServie } from '../services';
 // TODO: use passport.js for authentication
 @autoInjectable()
 export class AuthController implements IAuthController {
-  constructor(private readonly authService: AuthServie) {}
+  constructor(private readonly authService: AuthServie) { }
   // TODO: return the access token in the response body additionally to the cookie
   private accessTokenCookieOptions: CookieOptions = {
     httpOnly: true, // client side js cannot access the cookie
