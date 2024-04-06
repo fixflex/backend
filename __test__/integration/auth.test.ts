@@ -98,7 +98,7 @@ describe('Authentication', () => {
     });
   });
 
-  describe('forgot-password, verify-reset-code, reset-password', () => {
+  describe('/api/v1/auth/[forgot-password, verify-reset-code, reset-password]', () => {
     deleteUsers = false;
     it('should return 200 and send reset code', async () => {
       await request(app).post('/api/v1/auth/signup').send(newUserData);

@@ -13,6 +13,7 @@ const newUserData = {
   lastName: 'doe',
   email: 'john@gmail.com',
   password: 'password',
+  phoneNumber: '01066032817',
 };
 
 afterAll(async () => {
@@ -76,6 +77,22 @@ describe('User', () => {
   //   });
   // });
 
+  // this.router.get(`${this.path}/send-verification-code`, authenticateUser, this.userController.sendVerificationCode);
+  // this.router.post(`${this.path}/verify`, authenticateUser, this.userController.verifyCode);
+
+  //   describe('api/v1/users/[send-verification-code, verify]', () => {
+  //     it('should return 200 and send verification code', async () => {
+  //       const response = await request(app).get('/api/v1/users/send-verification-code').set('Authorization', `Bearer ${token}`);
+  //       expect(response.status).toBe(200);
+  //       expect(response.body.message).toBeDefined();
+  //     });
+
+  //     it('should return 200 and verify code', async () => {
+  //       const response = await request(app).post('/api/v1/users/verify').set('Authorization', `Bearer ${token}`).send({ verificationCode: '123456' });
+  //       expect(response.status).toBe(200);
+  //       expect(response.body.message).toBeDefined();
+  //     });
+  //   });
 
 });
 
