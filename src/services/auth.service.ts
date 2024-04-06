@@ -10,10 +10,11 @@ import { hashCode } from '../helpers/hashing';
 import { sendMailer } from '../helpers/nodemailer';
 import { IUser } from '../interfaces';
 import { IAuthService } from '../interfaces/auth.interface';
+import { randomNum } from '../helpers/randomNumGen';
 
 @autoInjectable()
 export class AuthServie implements IAuthService {
-  constructor(private readonly userDao: UserDao) {}
+  constructor(private readonly userDao: UserDao) { }
   /**
    * Signup a new user
    * @param user - The user object to signup
@@ -112,7 +113,9 @@ export class AuthServie implements IAuthService {
       throw new HttpException(404, 'user_not_found');
     }
     // 2- generate a reset code
-    const resetCode = Math.floor(100000 + Math.random() * 90000).toString();
+    let resetCode = randomNum(6);
+    // const resetCode = Math.floor(100000 + Math.random() * 90000).toString();
+
     // 3- hash the reset code via crypto
     user.passwordResetCode = hashCode(resetCode);
     // 3- set the reset code expiration to 10 minutes
