@@ -7,8 +7,14 @@ module.exports = {
   testMatch: ['**/__test__/**/*.test.ts'],
   // maxWorkers: 1, // this should solve the problem of " listen EADDRINUSE: address already in use :::3000" when running tests concurrently
   forceExit: true, // this is to avoid the error "Jest did not exit one second after the test run has completed"
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.json',
+    },
+  },
   // collectCoverage: true, //this means that jest will collect coverage information
   // only files on __test__ directory
   // TODO: jest.config.js is not working 
   // TODO: search for jest.config best practices
-};
+}; 

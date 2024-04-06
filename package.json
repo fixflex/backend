@@ -30,6 +30,7 @@
   "author": "Ahmed Mostata",
   "license": "ISC",
   "dependencies": {
+    "@jest/globals": "^29.7.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-parser": "^1.4.6",
@@ -37,7 +38,6 @@
     "@types/express": "^4.17.20",
     "@types/express-winston": "^4.0.0",
     "@types/i18next-fs-backend": "^1.1.5",
-    "@types/jest": "^29.5.4",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/morgan": "^1.9.7",
     "@types/multer": "^1.4.7",
@@ -96,6 +96,7 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.12",
     "eslint": "^8.46.0",
     "jest": "^29.6.4",
     "ndb": "^0.2.4",
