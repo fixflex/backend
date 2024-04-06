@@ -81,9 +81,19 @@ class App {
   }
 
   private initializeWhatsAppWeb() {
+
+    const wwebVersion = '2.2407.3';
     this.whatsappclient = new Client({
-      authStrategy: new LocalAuth(),
+      authStrategy: new LocalAuth(), // your authstrategy here
+      // puppeteer: {
+      //     // puppeteer args here
+      // },
+      webVersionCache: {
+        type: 'remote',
+        remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${wwebVersion}.html`,
+      },
     });
+
     this.whatsappclient.on('qr', async (qr: any) => {
       qrcode.generate(qr, { small: true });
       // console.log('QR RECEIVED', qr);
