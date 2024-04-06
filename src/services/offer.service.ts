@@ -48,7 +48,7 @@ class OfferService implements IOfferService {
     // 2.1 check that the tasker is not the owner of the task
     if (task.userId === userId) throw new HttpException(400, 'You_cant_make_an_offer_on_your_task');
     // 2.2 check that the tasker phone is verified
-    // if (!tasker.userId.phoneNumVerified) throw new HttpException(400, 'You_must_verify_your_phone_number'); // TODO: Fix this (whatsapp-web.js issue)
+    if (!tasker.userId.phoneNumVerified) throw new HttpException(400, 'You_must_verify_your_phone_number');
     if (task.status !== TaskStatus.OPEN) throw new HttpException(400, 'Task_is_not_open');
     // 3. check if the tasker already made an offer on this task, if yes return an error
     let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });

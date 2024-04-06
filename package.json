@@ -90,7 +90,7 @@
     "ts-node": "^10.9.1",
     "tsyringe": "^4.8.0",
     "typescript": "^5.1.6",
-    "whatsapp-web.js": "^1.16.4-alpha.0",
+    "whatsapp-web.js": "^1.23.0",
     "winston": "^3.10.0",
     "winston-mongodb": "^5.1.1",
     "yamljs": "^0.3.0"
