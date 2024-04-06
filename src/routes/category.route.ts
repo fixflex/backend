@@ -19,8 +19,8 @@ export class CategoryRoute implements Routes {
 
   private initializeRoutes() {
     // Public routes
-    this.router.get(`${this.path}`, this.categoryController.getCategories);
     this.router.get(`${this.path}/:id`, isMongoId, this.categoryController.getCategoryById);
+    this.router.get(`${this.path}`, this.categoryController.getCategories);
 
     // Admin routes
     this.router.use(`${this.path}`, authenticateUser, allowedTo(UserType.ADMIN));

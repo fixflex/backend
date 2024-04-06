@@ -20,7 +20,6 @@ const newUserData = {
 afterAll(async () => {
   await mongoose.connection.dropDatabase();
   await mongoose.connection.close();
-  //   app.close();
 });
 
 // create user before all tests

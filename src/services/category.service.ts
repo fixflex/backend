@@ -9,11 +9,11 @@ import { uploadSingleFile } from '../middleware/uploadImages.middleware';
 export const uploadServiceImage = uploadSingleFile('image');
 @autoInjectable()
 class CategoryService implements ICategoryService {
-  constructor(private readonly categoryDao: CategoryDao) {}
+  constructor(private readonly categoryDao: CategoryDao) { }
 
   async createCategory(category: ICategory) {
-    let isServiceExists = await this.categoryDao.getCategoryByName(category.name);
-    if (isServiceExists) {
+    let isCategoryExists = await this.categoryDao.getCategoryByName(category.name);
+    if (isCategoryExists) {
       throw new HttpException(409, `Service ${category.name} is already exists, please pick a different one.`);
     }
     let newCategory = await this.categoryDao.create(category);
@@ -31,37 +31,37 @@ class CategoryService implements ICategoryService {
     return localizedDocs;
   }
 
-  async getCategory(serviceId: string, reqLanguage: string): Promise<ICategory> {
-    let category = await this.categoryDao.getOneById(serviceId, '', false);
-    if (!category) throw new HttpException(404, 'No service found');
+  async getCategory(categoryId: string, reqLanguage: string): Promise<ICategory> {
+    let category = await this.categoryDao.getOneById(categoryId, '', false);
+    if (!category) throw new HttpException(404, 'No category found');
     return this.categoryDao.toJSONLocalizedOnly(category, reqLanguage) as ICategory;
   }
 
-  async updateCategory(serviceId: string, service: ICategory) {
-    let isServiceExists = await this.categoryDao.getOneById(serviceId);
-    if (!isServiceExists) throw new HttpException(404, 'No service found');
-    return await this.categoryDao.updateOneById(serviceId, service);
+  async updateCategory(categoryId: string, category: ICategory) {
+    let isCategoryExists = await this.categoryDao.getOneById(categoryId);
+    if (!isCategoryExists) throw new HttpException(404, 'No category found');
+    return await this.categoryDao.updateOneById(categoryId, category);
   }
 
-  async uploadCategoryImage(serviceId: string, file: Express.Multer.File) {
+  async uploadCategoryImage(categoryId: string, file: Express.Multer.File) {
     const result = await cloudinaryUploadImage(file.buffer, 'service-image');
-    // update the service with the image url and public id
-    let service = await this.categoryDao.getOneById(serviceId);
-    if (!service) throw new HttpException(404, 'No service found');
+    // update the category with the image url and public id
+    let category = await this.categoryDao.getOneById(categoryId);
+    if (!category) throw new HttpException(404, 'No category found');
     // delete the old image from cloudinary if exists
-    if (service.image.publicId) await cloudinaryDeleteImage(service.image.publicId);
+    if (category.image.publicId) await cloudinaryDeleteImage(category.image.publicId);
     // update the image field in the DB with the new image url and public id
-    service = await this.categoryDao.updateOneById(serviceId, {
+    category = await this.categoryDao.updateOneById(categoryId, {
       image: { url: result.secure_url, publicId: result.public_id },
     } as ICategory);
 
-    return service;
+    return category;
   }
 
-  async deleteCategory(serviceId: string) {
-    let isServiceExists = await this.categoryDao.getOneById(serviceId);
-    if (!isServiceExists) throw new HttpException(404, 'No service found');
-    return await this.categoryDao.deleteOneById(serviceId);
+  async deleteCategory(categoryId: string) {
+    let isCategoryExists = await this.categoryDao.getOneById(categoryId);
+    if (!isCategoryExists) throw new HttpException(404, 'No category found');
+    return await this.categoryDao.deleteOneById(categoryId);
   }
 }
 
