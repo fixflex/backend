@@ -100,6 +100,14 @@ class App {
         (global as any)['myGlobalVar'] = true;
       });
     this.whatsappclient.on('authenticated', () => console.log('Authenticated'));
+    this.whatsappclient.on('disconnected', () => {
+      console.log('Client is disconnected!');
+    });
+
+    this.whatsappclient.on('auth_failure', () => {
+      console.log('Client is auth_failure!');
+    });
+
     this.whatsappclient.on('message', async (message: any) => {
       try {
         // process.env.PROCCESS_MESSAGE_FROM_CLIENT &&
@@ -114,7 +122,7 @@ class App {
             await this.whatsappclient.sendMessage(
               message.from,
               `👋 Hello ${message._data.notifyName}` +
-                "\n\nNeed help or have questions? Don't hesitate to reach out to our dedicated customer service team – they're here for you!\n📞 Call +201146238572 or email support@fixflex.tech for assistance."
+              "\n\nNeed help or have questions? Don't hesitate to reach out to our dedicated customer service team – they're here for you!\n📞 Call +201146238572 or email support@fixflex.tech for assistance."
             );
           }
         }
