@@ -8,6 +8,7 @@ module.exports = {
   globalSetup: './__test__/testSetup/globalSetup.ts',
   globalTeardown: './__test__/testSetup/globalTeardown.ts',
   testSequencer: './__test__/testSetup/custom-sequencer.js',
+  forceExit: true,
   // globals: {
   //   'ts-jest': {
   //     tsconfig: 'tsconfig.json',

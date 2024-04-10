@@ -1,5 +1,6 @@
-import { createAccessToken, createRefreshToken } from '../../src/helpers';
-import { randomNum } from '../../src/helpers';
+// import { createAccessToken, createRefreshToken, randomNum } from '../../src/helpers';
+import { createAccessToken, createRefreshToken } from '../../src/helpers/createToken';
+import { randomNum } from '../../src/helpers/randomNumGen';
 
 describe('Utils', () => {
   describe('createAccessToken', () => {
