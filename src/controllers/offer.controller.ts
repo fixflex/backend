@@ -38,7 +38,7 @@ class OfferController implements IOfferController {
   deleteOffer = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const offer = await this.offerService.deleteOffer(req.params.id, req.user._id);
     if (!offer) return next(new HttpException(404, 'resource_not_found'));
-    res.status(200).json(customResponse({ data: null, success: true, message: 'deleted_success' }));
+    res.status(204).json(customResponse({ data: null, success: true, message: 'deleted_success' }));
   });
 
   acceptOffer = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
