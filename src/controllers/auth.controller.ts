@@ -39,7 +39,7 @@ export class AuthController implements IAuthController {
 
     res
       .status(201)
-      .json(Object.assign(customResponse({ data: new UserDto(user), success: true, message: req.t('user_created') }), { accessToken }));
+      .json(Object.assign(customResponse({ data: user, success: true, message: req.t('user_created') }), { accessToken }));
   });
 
   public login = asyncHandler(async (req: Request, res: Response) => {

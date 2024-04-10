@@ -25,7 +25,7 @@ class MessageController implements IMessageController {
   deleteMessage = asyncHandler(async (req: Request, res: Response) => {
     let message = await this.messageService.deleteMessage(req.params.id, req.user);
     if (!message) throw new HttpException(404, 'No chat found');
-    res.status(200).json(customResponse<IMessage>({ data: message, success: true, message: 'Message deleted' }));
+    res.status(204).json(customResponse({ data: null, success: true, message: 'Message deleted' }));
   });
 }
 

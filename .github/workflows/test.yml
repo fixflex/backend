@@ -66,4 +66,4 @@ jobs:
           echo DB_URI=${{ secrets.DB_URI }} >> test.env
 
       - name: Run tests
-        run: npm run start:test
+        run: npm run test

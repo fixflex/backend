@@ -39,7 +39,17 @@ export const updateOfferValidator = [
   check('id').notEmpty().withMessage('is_required').isMongoId().withMessage('invalid_MongoId'),
 
   // ====================>>>>>>>> is optional <<<<<<<<<<<==================== //
-  check('price').optional().isNumeric().withMessage('invalid_input').isLength({ min: 5 }).withMessage('min_length'),
+  check('price')
+    .optional()
+    .isNumeric()
+    .withMessage('invalid_input')
+    .custom(value => {
+      if (value < 5.0) {
+        throw new Error('min_length');
+      }
+      return true;
+    }),
+
   check('message').optional().isLength({ max: 8000 }).withMessage('exceeds_max_length'),
 
   // ====================>>>>>>>> is empty <<<<<<<<<<<==================== //

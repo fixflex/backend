@@ -26,9 +26,6 @@ export const createTaskerValidator = [
       return true;
     }),
 
-  //  ckeck that the phone number is valid  and be from egypt
-  check('phoneNumber').notEmpty().withMessage('this_field_is_required').isMobilePhone('ar-EG').withMessage('invalid_phone_number'),
-  // https://www.npmjs.com/package/google-libphonenumber
   check('rating').isEmpty().withMessage('not_allowed'),
   check('completedTasks').isEmpty().withMessage('not_allowed'),
 

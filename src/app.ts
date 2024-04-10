@@ -28,7 +28,8 @@ class App {
   public env: string;
   public whatsappclient: any;
   private routes: Routes[];
-  constructor() {
+  static instance: App | null = null;
+  private constructor() {
     this.app = express();
     this.port = env.PORT || 8000;
     this.env = process.env.NODE_ENV || 'development';
@@ -41,7 +42,14 @@ class App {
     this.initializeErrorHandling();
   }
 
-  public getServer() {
+  public static getInstance(): App {
+    if (!App.instance) {
+      App.instance = new App();
+    }
+    return App.instance;
+  }
+
+  public getApp() {
     return this.app;
   }
 
@@ -81,7 +89,6 @@ class App {
   }
 
   private initializeWhatsAppWeb() {
-
     const wwebVersion = '2.2407.3';
     this.whatsappclient = new Client({
       authStrategy: new LocalAuth(), // your authstrategy here
@@ -132,7 +139,7 @@ class App {
             await this.whatsappclient.sendMessage(
               message.from,
               `👋 Hello ${message._data.notifyName}` +
-              "\n\nNeed help or have questions? Don't hesitate to reach out to our dedicated customer service team – they're here for you!\n📞 Call +201146238572 or email support@fixflex.tech for assistance."
+                "\n\nNeed help or have questions? Don't hesitate to reach out to our dedicated customer service team – they're here for you!\n📞 Call +201146238572 or email support@fixflex.tech for assistance."
             );
           }
         }
