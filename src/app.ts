@@ -100,14 +100,17 @@ class App {
         remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${wwebVersion}.html`,
       },
     });
-
+    let flag = true;
     this.whatsappclient.on('qr', async (qr: any) => {
       qrcode.generate(qr, { small: true });
       // console.log('QR RECEIVED', qr);
       try {
         console.log('New QR code generated');
         const message = `Scan the QR code to login to whatsapp account \n\nhttps://dashboard.render.com/web/srv-clkt2gsjtl8s73f24g00/logs?m=max\n\n`;
-        await sendMailer(env.DEVELOPER_EMAIL, 'Whatsapp QR Code', message);
+        if (flag) {
+          flag = false;
+          await sendMailer(env.DEVELOPER_EMAIL, 'Whatsapp QR Code', message);
+        }
       } catch (err) {
         console.log(err);
       }
