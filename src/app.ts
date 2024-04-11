@@ -1,6 +1,11 @@
+import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
+import mongoSanitize from 'express-mongo-sanitize';
+import { rateLimit } from 'express-rate-limit';
+import helmet from 'helmet';
+import hpp from 'hpp';
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 import i18nextMiddleware from 'i18next-http-middleware';
@@ -10,10 +15,10 @@ import qrcode from 'qrcode-terminal';
 import 'reflect-metadata';
 import swaggerUi from 'swagger-ui-express';
 import { Client, LocalAuth } from 'whatsapp-web.js';
+import xss from 'xss-clean';
 
 import { dbConnection } from './DB';
 import env from './config/validateEnv';
-// Documentation
 import swaggerDocument from './docs/swagger';
 import { notFound } from './exceptions/notFoundException';
 import './exceptions/shutdownHandler';
@@ -28,6 +33,7 @@ class App {
   public env: string;
   public whatsappclient: any;
   private routes: Routes[];
+
   static instance: App | null = null;
   private constructor() {
     this.app = express();
@@ -61,10 +67,40 @@ class App {
     if (this.env === 'development') {
       this.app.use(morgan('dev'));
     }
+
     this.app.use(cors({ origin: true, credentials: true, exposedHeaders: ['set-cookie'] }));
-    this.app.use(express.json());
+
+    // Set security HTTP headers to prevent XSS attacks, clickjacking etc.
+    this.app.use(helmet());
+
+    // Compress response bodies for all requests
+    this.app.use(compression());
+
+    // Limit the body of the request to 50kb to prevent DOS attacks
+    this.app.use(express.json({ limit: '50kb' }));
+
+    // Data sanitization against NoSQL query injection
+    this.app.use(mongoSanitize());
+
+    // Data sanitization against XSS (Cross-Site Scripting) attacks
+    this.app.use(xss());
+
+    //  Rate limiter middleware to prevent brute force attacks on the login & reset password routes
+    const limiter = rateLimit({
+      windowMs: 10 * 60 * 1000, // 10 minutes
+      max: 100, // limit each IP to 100 requests per windowMs
+      message: 'Too many requests from this IP, please try again after 10 minutes',
+    });
+    this.app.use('/api/v1/auth/login', limiter);
+    this.app.use('/api/v1/auth/reset-password', limiter);
+
+    // Prevent HTTP Parameter Pollution attacks
+    this.app.use(hpp());
+
     this.app.use(cookieParser());
+
     if (this.env !== 'production') this.app.use(express.static(path.join(__dirname, '../public')));
+
     i18next
       .use(Backend)
       .use(i18nextMiddleware.LanguageDetector)
