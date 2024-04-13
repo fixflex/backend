@@ -6,9 +6,6 @@ import mongoSanitize from 'express-mongo-sanitize';
 import { rateLimit } from 'express-rate-limit';
 import helmet from 'helmet';
 import hpp from 'hpp';
-import i18next from 'i18next';
-import Backend from 'i18next-fs-backend';
-import i18nextMiddleware from 'i18next-http-middleware';
 import morgan from 'morgan';
 import path from 'path';
 import 'reflect-metadata';
@@ -21,6 +18,7 @@ import swaggerDocument from './docs/swagger';
 import { notFound } from './exceptions/notFoundException';
 import './exceptions/shutdownHandler';
 import { Routes } from './interfaces/routes.interface';
+import { i18nMiddleware } from './middleware';
 import { errorMiddleware } from './middleware/errors';
 import { routes } from './routes/routes';
 import { WhatsAppClient } from './services';
@@ -40,7 +38,7 @@ class App {
     this.connectToDatabase();
     this.initializeMiddlewares();
     this.initializeRoutes(this.routes);
-    if (process.env.NODE_ENV !== 'testing') this.initializeWhatsAppWeb(); // TODO : fix this
+    this.initializeWhatsAppWeb();
     this.initializeSwagger();
     this.initializeErrorHandling();
   }
@@ -122,31 +120,11 @@ class App {
 
     if (this.env !== 'production') this.app.use(express.static(path.join(__dirname, '../public')));
 
-    i18next
-      .use(Backend)
-      .use(i18nextMiddleware.LanguageDetector)
-      .init({
-        backend: {
-          loadPath: path.join(__dirname, '../locales/{{lng}}/translation.json'),
-          addPath: path.join(__dirname, '../locales/missing.json'),
-        },
-        fallbackLng: env.defaultLocale,
-        saveMissing: true,
-        detection: {
-          // TODO: get the language from the user's browser
-          order: ['header', 'cookie'],
-          lookupHeader: 'accept-language',
-          lookupCookie: 'accept-language',
-          caches: ['cookie'], // cache the language in a cookie
-        },
-        // preload: ['en', 'ar'], // preload all languages
-        // debug: env.NODE_ENV === 'development',
-      });
-    this.app.use(i18nextMiddleware.handle(i18next));
+    this.app.use(i18nMiddleware);
   }
 
   private initializeWhatsAppWeb() {
-    WhatsAppClient.getInstance();
+    if (process.env.NODE_ENV !== 'testing') WhatsAppClient.getInstance();
   }
   private initializeRoutes(routes: Routes[]) {
     // serve the static files (index.html)
