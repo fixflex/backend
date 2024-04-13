@@ -63,8 +63,8 @@ jobs:
           echo SMTP_USERNAME=${{ secrets.SMTP_USERNAME }} >> test.env
           echo USER_AUTH_KEY=${{ secrets.USER_AUTH_KEY }} >> test.env
           echo defaultLocale=${{ secrets.defaultLocale }} >> test.env
-          echo FRONTEND_URL=${FRONTEND_URL} >> test.env
-          echo WEB_VERSION=${WEB_VERSION} >> test.env
+          echo FRONTEND_URL=${{secrets.FRONTEND_URL}} >> test.env
+          echo WEB_VERSION=${{secrets.WEB_VERSION}} >> test.env
           echo DB_URI=${{ secrets.DB_URI }} >> test.env
 
       - name: Run tests
