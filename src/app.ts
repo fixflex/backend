@@ -68,14 +68,38 @@ class App {
       this.app.use(morgan('dev'));
     }
 
-    this.app.use(cors({ origin: true, credentials: true, exposedHeaders: ['set-cookie'] }));
+    if (env.NODE_ENV === 'production') {
+      this.app.use(
+        cors({
+          origin: env.FRONTEND_URL,
+          methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+          credentials: true,
+          exposedHeaders: ['set-cookie'],
+        })
+      );
+    } else {
+      // Allow all origins for development and staging environments
+      this.app.use(cors({ origin: true, credentials: true, exposedHeaders: ['set-cookie'] }));
+    }
 
     // Set security HTTP headers to prevent XSS attacks, clickjacking etc.
     this.app.use(helmet());
 
     // Compress response bodies for all requests
-    this.app.use(compression());
-
+    this.app.use(
+      compression({
+        level: 6, // set compression level from -1 to 9 (-1 default level, 0 no compression, 9 is the maximum compression level)
+        threshold: 100 * 1024, // 100kb is the minimum size of the response before applying compression
+        // filter function to determine if the response should be compressed
+        filter: (req, res) => {
+          if (req.headers['x-no-compression']) {
+            // don't compress responses with this request header
+            return false;
+          }
+          return compression.filter(req, res);
+        },
+      })
+    );
     // Limit the body of the request to 50kb to prevent DOS attacks
     this.app.use(express.json({ limit: '50kb' }));
 
@@ -88,7 +112,7 @@ class App {
     //  Rate limiter middleware to prevent brute force attacks on the login & reset password routes
     const limiter = rateLimit({
       windowMs: 10 * 60 * 1000, // 10 minutes
-      max: 100, // limit each IP to 100 requests per windowMs
+      max: 10, // limit each IP to 10 requests per windowMs
       message: 'Too many requests from this IP, please try again after 10 minutes',
     });
     this.app.use('/api/v1/auth/login', limiter);
