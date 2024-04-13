@@ -41,6 +41,7 @@ const validateEnv = cleanEnv(process.env, {
   PAYMOB_SECRET_KEY: str(),
   PAYMOB_HMAC_SECRET: str(),
   FRONTEND_URL: url(),
+  WEB_VERSION: str(),
 });
 
 export default validateEnv;

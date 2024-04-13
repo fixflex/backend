@@ -50,7 +50,6 @@ let userSchema: Schema<IUser> = new Schema(
       type: String,
       enum: Object.values(UserType),
       default: UserType.USER,
-      select: false,
     },
     active: {
       type: Boolean,

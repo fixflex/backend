@@ -20,4 +20,4 @@ let s = server.listen(env.PORT).on('listening', () => {
 let socketService = SocketService.getInstance(s);
 let io = socketService.getSocketIO();
 
-export { server, io, client, app };
+export { server, io, client };

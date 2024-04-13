@@ -11,10 +11,8 @@ import Backend from 'i18next-fs-backend';
 import i18nextMiddleware from 'i18next-http-middleware';
 import morgan from 'morgan';
 import path from 'path';
-import qrcode from 'qrcode-terminal';
 import 'reflect-metadata';
 import swaggerUi from 'swagger-ui-express';
-import { Client, LocalAuth } from 'whatsapp-web.js';
 import xss from 'xss-clean';
 
 import { dbConnection } from './DB';
@@ -22,16 +20,15 @@ import env from './config/validateEnv';
 import swaggerDocument from './docs/swagger';
 import { notFound } from './exceptions/notFoundException';
 import './exceptions/shutdownHandler';
-import { sendMailer } from './helpers';
 import { Routes } from './interfaces/routes.interface';
 import { errorMiddleware } from './middleware/errors';
 import { routes } from './routes/routes';
+import { WhatsAppClient } from './services';
 
 class App {
   public app: express.Application;
   public port: number | string;
   public env: string;
-  public whatsappclient: any;
   private routes: Routes[];
 
   static instance: App | null = null;
@@ -149,71 +146,8 @@ class App {
   }
 
   private initializeWhatsAppWeb() {
-    const wwebVersion = '2.2407.3';
-    this.whatsappclient = new Client({
-      authStrategy: new LocalAuth(), // your authstrategy here
-      // puppeteer: {
-      //     // puppeteer args here
-      // },
-      webVersionCache: {
-        type: 'remote',
-        remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${wwebVersion}.html`,
-      },
-    });
-    let flag = true;
-    this.whatsappclient.on('qr', async (qr: any) => {
-      qrcode.generate(qr, { small: true });
-      // console.log('QR RECEIVED', qr);
-      try {
-        console.log('New QR code generated');
-        const message = `Scan the QR code to login to whatsapp account \n\nhttps://dashboard.render.com/web/srv-clkt2gsjtl8s73f24g00/logs?m=max\n\n`;
-        if (flag) {
-          flag = false;
-          await sendMailer(env.DEVELOPER_EMAIL, 'Whatsapp QR Code', message);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }),
-      this.whatsappclient.on('ready', () => {
-        console.log('Client is ready!');
-        (global as any)['myGlobalVar'] = true;
-      });
-    this.whatsappclient.on('authenticated', () => console.log('Authenticated'));
-    this.whatsappclient.on('disconnected', () => {
-      console.log('Client is disconnected!');
-    });
-
-    this.whatsappclient.on('auth_failure', () => {
-      console.log('Client is auth_failure!');
-    });
-
-    this.whatsappclient.on('message', async (message: any) => {
-      try {
-        // process.env.PROCCESS_MESSAGE_FROM_CLIENT &&
-        if (message.from != 'status@broadcast') {
-          const contact = await message.getContact();
-          console.log(contact.pushname, message.from);
-          // console.log(message.from);
-          if (message.body === 'ping') {
-            await message.reply('pong');
-            await this.whatsappclient.sendMessage(message.from, 'pong');
-          } else {
-            await this.whatsappclient.sendMessage(
-              message.from,
-              `👋 Hello ${message._data.notifyName}` +
-                "\n\nNeed help or have questions? Don't hesitate to reach out to our dedicated customer service team – they're here for you!\n📞 Call +201146238572 or email support@fixflex.tech for assistance."
-            );
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    });
-
-    this.whatsappclient.initialize();
+    WhatsAppClient.getInstance();
   }
-
   private initializeRoutes(routes: Routes[]) {
     // serve the static files (index.html)
     if (this.env !== 'production') {
