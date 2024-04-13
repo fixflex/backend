@@ -2,11 +2,13 @@ import request from 'supertest';
 
 import { client } from '../../src';
 import * as RandomNum from '../../src/helpers/randomNumGen';
-import * as SendWhatsappMessage from '../../src/helpers/sendWhatsappMessage';
+import * as SendWhatsappMessage from '../../src/services/whatsappClient.service';
 import { user2 } from '../data';
 
 jest.spyOn(RandomNum, 'randomNum').mockReturnValue('123456');
-jest.spyOn(SendWhatsappMessage, 'sendWhatsappMessage').mockResolvedValue(true); //  use resolvedValue for async functions
+// jest.spyOn(SendWhatsappMessage, 'sendMessage').mockResolvedValue(true); //  use resolvedValue for async functions
+// to spy sendMessage static method in whatsappClient class follow the steps below:
+jest.spyOn(SendWhatsappMessage.WhatsAppClient, 'sendMessage').mockResolvedValue(true);
 
 let token: string;
 let category: any;

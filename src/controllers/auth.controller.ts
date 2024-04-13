@@ -13,7 +13,7 @@ import { AuthServie } from '../services';
 // TODO: use passport.js for authentication
 @autoInjectable()
 export class AuthController implements IAuthController {
-  constructor(private readonly authService: AuthServie) { }
+  constructor(private readonly authService: AuthServie) {}
   // TODO: return the access token in the response body additionally to the cookie
   private accessTokenCookieOptions: CookieOptions = {
     httpOnly: true, // client side js cannot access the cookie
@@ -37,9 +37,7 @@ export class AuthController implements IAuthController {
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
     res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
 
-    res
-      .status(201)
-      .json(Object.assign(customResponse({ data: user, success: true, message: req.t('user_created') }), { accessToken }));
+    res.status(201).json(Object.assign(customResponse({ data: user, success: true, message: req.t('user_created') }), { accessToken }));
   });
 
   public login = asyncHandler(async (req: Request, res: Response) => {

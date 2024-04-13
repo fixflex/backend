@@ -20,11 +20,6 @@ let userSchema: Schema<IUser> = new Schema(
       unique: true,
       required: [true, 'Email is required'],
       minlength: 5,
-      // a regular expression to validate an email address(stackoverflow)
-      match: [
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        'Please provide a valid email',
-      ],
       maxLength: [128, "Email can't be greater than 128 characters"],
       trim: true,
     },

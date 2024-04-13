@@ -5,9 +5,10 @@ import { autoInjectable } from 'tsyringe';
 import UserDao from '../DB/dao/user.dao';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
-import { hashCode, randomNum, sendWhatsappMessage } from '../helpers';
+import { hashCode, randomNum } from '../helpers';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { IUser, IUserService } from '../interfaces';
+import { WhatsAppClient } from './whatsappClient.service';
 
 @autoInjectable()
 class UserService implements IUserService {
@@ -88,7 +89,7 @@ class UserService implements IUserService {
     // Step 2: Generate a random 6 digits code (Verification code)
     let verificationCode = randomNum(6);
     // Step 3: Send the verification code to the user phone number
-    await sendWhatsappMessage(user.phoneNumber, `Verification code is: ${verificationCode}`);
+    await WhatsAppClient.sendMessage(user.phoneNumber, `Verification code is: ${verificationCode}`);
     // Step 4: Hash the verification code
     let hashedVerificationCode = hashCode(verificationCode);
     // step 5: Set the expiration time for the verification code to 10 minutes and save it in the database
