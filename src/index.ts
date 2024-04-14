@@ -6,10 +6,10 @@ import logger from './helpers/log';
 import { SocketService } from './sockets/socket';
 
 // Setup app
-let app = new App();
+let app = App.getInstance();
 
 // Setup http server
-let client = app.getServer();
+let client = app.getApp();
 let server = createServer(client);
 
 let s = server.listen(env.PORT).on('listening', () => {
@@ -20,4 +20,4 @@ let s = server.listen(env.PORT).on('listening', () => {
 let socketService = SocketService.getInstance(s);
 let io = socketService.getSocketIO();
 
-export { server, io, client, app };
+export { server, io, client };

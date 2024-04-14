@@ -17,7 +17,7 @@ class TaskerService implements ITaskerService {
     private readonly couponeDao: CouponDao,
     private readonly taskDao: TaskDao,
     private readonly paymobService: PaymobService
-  ) {}
+  ) { }
   async createTasker(userId: string, tasker: ITasker) {
     // check if service is exists in DB
     await Promise.all(
@@ -111,7 +111,7 @@ class TaskerService implements ITaskerService {
       taskId: '',
       taskerId: `${Math.floor(100000 + Math.random() * 90000)}-${tasker._id.toString()}`,
       transactionType: TransactionType.COMMISSION_PAYMENT,
-      phoneNumber: payload.phoneNumber ? payload.phoneNumber : tasker.phoneNumber,
+      phoneNumber: payload.phoneNumber ? payload.phoneNumber : user.phoneNumber,
       merchant_order_id: tasker._id.toString(),
     };
 

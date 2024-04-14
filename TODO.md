@@ -2,3 +2,5 @@
 2. perform push notification when a tasker is assigned to a task to the tasker
 3. Get the location details by using city name
 4. Use mailgun to send emails instead of gmail (mailgun more reliable)
+5. Use pnpm instead of npm
+6. Use eslint-plugin-security to check for security vulnerabilities in the code

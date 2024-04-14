@@ -2,10 +2,17 @@ name: Run tests
 
 on:
   pull_request:
-    branches: [main]
+    branches:
+      - main
+      - stage
+      - develop
+
   push:
-    branches: [main]
-  # Allows you to run this workflow manually from the Actions tab
+    branches:
+      - main
+      - stage
+      - develop
+
   workflow_dispatch:
 
 jobs:
@@ -24,39 +31,41 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: install dependencies
         run: npm install
-      - name: create .env.test file
+      - name: create test.env file
         run: |
-          touch .env.test
-          echo ACCESS_TOKEN_KEY_EXPIRE_TIME=${{ secrets.ACCESS_TOKEN_KEY_EXPIRE_TIME }} >> .env.test
-          echo ACCESS_TOKEN_SECRET_KEY=${{ secrets.ACCESS_TOKEN_SECRET_KEY }} >> .env.test
-          echo API_KEY=${{ secrets.API_KEY }} >> .env.test
-          echo APP_ID=${{ secrets.APP_ID }} >> .env.test
-          echo BASE_URL=${{ secrets.BASE_URL }} >> .env.test
-          echo CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} >> .env.test
-          echo CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} >> .env.test
-          echo COMMISSION_RATE=${{ secrets.COMMISSION_RATE }} >> .env.test
-          echo DEVELOPER_EMAIL=${{ secrets.DEVELOPER_EMAIL }} >> .env.test
-          echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env.test
-          echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env.test
-          echo PAYMOB_API_KEY=${{ secrets.PAYMOB_API_KEY }} >> .env.test
-          echo PAYMOB_HMAC_SECRET=${{ secrets.PAYMOB_HMAC_SECRET }} >> .env.test
-          echo PAYMOB_INTEGRATION_ID=${{ secrets.PAYMOB_INTEGRATION_ID }} >> .env.test
-          echo PAYMOB_INTEGRATION_ID_WALLET=${{ secrets.PAYMOB_INTEGRATION_ID_WALLET }} >> .env.test
-          echo PAYMOB_PUBLIC_KEY=${{ secrets.PAYMOB_PUBLIC_KEY }} >> .env.test
-          echo PAYMOB_SECRET_KEY=${{ secrets.PAYMOB_SECRET_KEY }} >> .env.test
-          echo PORT=${{ secrets.PORT }} >> .env.test
-          echo REFRESH_TOKEN_KEY_EXPIRE_TIME=${{ secrets.REFRESH_TOKEN_KEY_EXPIRE_TIME }} >> .env.test
-          echo REFRESH_TOKEN_SECRET_KEY=${{ secrets.REFRESH_TOKEN_SECRET_KEY }} >> .env.test
-          echo SALT_ROUNDS=${{ secrets.SALT_ROUNDS }} >> .env.test
-          echo CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} >> .env.test
-          echo SMTP_HOST=${{ secrets.SMTP_HOST }} >> .env.test
-          echo SMTP_NAME=${{ secrets.SMTP_NAME }} >> .env.test
-          echo SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }} >> .env.test
-          echo SMTP_PORT=${{ secrets.SMTP_PORT }} >> .env.test
-          echo SMTP_USERNAME=${{ secrets.SMTP_USERNAME }} >> .env.test
-          echo USER_AUTH_KEY=${{ secrets.USER_AUTH_KEY }} >> .env.test
-          echo defaultLocale=${{ secrets.defaultLocale }} >> .env.test
-          echo DB_URI=${{ secrets.DB_URI }} >> .env.test
+          touch test.env
+          echo ACCESS_TOKEN_KEY_EXPIRE_TIME=${{ secrets.ACCESS_TOKEN_KEY_EXPIRE_TIME }} >> test.env
+          echo ACCESS_TOKEN_SECRET_KEY=${{ secrets.ACCESS_TOKEN_SECRET_KEY }} >> test.env
+          echo API_KEY=${{ secrets.API_KEY }} >> test.env
+          echo APP_ID=${{ secrets.APP_ID }} >> test.env
+          echo BASE_URL=${{ secrets.BASE_URL }} >> test.env
+          echo CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} >> test.env
+          echo CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} >> test.env
+          echo COMMISSION_RATE=${{ secrets.COMMISSION_RATE }} >> test.env
+          echo DEVELOPER_EMAIL=${{ secrets.DEVELOPER_EMAIL }} >> test.env
+          echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> test.env
+          echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> test.env
+          echo PAYMOB_API_KEY=${{ secrets.PAYMOB_API_KEY }} >> test.env
+          echo PAYMOB_HMAC_SECRET=${{ secrets.PAYMOB_HMAC_SECRET }} >> test.env
+          echo PAYMOB_INTEGRATION_ID=${{ secrets.PAYMOB_INTEGRATION_ID }} >> test.env
+          echo PAYMOB_INTEGRATION_ID_WALLET=${{ secrets.PAYMOB_INTEGRATION_ID_WALLET }} >> test.env
+          echo PAYMOB_PUBLIC_KEY=${{ secrets.PAYMOB_PUBLIC_KEY }} >> test.env
+          echo PAYMOB_SECRET_KEY=${{ secrets.PAYMOB_SECRET_KEY }} >> test.env
+          echo PORT=${{ secrets.PORT }} >> test.env
+          echo REFRESH_TOKEN_KEY_EXPIRE_TIME=${{ secrets.REFRESH_TOKEN_KEY_EXPIRE_TIME }} >> test.env
+          echo REFRESH_TOKEN_SECRET_KEY=${{ secrets.REFRESH_TOKEN_SECRET_KEY }} >> test.env
+          echo SALT_ROUNDS=${{ secrets.SALT_ROUNDS }} >> test.env
+          echo CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} >> test.env
+          echo SMTP_HOST=${{ secrets.SMTP_HOST }} >> test.env
+          echo SMTP_NAME=${{ secrets.SMTP_NAME }} >> test.env
+          echo SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }} >> test.env
+          echo SMTP_PORT=${{ secrets.SMTP_PORT }} >> test.env
+          echo SMTP_USERNAME=${{ secrets.SMTP_USERNAME }} >> test.env
+          echo USER_AUTH_KEY=${{ secrets.USER_AUTH_KEY }} >> test.env
+          echo defaultLocale=${{ secrets.defaultLocale }} >> test.env
+          echo FRONTEND_URL=${{secrets.FRONTEND_URL}} >> test.env
+          echo WEB_VERSION=${{secrets.WEB_VERSION}} >> test.env
+          echo DB_URI=${{ secrets.DB_URI }} >> test.env
 
       - name: Run tests
-        run: npm run start:test
+        run: npm run test

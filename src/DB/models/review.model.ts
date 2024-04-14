@@ -47,7 +47,6 @@ reviewSchema.statics.calcAverageRatingsAndQuantity = async function (taskerId: s
       },
     },
   ]);
-  console.log('stats ===>  ', stats);
   if (stats.length > 0) {
     await TaskerModel.findByIdAndUpdate(
       taskerId,

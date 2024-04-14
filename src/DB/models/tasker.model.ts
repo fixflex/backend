@@ -45,13 +45,13 @@ let taskerSchema: Schema<ITasker> = new Schema(
       },
     },
     bio: String,
-    phoneNumber: {
-      unique: true,
-      type: String,
-      required: true,
-      minlength: 11,
-      maxlength: 11,
-    },
+    // phoneNumber: {
+    //   unique: true,
+    //   type: String,
+    //   required: true,
+    //   minlength: 11,
+    //   maxlength: 11,
+    // },
     notPaidTasks: [
       {
         type: String,

@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import { cleanEnv, num, str, url } from 'envalid';
 
 if (process.env.NODE_ENV === 'testing') {
-  config({ path: '.env.test' });
+  config({ path: 'test.env' });
 } else {
   config();
 }
@@ -40,6 +40,8 @@ const validateEnv = cleanEnv(process.env, {
   PAYMOB_PUBLIC_KEY: str(),
   PAYMOB_SECRET_KEY: str(),
   PAYMOB_HMAC_SECRET: str(),
+  FRONTEND_URL: url(),
+  WEB_VERSION: str(),
 });
 
 export default validateEnv;

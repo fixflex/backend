@@ -22,7 +22,7 @@ class OfferService implements IOfferService {
     private taskDao: TaskDao,
     // private transactionDao: TransactionDao,
     private oneSignalApiHandler: OneSignalApiHandler
-  ) {}
+  ) { }
 
   //  // 4-   Decrement product quantity, increment product sold
   //  if (order) {

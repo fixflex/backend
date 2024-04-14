@@ -1,13 +1,14 @@
 import bcrypt from 'bcrypt';
 import { autoInjectable } from 'tsyringe';
 
-import { app } from '../';
+// import { app } from '../';
 import UserDao from '../DB/dao/user.dao';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
-import { hashCode } from '../helpers';
+import { hashCode, randomNum } from '../helpers';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { IUser, IUserService } from '../interfaces';
+import { WhatsAppClient } from './whatsappClient.service';
 
 @autoInjectable()
 class UserService implements IUserService {
@@ -85,10 +86,10 @@ class UserService implements IUserService {
   async sendVerificationCode(user: IUser) {
     // Step 1: Check if the user has a phone number
     if (!user.phoneNumber) throw new HttpException(400, 'You must have a phone number to verify');
-    // Step 2: Check if the Client is ready (whatsappclient)
-    if (!(global as any)['myGlobalVar']) throw new HttpException(500, 'Something went wrong, please try again later');
-    // Step 3: Generate a random 6 digits code (Verification code)
-    let verificationCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digits random code
+    // Step 2: Generate a random 6 digits code (Verification code)
+    let verificationCode = randomNum(6);
+    // Step 3: Send the verification code to the user phone number
+    await WhatsAppClient.sendMessage(user.phoneNumber, `Verification code is: ${verificationCode}`);
     // Step 4: Hash the verification code
     let hashedVerificationCode = hashCode(verificationCode);
     // step 5: Set the expiration time for the verification code to 10 minutes and save it in the database
@@ -98,13 +99,9 @@ class UserService implements IUserService {
       phoneNumVerificationCode: hashedVerificationCode,
       phoneNumVerificationCodeExpiration: expirationTime,
     });
+
     if (!updatedUser) throw new HttpException(500, 'something_went_wrong');
 
-    // Step 6: Send the verification code to the user phone number using the whatsappclient
-    let phoneNumber = user.phoneNumber.replace(/^0/, '20') + '@c.us';
-    let mes = await app.whatsappclient.sendMessage(phoneNumber, `Verification code is: ${verificationCode}`);
-    console.log('mes.body', mes._data.body);
-    console.log('TO =>', mes._data.to);
     return true;
   }
 

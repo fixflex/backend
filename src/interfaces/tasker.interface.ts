@@ -10,7 +10,7 @@ export interface ITasker extends Document {
   ratingQuantity: number;
   bio: string;
   categories: string[];
-  phoneNumber: string;
+  // phoneNumber: string;
   location: {
     type: string;
     coordinates: [number, number];
