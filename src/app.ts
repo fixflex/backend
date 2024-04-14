@@ -56,12 +56,10 @@ class App {
   }
 
   private initializeMiddlewares() {
-    if (this.env === 'development') {
+    if (this.env === 'development' || this.env === 'staging') {
       this.app.use(morgan('dev'));
     }
-
-    this.app.enable('trust proxy'); // This will enable the app to work behind a proxy (Render, Heroku, AWS, Nginx etc.) which sets the X-Forwarded-Proto header to "https" when a request is made over HTTPS
-
+    if (this.env === 'production' || this.env === 'staging') this.app.enable('trust proxy'); // This will enable the app to work behind a proxy (Render, Heroku, AWS, Nginx etc.) which sets the X-Forwarded-Proto header to "https" when a request is made over HTTPS
     this.app.use(cors);
     // Set security HTTP headers to prevent XSS attacks, clickjacking etc.
     this.app.use(helmet());
