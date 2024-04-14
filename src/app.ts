@@ -59,6 +59,9 @@ class App {
     if (this.env === 'development') {
       this.app.use(morgan('dev'));
     }
+
+    this.app.enable('trust proxy'); // This will enable the app to work behind a proxy (Render, Heroku, AWS, Nginx etc.) which sets the X-Forwarded-Proto header to "https" when a request is made over HTTPS
+
     this.app.use(cors);
     // Set security HTTP headers to prevent XSS attacks, clickjacking etc.
     this.app.use(helmet());
