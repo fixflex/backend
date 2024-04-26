@@ -118,7 +118,7 @@ export class AuthController implements IAuthController {
   });
 
   public changePassword = asyncHandler(async (req: Request, res: Response) => {
-    let { token } = await this.authService.changePassword(req.body as { oldPassword: string; newPassword: string }, req.user!);
+    let { token } = await this.authService.changePassword(req.body as { oldPassword: string; newPassword: string }, req.user);
     res.cookie('access_token', token, this.accessTokenCookieOptions);
 
     res

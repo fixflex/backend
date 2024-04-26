@@ -1,11 +1,14 @@
 import request from 'supertest';
+
 import { client as app } from '../../src';
+import * as SendMailer from '../../src/helpers/nodemailer';
 import * as RandomNum from '../../src/helpers/randomNumGen';
-import * as SendMailer from '../../src/helpers/nodemailer'
 import { user } from '../data';
 
 jest.spyOn(RandomNum, 'randomNum').mockReturnValue('123456');
 jest.spyOn(SendMailer, 'sendMailer').mockResolvedValue(true);
+
+let accessToken: string;
 
 describe('Authentication', () => {
   describe('POST /api/v1/auth/signup', () => {
@@ -33,7 +36,7 @@ describe('Authentication', () => {
   describe('POST /api/v1/auth/login', () => {
     it('should login with correct credentials', async () => {
       const response = await request(app).post('/api/v1/auth/login').send({ email: user.email, password: user.password });
-
+      accessToken = response.body.accessToken;
       expect(response.status).toBe(200);
       expect(response.body.data).toBeDefined();
       // expect(response.body.token).toBeDefined();
@@ -62,9 +65,7 @@ describe('Authentication', () => {
     });
 
     it('should return 200 and refresh token', async () => {
-      const loginResponse = await request(app)
-        .post('/api/v1/auth/login')
-        .send({ email: user.email, password: user.password });
+      const loginResponse = await request(app).post('/api/v1/auth/login').send({ email: user.email, password: user.password });
       const response = await request(app).get('/api/v1/auth/refresh-token').set('Cookie', loginResponse.header['set-cookie']);
 
       expect(response.status).toBe(200);
@@ -74,9 +75,7 @@ describe('Authentication', () => {
 
   describe('GET /api/v1/auth/logout', () => {
     it('should return 200 and logout', async () => {
-      const loginResponse = await request(app)
-        .post('/api/v1/auth/login')
-        .send({ email: user.email, password: user.password });
+      const loginResponse = await request(app).post('/api/v1/auth/login').send({ email: user.email, password: user.password });
 
       const response = await request(app).post('/api/v1/auth/logout').set('Cookie', loginResponse.header['set-cookie']);
 
@@ -91,14 +90,13 @@ describe('Authentication', () => {
       const response = await request(app).post('/api/v1/auth/forgot-password').send({ email: user.email });
       expect(response.status).toBe(200);
       expect(response.body.message).toBeDefined();
-
     });
   });
 
   describe('POST /api/v1/auth/verify-reset-code', () => {
     it('should return 200 and verify reset code', async () => {
       const response = await request(app).post('/api/v1/auth/verify-reset-code').send({
-        resetCode: '123456'
+        resetCode: '123456',
       });
       expect(response.status).toBe(200);
       expect(response.body.message).toBeDefined();
@@ -109,12 +107,25 @@ describe('Authentication', () => {
     it('should return 200 and reset password', async () => {
       const response = await request(app).patch('/api/v1/auth/reset-password').send({
         email: user.email,
-        newPassword: user.password
+        newPassword: user.password,
       });
       expect(response.status).toBe(200);
       expect(response.body.message).toBeDefined();
     });
   });
+
+  // {{URL}}/api/v1/auth/change-password
+  describe('PATCH /api/v1/auth/change-password', () => {
+    it('should return 200 and change password', async () => {
+      const response = await request(app)
+        .patch('/api/v1/auth/change-password')
+        .send({ oldPassword: user.password, newPassword: user.password })
+        .set('Cookie', `access_token=${accessToken}`);
+
+      console.log('response.body ===========>>>>>> ', response.body);
+      expect(response.status).toBe(200);
+
+      expect(response.body.message).toBeDefined();
+    });
+  });
 });
-
-

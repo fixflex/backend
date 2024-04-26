@@ -5,3 +5,5 @@
 5. Use pnpm instead of npm
 6. Use eslint-plugin-security to check for security vulnerabilities in the code
 7. Use JMeter to check the performance of the website
+8. Protect the website from CSRF attacks by using CSRF tokens
+https://www.youtube.com/watch?v=kT1SVkkgE6k
