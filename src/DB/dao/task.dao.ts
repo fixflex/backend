@@ -29,7 +29,7 @@ class TaskDao extends CommonDAO<ITask> {
     // console.log(query);
     const countDocments = await TaskModel.countDocuments();
 
-    if (!query.status) query.status = { $nin: ['CANCELLED'] };
+    if (!query.status && !query.userId) query.status = { $nin: ['CANCELLED'] };
 
     let apiFeatures = new QueryBuilder<ITask>(TaskModel.find(), query)
       .filter(['location', 'online', 'maxDistance'])

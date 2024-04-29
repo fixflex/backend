@@ -17,7 +17,7 @@ class TaskerService implements ITaskerService {
     private readonly couponeDao: CouponDao,
     private readonly taskDao: TaskDao,
     private readonly paymobService: PaymobService
-  ) { }
+  ) {}
   async createTasker(userId: string, tasker: ITasker) {
     // check if service is exists in DB
     await Promise.all(

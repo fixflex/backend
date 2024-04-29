@@ -20,6 +20,9 @@ class TaskController implements ITaskController {
 
   createTask = asyncHandler(async (req: Request<ITask>, res: Response, next: NextFunction) => {
     req.body.userId = req.user._id;
+    // TODO: Remove this log
+    console.log('Create tasks ======>>>>>>  ', req.body);
+    console.log('User ======>>>>>>  ', req.user);
     const task = await this.taskService.createTask(req.body);
     if (!task) return next(new HttpException(400, 'something_went_wrong'));
     res.status(201).json(customResponse({ data: task, success: true, message: req.t('task_created') }));

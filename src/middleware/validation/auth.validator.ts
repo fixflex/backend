@@ -20,7 +20,7 @@ export const signupValidator = [
 export const loginValidator = [
   check('email').notEmpty().withMessage('is_required').isEmail().withMessage('invalid_email'),
 
-  check('password').notEmpty().withMessage('is_required').isLength({ min: 8 }).withMessage('invalid_password'),
+  check('password').notEmpty().withMessage('is_required').isLength({ min: 8 }).withMessage('Invalid_Password'),
 
   validatorMiddleware,
 ];
