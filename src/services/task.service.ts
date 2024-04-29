@@ -71,8 +71,6 @@ class TaskService implements ITaskService {
   getTaskById = async (id: string) => {
     let task = await this.taskDao.getOneByIdPopulate(id, this.taskPopulate);
     if (!task) throw new HttpException(404, 'Task not found');
-    // console.log('extract time from _id=> ', task._id.getTimestamp());
-    // console.log('extract time from _id=> ', task._id.getTimestamp().toISOString());
     return task;
   };
 

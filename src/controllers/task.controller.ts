@@ -2,6 +2,7 @@ import { NextFunction, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
+import { TaskDto } from '../dtos';
 import HttpException from '../exceptions/HttpException';
 import { Request } from '../helpers';
 import customResponse from '../helpers/customResponse';
@@ -20,9 +21,6 @@ class TaskController implements ITaskController {
 
   createTask = asyncHandler(async (req: Request<ITask>, res: Response, next: NextFunction) => {
     req.body.userId = req.user._id;
-    // TODO: Remove this log
-    console.log('Create tasks ======>>>>>>  ', req.body);
-    console.log('User ======>>>>>>  ', req.user);
     const task = await this.taskService.createTask(req.body);
     if (!task) return next(new HttpException(400, 'something_went_wrong'));
     res.status(201).json(customResponse({ data: task, success: true, message: req.t('task_created') }));
@@ -36,7 +34,9 @@ class TaskController implements ITaskController {
   getTaskById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const task = await this.taskService.getTaskById(req.params.id);
     if (!task) return next(new HttpException(404, 'resource_not_found'));
-    res.status(200).json(customResponse({ data: task, success: true, message: null }));
+    let asdf = new TaskDto(task);
+    console.log('asdf', asdf);
+    res.status(200).json(customResponse({ data: new TaskDto(task), success: true, message: null }));
   });
 
   updateTask = asyncHandler(async (req: Request<ITask>, res: Response, next: NextFunction) => {
