@@ -34,8 +34,6 @@ class TaskController implements ITaskController {
   getTaskById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const task = await this.taskService.getTaskById(req.params.id);
     if (!task) return next(new HttpException(404, 'resource_not_found'));
-    let asdf = new TaskDto(task);
-    console.log('asdf', asdf);
     res.status(200).json(customResponse({ data: new TaskDto(task), success: true, message: null }));
   });
 
