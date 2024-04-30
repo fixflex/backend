@@ -9,6 +9,7 @@ import { sendMailer } from '../helpers';
 class WhatsAppClient {
   private static instance: WhatsAppClient | null = null;
   private static whatsappClient: Client;
+  private flag = true;
 
   private constructor() {
     WhatsAppClient.whatsappClient = new Client({
@@ -21,11 +22,11 @@ class WhatsAppClient {
 
     WhatsAppClient.whatsappClient.on('qr', async (qr: string) => {
       qrcode.generate(qr, { small: true });
-      let flag = true;
       try {
         console.log('New QR code generated');
-        if (flag) {
-          flag = false;
+        if (this.flag) {
+          this.flag = false;
+          console.log('this.flag,  ', this.flag);
           const message = `Scan the QR code to login to WhatsApp account \n\nhttps://dashboard.render.com/web/srv-clkt2gsjtl8s73f24g00/logs?m=max\n\n`;
           await sendMailer(env.DEVELOPER_EMAIL, 'WhatsApp QR Code', message);
         }

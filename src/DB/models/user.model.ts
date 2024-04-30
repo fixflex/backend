@@ -77,7 +77,6 @@ let userSchema: Schema<IUser> = new Schema(
 );
 
 // TODO: add a pre save hook to hash the password before saving the user
-// TODO: change the passwordChangedAt field when the user changes his password or when the user resets his password
 // TODO: change user._id from ObjectId to string
 
 let User = model<IUser>('User', userSchema);
