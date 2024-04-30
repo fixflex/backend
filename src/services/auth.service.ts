@@ -5,8 +5,8 @@ import { autoInjectable } from 'tsyringe';
 import UserDao from '../DB/dao/user.dao';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
+import { decrypt, hashCode } from '../helpers';
 import { createAccessToken, createRefreshToken } from '../helpers/createToken';
-import { hashCode } from '../helpers/hashing';
 import { sendMailer } from '../helpers/nodemailer';
 import { randomNum } from '../helpers/randomNumGen';
 import { IUser } from '../interfaces';
@@ -30,9 +30,13 @@ export class AuthServie implements IAuthService {
     }
     // hash the password
     user.password = await bcrypt.hash(user.password, env.SALT_ROUNDS);
+
+    // Decrypt the phone number before saving it to the database
+    if (user.phoneNumber) user.phoneNumber = decrypt(user.phoneNumber, env.ENCRYPTION_KEY);
+
     let newUser = await this.userDao.create(user);
     let accessToken = createAccessToken(newUser._id!);
-    let refreshToken = createAccessToken(newUser._id!);
+    let refreshToken = createRefreshToken(newUser._id!);
 
     return { user: newUser, accessToken, refreshToken };
   }

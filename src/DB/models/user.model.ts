@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 
+import env from '../../config/validateEnv';
+import { encrypt } from '../../helpers';
 import { IUser, UserType } from '../../interfaces';
 
 let userSchema: Schema<IUser> = new Schema(
@@ -62,7 +64,7 @@ let userSchema: Schema<IUser> = new Schema(
       sparse: true, // use sparse index to allow multiple documents to have no value for the indexed field
       index: true,
       trim: true,
-      match: [/^\d{11}$/, 'Please provide a valid phone number (11 digits)'],
+      // match: [/^\d{11}$/, 'Please provide a valid phone number (11 digits)'],
     },
     phoneNumVerified: {
       type: Boolean,
@@ -76,8 +78,12 @@ let userSchema: Schema<IUser> = new Schema(
   { timestamps: true }
 );
 
-// TODO: add a pre save hook to hash the password before saving the user
-// TODO: change user._id from ObjectId to string
+// Middleware to encrypt phone number after fetching from DB
+userSchema.post<IUser>(/^find/, function (result: IUser) {
+  if (!result) return;
+  console.log('from post find middleware =========>> ', result.phoneNumber);
+  result.phoneNumber = encrypt(result.phoneNumber || '', env.ENCRYPTION_KEY);
+});
 
 let User = model<IUser>('User', userSchema);
 

@@ -5,7 +5,7 @@ import { autoInjectable } from 'tsyringe';
 import UserDao from '../DB/dao/user.dao';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
-import { hashCode, randomNum } from '../helpers';
+import { decrypt, hashCode, randomNum } from '../helpers';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { IUser, IUserService } from '../interfaces';
 import { WhatsAppClient } from './whatsappClient.service';
@@ -44,6 +44,8 @@ class UserService implements IUserService {
     if (isEmailExists) {
       throw new HttpException(409, 'email_already_exist');
     }
+    // Decrypt the phone number before saving it to the database
+    if (user.phoneNumber) user.phoneNumber = decrypt(user.phoneNumber, env.ENCRYPTION_KEY);
     // hash the password
     user.password = await bcrypt.hash(user.password, env.SALT_ROUNDS);
     let newUser = await this.userDao.create(user);
@@ -60,6 +62,10 @@ class UserService implements IUserService {
         throw new HttpException(409, 'email_already_exist');
       }
     }
+
+    // Decrypt the phone number before saving it to the database
+    if (user.phoneNumber) user.phoneNumber = decrypt(user.phoneNumber, env.ENCRYPTION_KEY);
+
     return await this.userDao.updateOneById(userId, user);
   }
 

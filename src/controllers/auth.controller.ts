@@ -33,7 +33,6 @@ export class AuthController implements IAuthController {
 
   public signup = asyncHandler(async (req: Request<IUser>, res: Response) => {
     let { user, accessToken, refreshToken } = await this.authService.signup(req.body);
-    // TODO: make save the cookie name in a variable
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
     res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
 

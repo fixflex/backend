@@ -9,8 +9,8 @@ import { Request } from '../helpers';
 import { UserType } from '../interfaces';
 
 const checkAccessTokenExists = (req: Request) => {
-  // check cookies first then check headers for the token (for the swagger docs)
   let token = req.cookies.access_token || req.headers.authorization?.split(' ')[1];
+  // let token = req.headers.authorization?.split(' ')[1];
   if (!token || token === 'null') {
     return;
   }
@@ -43,7 +43,7 @@ const authenticateUser = asyncHandler(async (req: Request, _res: Response, next:
     return next(new HttpException(401, 'unauthorized'));
   }
   // 2- check if the token is valid
-  const decoded = jwt.verify(token!, env.ACCESS_TOKEN_SECRET_KEY) as JwtPayload;
+  const decoded = jwt.verify(token, env.ACCESS_TOKEN_SECRET_KEY) as JwtPayload;
 
   // 3- check if the user still exists
   const user = await checkUserExists(decoded.userId);
@@ -51,7 +51,6 @@ const authenticateUser = asyncHandler(async (req: Request, _res: Response, next:
     return next(new HttpException(401, 'unauthorized'));
   }
   // 4- check if the user changed his password after the token was issued
-  // TODO: make this check in the user model instead of here
   if (isPasswordChanged(user.passwordChangedAt, decoded.iat!)) {
     // iat is the time the token was issued
     return next(new HttpException(401, 'unauthorized'));
@@ -60,18 +59,15 @@ const authenticateUser = asyncHandler(async (req: Request, _res: Response, next:
   if (!user.active) {
     return next(new HttpException(401, 'user_not_active'));
   }
-  // TODO: change _id to be string instead of object
-  // user._id = user._id.toString()
-  // console.log(user._id);
   req.user = user;
   next();
 });
 
-// Authorization (User permissions)
+// Authorization (User permissions - Guard)
 const allowedTo =
   (...roles: UserType[]) =>
   (req: Request, _res: Response, next: NextFunction) => {
-    if (!roles.includes(req.user!.role)) {
+    if (!roles.includes(req.user.role)) {
       return next(new HttpException(403, 'permission_denied'));
     }
 

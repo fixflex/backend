@@ -26,7 +26,6 @@ class WhatsAppClient {
         console.log('New QR code generated');
         if (this.flag) {
           this.flag = false;
-          console.log('this.flag,  ', this.flag);
           const message = `Scan the QR code to login to WhatsApp account \n\nhttps://dashboard.render.com/web/srv-clkt2gsjtl8s73f24g00/logs?m=max\n\n`;
           await sendMailer(env.DEVELOPER_EMAIL, 'WhatsApp QR Code', message);
         }
