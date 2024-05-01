@@ -22,7 +22,7 @@ class OfferService implements IOfferService {
     private taskDao: TaskDao,
     // private transactionDao: TransactionDao,
     private oneSignalApiHandler: OneSignalApiHandler
-  ) { }
+  ) {}
 
   //  // 4-   Decrement product quantity, increment product sold
   //  if (order) {
@@ -41,6 +41,7 @@ class OfferService implements IOfferService {
     // 1. check if the user is a tasker & notPaidTask array is empty
     let tasker = await this.taskerDao.getOnePopulate<{ userId: IUser }>({ userId }, { path: 'userId' });
     if (!tasker) throw new HttpException(403, 'You_are_not_a_tasker');
+    if (!tasker.isActive) throw new HttpException(403, 'You_are_not_active');
     if (tasker.notPaidTasks && tasker.notPaidTasks.length > 0) throw new HttpException(403, 'You must pay the previous tasks commissions');
     // 2. check if the task is exist and status is open
     let task = await this.taskDao.getOne({ _id: offer.taskId }); // TODO: use getOneById

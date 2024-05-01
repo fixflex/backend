@@ -6,12 +6,12 @@ export const updateLoggedUserValidator = [
   // ====================>>>>>>>>  optional <<<<<<<<<<<==================== //
   check('name').optional().isString().withMessage('invalid_input'),
   check('email').optional().isEmail().withMessage('invalid_email'),
-  check('password').isEmpty().withMessage('not_allowed'),
   check('phoneNumber').optional().isMobilePhone('ar-EG').withMessage('invalid_phone_number'),
+  check('active').optional().isBoolean().withMessage('invalid_input'),
 
   // ====================>>>>>>>>  empty <<<<<<<<<<<==================== //
+  check('password').isEmpty().withMessage('not_allowed'),
   check('role').isEmpty().withMessage('not_allowed'),
-  check('active').isEmpty().withMessage('not_allowed'),
   check('createdAt').isEmpty().withMessage('not_allowed'),
   check('updatedAt').isEmpty().withMessage('not_allowed'),
   check('_id').isEmpty().withMessage('not_allowed'),
