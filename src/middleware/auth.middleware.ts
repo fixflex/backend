@@ -38,7 +38,6 @@ const isPasswordChanged = (passwordChangedAt: Date, tokenIssuedAt: number) => {
 const authenticateUser = asyncHandler(async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
   // 1- check if the token exists
   const token = checkAccessTokenExists(req);
-  // console.log('token', token);
   if (!token) {
     return next(new HttpException(401, 'unauthorized'));
   }
@@ -60,9 +59,6 @@ const authenticateUser = asyncHandler(async (req: Request, _res: Response, next:
   if (!user.active) {
     return next(new HttpException(401, 'user_not_active'));
   }
-  // TODO: change _id to be string instead of object
-  // user._id = user._id.toString()
-  // console.log(user._id);
   req.user = user;
   next();
 });

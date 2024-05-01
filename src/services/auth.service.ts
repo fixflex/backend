@@ -32,7 +32,7 @@ export class AuthServie implements IAuthService {
     user.password = await bcrypt.hash(user.password, env.SALT_ROUNDS);
     let newUser = await this.userDao.create(user);
     let accessToken = createAccessToken(newUser._id!);
-    let refreshToken = createAccessToken(newUser._id!);
+    let refreshToken = createRefreshToken(newUser._id!);
 
     return { user: newUser, accessToken, refreshToken };
   }
