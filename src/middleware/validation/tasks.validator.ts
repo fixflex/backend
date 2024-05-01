@@ -4,7 +4,7 @@ import { TaskTime } from '../../interfaces';
 import validatorMiddleware from '../errors/validation.middleware';
 
 export const createTaskValidator = [
-  // ====================>>>>>>>> is required <<<<<<<<<<<==================== //
+  // ====================>>>>>>>> required <<<<<<<<<<<==================== //
   check('title').isString().withMessage('invalid_input').isLength({ max: 300, min: 5 }).withMessage('title_lenght'),
   check('categoryId').isMongoId().withMessage('invalid_MongoId'),
   check('location')
@@ -27,8 +27,6 @@ export const createTaskValidator = [
     .withMessage('invalid_input')
     .isInt({ min: 10 })
     .withMessage('invalid_budget'),
-
-  // ====================>>>>>>>> is optional <<<<<<<<<<<==================== //
   check('details')
     .notEmpty()
     .withMessage('is_required')
@@ -36,6 +34,8 @@ export const createTaskValidator = [
     .withMessage('invalid_input')
     .isLength({ max: 8000, min: 10 })
     .withMessage('details_lenght'),
+
+  // ====================>>>>>>>> optional <<<<<<<<<<<==================== //
   check('dueDate.flexible').optional().isBoolean().withMessage('invalid_input'),
   check('dueDate.on').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Invalid date format, must be YYYY-MM-DD'),
   check('dueDate.before').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage(' "Invalid date format, must be YYYY-MM-DD",'),
@@ -69,7 +69,7 @@ export const createTaskValidator = [
     .withMessage('Invalid task time, must be one of MORNING, MIDDAY, AFTERNOON, EVENING'),
   check('location.online').optional().isBoolean().withMessage('invalid_input'),
 
-  // ====================>>>>>>>> is empty <<<<<<<<<<<==================== //
+  // ====================>>>>>>>> empty <<<<<<<<<<<==================== //
   check('status').isEmpty().withMessage('not_allowed'),
   check('offers').isEmpty().withMessage('not_allowed'),
   check('acceptedOffer').isEmpty().withMessage('not_allowed'),
@@ -84,14 +84,8 @@ export const createTaskValidator = [
   validatorMiddleware,
 ];
 
-/**
- *
- * @description this validator is used to validate the update task request
- * @see src/routes/task.route.ts
- *
- */
 export const updateTaskValidator = [
-  // ====================>>>>>>>> is optional <<<<<<<<<<<==================== //
+  // ====================>>>>>>>> optional <<<<<<<<<<<==================== //
   check('dueDate.flexible').optional().isBoolean().withMessage('invalid_input'),
   check('dueDate.on').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('Invalid date format, must be YYYY-MM-DD'),
   check('dueDate.before').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage(' "Invalid date format, must be YYYY-MM-DD",'),
@@ -144,7 +138,7 @@ export const updateTaskValidator = [
     }),
   check('budget').optional().isNumeric().withMessage('invalid_input'),
 
-  // ====================>>>>>>>> is empty <<<<<<<<<<<==================== //
+  // ====================>>>>>>>> empty <<<<<<<<<<<==================== //
   check('offers').isEmpty().withMessage('not_allowed'),
   check('status').isEmpty().withMessage('not_allowed'),
   check('taskerId').isEmpty().withMessage('not_allowed'),

@@ -8,13 +8,9 @@ export enum OfferStatus {
   PENDING = 'PENDING',
   ACCEPTED = 'ACCEPTED',
   CANCELLED = 'CANCELLED',
-  // REJECTED = 'REJECTED',
-  // CANCELLATION_REQUESTED = 'CANCELLATION_REQUESTED',
-  // CANCELLATION_REJECTED = 'CANCELLATION_REJECTED',
 }
 
 export interface IOffer extends Document {
-  // tasker: { type: Schema.Types.ObjectId; ref: 'Tasker' }; // TODO: For Fix the populate issue
   taskerId: string;
   taskId: string;
   message: string;

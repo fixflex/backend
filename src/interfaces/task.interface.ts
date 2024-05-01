@@ -20,9 +20,7 @@ export enum TaskStatus {
   ASSIGNED = 'ASSIGNED',
   COMPLETED = 'COMPLETED',
   CANCELLED = 'CANCELLED',
-  // DONE = 'DONE',
   // IN_PROGRESS = 'IN_PROGRESS',
-  // CANCELED = 'CANCELED',
 }
 
 export enum TaskTime {

@@ -5,7 +5,7 @@ import validatorMiddleware from '../errors/validation.middleware';
 export const createChatValidator = [
   check('tasker').isMongoId().withMessage('invalid_MongoId'),
 
-  // ====================>>>>>>>> is empty <<<<<<<<<<<==================== //
+  // ====================>>>>>>>>  empty  <<<<<<<<<<<==================== //
   check('_id').isEmpty().withMessage('not_allowed'),
   check('messages').isEmpty().withMessage('not_allowed'),
   check('user').isEmpty().withMessage('not_allowed'),
