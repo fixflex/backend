@@ -4,7 +4,6 @@ import { autoInjectable } from 'tsyringe';
 
 import { CategoryDao, OfferDao, TaskDao, TaskerDao } from '../DB/dao';
 import HttpException from '../exceptions/HttpException';
-import { IPopulate } from '../helpers';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { NotificationOptions, OneSignalApiHandler } from '../helpers/onesignal';
 import { IPagination, ITask, ITaskService, IUser, OfferStatus, PaymobOrderDetails, TaskStatus } from '../interfaces';
@@ -23,10 +22,10 @@ class TaskService implements ITaskService {
     private readonly paymobService: PaymobService
   ) {}
 
-  private taskPopulate: IPopulate = {
-    path: 'userId offers reviews',
-    select: '-__v -password -active -role',
-  };
+  // private taskPopulate: IPopulate = {
+  //   path: 'userId offers reviews',
+  //   select: '-__v -password -active -role',
+  // };
 
   createTask = async (task: ITask) => {
     // if there is categoryId, check if it exists
@@ -70,7 +69,8 @@ class TaskService implements ITaskService {
   };
 
   getTaskById = async (id: string) => {
-    let task = await this.taskDao.getOneByIdPopulate(id, this.taskPopulate);
+    // let task = await this.taskDao.getOneByIdPopulate(id, this.taskPopulate);
+    let task = await this.taskDao.getTaskById(id);
     if (!task) throw new HttpException(404, 'Task not found');
     return task;
   };

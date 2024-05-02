@@ -45,9 +45,7 @@ class TaskRoute implements Routes {
     this.router.get(`${this.path}/:id`, isMongoId, this.taskController.getTaskById);
     // this.router.get(`${this.path}/:id/offers`, this.taskController.getTaskOffers);
 
-    // =================================================================== //
     // ====>>>====>>>====>>>  require authentication <<<====<<<====<<<==== //
-    // =================================================================== //
     this.router.use(`${this.path}`, authenticateUser);
     this.router.post(`${this.path}`, createTaskValidator, this.taskController.createTask);
     // uplaodTaskImages,

@@ -11,19 +11,26 @@ class TaskDao extends CommonDAO<ITask> {
   }
   // override the getOneById method to populate the userId and offers and don't select the __v and the password
 
-  // async getOneById(id: string) {
-  //   //  make nested populate to populate the offers the taskerId for each offer
-  //   return await this.model
-  //     .findById(id)
-  //     .populate({
-  //       path: 'offers',
-  //       populate: {
-  //         path: 'taskId',
-  //       },
-  //     })
-  //     .populate('userId', 'firstName lastName profilePicture')
-  //     .select('-__v -password');
-  // }
+  async getTaskById(id: string) {
+    //  make nested populate to populate the offers the taskerId for each offer
+    return await this.model
+      .findById(id)
+      // .select('title userId')
+      .populate({
+        path: 'offers',
+        select: '-__v',
+        populate: {
+          path: 'taskerId',
+          select: 'ratingAverage ratingQuantity',
+          populate: {
+            path: 'userId',
+            select: 'firstName lastName profilePicture',
+          },
+        },
+      })
+      .populate('userId', 'firstName lastName profilePicture')
+      .select('-__v');
+  }
 
   async getTasks(query: Query) {
     // console.log(query);
