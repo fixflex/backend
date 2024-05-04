@@ -82,7 +82,10 @@ class App {
   }
 
   private initializeWhatsAppWeb() {
-    if (process.env.NODE_ENV !== 'testing') WhatsAppClient.getInstance();
+    // Initialize the WhatsApp Web Client after 5 seconds
+    setTimeout(() => {
+      if (process.env.NODE_ENV !== 'testing') WhatsAppClient.getInstance();
+    }, 0);
   }
   private initializeRoutes(routes: Routes[]) {
     // serve the static files (index.html)
