@@ -1,7 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
-import { UserDto } from '../dtos';
 import HttpException from '../exceptions/HttpException';
 import { NextFunction, Request, Response } from '../helpers';
 import customResponse from '../helpers/customResponse';
@@ -18,8 +17,9 @@ class UserController implements IUserController {
   public getUser = asyncHandler(async (req: Request, res: Response) => {
     let user = await this.userService.getUser(req.params.id);
     if (!user) throw new HttpException(404, 'user_not_found');
+    user.password = '';
     // TODO: remove status from customResponse
-    res.status(200).json(customResponse<Partial<IUser>>({ data: new UserDto(user), success: true, message: req.t('user_found') }));
+    res.status(200).json(customResponse<Partial<IUser>>({ data: user, success: true, message: req.t('user_found') }));
   });
 
   /**
