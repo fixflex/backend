@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+// npm i wwebjs-mongo
+import { MongoStore } from 'wwebjs-mongo';
 
 import env from '../config/validateEnv';
 import logger from '../helpers/log';
@@ -20,12 +22,14 @@ import logger from '../helpers/log';
 // TODO: Add a connection pool to the connection
 // TODO: Convert the dbConnection function to a class and add a method to close the connection pool
 // TODO: Make the connection pool a singleton class to avoid multiple connections to the database and to avoid memory leaks from the connection, and to avoid the overhead of creating a new connection pool
+let store: any;
 
 const dbConnection = async () => {
   mongoose
     .connect(env.DB_URI)
     .then(conn => {
       logger.info(`Database Connected ✌️ ${conn.connection.host} `);
+      store = new MongoStore({ mongoose: mongoose });
     })
     .catch(err => {
       logger.error(`Error: ${err.message}`);
@@ -35,4 +39,8 @@ const dbConnection = async () => {
     });
 };
 
-export { dbConnection };
+const getRemoteAuthStore = () => {
+  return store;
+};
+
+export { dbConnection, getRemoteAuthStore };

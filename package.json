@@ -98,6 +98,7 @@
     "whatsapp-web.js": "^1.23.0",
     "winston": "^3.10.0",
     "winston-mongodb": "^5.1.1",
+    "wwebjs-mongo": "^1.1.0",
     "xss-clean": "^0.1.4",
     "yamljs": "^0.3.0"
   },

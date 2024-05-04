@@ -1,7 +1,8 @@
 // WhatsAppClient.ts
 import qrcode from 'qrcode-terminal';
-import { Client, LocalAuth } from 'whatsapp-web.js';
+import { Client, RemoteAuth } from 'whatsapp-web.js';
 
+import { getRemoteAuthStore } from '../DB';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import { sendMailer } from '../helpers';
@@ -13,7 +14,10 @@ class WhatsAppClient {
 
   private constructor() {
     WhatsAppClient.whatsappClient = new Client({
-      authStrategy: new LocalAuth(),
+      authStrategy: new RemoteAuth({
+        store: getRemoteAuthStore(),
+        backupSyncIntervalMs: 300000, // the backup sync interval means that the client will sync the data with the server every 3 minutes
+      }),
       webVersionCache: {
         type: 'remote',
         remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${env.WEB_VERSION}.html`,
