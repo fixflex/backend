@@ -12,10 +12,11 @@ import { TaskerService } from '../services/tasker.service';
 class TaskerController implements ITaskerController {
   constructor(private readonly taskerService: TaskerService) {}
   createTasker = asyncHandler(async (req: Request<ITasker>, res: Response, next: NextFunction) => {
-    let userId = req.user?._id;
-    let user = await this.taskerService.createTasker(userId!, req.body);
-    if (!user) return next(new HttpException(400, 'something_went_wrong')); //
-    res.status(201).json(customResponse<ITasker>({ data: user, success: true, message: req.t('tasker_created') }));
+    let userId = req.user._id;
+    let tasker = await this.taskerService.createTasker(userId, req.body);
+    if (!tasker) return next(new HttpException(400, 'something_went_wrong'));
+    console.log('tasker: ', tasker);
+    res.status(201).json(customResponse<ITasker>({ data: tasker, success: true, message: req.t('tasker_created') }));
   });
 
   getTaskerPublicProfile = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -28,7 +29,7 @@ class TaskerController implements ITaskerController {
 
   // get tasker profile by user id
   getMe = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    let userId = req.user?._id;
+    let userId = req.user._id;
     let tasker = await this.taskerService.getMyProfile(userId);
     if (!tasker) return next(new HttpException(404, 'tasker_not_found'));
     res.status(200).json(customResponse({ data: tasker, success: true, message: req.t('tasker_found') }));
@@ -43,14 +44,14 @@ class TaskerController implements ITaskerController {
   });
 
   updateMe = asyncHandler(async (req: Request<ITasker>, res: Response, next: NextFunction) => {
-    let userId = req.user?._id;
+    let userId = req.user._id;
     let updatedTasker = await this.taskerService.updateTasker(userId!, req.body);
     if (updatedTasker.modifiedCount == 0) return next(new HttpException(404, 'tasker_not_found'));
     res.status(200).json(customResponse({ data: null, success: true, message: req.t('tasker_updated') }));
   });
 
   deleteTasker = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    let userId = req.user?._id; //
+    let userId = req.user._id; //
     let user = await this.taskerService.deleteTasker(userId!);
     if (user.deletedCount == 0) return next(new HttpException(404, 'tasker_not_found'));
     res.status(204).json(customResponse({ data: null, success: true, message: req.t('tasker_deleted') }));
