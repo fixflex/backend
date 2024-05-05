@@ -410,7 +410,7 @@ fixflex/
 ```bash
 
 # Create a .env and test.env file for development and testing environment respectively in the root directory and add the following environment variables:
-file in the root directory and add the following environment variables:
+
 # APP ENVIRONMENT
 PORT="xxxxxxx"
 SOCKET_PORT="xxxxxxx"
@@ -491,4 +491,14 @@ npm run test
 
 # To build the project
 npm run build-ts
+```
+
+# License 📝
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+#
+
+```
+# Happy Coding! 🚀
 ```
