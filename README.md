@@ -1,16 +1,15 @@
-# TasksRunner
+# Welcome to `fixflex` 🛠️
 
-TasksRunner is a platform that connects people looking for task services with skilled task runners in their area. Whether you need help with household chores, errands, or any other tasks,
+## What is fixflex?
 
-## Features
+**Fixflex** is a platform that connects people who need tasks done with individuals who are willing to complete those tasks for pay. It operates like traditional freelancing platforms such as *Upwork*, *Fiverr*, and *Freelancer*, where users can post tasks or jobs and taskers make offers on these tasks. The user then selects the most suitable tasker for the job. However, the main difference between **fixflex** and traditional freelancing platforms lies in their primary objectives. While platforms like *Upwork* primarily focus on digital services such as programming, writing, and design, **fixflex**'s core mission is to facilitate the completion of a wide range of everyday tasks and services. **Fixflex** specializes in connecting people who need tasks like plumbing, electricity, painting, cleaning, gardening, moving, cooking, and more with handymen who are willing to perform these tasks for pay.
 
-- **Task Posting:** Users can post tasks they need help with, providing details, budget, and timeline.
-- **Task Matching:** Skilled task runners can browse available tasks and choose the ones they want to complete.
-- **Real-time Chat:** Users and task runners can communicate in real-time through the built-in chat system.
-- **Task Status Tracking:** Users can track the status of their posted tasks and receive notifications on updates.
-- **Ratings and Reviews:** Users can rate task runners and leave reviews based on their experience.
-- **Secure Payments:** Integrated payment system for secure and seamless transactions.
-- **User Profiles:** Users and task runners have profiles displaying their skills, reviews, and completed tasks.
+# Tech Stack 📚
 
-<!-- // use ctrl + / to comment out the code -->
-<!-- use ctrl + shift + v to preview the markdown file -->
+**Fixflex** is built using the following main technologies:
+
+- **Node.js**: A JavaScript runtime built on Chrome's V8 JavaScript engine, used for building scalable and efficient server-side applications.
+- **TypeScript**: A superset of JavaScript that adds static types to the language, providing enhanced tooling and improved code quality.
+- **Express.js**: A minimalist web application framework for Node.js, used for building robust and scalable APIs and web applications.
+- **MongoDB**: A NoSQL database system known for its flexibility and scalability, used for storing and managing data in **Fixflex**.
+- **Mongoose**: An elegant MongoDB object modeling tool designed to work in an asynchronous environment, used for simplifying interactions with MongoDB databases and defining schemas.
