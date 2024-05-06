@@ -1,0 +1,908 @@
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'   width='1616' height='1150' viewBox='0 0 1616 1150' >
+  <script type='text/ecmascript'>
+  <![CDATA[
+  function hghl(el) { for ( var i in el ){ var elem = document.getElementById(el[i]); if ( elem != null ) elem.setAttribute('class','highlight');  }  }
+  function uhghl(el) { for ( var i in el ){ var elem = document.getElementById(el[i]); if ( elem != null ) elem.setAttribute('class','unhighlight'); }  } 
+  ]]>
+  </script> 
+
+<style type='text/css'>
+  text                { fill:#1c1d1f; font-weight:normal;stroke:#2a2b2c;stroke-width:.1px; font-family: Segoe UI, 'Segoe UI', Dialog; font-size:13.0px; }
+  a text:hover        { font-weight:500; }
+  text.highlight      { font-weight:500; }
+  text.white          { fill:#ffffff; }
+  text.colType        { fill:#b3b3b3; }
+  text.relName        { fill:#9c9a9a; stroke-width:0; }
+  text.legendTitle    { fill:#2b3b64; font-weight:500; }
+  text.legendSubTitle { fill:#616161; font-size:12px; }
+  path, circle        { stroke:#939391; stroke-width:1.65; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+  .filled             { fill:#939391; }
+  path.virtual        { stroke:#6e377e; }
+  path.logo           { fill:#fbeac0;fill-opacity:1;stroke-width:0.3;stroke:#222222; }
+  path.dotted         { stroke-dasharray:3,3; }
+  path.unhighlight    { stroke-width:5; opacity:0; pointer-events:all; }
+  path.highlight      { stroke-width:3; stroke:#a19f9b; opacity:0.8; pointer-events:all; }
+  path.line           { stroke-width:10; stroke-linecap:round; stroke-linejoin:round; }
+  rect.entity         { fill:#ffffff; stroke-width:0; shape-rendering:crispEdges;  filter:url(#shadow); }
+  line.delim          { stroke-width:1px; shape-rendering:crispEdges; }
+  line.topLine        { stroke-width:2px; shape-rendering:crispEdges; }
+  text.callout        { fill:#201a10; font-family: Segoe UI, 'Segoe UI', Dialog; font-size:13.0px; }
+  rect.callout        { fill:url(#calloutGradient); stroke-width:1px; stroke:#b0b0b0; }
+  rect.shape          { stroke:#bebdbd; stroke-width:0.5; }
+  rect.legend         { fill:#d9e4f5; stroke-width:1px; stroke:#b0b0b0; filter:url(#shadow); }
+  text.grp            { fill:#b1b1b1; }
+  rect.grp            { stroke:#919171; stroke-width:3; opacity:0.34; }
+  path.bgPattern      { fill:none;stroke-width:0.6;stroke:#e5e9ee; }
+  path.eval           { fill:#ececec;fill-opacity:1;stroke-width:0.6;stroke:#dddddd; }
+  rect.palpable       { fill:#fffbe5; }
+</style>
+<defs>
+  <pattern id="layoutBgA" width="60" height="34.64" patternUnits="userSpaceOnUse">
+    <rect x="0" y="0"  width="60" height="34.64" fill="#f2f2f4" />
+  </pattern>
+  <pattern id='layoutBgEval'  width='300' height='300' x='0' y='0' patternUnits="userSpaceOnUse">
+    <path class='eval' d='m 62.011835,91.267143 c 3.536475,3.175214 2.262669,8.705999 -1.637711,11.015197 -3.594697,5.8423 -6.34682,-2.892623 -9.715478,-4.653898 -5.609222,-2.838926 2.050802,-6.680123 4.77004,-8.319046 2.334696,-0.724067 4.935143,0.312302 6.583149,1.957747 z m -2.720492,2.538595 c -2.698397,-3.517732 -9.282815,1.269287 -3.69635,3.568637 2.765331,5.605665 7.052809,-0.56184 3.69635,-3.568637 z' />
+    <path class='eval' d='m 72.25864,84.624638 c 4.108046,3.143003 -0.737059,6.895259 -1.994918,8.323564 -3.586718,5.561143 -6.495079,-4.197379 -10.07759,-5.582178 -4.443422,-1.088878 1.349298,-7.249213 2.503526,-2.503449 2.464639,4.517161 2.304019,-3.70697 6.291113,-1.995914 1.280083,0.137865 2.410691,0.864819 3.277869,1.757977 z m -2.646109,2.323242 c -4.797162,-3.078383 -2.810517,6.305507 0.515161,1.990646 0.296432,-0.688582 0.01209,-1.493412 -0.515161,-1.990646 z' />
+    <path class='eval' d='m 78.230641,79.436735 c 4.142121,3.027466 -2.020102,10.435276 -3.450543,5.477315 3.306312,-5.248112 -9.186019,-2.220094 -5.805994,-8.77679 -0.544141,-3.93011 6.797826,-2.102227 3.386015,0.245477 -0.181085,2.915838 4.637371,1.019311 5.870522,3.053982 z' />
+    <path class='eval' d='m 82.744502,72.597397 c -4.901605,1.926521 1.146497,6.285555 2.559694,2.225783 6.21817,3.539297 -6.640186,8.416664 -7.590325,1.997457 -2.24365,-2.914883 4.026676,-10.148618 5.030631,-4.22324 z' />
+    <path class='eval' d='m 90.727458,64.259158 c 1.583987,1.690029 3.321317,3.2696 4.81267,5.026353 -2.535706,6.849794 -6.445583,-5.918773 -8.388458,-0.167017 0.782768,2.03426 5.877405,3.752079 2.670979,5.711199 -3.315119,1.519161 -5.782422,-5.157931 -8.858893,-6.780537 -4.229842,-1.139816 1.510134,-7.074128 2.586227,-2.385939 3.141198,5.495193 1.840537,-5.598295 7.177489,-1.404062 z' />
+    <path class='eval' d='m 99.622027,58.374253 c 1.493293,1.9548 -6.281936,7.024659 -0.885258,4.740447 0.386238,-4.434477 6.131941,-1.133173 2.175851,1.618005 -4.421491,6.12739 -13.666659,-3.151506 -7.058299,-7.136537 1.785129,-1.119329 4.348209,-0.743179 5.767706,0.778085 z m -2.900824,1.89746 c -3.608188,-2.208543 -2.280489,5.00803 -0.12563,0.329531 z' />
+    <path class='eval' d='m 115.18023,50.570441 c -1.61703,5.201678 -4.6204,-0.364502 -7.01598,-1.749619 -4.40977,2.122562 4.89641,4.913939 1.89606,7.018157 -2.48061,3.877635 -4.11404,-4.060614 -7.01192,-2.6391 -1.76318,3.107252 7.28394,6.252304 0.87346,7.876177 -1.74515,-2.956649 -9.055498,-5.610518 -3.950378,-8.66062 1.696478,1.897023 1.770418,-5.43503 5.347308,-3.072411 -0.44014,-5.474701 6.11995,-4.950882 7.7846,-0.815355 0.69076,0.682329 1.39587,1.351469 2.07685,2.042771 z' />
+    <path class='eval' d='m 120.54891,39.417125 c 2.50681,1.334124 4.80466,4.941837 0.75044,5.297362 -0.46414,1.89865 -5.25369,5.602652 -8.01742,1.815475 -3.87345,-2.809139 -0.0676,-7.603869 2.3036,-8.133924 1.6795,-3.853018 3.16703,-1.199465 4.96338,1.021087 z m -2.2464,2.175828 c -4.8049,-2.992167 -3.08987,6.380358 0.42374,2.036159 0.33052,-0.677508 0.12099,-1.525836 -0.42374,-2.036159 z' />
+    <path class='eval' d='m 128.50836,24.06821 c -5.10403,3.035506 3.20535,6.383175 5.05938,9.450276 -0.91853,2.95886 -4.06493,3.650723 -5.34691,0.265618 -2.25715,-2.089033 -4.65672,-6.948595 -7.07024,-2.584686 -4.71758,-3.764394 3.81217,-5.812054 5.12382,-9.226328 0.75738,0.677487 1.38637,1.498638 2.23389,2.095175 z' />
+    <path class='eval' d='m 137.14366,22.299812 c -3.09615,2.259885 0.71537,4.412454 1.99042,6.435866 -3.08975,5.080354 -5.91384,-2.98648 -8.92144,-4.094939 1.44369,-3.219573 3.3497,-1.335928 4.27156,-4.41058 0.97822,-0.894325 1.75044,1.871047 2.65946,2.069653 z' />
+    <path class='eval' d='m 136.85093,14.890174 c 2.31562,5.283511 -7.17975,1.771993 -1.29675,-0.475107 l 0.7108,0.08973 z m 4.867,5.317354 c 2.56912,1.439678 4.26517,4.725219 0.30678,5.233637 -1.56592,-3.098864 -9.51683,-5.749448 -3.64502,-8.633714 1.17746,0.325095 2.15375,2.591149 3.33824,3.400077 z' />
+    <path class='eval' d='m 149.95578,11.976423 c 2.50679,1.334142 4.80455,4.94192 0.75041,5.297394 -0.4641,1.898604 -5.25368,5.602645 -8.0174,1.81545 -3.87347,-2.80918 -0.0676,-7.603844 2.30366,-8.133968 1.67949,-3.8530525 3.16695,-1.1993573 4.96333,1.021124 z m -2.24641,2.175828 c -4.80489,-2.992177 -3.08986,6.380343 0.42374,2.036167 0.33055,-0.677518 0.121,-1.52585 -0.42374,-2.036167 z' />
+    <path class='eval' d='m 153.26135,7.538431 c 2.60497,1.5799548 6.03999,5.944272 1.08117,6.050232 -2.53319,-3.231828 -7.20316,-6.4304525 -8.84748,-9.4582682 1.89121,-2.8664883 3.78452,-2.247699 5.38514,0.8929426 0.78017,0.8503859 1.57195,1.6911437 2.38118,2.5150667 z' />
+  </pattern>
+  <!-- https://norbat.de/svg-pattern-3d-webmuster/ -->
+  <radialGradient id='calloutGradient' cx='25%' cy='20%' r='80%' fx='10%' fy='10%'>
+    <stop offset='0%' stop-color='#fefdf7aa' />
+    <stop offset='100%' stop-color='#fcf9e7aa' />
+  </radialGradient>
+  <filter id="shadow">
+    <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#707070" flood-opacity="0.6" />
+  </filter>
+  <!--
+  <filter id='shadow2' width='120%' height='120%'>
+    <feOffset result='offOut' in='SourceGraphic' dx='0' dy='0' />
+    <feColorMatrix result='matrixOut' in='offOut'
+                   values='0.5 0 0 0 0 0 0.5 0 0 0 0 0 0.5 0 0 0 0 0 0.5 0' />
+    <feGaussianBlur result='blurOut' in='matrixOut' stdDeviation='3' />
+    <feBlend in='SourceGraphic' in2='blurOut' />
+  </filter>
+  -->
+  <filter id='fkShadow' height='130%'>
+    <feGaussianBlur in='SourceAlpha' stdDeviation='1.5'/> <!-- stdDeviation is how much to blur -->
+    <feOffset dx='1.2' dy='1.2' result='offsetblur'/> <!-- how much to offset -->
+    <feMerge>
+      <feMergeNode/> <!-- this contains the offset blurred image -->
+      <feMergeNode in='SourceGraphic'/> <!-- this contains the element that the filter is applied to -->
+    </feMerge>
+  </filter>
+  <symbol id='calloutArrowDown' >
+    <path d='M 0,0 L 8,12 L 16,0 z' style='fill:#f8f6d1;stroke:none; filter: url(#shadow);' />
+    <path d='M 0,0 L 8,12 L 16,0' style='stroke:#bebdbd; stroke-width:0.5;' />
+  </symbol>
+  <symbol id='calloutArrowUp' >
+    <path d='M 0,16 L 8,4 L 16,16 z' style='fill:#ffffff; stroke:none; filter: url(#shadow);' />
+    <path d='M 0,16 L 8,4 L 16,16' style='stroke:#bebdbd; stroke-width:0.5;' />
+  </symbol>
+  <symbol id='pk' width="13" height="13">
+    <g transform='scale(0.99)'>
+      <path style='fill:#f0d938;stroke:#906b25;stroke-width:0.6;stroke-linecap:round;stroke-linejoin:round;'
+            d='M 9.3678877,3.5695485 C 9.1030218,3.2729386 9.0796382,2.7628519 9.3396185,2.4517097 9.5449651,2.1956495 9.9040386,2.0980533 10.199638,2.2169415 10.533525,2.3415459 10.775153,2.706942 10.750675,3.0842709 10.737029,3.3980003 10.541153,3.699122 10.258248,3.8066067 9.966649,3.9250429 9.6169668,3.8418805 9.4008073,3.6062324 9.3894892,3.5943518 9.3785264,3.582104 9.3678886,3.5695487 z M 11.226617,6.9916004 C 11.888137,6.3548946 12.293488,5.4172188 12.311087,4.442353 12.378144,2.7379364 11.248678,1.0541269 9.7322318,0.44767357 8.3887112,-0.1280313 6.7865012,0.26822889 5.8918395,1.4007929 5.080823,2.3839145 4.9336815,3.8452096 5.3635544,5.101615 L 4.3670905,5.315913 C 4.0664984,5.3682645 4.0967703,5.6316724 4.2574957,5.8208829 L 4.9124,6.5655244 4.1543436,7.2512357 3.2136002,7.2163506 3.1674775,8.5586827 2.0406832,8.5086512 1.5965306,8.9299953 1.5471661,10.179833 0.75616674,10.195223 0.2112857,10.758575 0.15354288,11.735988 0.07199052,12.765553 c 0.36440953,0.238225 0.79006967,0.195492 1.44938278,-0.02675 L 6.3033562,8.1282037 6.8217102,8.6765688 C 6.9985465,8.8799427 7.3003699,8.7497574 7.358381,8.5016252 L 7.4938877,7.5084164 c 0.8537488,0.3985387 1.8303125,0.4711541 2.6851793,0.1427713 0.393927,-0.1407258 0.746858,-0.3701772 1.04755,-0.6595873 z'/>
+      <path d='M 6.8014948,6.3102123 0.15369063,13.024481 0.21560535,12.141962 6.0062342,6.2683782 z'
+            style='fill:#ffe5a5;fill-opacity:1;stroke:#906b25;stroke-width:0.06912433;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:3.00300009'/>
+    </g>
+  </symbol>
+  <symbol id='idx1' width="13" height="13">
+    <g transform='scale(0.99)'>
+      <rect width='4' height='4' x='7' y='1' style='fill:#ffff3f;stroke:#b48333;stroke-width:0.6;' ry='0.83'/>
+      <rect width='4' height='4' x='1' y='7' style='fill:#ffff3f;stroke:#b48333;stroke-width:0.6;' ry='0.832'/>
+      <rect width='4' height='4' x='7' y='7' style='fill:#ffff3f;stroke:#b48333;stroke-width:0.6;' ry='0.832'/>
+    </g>
+  </symbol>
+  <symbol id='idx2' width="13" height="13">
+    <g transform='scale(0.99)'>
+      <rect width='4' height='3' x='6' y='1' style='fill:#7fc8e9;stroke:#2f6f8c;stroke-width:0.6;' ry='0.83'/>
+      <rect width='7' height='3' x='3' y='6' style='fill:#7fc8e9;stroke:#2f6f8c;stroke-width:0.6;' ry='0.832'/>
+    </g>
+  </symbol>
+  <symbol id='unq' width="13" height="13">
+    <g transform='scale(0.99)'>
+      <rect style='fill:none;stroke:#7e4d31;stroke-width:0.71934468;stroke-linecap:round;stroke-linejoin:round;'
+            width='2.29' height='8.43' x='7.48' y='-0.76' ry='1.14' transform='matrix(0.701,0.713,-0.727,0.685,0,0)' />
+      <path style='fill:white;stroke:#858585;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='m 26.04,8.64 a 4.13,4.13 0 1 1 -8.26,0 4.13,4.13 0 1 1 8.26,0 z'
+            transform='matrix(1.025,0,0,0.987,-14.690,-3.862)' />
+      <text x='5.4' y='7.2' style='font-size:7px;fill:#655c59;'>U</text>
+    </g>
+  </symbol>
+  <symbol id='idx' width="13" height="13">
+    <g transform='scale(0.99)'>
+      <rect style='fill:none;stroke:#7e4d31;stroke-width:0.71934468;stroke-linecap:round;stroke-linejoin:round;'
+            width='2.29' height='8.43' x='7.48' y='-0.76' ry='1.14' transform='matrix(0.701,0.713,-0.727,0.685,0,0)' />
+      <path style='fill:white;stroke:#858585;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='m 26.04,8.64 a 4.13,4.13 0 1 1 -8.26,0 4.13,4.13 0 1 1 8.26,0 z'
+            transform='matrix(1.025,0,0,0.987,-14.690,-3.862)' />
+    </g>
+  </symbol>
+  <symbol id='fk' width="13" height="13">
+    <g transform='scale(0.87)'>
+      <path style='fill:none;stroke:#5a72a8;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 1.1,11 1,5.3 C 1,3.6 1.6,3.3 2.9,3.3 l 7.9,0' />
+      <path style='fill:#5a72a8;stroke:#5a72a8;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 6.3,0.8 11.3,3.4 6.3,5.6 Z' />
+    </g>
+  </symbol>
+  <symbol id='ref' width="13" height="13">
+    <g transform='scale(0.87)'>
+      <path style='fill:none;stroke:#906b25;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='m 10.9,11.2 0,-5.8 C 10,3.7 10,3 9,3 l -7.9,0'/>
+      <path style='fill:#906b25;stroke:#906b25;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 5.7,0.8 0.7,3.4 5.7,5.6 Z'/>
+    </g>
+  </symbol>
+  <symbol id='flag0' width="13" height="13">
+    <g transform='scale(0.92)'>
+      <path style='fill:#b7d0f6;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 0.12,12.67 0.16,7.22 C 2.59,7.22 4.13,8.78 9.22,4.22 5.68,4.98 2.53,4.50 0.09,1.80 z'/>
+    </g>
+  </symbol>
+  <symbol id='flag1' width="13" height="13">
+    <g transform='scale(0.92)'>
+      <path style='fill:#f4a393;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 0.12,12.67 0.16,7.22 C 2.59,7.22 4.13,8.78 9.22,4.22 5.68,4.98 2.53,4.50 0.09,1.80 z'/>
+    </g>
+  </symbol>
+  <symbol id='flag2' width="13" height="13">
+    <g transform='scale(0.92)'>
+      <path style='fill:#77ec8b;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 0.12,12.67 0.16,7.22 C 2.59,7.22 4.13,8.78 9.22,4.22 5.68,4.98 2.53,4.50 0.09,1.80 z'/>
+    </g>
+  </symbol>
+  <symbol id='nn' width="3" height="3">
+    <path style='stroke:#9b3e50;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+          d='M 0,0 3,3 M 0,3 3,0 z'/>
+  </symbol>
+  <symbol id='virtual' width="13" height="13">
+    <circle cx='6' cy='6.5' r='5.5' fill='#a3dda3' stroke='#4c6a4c' stroke-width='0.5'/>
+    <path style='stroke:#ffffff;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+          d='M 3,4 6,10 9,4'/>
+  </symbol>
+  <symbol id='view' width="13" height="13">
+    <g transform='scale(0.99)'>
+      <line x1='12' y1='6' x2='19' y2='0' stroke='black' stroke-width='0.5' />
+      <line x1='0' y1='6' x2='7' y2='0' stroke='black' stroke-width='0.5' />
+      <circle cx='3' cy='6' r='3' fill='#f9ebbc' stroke='black' stroke-width='0.5'/>
+      <circle cx='10' cy='6' r='3' fill='#f9ebbc' stroke='black' stroke-width='0.5'/>
+    </g>
+  </symbol>
+  <symbol id='logo' width="100" height="100">
+    <path style='stroke:none;fill:#5d5d5d' d='M2.41,6.80 17.39,0.35 26.83,7.21 28.32,24.45 12.62,29.77 1.74,23.96'/>
+    <path style='stroke:none;fill:#efefef' d='M 2.21, 6.45  9.36, 3.49  9.42,11.63  2.04,14.42'/>
+    <path style='stroke:none;fill:#efefef' d='M10.23, 3.14 17.39, 0.17 17.68, 8.59 10.29,11.28'/>
+    <path style='stroke:none;fill:#d2d2d2' d='M17.44, 0.17 21.59, 3.55 22.36,11.43 17.76,8.63'/>
+    <path style='stroke:none;fill:#d2d2d2' d='M22.67, 4.33 26.98, 7.06 27.65,14.77 23.20,11.77'/>
+    <path style='stroke:none;fill:#efefef' d='M1.89,15.58  9.39,12.65  9.48,21.14  1.57,24.10'/>
+    <path style='stroke:none;fill:#17afde' d='M10.38,12.36 17.70, 9.51 18.11,18.37 10.32 20.96'/>
+    <path style='stroke:none;fill:#1389ad' d='M17.73, 9.59 22.41,12.47 22.82,21.14 18.05,18.34'/>
+    <path style='stroke:none;fill:#d2d2d2' d='M23.26,12.94 27.62,15.70 28.42,24.54 23.69,21.60'/>
+    <path style='stroke:none;fill:#828282' d='M1.57,24.19  9.45,21.22 14.30,24.40  6.80,26.80'/>
+    <path style='stroke:none;fill:#0c485c' d='M10.47,20.90 18.11,18.32 22.82,21.19 15.20,23.81'/>
+    <path style='stroke:none;fill:#828282' d='M23.69,21.63 28.32,24.65 20.87,27.07 15.84,24.30'/>
+    <path style='stroke:none;fill:#828282' d='M14.94,24.68 19.80,27.41 12.59,29.97  7.73,27.21'/>
+  </symbol>
+
+</defs>
+
+<defs>  <marker id='ZeroMore' viewBox='0 0 8.00 8.00' refX='4.00' refY='4.00' markerWidth='8.00' markerHeight='8.00' orient='auto-start-reverse'>
+    <path d='M 2.00,4.00 L 4.00,4.00 M 6.00,4.00 L 8.00,4.00 z' style='stroke-width:1;'/>
+    <path d='M 8.00,0.00 L 4.00,4.00 L 8.00,8.00' style='stroke-width:1;'/>
+    <path d='M 0.00,4.00 L 8.00,4.00 z' style='stroke-width:1;'/>
+  </marker>
+  <marker id='ZeroOne' viewBox='0 0 8.00 8.00' refX='4.00' refY='4.00' markerWidth='8.00' markerHeight='8.00' orient='auto-start-reverse'>
+    <path d='M 2.00,4.00 L 4.00,4.00 M 6.00,4.00 L 8.00,4.00 z' style='stroke-width:1;'/>
+  </marker>
+  <marker id='OneMore' viewBox='0 0 8.00 8.00' refX='4.00' refY='4.00' markerWidth='8.00' markerHeight='8.00' orient='auto-start-reverse'>
+    <path d='M 4.00,4.00 L 8.00,4.00 z' style='stroke-width:1;'/>
+    <path d='M 8.00,0.00 L 4.00,4.00 L 8.00,8.00' style='stroke-width:1;'/>
+    <path d='M 0.00,4.00 L 8.00,4.00 z' style='stroke-width:1;'/>
+  </marker>
+  <marker id='One' viewBox='0 0 8.00 8.00' refX='4.00' refY='4.00' markerWidth='8.00' markerHeight='8.00' orient='auto-start-reverse'>
+    <path d='M 4.00,4.00 L 8.00,4.00 z' style='stroke-width:1;'/>
+  </marker>
+  <marker id='Range' viewBox='0 0 8.00 8.00' refX='4.00' refY='4.00' markerWidth='8.00' markerHeight='8.00' orient='auto-start-reverse'>
+    <path d='M 4.00,4.00 L 8.00,4.00 z' style='stroke-width:1;'/>
+  </marker>
+  <marker id='Arrow' viewBox='0 0 8.00 8.00' refX='4.00' refY='4.00' markerWidth='8.00' markerHeight='8.00' orient='auto-start-reverse'>
+    <path d='M 4.000,4.000 L 8.000,4.000 L 4.000,0.000 L 8.000,4.000 L 4.000,8.000' style='stroke-width:1;'/>
+  </marker>
+  <linearGradient id='tbg_F4DDBE' x1='0%' y1='0%' x2='0%' y2='100%' >
+     <stop offset='0%' stop-color='#FFFEFE' /> 
+     <stop offset='75%' stop-color='#FDF0DF' /> 
+     <stop offset='100%' stop-color='#FEE1BA' /> 
+  </linearGradient>
+  <linearGradient id='tbg_BED3F4' x1='0%' y1='0%' x2='0%' y2='100%' >
+     <stop offset='0%' stop-color='#FEFEFF' /> 
+     <stop offset='75%' stop-color='#DFEAFD' /> 
+     <stop offset='100%' stop-color='#BAD4FE' /> 
+  </linearGradient>
+  <linearGradient id='tbg_C7F4BE' x1='0%' y1='0%' x2='0%' y2='100%' >
+     <stop offset='0%' stop-color='#FEFFFE' /> 
+     <stop offset='75%' stop-color='#E4FDDF' /> 
+     <stop offset='100%' stop-color='#C5FEBA' /> 
+  </linearGradient>
+  <linearGradient id='tbg_BEBEF4' x1='0%' y1='0%' x2='0%' y2='100%' >
+     <stop offset='0%' stop-color='#FEFEFF' /> 
+     <stop offset='75%' stop-color='#DFDFFD' /> 
+     <stop offset='100%' stop-color='#BABAFE' /> 
+  </linearGradient>
+  <linearGradient id='tbg_D1BEF4' x1='0%' y1='0%' x2='0%' y2='100%' >
+     <stop offset='0%' stop-color='#FEFEFF' /> 
+     <stop offset='75%' stop-color='#E9DFFD' /> 
+     <stop offset='100%' stop-color='#D1BAFE' /> 
+  </linearGradient>
+</defs>
+
+<!-- == Shape Colors == -->
+<!-- == Desktop == -->
+<rect x='1' y='1' width='1614' height='1148' rx='8' ry='8' style='fill:url(#layoutBgA); stroke:#ccc; stroke-width:.7px; cursor:move;' />
+<rect x='1' y='1' width='1614' height='1148' rx='8' ry='8' style='fill:url(#layoutBgEval);' />
+
+<!-- == Legend == -->
+<g transform='translate(10,10)'>
+  <rect x='10' y='10' width='310' height='70' class='legend'/> 
+  <use id='logo' x='20' y='40' xlink:href='#logo'><title>DbSchema Database Designer </title></use>  <text x='20' y='30' class='legendTitle' >Fixflex ERD</text> 
+  <text x='57' y='47' class='legendSubTitle'><tspan>Comments as mouse-over tips, zoom and pan.<title>Read column and table comments by hovering the columns and tables.
+Zoom with CTRL+whell mouse button, pan by dragging the diagram with the right-mouse button</title></tspan></text> 
+  <a xlink:href='https%3A%2F%2Fdbschema.com'><text x='57' y='61' class='legendSubTitle'><tspan>by DbSchema.com - Wise Coders<title>DbSchema is an universal database designer.
+DbSchema has a free Community Edition.</title></tspan></text></a> 
+</g>
+
+<g transform='translate(0,110)'>
+<!-- == Group 'Collection 'chats'' == -->
+<rect class='grp' style='fill:#ECF2FD;stroke:#717C91' x='80' y='61' width='1504' height='914' />
+<text x='92' y='77' style='fill:#667FAC;'>Collection &#39;chats&#39;</text>
+<!-- == Group 'Collection 'taskers'' == -->
+<rect class='grp' style='fill:#ECECFD;stroke:#717191' x='768' y='269' width='208' height='482' />
+<text x='780' y='285' style='fill:#6666AC;'>Collection &#39;taskers&#39;</text>
+<!-- == Group 'Collection 'users'' == -->
+<rect class='grp' style='fill:#F2ECFD;stroke:#7C7191' x='1072' y='157' width='448' height='402' />
+<text x='1084' y='173' style='fill:#7F66AC;'>Collection &#39;users&#39;</text>
+<!-- == Group 'Collection 'categories'' == -->
+<rect class='grp' style='fill:#FDF5EC;stroke:#918271' x='32' y='93' width='224' height='274' />
+<text x='44' y='109' style='fill:#AC8C66;'>Collection &#39;categories&#39;</text>
+<!-- == Group 'Collection 'tasks'' == -->
+<rect class='grp' style='fill:#EFFDEC;stroke:#769171' x='336' y='45' width='304' height='514' />
+<text x='348' y='61' style='fill:#72AC66;'>Collection &#39;tasks&#39;</text>
+<!-- == Fk 'chats_fk_chats_messages' == -->
+<path id='chats_fk_chats_messages'  onmouseover="hghl(['chats_fk_chats_messages','fixflex.chats.messages','fixflex.messages._id'])" onmouseout="uhghl(['chats_fk_chats_messages','fixflex.chats.messages','fixflex.messages._id'])" transform='translate(8,0)' class='unhighlight' d='M 112,736L 112,608' >
+	<title>&#x1F517;  Foreign Key fk_chats_messages
+chats ref messages ( messages -&gt; _id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#OneMore)' marker-end='url(#One)'  class='virtual'  d='M 112,736L 112,608' ><title>&#x1F517;  Foreign Key fk_chats_messages
+chats ref messages ( messages -&gt; _id )</title></path>
+<text x='115' y='734' transform='rotate(270 115,734)' class='relName'>fk&#95;chats&#95;messages</text>
+<!-- == Fk 'dueDate_JSon' == -->
+<path id='dueDate_JSon'  onmouseover="hghl(['dueDate_JSon','fixflex.tasks.dueDate'])" onmouseout="uhghl(['dueDate_JSon','fixflex.tasks.dueDate'])" transform='translate(8,0)' class='unhighlight' d='M 432,256L 464,256' >
+	<title>&#x1F517;  Foreign Key JSon
+dueDate ref tasks (  )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#ZeroOne)' marker-end='url(#One)'    d='M 432,256L 464,256' ><title>&#x1F517;  Foreign Key JSon
+dueDate ref tasks (  )</title></path>
+<text x='441' y='251' transform='rotate(0 441,251)' class='relName'>Obj</text>
+<!-- == Fk 'image_JSon' == -->
+<path id='image_JSon'  onmouseover="hghl(['image_JSon','fixflex.categories.image'])" onmouseout="uhghl(['image_JSon','fixflex.categories.image'])" transform='translate(8,0)' class='unhighlight' d='M 112,256L 112,216Q 112,208 120,208L 128,208' >
+	<title>&#x1F517;  Foreign Key JSon
+image ref categories (  )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#ZeroOne)' marker-end='url(#One)'    d='M 112,256L 112,216Q 112,208 120,208L 128,208' ><title>&#x1F517;  Foreign Key JSon
+image ref categories (  )</title></path>
+<text x='115' y='254' transform='rotate(270 115,254)' class='relName'>Obj</text>
+<!-- == Fk 'imageCover_JSon' == -->
+<path id='imageCover_JSon'  onmouseover="hghl(['imageCover_JSon','fixflex.tasks.imageCover'])" onmouseout="uhghl(['imageCover_JSon','fixflex.tasks.imageCover'])" transform='translate(8,0)' class='unhighlight' d='M 448,176L 464,176' >
+	<title>&#x1F517;  Foreign Key JSon
+imageCover ref tasks (  )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#ZeroOne)' marker-end='url(#One)'    d='M 448,176L 464,176' ><title>&#x1F517;  Foreign Key JSon
+imageCover ref tasks (  )</title></path>
+<text x='457' y='171' transform='rotate(0 457,171)' class='relName'>Obj</text>
+<!-- == Fk 'images_JSon' == -->
+<path id='images_JSon'  onmouseover="hghl(['images_JSon','fixflex.tasks.images'])" onmouseout="uhghl(['images_JSon','fixflex.tasks.images'])" transform='translate(8,0)' class='unhighlight' d='M 448,352L 464,352' >
+	<title>&#x1F517;  Foreign Key JSon
+images ref tasks (  )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#ZeroOne)' marker-end='url(#One)'  class='dotted '  d='M 448,352L 464,352' ><title>&#x1F517;  Foreign Key JSon
+images ref tasks (  )</title></path>
+<text x='457' y='347' transform='rotate(0 457,347)' class='relName'>Ary</text>
+<!-- == Fk 'location_JSon' == -->
+<path id='location_JSon'  onmouseover="hghl(['location_JSon','fixflex.tasks.location'])" onmouseout="uhghl(['location_JSon','fixflex.tasks.location'])" transform='translate(8,0)' class='unhighlight' d='M 464,496L 488,496Q 496,496 496,488L 496,480' >
+	<title>&#x1F517;  Foreign Key JSon
+location ref tasks (  )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#ZeroOne)' marker-end='url(#One)'    d='M 464,496L 488,496Q 496,496 496,488L 496,480' ><title>&#x1F517;  Foreign Key JSon
+location ref tasks (  )</title></path>
+<text x='473' y='491' transform='rotate(0 473,491)' class='relName'>Obj</text>
+<!-- == Fk 'messages_fk_messages_chats' == -->
+<path id='messages_fk_messages_chats'  onmouseover="hghl(['messages_fk_messages_chats','fixflex.messages.chatId','fixflex.chats._id'])" onmouseout="uhghl(['messages_fk_messages_chats','fixflex.messages.chatId','fixflex.chats._id'])" transform='translate(8,0)' class='unhighlight' d='M 128,608L 128,736' >
+	<title>&#x1F517;  Foreign Key fk_messages_chats
+messages ref chats ( chatId -&gt; _id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#OneMore)' marker-end='url(#One)'  class='virtual'  d='M 128,608L 128,736' ><title>&#x1F517;  Foreign Key fk_messages_chats
+messages ref chats ( chatId -&gt; _id )</title></path>
+<text x='140' y='609' transform='rotate(90 140,609)' class='relName'>fk&#95;messages&#95;chats</text>
+<!-- == Fk 'name_JSon' == -->
+<path id='name_JSon'  onmouseover="hghl(['name_JSon','fixflex.categories.name'])" onmouseout="uhghl(['name_JSon','fixflex.categories.name'])" transform='translate(8,0)' class='unhighlight' d='M 192,256L 192,240' >
+	<title>&#x1F517;  Foreign Key JSon
+name ref categories (  )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#ZeroOne)' marker-end='url(#One)'    d='M 192,256L 192,240' ><title>&#x1F517;  Foreign Key JSon
+name ref categories (  )</title></path>
+<text x='195' y='254' transform='rotate(270 195,254)' class='relName'>Obj</text>
+<!-- == Fk 'reviews_fk_reviews_users' == -->
+<path id='reviews_fk_reviews_users'  onmouseover="hghl(['reviews_fk_reviews_users','fixflex.reviews.userId','fixflex.users._id'])" onmouseout="uhghl(['reviews_fk_reviews_users','fixflex.reviews.userId','fixflex.users._id'])" transform='translate(8,0)' class='unhighlight' d='M 384,944L 384,968Q 384,976 392,976L 1048,976Q 1056,976 1056,968L 1056,520Q 1056,512 1064,512L 1072,512' >
+	<title>&#x1F517;  Foreign Key fk_reviews_users
+reviews ref users ( userId -&gt; _id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#OneMore)' marker-end='url(#One)'  class='virtual'  d='M 384,944L 384,968Q 384,976 392,976L 1048,976Q 1056,976 1056,968L 1056,520Q 1056,512 1064,512L 1072,512' ><title>&#x1F517;  Foreign Key fk_reviews_users
+reviews ref users ( userId -&gt; _id )</title></path>
+<text x='396' y='945' transform='rotate(90 396,945)' class='relName'>fk&#95;reviews&#95;users</text>
+<!-- == Fk 'reviews_fk_reviews_tasks' == -->
+<path id='reviews_fk_reviews_tasks'  onmouseover="hghl(['reviews_fk_reviews_tasks','fixflex.reviews.taskId','fixflex.tasks._id'])" onmouseout="uhghl(['reviews_fk_reviews_tasks','fixflex.reviews.taskId','fixflex.tasks._id'])" transform='translate(8,0)' class='unhighlight' d='M 320,736L 320,136Q 320,128 328,128L 464,128' >
+	<title>&#x1F517;  Foreign Key fk_reviews_tasks
+reviews ref tasks ( taskId -&gt; _id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#OneMore)' marker-end='url(#One)'  class='virtual'  d='M 320,736L 320,136Q 320,128 328,128L 464,128' ><title>&#x1F517;  Foreign Key fk_reviews_tasks
+reviews ref tasks ( taskId -&gt; _id )</title></path>
+<text x='323' y='734' transform='rotate(270 323,734)' class='relName'>fk&#95;reviews&#95;tasks</text>
+<!-- == Fk 'reviews_fk_reviews_taskers' == -->
+<path id='reviews_fk_reviews_taskers'  onmouseover="hghl(['reviews_fk_reviews_taskers','fixflex.reviews.taskerId','fixflex.taskers._id'])" onmouseout="uhghl(['reviews_fk_reviews_taskers','fixflex.reviews.taskerId','fixflex.taskers._id'])" transform='translate(8,0)' class='unhighlight' d='M 384,736L 384,584Q 384,576 392,576L 784,576' >
+	<title>&#x1F517;  Foreign Key fk_reviews_taskers
+reviews ref taskers ( taskerId -&gt; _id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#OneMore)' marker-end='url(#One)'  class='virtual'  d='M 384,736L 384,584Q 384,576 392,576L 784,576' ><title>&#x1F517;  Foreign Key fk_reviews_taskers
+reviews ref taskers ( taskerId -&gt; _id )</title></path>
+<text x='387' y='734' transform='rotate(270 387,734)' class='relName'>fk&#95;reviews&#95;taskers</text>
+<!-- == Fk 'tasks_fk_tasks_offers' == -->
+<path id='tasks_fk_tasks_offers'  onmouseover="hghl(['tasks_fk_tasks_offers','fixflex.tasks.offers','fixflex.offers._id'])" onmouseout="uhghl(['tasks_fk_tasks_offers','fixflex.tasks.offers','fixflex.offers._id'])" transform='translate(8,0)' class='unhighlight' d='M 512,480L 512,736' >
+	<title>&#x1F517;  Foreign Key fk_tasks_offers
+tasks ref offers ( offers -&gt; _id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#OneMore)' marker-end='url(#One)'  class='virtual'  d='M 512,480L 512,736' ><title>&#x1F517;  Foreign Key fk_tasks_offers
+tasks ref offers ( offers -&gt; _id )</title></path>
+<text x='524' y='481' transform='rotate(90 524,481)' class='relName'>fk&#95;tasks&#95;offers</text>
+<!-- == Fk 'tasks_fk_tasks_categories' == -->
+<path id='tasks_fk_tasks_categories'  onmouseover="hghl(['tasks_fk_tasks_categories','fixflex.tasks.categoryId','fixflex.categories._id'])" onmouseout="uhghl(['tasks_fk_tasks_categories','fixflex.tasks.categoryId','fixflex.categories._id'])" transform='translate(8,0)' class='unhighlight' d='M 464,96L 216,96Q 208,96 208,104L 208,112' >
+	<title>&#x1F517;  Foreign Key fk_tasks_categories
+tasks ref categories ( categoryId -&gt; _id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#OneMore)' marker-end='url(#One)'  class='virtual'  d='M 464,96L 216,96Q 208,96 208,104L 208,112' ><title>&#x1F517;  Foreign Key fk_tasks_categories
+tasks ref categories ( categoryId -&gt; _id )</title></path>
+<text x='365' y='91' transform='rotate(0 365,91)' class='relName'>fk&#95;tasks&#95;categories</text>
+<!-- == Fk 'tasks_fk_tasks_users' == -->
+<path id='tasks_fk_tasks_users'  onmouseover="hghl(['tasks_fk_tasks_users','fixflex.tasks.userId','fixflex.users._id'])" onmouseout="uhghl(['tasks_fk_tasks_users','fixflex.tasks.userId','fixflex.users._id'])" transform='translate(8,0)' class='unhighlight' d='M 624,192L 1072,192' >
+	<title>&#x1F517;  Foreign Key fk_tasks_users
+tasks ref users ( userId -&gt; _id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#OneMore)' marker-end='url(#One)'  class='virtual'  d='M 624,192L 1072,192' ><title>&#x1F517;  Foreign Key fk_tasks_users
+tasks ref users ( userId -&gt; _id )</title></path>
+<text x='633' y='187' transform='rotate(0 633,187)' class='relName'>fk&#95;tasks&#95;users</text>
+<!-- == Fk 'tasks_fk_tasks_taskers' == -->
+<path id='tasks_fk_tasks_taskers'  onmouseover="hghl(['tasks_fk_tasks_taskers','fixflex.tasks.taskerId','fixflex.taskers._id'])" onmouseout="uhghl(['tasks_fk_tasks_taskers','fixflex.tasks.taskerId','fixflex.taskers._id'])" transform='translate(8,0)' class='unhighlight' d='M 624,304L 784,304' >
+	<title>&#x1F517;  Foreign Key fk_tasks_taskers
+tasks ref taskers ( taskerId -&gt; _id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#ZeroMore)' marker-end='url(#One)'  class='dotted virtual'  d='M 624,304L 784,304' ><title>&#x1F517;  Foreign Key fk_tasks_taskers
+tasks ref taskers ( taskerId -&gt; _id )</title></path>
+<text x='633' y='299' transform='rotate(0 633,299)' class='relName'>fk&#95;tasks&#95;taskers</text>
+<!-- == Fk 'tasks_fk_tasks_offers_0' == -->
+<path id='tasks_fk_tasks_offers_0'  onmouseover="hghl(['tasks_fk_tasks_offers_0','fixflex.tasks.acceptedOffer','fixflex.offers._id'])" onmouseout="uhghl(['tasks_fk_tasks_offers_0','fixflex.tasks.acceptedOffer','fixflex.offers._id'])" transform='translate(8,0)' class='unhighlight' d='M 528,480L 528,736' >
+	<title>&#x1F517;  Foreign Key fk_tasks_offers_0
+tasks ref offers ( acceptedOffer -&gt; _id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#ZeroMore)' marker-end='url(#One)'  class='dotted virtual'  d='M 528,480L 528,736' ><title>&#x1F517;  Foreign Key fk_tasks_offers_0
+tasks ref offers ( acceptedOffer -&gt; _id )</title></path>
+<text x='540' y='481' transform='rotate(90 540,481)' class='relName'>fk&#95;tasks&#95;offers&#95;0</text>
+<!-- == Fk 'transactions_fk_transactions_tasks' == -->
+<path id='transactions_fk_transactions_tasks'  onmouseover="hghl(['transactions_fk_transactions_tasks','fixflex.transactions.taskId','fixflex.tasks._id'])" onmouseout="uhghl(['transactions_fk_transactions_tasks','fixflex.transactions.taskId','fixflex.tasks._id'])" transform='translate(8,0)' class='unhighlight' d='M 1424,96L 624,96' >
+	<title>&#x1F517;  Foreign Key fk_transactions_tasks
+transactions ref tasks ( taskId -&gt; _id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#OneMore)' marker-end='url(#One)'  class='virtual'  d='M 1424,96L 624,96' ><title>&#x1F517;  Foreign Key fk_transactions_tasks
+transactions ref tasks ( taskId -&gt; _id )</title></path>
+<text x='1315' y='91' transform='rotate(0 1315,91)' class='relName'>fk&#95;transactions&#95;tasks</text>
+<!-- == Fk 'transactions_fk_transactions_taskers' == -->
+<path id='transactions_fk_transactions_taskers'  onmouseover="hghl(['transactions_fk_transactions_taskers','fixflex.transactions.taskerId','fixflex.taskers._id'])" onmouseout="uhghl(['transactions_fk_transactions_taskers','fixflex.transactions.taskerId','fixflex.taskers._id'])" transform='translate(8,0)' class='unhighlight' d='M 1424,160L 952,160Q 944,160 944,168L 944,288' >
+	<title>&#x1F517;  Foreign Key fk_transactions_taskers
+transactions ref taskers ( taskerId -&gt; _id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#ZeroMore)' marker-end='url(#One)'  class='dotted virtual'  d='M 1424,160L 952,160Q 944,160 944,168L 944,288' ><title>&#x1F517;  Foreign Key fk_transactions_taskers
+transactions ref taskers ( taskerId -&gt; _id )</title></path>
+<text x='1303' y='155' transform='rotate(0 1303,155)' class='relName'>fk&#95;transactions&#95;taskers</text>
+<!-- == Fk 'location_JSon' == -->
+<path id='location_JSon'  onmouseover="hghl(['location_JSon','fixflex.taskers.location'])" onmouseout="uhghl(['location_JSon','fixflex.taskers.location'])" transform='translate(8,0)' class='unhighlight' d='M 816,624L 816,608' >
+	<title>&#x1F517;  Foreign Key JSon
+location ref taskers (  )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#ZeroOne)' marker-end='url(#One)'    d='M 816,624L 816,608' ><title>&#x1F517;  Foreign Key JSon
+location ref taskers (  )</title></path>
+<text x='819' y='622' transform='rotate(270 819,622)' class='relName'>Obj</text>
+<!-- == Fk 'profilePicture_JSon' == -->
+<path id='profilePicture_JSon'  onmouseover="hghl(['profilePicture_JSon','fixflex.users.profilePicture'])" onmouseout="uhghl(['profilePicture_JSon','fixflex.users.profilePicture'])" transform='translate(8,0)' class='unhighlight' d='M 1392,416L 1344,416' >
+	<title>&#x1F517;  Foreign Key JSon
+profilePicture ref users (  )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#ZeroOne)' marker-end='url(#One)'    d='M 1392,416L 1344,416' ><title>&#x1F517;  Foreign Key JSon
+profilePicture ref users (  )</title></path>
+<text x='1381' y='411' transform='rotate(0 1381,411)' class='relName'>Obj</text>
+<!-- == Fk 'taskers_fk_taskers_users' == -->
+<path id='taskers_fk_taskers_users'  onmouseover="hghl(['taskers_fk_taskers_users','fixflex.taskers.userId','fixflex.users._id'])" onmouseout="uhghl(['taskers_fk_taskers_users','fixflex.taskers.userId','fixflex.users._id'])" transform='translate(8,0)' class='unhighlight' d='M 960,320L 1072,320' >
+	<title>&#x1F517;  Foreign Key fk_taskers_users
+taskers ref users ( userId -&gt; _id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#One)' marker-end='url(#One)'  class='virtual'  d='M 960,320L 1072,320' ><title>&#x1F517;  Foreign Key fk_taskers_users
+taskers ref users ( userId -&gt; _id )</title></path>
+<text x='969' y='315' transform='rotate(0 969,315)' class='relName'>fk&#95;taskers&#95;users</text>
+<!-- == Fk 'taskers_fk_taskers_categories' == -->
+<path id='taskers_fk_taskers_categories'  onmouseover="hghl(['taskers_fk_taskers_categories','fixflex.taskers.categories','fixflex.categories._id'])" onmouseout="uhghl(['taskers_fk_taskers_categories','fixflex.taskers.categories','fixflex.categories._id'])" transform='translate(8,0)' class='unhighlight' d='M 784,560L 264,560Q 256,560 256,552L 256,232Q 256,224 248,224L 224,224' >
+	<title>&#x1F517;  Foreign Key fk_taskers_categories
+taskers ref categories ( categories -&gt; _id )</title>
+</path>
+<path transform='translate(8,0)' marker-start='url(#OneMore)' marker-end='url(#One)'  class='virtual'  d='M 784,560L 264,560Q 256,560 256,552L 256,232Q 256,224 248,224L 224,224' ><title>&#x1F517;  Foreign Key fk_taskers_categories
+taskers ref categories ( categories -&gt; _id )</title></path>
+<text x='673' y='555' transform='rotate(0 673,555)' class='relName'>fk&#95;taskers&#95;categories</text>
+<!-- == Table 'categories' == -->
+<rect id='depict_fixflex&#46;categories' class='entity' style='stroke:#B99C76' x='144' y='120' width='80' height='112' />
+<rect x='144' y='120' width='80' height='28' style='stroke-width:0; fill:#FAF6F1'/>
+<line class='topLine' style='stroke:#986117;' stroke-linecap='round' x1='144' y1='120' x2='224' y2='120'/>
+<a xlink:href='#fixflex.categories'><text x='151' y='139' >categories</text><title>Collection fixflex.categories</title></a>
+  <use id='nn' x='146' y='157' xlink:href='#nn'/><use id='pk' x='146' y='156' xlink:href='#pk'><title>&#x1F511;  Pk _id_ ( _id ) </title></use><a xlink:href='#fixflex.categories__id'><text id='fixflex&#46;categories&#46;&#95;id' x='163' y='167' onmouseover="hghl(['taskers_fk_taskers_categories','fixflex.taskers.categories','tasks_fk_tasks_categories','fixflex.tasks.categoryId'])" onmouseout="uhghl(['taskers_fk_taskers_categories','fixflex.taskers.categories','tasks_fk_tasks_categories','fixflex.tasks.categoryId'])">&#95;id</text><title>&#10697;  _id
+     * objectid
+ &#8601; taskers( _id )
+ &#8601; tasks( _id )</title></a>
+<a xlink:href='#fixflex.categories._id'><use id='ref' x='212' y='156' xlink:href='#ref'/><title>&#x1F517;  Referred by taskers ( categories -&gt; _id ) 
+Referred by tasks ( categoryId -&gt; _id ) </title></a>
+  <use id='nn' x='146' y='173' xlink:href='#nn'/><a xlink:href='#fixflex.categories_image'><text id='fixflex&#46;categories&#46;image' x='163' y='183' onmouseover="hghl(['image_JSon'])" onmouseout="uhghl(['image_JSon'])">image</text><title>&#10697;  image
+     * object
+ &#8601; image( image )</title></a>
+  <use id='nn' x='146' y='189' xlink:href='#nn'/><a xlink:href='#fixflex.categories_name'><text id='fixflex&#46;categories&#46;name' x='163' y='199' onmouseover="hghl(['name_JSon'])" onmouseout="uhghl(['name_JSon'])">name</text><title>&#10697;  name
+     * object
+ &#8601; name( name )</title></a>
+  <use id='nn' x='146' y='205' xlink:href='#nn'/><a xlink:href='#fixflex.categories___v'><text id='fixflex&#46;categories&#46;&#95;&#95;v' x='163' y='215'>&#95;&#95;v</text><title>&#10697;  __v
+     * int</title></a>
+<text x='221' y='212' text-anchor='end' class='colType'>&#35;</text>
+<!-- == Table 'chats' == -->
+<rect id='depict_fixflex&#46;chats' class='entity' style='stroke:#7690B9' x='96' y='744' width='96' height='128' />
+<rect x='96' y='744' width='96' height='28' style='stroke-width:0; fill:#F1F4FA'/>
+<line class='topLine' style='stroke:#174998;' stroke-linecap='round' x1='96' y1='744' x2='192' y2='744'/>
+<a xlink:href='#fixflex.chats'><text x='126' y='763' >chats</text><title>Collection fixflex.chats</title></a>
+  <use id='nn' x='98' y='781' xlink:href='#nn'/><use id='pk' x='98' y='780' xlink:href='#pk'><title>&#x1F511;  Pk _id_ ( _id ) </title></use><a xlink:href='#fixflex.chats__id'><text id='fixflex&#46;chats&#46;&#95;id' x='115' y='791' onmouseover="hghl(['messages_fk_messages_chats','fixflex.messages.chatId'])" onmouseout="uhghl(['messages_fk_messages_chats','fixflex.messages.chatId'])">&#95;id</text><title>&#10697;  _id
+     * objectid
+ &#8601; messages( _id )</title></a>
+<a xlink:href='#fixflex.chats._id'><use id='ref' x='180' y='780' xlink:href='#ref'/><title>&#x1F517;  Referred by messages ( chatId -&gt; _id ) </title></a>
+  <use id='nn' x='98' y='797' xlink:href='#nn'/><a xlink:href='#fixflex.chats_user'><text id='fixflex&#46;chats&#46;user' x='115' y='807'>user</text><title>&#10697;  user
+     * string</title></a>
+<text x='189' y='804' text-anchor='end' class='colType'>t</text>  <use id='nn' x='98' y='813' xlink:href='#nn'/><a xlink:href='#fixflex.chats_tasker'><text id='fixflex&#46;chats&#46;tasker' x='115' y='823'>tasker</text><title>&#10697;  tasker
+     * string</title></a>
+<text x='189' y='820' text-anchor='end' class='colType'>t</text>  <use id='nn' x='98' y='829' xlink:href='#nn'/><a xlink:href='#fixflex.chats_messages'><text id='fixflex&#46;chats&#46;messages' x='115' y='839' onmouseover="hghl(['chats_fk_chats_messages','fixflex.messages._id'])" onmouseout="uhghl(['chats_fk_chats_messages','fixflex.messages._id'])">messages</text><title>&#10697;  messages
+     * array
+ &#8599; chats( _id )</title></a>
+<a xlink:href='#fixflex.chats.messages'><use id='fk' x='180' y='828' xlink:href='#fk'/><title>&#x1F517;  References messages ( messages -&gt; _id ) </title></a>
+  <use id='nn' x='98' y='845' xlink:href='#nn'/><a xlink:href='#fixflex.chats___v'><text id='fixflex&#46;chats&#46;&#95;&#95;v' x='115' y='855'>&#95;&#95;v</text><title>&#10697;  __v
+     * int</title></a>
+<text x='189' y='852' text-anchor='end' class='colType'>&#35;</text>
+<!-- == Table 'dueDate' == -->
+<rect id='depict_dueDate' class='entity' style='stroke:#81B976' x='352' y='232' width='80' height='80' />
+<rect x='352' y='232' width='80' height='28' style='stroke-width:0; fill:#F2FAF1'/>
+<line class='topLine' style='stroke:#2C9817;' stroke-linecap='round' x1='352' y1='232' x2='432' y2='232'/>
+<a xlink:href='#dueDate'><text x='364' y='251' >dueDate</text><title>Sub-document dueDate</title></a>
+  <a xlink:href='#dueDate_flexible'><text id='dueDate&#46;flexible' x='371' y='279'>flexible</text><title>&#10697;  flexible
+     boolean</title></a>
+<text x='429' y='276' text-anchor='end' class='colType'>t</text>  <a xlink:href='#dueDate_on'><text id='dueDate&#46;on' x='371' y='295'>on</text><title>&#10697;  on
+     date</title></a>
+<text x='429' y='292' text-anchor='end' class='colType'>d</text>
+<!-- == Table 'image' == -->
+<rect id='depict_image' class='entity' style='stroke:#B99C76' x='48' y='264' width='96' height='80' />
+<rect x='48' y='264' width='96' height='28' style='stroke-width:0; fill:#FAF6F1'/>
+<line class='topLine' style='stroke:#986117;' stroke-linecap='round' x1='48' y1='264' x2='144' y2='264'/>
+<a xlink:href='#image'><text x='75' y='283' >image</text><title>Sub-document image</title></a>
+  <use id='nn' x='50' y='301' xlink:href='#nn'/><a xlink:href='#image_url'><text id='image&#46;url' x='67' y='311'>url</text><title>&#10697;  url
+     * string</title></a>
+<text x='141' y='308' text-anchor='end' class='colType'>t</text>  <use id='nn' x='50' y='317' xlink:href='#nn'/><a xlink:href='#image_publicId'><text id='image&#46;publicId' x='67' y='327'>publicId</text><title>&#10697;  publicId
+     * string</title></a>
+<text x='141' y='324' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'imageCover' == -->
+<rect id='depict_imageCover' class='entity' style='stroke:#81B976' x='352' y='152' width='96' height='64' />
+<rect x='352' y='152' width='96' height='28' style='stroke-width:0; fill:#F2FAF1'/>
+<line class='topLine' style='stroke:#2C9817;' stroke-linecap='round' x1='352' y1='152' x2='448' y2='152'/>
+<a xlink:href='#imageCover'><text x='362' y='171' >imageCover</text><title>Sub-document imageCover</title></a>
+  <use id='nn' x='354' y='189' xlink:href='#nn'/><a xlink:href='#imageCover_publicId'><text id='imageCover&#46;publicId' x='371' y='199'>publicId</text><title>&#10697;  publicId
+     * string</title></a>
+<text x='445' y='196' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'images' == -->
+<rect id='depict_images' class='entity' style='stroke:#81B976' x='352' y='328' width='96' height='96' />
+<rect x='352' y='328' width='96' height='28' style='stroke-width:0; fill:#F2FAF1'/>
+<line class='topLine' style='stroke:#2C9817;' stroke-linecap='round' x1='352' y1='328' x2='448' y2='328'/>
+<a xlink:href='#images'><text x='376' y='347' >images</text><title>Sub-document images</title></a>
+  <use id='nn' x='354' y='365' xlink:href='#nn'/><a xlink:href='#images_url'><text id='images&#46;url' x='371' y='375'>url</text><title>&#10697;  url
+     * string</title></a>
+<text x='445' y='372' text-anchor='end' class='colType'>t</text>  <a xlink:href='#images_publicId'><text id='images&#46;publicId' x='371' y='391'>publicId</text><title>&#10697;  publicId
+     string</title></a>
+<text x='445' y='388' text-anchor='end' class='colType'>t</text>  <a xlink:href='#images__id'><text id='images&#46;&#95;id' x='371' y='407'>&#95;id</text><title>&#10697;  _id
+     objectid</title></a>
+
+<!-- == Table 'location' == -->
+<rect id='depict_location' class='entity' style='stroke:#81B976' x='352' y='440' width='112' height='96' />
+<rect x='352' y='440' width='112' height='28' style='stroke-width:0; fill:#F2FAF1'/>
+<line class='topLine' style='stroke:#2C9817;' stroke-linecap='round' x1='352' y1='440' x2='464' y2='440'/>
+<a xlink:href='#location'><text x='382' y='459' >location</text><title>Sub-document location</title></a>
+  <use id='nn' x='354' y='477' xlink:href='#nn'/><a xlink:href='#location_coordinates'><text id='location&#46;coordinates' x='371' y='487'>coordinates</text><title>&#10697;  coordinates
+     * array[double]</title></a>
+<text x='461' y='484' text-anchor='end' class='colType'>&#91;&#93;</text>  <use id='nn' x='354' y='493' xlink:href='#nn'/><a xlink:href='#location_type'><text id='location&#46;type' x='371' y='503'>type</text><title>&#10697;  type
+     * string</title></a>
+<text x='461' y='500' text-anchor='end' class='colType'>t</text>  <a xlink:href='#location_online'><text id='location&#46;online' x='371' y='519'>online</text><title>&#10697;  online
+     boolean</title></a>
+<text x='461' y='516' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'messages' == -->
+<rect id='depict_fixflex&#46;messages' class='entity' style='stroke:#7690B9' x='96' y='456' width='96' height='144' />
+<rect x='96' y='456' width='96' height='28' style='stroke-width:0; fill:#F1F4FA'/>
+<line class='topLine' style='stroke:#174998;' stroke-linecap='round' x1='96' y1='456' x2='192' y2='456'/>
+<a xlink:href='#fixflex.messages'><text x='113' y='475' >messages</text><title>Collection fixflex.messages</title></a>
+  <use id='nn' x='98' y='493' xlink:href='#nn'/><use id='pk' x='98' y='492' xlink:href='#pk'><title>&#x1F511;  Pk _id_ ( _id ) </title></use><a xlink:href='#fixflex.messages__id'><text id='fixflex&#46;messages&#46;&#95;id' x='115' y='503' onmouseover="hghl(['chats_fk_chats_messages','fixflex.chats.messages'])" onmouseout="uhghl(['chats_fk_chats_messages','fixflex.chats.messages'])">&#95;id</text><title>&#10697;  _id
+     * objectid
+ &#8601; chats( _id )</title></a>
+<a xlink:href='#fixflex.messages._id'><use id='ref' x='180' y='492' xlink:href='#ref'/><title>&#x1F517;  Referred by chats ( messages -&gt; _id ) </title></a>
+  <use id='nn' x='98' y='509' xlink:href='#nn'/><a xlink:href='#fixflex.messages_sender'><text id='fixflex&#46;messages&#46;sender' x='115' y='519'>sender</text><title>&#10697;  sender
+     * string</title></a>
+<text x='189' y='516' text-anchor='end' class='colType'>t</text>  <use id='nn' x='98' y='525' xlink:href='#nn'/><a xlink:href='#fixflex.messages_message'><text id='fixflex&#46;messages&#46;message' x='115' y='535'>message</text><title>&#10697;  message
+     * string</title></a>
+<text x='189' y='532' text-anchor='end' class='colType'>t</text>  <use id='nn' x='98' y='541' xlink:href='#nn'/><a xlink:href='#fixflex.messages_chatId'><text id='fixflex&#46;messages&#46;chatId' x='115' y='551' onmouseover="hghl(['messages_fk_messages_chats','fixflex.chats._id'])" onmouseout="uhghl(['messages_fk_messages_chats','fixflex.chats._id'])">chatId</text><title>&#10697;  chatId
+     * string
+ &#8599; messages( _id )</title></a>
+<a xlink:href='#fixflex.messages.chatId'><use id='fk' x='180' y='540' xlink:href='#fk'/><title>&#x1F517;  References chats ( chatId -&gt; _id ) </title></a>
+  <use id='nn' x='98' y='557' xlink:href='#nn'/><a xlink:href='#fixflex.messages_createdAt'><text id='fixflex&#46;messages&#46;createdAt' x='115' y='567'>createdAt</text><title>&#10697;  createdAt
+     * date</title></a>
+<text x='189' y='564' text-anchor='end' class='colType'>d</text>  <use id='nn' x='98' y='573' xlink:href='#nn'/><a xlink:href='#fixflex.messages___v'><text id='fixflex&#46;messages&#46;&#95;&#95;v' x='115' y='583'>&#95;&#95;v</text><title>&#10697;  __v
+     * int</title></a>
+<text x='189' y='580' text-anchor='end' class='colType'>&#35;</text>
+<!-- == Table 'name' == -->
+<rect id='depict_name' class='entity' style='stroke:#B99C76' x='176' y='264' width='64' height='80' />
+<rect x='176' y='264' width='64' height='28' style='stroke-width:0; fill:#FAF6F1'/>
+<line class='topLine' style='stroke:#986117;' stroke-linecap='round' x1='176' y1='264' x2='240' y2='264'/>
+<a xlink:href='#name'><text x='189' y='283' >name</text><title>Sub-document name</title></a>
+  <use id='nn' x='178' y='301' xlink:href='#nn'/><a xlink:href='#name_en'><text id='name&#46;en' x='195' y='311'>en</text><title>&#10697;  en
+     * string</title></a>
+<text x='237' y='308' text-anchor='end' class='colType'>t</text>  <use id='nn' x='178' y='317' xlink:href='#nn'/><a xlink:href='#name_ar'><text id='name&#46;ar' x='195' y='327'>ar</text><title>&#10697;  ar
+     * string</title></a>
+<text x='237' y='324' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'reviews' == -->
+<rect id='depict_fixflex&#46;reviews' class='entity' style='stroke:#7690B9' x='288' y='744' width='112' height='192' />
+<rect x='288' y='744' width='112' height='28' style='stroke-width:0; fill:#F1F4FA'/>
+<line class='topLine' style='stroke:#174998;' stroke-linecap='round' x1='288' y1='744' x2='400' y2='744'/>
+<a xlink:href='#fixflex.reviews'><text x='319' y='763' >reviews</text><title>Collection fixflex.reviews</title></a>
+  <use id='nn' x='290' y='781' xlink:href='#nn'/><use id='pk' x='290' y='780' xlink:href='#pk'><title>&#x1F511;  Pk _id_ ( _id ) </title></use><a xlink:href='#fixflex.reviews__id'><text id='fixflex&#46;reviews&#46;&#95;id' x='307' y='791'>&#95;id</text><title>&#10697;  _id
+     * objectid</title></a>
+  <use id='nn' x='290' y='797' xlink:href='#nn'/><a xlink:href='#fixflex.reviews_userId'><text id='fixflex&#46;reviews&#46;userId' x='307' y='807' onmouseover="hghl(['reviews_fk_reviews_users','fixflex.users._id'])" onmouseout="uhghl(['reviews_fk_reviews_users','fixflex.users._id'])">userId</text><title>&#10697;  userId
+     * string
+ &#8599; reviews( _id )</title></a>
+<a xlink:href='#fixflex.reviews.userId'><use id='fk' x='388' y='796' xlink:href='#fk'/><title>&#x1F517;  References users ( userId -&gt; _id ) </title></a>
+  <use id='nn' x='290' y='813' xlink:href='#nn'/><a xlink:href='#fixflex.reviews_taskerId'><text id='fixflex&#46;reviews&#46;taskerId' x='307' y='823' onmouseover="hghl(['reviews_fk_reviews_taskers','fixflex.taskers._id'])" onmouseout="uhghl(['reviews_fk_reviews_taskers','fixflex.taskers._id'])">taskerId</text><title>&#10697;  taskerId
+     * string
+ &#8599; reviews( _id )</title></a>
+<a xlink:href='#fixflex.reviews.taskerId'><use id='fk' x='388' y='812' xlink:href='#fk'/><title>&#x1F517;  References taskers ( taskerId -&gt; _id ) </title></a>
+  <use id='nn' x='290' y='829' xlink:href='#nn'/><a xlink:href='#fixflex.reviews_taskId'><text id='fixflex&#46;reviews&#46;taskId' x='307' y='839' onmouseover="hghl(['reviews_fk_reviews_tasks','fixflex.tasks._id'])" onmouseout="uhghl(['reviews_fk_reviews_tasks','fixflex.tasks._id'])">taskId</text><title>&#10697;  taskId
+     * string
+ &#8599; reviews( _id )</title></a>
+<a xlink:href='#fixflex.reviews.taskId'><use id='fk' x='388' y='828' xlink:href='#fk'/><title>&#x1F517;  References tasks ( taskId -&gt; _id ) </title></a>
+  <use id='nn' x='290' y='845' xlink:href='#nn'/><a xlink:href='#fixflex.reviews_rating'><text id='fixflex&#46;reviews&#46;rating' x='307' y='855'>rating</text><title>&#10697;  rating
+     * object</title></a>
+  <use id='nn' x='290' y='861' xlink:href='#nn'/><a xlink:href='#fixflex.reviews_review'><text id='fixflex&#46;reviews&#46;review' x='307' y='871'>review</text><title>&#10697;  review
+     * string</title></a>
+<text x='397' y='868' text-anchor='end' class='colType'>t</text>  <use id='nn' x='290' y='877' xlink:href='#nn'/><a xlink:href='#fixflex.reviews_createdAt'><text id='fixflex&#46;reviews&#46;createdAt' x='307' y='887'>createdAt</text><title>&#10697;  createdAt
+     * date</title></a>
+<text x='397' y='884' text-anchor='end' class='colType'>d</text>  <use id='nn' x='290' y='893' xlink:href='#nn'/><a xlink:href='#fixflex.reviews_updatedAt'><text id='fixflex&#46;reviews&#46;updatedAt' x='307' y='903'>updatedAt</text><title>&#10697;  updatedAt
+     * date</title></a>
+<text x='397' y='900' text-anchor='end' class='colType'>d</text>  <use id='nn' x='290' y='909' xlink:href='#nn'/><a xlink:href='#fixflex.reviews___v'><text id='fixflex&#46;reviews&#46;&#95;&#95;v' x='307' y='919'>&#95;&#95;v</text><title>&#10697;  __v
+     * int</title></a>
+<text x='397' y='916' text-anchor='end' class='colType'>&#35;</text>
+<!-- == Table 'tasks' == -->
+<rect id='depict_fixflex&#46;tasks' class='entity' style='stroke:#81B976' x='480' y='72' width='144' height='400' />
+<rect x='480' y='72' width='144' height='28' style='stroke-width:0; fill:#F2FAF1'/>
+<line class='topLine' style='stroke:#2C9817;' stroke-linecap='round' x1='480' y1='72' x2='624' y2='72'/>
+<a xlink:href='#fixflex.tasks'><text x='534' y='91' >tasks</text><title>Collection fixflex.tasks</title></a>
+  <use id='nn' x='482' y='109' xlink:href='#nn'/><use id='pk' x='482' y='108' xlink:href='#pk'><title>&#x1F511;  Pk _id_ ( _id ) </title></use><a xlink:href='#fixflex.tasks__id'><text id='fixflex&#46;tasks&#46;&#95;id' x='499' y='119' onmouseover="hghl(['reviews_fk_reviews_tasks','fixflex.reviews.taskId','transactions_fk_transactions_tasks','fixflex.transactions.taskId'])" onmouseout="uhghl(['reviews_fk_reviews_tasks','fixflex.reviews.taskId','transactions_fk_transactions_tasks','fixflex.transactions.taskId'])">&#95;id</text><title>&#10697;  _id
+     * objectid
+ &#8601; reviews( _id )
+ &#8601; transactions( _id )</title></a>
+<a xlink:href='#fixflex.tasks._id'><use id='ref' x='612' y='108' xlink:href='#ref'/><title>&#x1F517;  Referred by reviews ( taskId -&gt; _id ) 
+Referred by transactions ( taskId -&gt; _id ) </title></a>
+  <use id='nn' x='482' y='125' xlink:href='#nn'/><a xlink:href='#fixflex.tasks_userId'><text id='fixflex&#46;tasks&#46;userId' x='499' y='135' onmouseover="hghl(['tasks_fk_tasks_users','fixflex.users._id'])" onmouseout="uhghl(['tasks_fk_tasks_users','fixflex.users._id'])">userId</text><title>&#10697;  userId
+     * string
+ &#8599; tasks( _id )</title></a>
+<a xlink:href='#fixflex.tasks.userId'><use id='fk' x='612' y='124' xlink:href='#fk'/><title>&#x1F517;  References users ( userId -&gt; _id ) </title></a>
+  <use id='nn' x='482' y='141' xlink:href='#nn'/><a xlink:href='#fixflex.tasks_dueDate'><text id='fixflex&#46;tasks&#46;dueDate' x='499' y='151' onmouseover="hghl(['dueDate_JSon'])" onmouseout="uhghl(['dueDate_JSon'])">dueDate</text><title>&#10697;  dueDate
+     * object
+ &#8601; dueDate( dueDate )</title></a>
+  <use id='nn' x='482' y='157' xlink:href='#nn'/><a xlink:href='#fixflex.tasks_time'><text id='fixflex&#46;tasks&#46;time' x='499' y='167'>time</text><title>&#10697;  time
+     * array</title></a>
+<text x='621' y='164' text-anchor='end' class='colType'>&#91;&#93;</text>  <use id='nn' x='482' y='173' xlink:href='#nn'/><a xlink:href='#fixflex.tasks_title'><text id='fixflex&#46;tasks&#46;title' x='499' y='183'>title</text><title>&#10697;  title
+     * string</title></a>
+<text x='621' y='180' text-anchor='end' class='colType'>t</text>  <use id='nn' x='482' y='189' xlink:href='#nn'/><a xlink:href='#fixflex.tasks_details'><text id='fixflex&#46;tasks&#46;details' x='499' y='199'>details</text><title>&#10697;  details
+     * string</title></a>
+<text x='621' y='196' text-anchor='end' class='colType'>t</text>  <use id='nn' x='482' y='205' xlink:href='#nn'/><a xlink:href='#fixflex.tasks_imageCover'><text id='fixflex&#46;tasks&#46;imageCover' x='499' y='215' onmouseover="hghl(['imageCover_JSon'])" onmouseout="uhghl(['imageCover_JSon'])">imageCover</text><title>&#10697;  imageCover
+     * object
+ &#8601; imageCover( imageCover )</title></a>
+  <use id='nn' x='482' y='221' xlink:href='#nn'/><a xlink:href='#fixflex.tasks_categoryId'><text id='fixflex&#46;tasks&#46;categoryId' x='499' y='231' onmouseover="hghl(['tasks_fk_tasks_categories','fixflex.categories._id'])" onmouseout="uhghl(['tasks_fk_tasks_categories','fixflex.categories._id'])">categoryId</text><title>&#10697;  categoryId
+     * string
+ &#8599; tasks( _id )</title></a>
+<a xlink:href='#fixflex.tasks.categoryId'><use id='fk' x='612' y='220' xlink:href='#fk'/><title>&#x1F517;  References categories ( categoryId -&gt; _id ) </title></a>
+  <use id='nn' x='482' y='237' xlink:href='#nn'/><a xlink:href='#fixflex.tasks_status'><text id='fixflex&#46;tasks&#46;status' x='499' y='247'>status</text><title>&#10697;  status
+     * string</title></a>
+<text x='621' y='244' text-anchor='end' class='colType'>t</text>  <use id='nn' x='482' y='253' xlink:href='#nn'/><use id='idx' x='482' y='252' xlink:href='#idx'><title>&#x1F50D;  location_2dsphere ( location ) </title></use><a xlink:href='#fixflex.tasks_location'><text id='fixflex&#46;tasks&#46;location' x='499' y='263' onmouseover="hghl(['location_JSon'])" onmouseout="uhghl(['location_JSon'])">location</text><title>&#10697;  location
+     * object
+ &#8601; location( location )</title></a>
+  <a xlink:href='#fixflex.tasks_city'><text id='fixflex&#46;tasks&#46;city' x='499' y='279'>city</text><title>&#10697;  city
+     string</title></a>
+<text x='621' y='276' text-anchor='end' class='colType'>t</text>  <use id='nn' x='482' y='285' xlink:href='#nn'/><a xlink:href='#fixflex.tasks_budget'><text id='fixflex&#46;tasks&#46;budget' x='499' y='295'>budget</text><title>&#10697;  budget
+     * int</title></a>
+<text x='621' y='292' text-anchor='end' class='colType'>&#35;</text>  <use id='nn' x='482' y='301' xlink:href='#nn'/><a xlink:href='#fixflex.tasks_offers'><text id='fixflex&#46;tasks&#46;offers' x='499' y='311' onmouseover="hghl(['tasks_fk_tasks_offers','fixflex.offers._id'])" onmouseout="uhghl(['tasks_fk_tasks_offers','fixflex.offers._id'])">offers</text><title>&#10697;  offers
+     * array[string]
+ &#8599; tasks( _id )</title></a>
+<a xlink:href='#fixflex.tasks.offers'><use id='fk' x='612' y='300' xlink:href='#fk'/><title>&#x1F517;  References offers ( offers -&gt; _id ) </title></a>
+  <use id='nn' x='482' y='317' xlink:href='#nn'/><a xlink:href='#fixflex.tasks_paymentMethod'><text id='fixflex&#46;tasks&#46;paymentMethod' x='499' y='327'>paymentMethod</text><title>&#10697;  paymentMethod
+     * string</title></a>
+<text x='621' y='324' text-anchor='end' class='colType'>t</text>  <use id='nn' x='482' y='333' xlink:href='#nn'/><a xlink:href='#fixflex.tasks_paid'><text id='fixflex&#46;tasks&#46;paid' x='499' y='343'>paid</text><title>&#10697;  paid
+     * boolean</title></a>
+<text x='621' y='340' text-anchor='end' class='colType'>t</text>  <a xlink:href='#fixflex.tasks_images'><text id='fixflex&#46;tasks&#46;images' x='499' y='359' onmouseover="hghl(['images_JSon'])" onmouseout="uhghl(['images_JSon'])">images</text><title>&#10697;  images
+     array[object]
+ &#8601; images( images )</title></a>
+  <use id='nn' x='482' y='365' xlink:href='#nn'/><a xlink:href='#fixflex.tasks_createdAt'><text id='fixflex&#46;tasks&#46;createdAt' x='499' y='375'>createdAt</text><title>&#10697;  createdAt
+     * date</title></a>
+<text x='621' y='372' text-anchor='end' class='colType'>d</text>  <use id='nn' x='482' y='381' xlink:href='#nn'/><a xlink:href='#fixflex.tasks_updatedAt'><text id='fixflex&#46;tasks&#46;updatedAt' x='499' y='391'>updatedAt</text><title>&#10697;  updatedAt
+     * date</title></a>
+<text x='621' y='388' text-anchor='end' class='colType'>d</text>  <use id='nn' x='482' y='397' xlink:href='#nn'/><a xlink:href='#fixflex.tasks___v'><text id='fixflex&#46;tasks&#46;&#95;&#95;v' x='499' y='407'>&#95;&#95;v</text><title>&#10697;  __v
+     * int</title></a>
+<text x='621' y='404' text-anchor='end' class='colType'>&#35;</text>  <a xlink:href='#fixflex.tasks_acceptedOffer'><text id='fixflex&#46;tasks&#46;acceptedOffer' x='499' y='423' onmouseover="hghl(['tasks_fk_tasks_offers_0','fixflex.offers._id'])" onmouseout="uhghl(['tasks_fk_tasks_offers_0','fixflex.offers._id'])">acceptedOffer</text><title>&#10697;  acceptedOffer
+     string
+ &#8599; tasks( _id )</title></a>
+<a xlink:href='#fixflex.tasks.acceptedOffer'><use id='fk' x='612' y='412' xlink:href='#fk'/><title>&#x1F517;  References offers ( acceptedOffer -&gt; _id ) </title></a>
+  <a xlink:href='#fixflex.tasks_commission'><text id='fixflex&#46;tasks&#46;commission' x='499' y='439'>commission</text><title>&#10697;  commission
+     object</title></a>
+  <a xlink:href='#fixflex.tasks_taskerId'><text id='fixflex&#46;tasks&#46;taskerId' x='499' y='455' onmouseover="hghl(['tasks_fk_tasks_taskers','fixflex.taskers._id'])" onmouseout="uhghl(['tasks_fk_tasks_taskers','fixflex.taskers._id'])">taskerId</text><title>&#10697;  taskerId
+     string
+ &#8599; tasks( _id )</title></a>
+<a xlink:href='#fixflex.tasks.taskerId'><use id='fk' x='612' y='444' xlink:href='#fk'/><title>&#x1F517;  References taskers ( taskerId -&gt; _id ) </title></a>
+
+<!-- == Table 'transactions' == -->
+<rect id='depict_fixflex&#46;transactions' class='entity' style='stroke:#7690B9' x='1440' y='88' width='128' height='240' />
+<rect x='1440' y='88' width='128' height='28' style='stroke-width:0; fill:#F1F4FA'/>
+<line class='topLine' style='stroke:#174998;' stroke-linecap='round' x1='1440' y1='88' x2='1568' y2='88'/>
+<a xlink:href='#fixflex.transactions'><text x='1466' y='107' >transactions</text><title>Collection fixflex.transactions</title></a>
+  <use id='nn' x='1442' y='125' xlink:href='#nn'/><use id='pk' x='1442' y='124' xlink:href='#pk'><title>&#x1F511;  Pk _id_ ( _id ) </title></use><a xlink:href='#fixflex.transactions__id'><text id='fixflex&#46;transactions&#46;&#95;id' x='1459' y='135'>&#95;id</text><title>&#10697;  _id
+     * objectid</title></a>
+  <use id='nn' x='1442' y='141' xlink:href='#nn'/><use id='unq' x='1442' y='140' xlink:href='#unq'><title>&#x1F50D;  Unq transactionId_1 ( transactionId ) </title></use><a xlink:href='#fixflex.transactions_transactionId'><text id='fixflex&#46;transactions&#46;transactionId' x='1459' y='151'>transactionId</text><title>&#10697;  transactionId
+     * string</title></a>
+<text x='1565' y='148' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1442' y='157' xlink:href='#nn'/><a xlink:href='#fixflex.transactions_amount'><text id='fixflex&#46;transactions&#46;amount' x='1459' y='167'>amount</text><title>&#10697;  amount
+     * int</title></a>
+<text x='1565' y='164' text-anchor='end' class='colType'>&#35;</text>  <use id='nn' x='1442' y='173' xlink:href='#nn'/><a xlink:href='#fixflex.transactions_transactionType'><text id='fixflex&#46;transactions&#46;transactionType' x='1459' y='183'>transactionType</text><title>&#10697;  transactionType
+     * string</title></a>
+<text x='1565' y='180' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1442' y='189' xlink:href='#nn'/><a xlink:href='#fixflex.transactions_pinding'><text id='fixflex&#46;transactions&#46;pinding' x='1459' y='199'>pinding</text><title>&#10697;  pinding
+     * boolean</title></a>
+<text x='1565' y='196' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1442' y='205' xlink:href='#nn'/><a xlink:href='#fixflex.transactions_success'><text id='fixflex&#46;transactions&#46;success' x='1459' y='215'>success</text><title>&#10697;  success
+     * boolean</title></a>
+<text x='1565' y='212' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1442' y='221' xlink:href='#nn'/><a xlink:href='#fixflex.transactions_orderId'><text id='fixflex&#46;transactions&#46;orderId' x='1459' y='231'>orderId</text><title>&#10697;  orderId
+     * string</title></a>
+<text x='1565' y='228' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1442' y='237' xlink:href='#nn'/><a xlink:href='#fixflex.transactions_taskId'><text id='fixflex&#46;transactions&#46;taskId' x='1459' y='247' onmouseover="hghl(['transactions_fk_transactions_tasks','fixflex.tasks._id'])" onmouseout="uhghl(['transactions_fk_transactions_tasks','fixflex.tasks._id'])">taskId</text><title>&#10697;  taskId
+     * string
+ &#8599; transactions( _id )</title></a>
+<a xlink:href='#fixflex.transactions.taskId'><use id='fk' x='1556' y='236' xlink:href='#fk'/><title>&#x1F517;  References tasks ( taskId -&gt; _id ) </title></a>
+  <use id='nn' x='1442' y='253' xlink:href='#nn'/><a xlink:href='#fixflex.transactions_createdAt'><text id='fixflex&#46;transactions&#46;createdAt' x='1459' y='263'>createdAt</text><title>&#10697;  createdAt
+     * date</title></a>
+<text x='1565' y='260' text-anchor='end' class='colType'>d</text>  <use id='nn' x='1442' y='269' xlink:href='#nn'/><a xlink:href='#fixflex.transactions_updatedAt'><text id='fixflex&#46;transactions&#46;updatedAt' x='1459' y='279'>updatedAt</text><title>&#10697;  updatedAt
+     * date</title></a>
+<text x='1565' y='276' text-anchor='end' class='colType'>d</text>  <use id='nn' x='1442' y='285' xlink:href='#nn'/><a xlink:href='#fixflex.transactions___v'><text id='fixflex&#46;transactions&#46;&#95;&#95;v' x='1459' y='295'>&#95;&#95;v</text><title>&#10697;  __v
+     * int</title></a>
+<text x='1565' y='292' text-anchor='end' class='colType'>&#35;</text>  <a xlink:href='#fixflex.transactions_taskerId'><text id='fixflex&#46;transactions&#46;taskerId' x='1459' y='311' onmouseover="hghl(['transactions_fk_transactions_taskers','fixflex.taskers._id'])" onmouseout="uhghl(['transactions_fk_transactions_taskers','fixflex.taskers._id'])">taskerId</text><title>&#10697;  taskerId
+     string
+ &#8599; transactions( _id )</title></a>
+<a xlink:href='#fixflex.transactions.taskerId'><use id='fk' x='1556' y='300' xlink:href='#fk'/><title>&#x1F517;  References taskers ( taskerId -&gt; _id ) </title></a>
+
+<!-- == Table 'log' == -->
+<rect id='depict_fixflex&#46;log' class='entity' style='stroke:#7690B9' x='1360' y='680' width='112' height='128' />
+<rect x='1360' y='680' width='112' height='28' style='stroke-width:0; fill:#F1F4FA'/>
+<line class='topLine' style='stroke:#174998;' stroke-linecap='round' x1='1360' y1='680' x2='1472' y2='680'/>
+<a xlink:href='#fixflex.log'><text x='1403' y='699' >log</text><title>Collection fixflex.log</title></a>
+  <use id='nn' x='1362' y='717' xlink:href='#nn'/><use id='pk' x='1362' y='716' xlink:href='#pk'><title>&#x1F511;  Pk _id_ ( _id ) </title></use><a xlink:href='#fixflex.log__id'><text id='fixflex&#46;log&#46;&#95;id' x='1379' y='727'>&#95;id</text><title>&#10697;  _id
+     * objectid</title></a>
+  <use id='nn' x='1362' y='733' xlink:href='#nn'/><use id='idx' x='1362' y='732' xlink:href='#idx'><title>&#x1F50D;  timestamp_1 ( timestamp ) </title></use><a xlink:href='#fixflex.log_timestamp'><text id='fixflex&#46;log&#46;timestamp' x='1379' y='743'>timestamp</text><title>&#10697;  timestamp
+     * date</title></a>
+<text x='1469' y='740' text-anchor='end' class='colType'>d</text>  <use id='nn' x='1362' y='749' xlink:href='#nn'/><a xlink:href='#fixflex.log_level'><text id='fixflex&#46;log&#46;level' x='1379' y='759'>level</text><title>&#10697;  level
+     * string</title></a>
+<text x='1469' y='756' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1362' y='765' xlink:href='#nn'/><a xlink:href='#fixflex.log_message'><text id='fixflex&#46;log&#46;message' x='1379' y='775'>message</text><title>&#10697;  message
+     * string</title></a>
+<text x='1469' y='772' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1362' y='781' xlink:href='#nn'/><a xlink:href='#fixflex.log_meta'><text id='fixflex&#46;log&#46;meta' x='1379' y='791'>meta</text><title>&#10697;  meta
+     * string</title></a>
+<text x='1469' y='788' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'coupons' == -->
+<rect id='depict_fixflex&#46;coupons' class='entity' style='stroke:#7690B9' x='1104' y='696' width='128' height='224' />
+<rect x='1104' y='696' width='128' height='28' style='stroke-width:0; fill:#F1F4FA'/>
+<line class='topLine' style='stroke:#174998;' stroke-linecap='round' x1='1104' y1='696' x2='1232' y2='696'/>
+<a xlink:href='#fixflex.coupons'><text x='1140' y='715' >coupons</text><title>Collection fixflex.coupons</title></a>
+  <use id='nn' x='1106' y='733' xlink:href='#nn'/><use id='pk' x='1106' y='732' xlink:href='#pk'><title>&#x1F511;  Pk _id_ ( _id ) </title></use><a xlink:href='#fixflex.coupons__id'><text id='fixflex&#46;coupons&#46;&#95;id' x='1123' y='743'>&#95;id</text><title>&#10697;  _id
+     * objectid</title></a>
+  <use id='nn' x='1106' y='749' xlink:href='#nn'/><use id='unq' x='1106' y='748' xlink:href='#unq'><title>&#x1F50D;  Unq code_1 ( code ) </title></use><a xlink:href='#fixflex.coupons_code'><text id='fixflex&#46;coupons&#46;code' x='1123' y='759'>code</text><title>&#10697;  code
+     * string</title></a>
+<text x='1229' y='756' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1106' y='765' xlink:href='#nn'/><a xlink:href='#fixflex.coupons_type'><text id='fixflex&#46;coupons&#46;type' x='1123' y='775'>type</text><title>&#10697;  type
+     * string</title></a>
+<text x='1229' y='772' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1106' y='781' xlink:href='#nn'/><a xlink:href='#fixflex.coupons_value'><text id='fixflex&#46;coupons&#46;value' x='1123' y='791'>value</text><title>&#10697;  value
+     * int</title></a>
+<text x='1229' y='788' text-anchor='end' class='colType'>&#35;</text>  <use id='nn' x='1106' y='797' xlink:href='#nn'/><a xlink:href='#fixflex.coupons_expirationDate'><text id='fixflex&#46;coupons&#46;expirationDate' x='1123' y='807'>expirationDate</text><title>&#10697;  expirationDate
+     * date</title></a>
+<text x='1229' y='804' text-anchor='end' class='colType'>d</text>  <use id='nn' x='1106' y='813' xlink:href='#nn'/><a xlink:href='#fixflex.coupons_maxUses'><text id='fixflex&#46;coupons&#46;maxUses' x='1123' y='823'>maxUses</text><title>&#10697;  maxUses
+     * int</title></a>
+<text x='1229' y='820' text-anchor='end' class='colType'>&#35;</text>  <use id='nn' x='1106' y='829' xlink:href='#nn'/><a xlink:href='#fixflex.coupons_remainingUses'><text id='fixflex&#46;coupons&#46;remainingUses' x='1123' y='839'>remainingUses</text><title>&#10697;  remainingUses
+     * int</title></a>
+<text x='1229' y='836' text-anchor='end' class='colType'>&#35;</text>  <use id='nn' x='1106' y='845' xlink:href='#nn'/><a xlink:href='#fixflex.coupons_createdBy'><text id='fixflex&#46;coupons&#46;createdBy' x='1123' y='855'>createdBy</text><title>&#10697;  createdBy
+     * string</title></a>
+<text x='1229' y='852' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1106' y='861' xlink:href='#nn'/><a xlink:href='#fixflex.coupons_createdAt'><text id='fixflex&#46;coupons&#46;createdAt' x='1123' y='871'>createdAt</text><title>&#10697;  createdAt
+     * date</title></a>
+<text x='1229' y='868' text-anchor='end' class='colType'>d</text>  <use id='nn' x='1106' y='877' xlink:href='#nn'/><a xlink:href='#fixflex.coupons_updatedAt'><text id='fixflex&#46;coupons&#46;updatedAt' x='1123' y='887'>updatedAt</text><title>&#10697;  updatedAt
+     * date</title></a>
+<text x='1229' y='884' text-anchor='end' class='colType'>d</text>  <use id='nn' x='1106' y='893' xlink:href='#nn'/><a xlink:href='#fixflex.coupons___v'><text id='fixflex&#46;coupons&#46;&#95;&#95;v' x='1123' y='903'>&#95;&#95;v</text><title>&#10697;  __v
+     * int</title></a>
+<text x='1229' y='900' text-anchor='end' class='colType'>&#35;</text>
+<!-- == Table 'location' == -->
+<rect id='depict_location' class='entity' style='stroke:#7676B9' x='784' y='632' width='112' height='96' />
+<rect x='784' y='632' width='112' height='28' style='stroke-width:0; fill:#F1F1FA'/>
+<line class='topLine' style='stroke:#171798;' stroke-linecap='round' x1='784' y1='632' x2='896' y2='632'/>
+<a xlink:href='#location'><text x='814' y='651' >location</text><title>Sub-document location</title></a>
+  <use id='nn' x='786' y='669' xlink:href='#nn'/><a xlink:href='#location_coordinates'><text id='location&#46;coordinates' x='803' y='679'>coordinates</text><title>&#10697;  coordinates
+     * array[double]</title></a>
+<text x='893' y='676' text-anchor='end' class='colType'>&#91;&#93;</text>  <use id='nn' x='786' y='685' xlink:href='#nn'/><a xlink:href='#location_type'><text id='location&#46;type' x='803' y='695'>type</text><title>&#10697;  type
+     * string</title></a>
+<text x='893' y='692' text-anchor='end' class='colType'>t</text>  <use id='nn' x='786' y='701' xlink:href='#nn'/><a xlink:href='#location_radius'><text id='location&#46;radius' x='803' y='711'>radius</text><title>&#10697;  radius
+     * int</title></a>
+<text x='893' y='708' text-anchor='end' class='colType'>&#35;</text>
+<!-- == Table 'users' == -->
+<rect id='depict_fixflex&#46;users' class='entity' style='stroke:#8D76B9' x='1088' y='184' width='256' height='352' />
+<rect x='1088' y='184' width='256' height='28' style='stroke-width:0; fill:#F4F1FA'/>
+<line class='topLine' style='stroke:#441798;' stroke-linecap='round' x1='1088' y1='184' x2='1344' y2='184'/>
+<a xlink:href='#fixflex.users'><text x='1198' y='203' >users</text><title>Collection fixflex.users</title></a>
+  <use id='nn' x='1090' y='221' xlink:href='#nn'/><use id='pk' x='1090' y='220' xlink:href='#pk'><title>&#x1F511;  Pk _id_ ( _id ) </title></use><a xlink:href='#fixflex.users__id'><text id='fixflex&#46;users&#46;&#95;id' x='1107' y='231' onmouseover="hghl(['reviews_fk_reviews_users','fixflex.reviews.userId','taskers_fk_taskers_users','fixflex.taskers.userId','tasks_fk_tasks_users','fixflex.tasks.userId'])" onmouseout="uhghl(['reviews_fk_reviews_users','fixflex.reviews.userId','taskers_fk_taskers_users','fixflex.taskers.userId','tasks_fk_tasks_users','fixflex.tasks.userId'])">&#95;id</text><title>&#10697;  _id
+     * objectid
+ &#8601; reviews( _id )
+ &#8601; taskers( _id )
+ &#8601; tasks( _id )</title></a>
+<a xlink:href='#fixflex.users._id'><use id='ref' x='1332' y='220' xlink:href='#ref'/><title>&#x1F517;  Referred by reviews ( userId -&gt; _id ) 
+Referred by taskers ( userId -&gt; _id ) 
+Referred by tasks ( userId -&gt; _id ) </title></a>
+  <use id='nn' x='1090' y='237' xlink:href='#nn'/><a xlink:href='#fixflex.users_firstName'><text id='fixflex&#46;users&#46;firstName' x='1107' y='247'>firstName</text><title>&#10697;  firstName
+     * string</title></a>
+<text x='1341' y='244' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1090' y='253' xlink:href='#nn'/><a xlink:href='#fixflex.users_lastName'><text id='fixflex&#46;users&#46;lastName' x='1107' y='263'>lastName</text><title>&#10697;  lastName
+     * string</title></a>
+<text x='1341' y='260' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1090' y='269' xlink:href='#nn'/><use id='unq' x='1090' y='268' xlink:href='#unq'><title>&#x1F50D;  Unq email_1 ( email ) </title></use><a xlink:href='#fixflex.users_email'><text id='fixflex&#46;users&#46;email' x='1107' y='279'>email</text><title>&#10697;  email
+     * string</title></a>
+<text x='1341' y='276' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1090' y='285' xlink:href='#nn'/><a xlink:href='#fixflex.users_emailVerified'><text id='fixflex&#46;users&#46;emailVerified' x='1107' y='295'>emailVerified</text><title>&#10697;  emailVerified
+     * boolean</title></a>
+<text x='1341' y='292' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1090' y='301' xlink:href='#nn'/><a xlink:href='#fixflex.users_password'><text id='fixflex&#46;users&#46;password' x='1107' y='311'>password</text><title>&#10697;  password
+     * string</title></a>
+<text x='1341' y='308' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1090' y='317' xlink:href='#nn'/><a xlink:href='#fixflex.users_profilePicture'><text id='fixflex&#46;users&#46;profilePicture' x='1107' y='327' onmouseover="hghl(['profilePicture_JSon'])" onmouseout="uhghl(['profilePicture_JSon'])">profilePicture</text><title>&#10697;  profilePicture
+     * object
+ &#8601; profilePicture( profilePicture )</title></a>
+  <use id='nn' x='1090' y='333' xlink:href='#nn'/><a xlink:href='#fixflex.users_role'><text id='fixflex&#46;users&#46;role' x='1107' y='343'>role</text><title>&#10697;  role
+     * string</title></a>
+<text x='1341' y='340' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1090' y='349' xlink:href='#nn'/><a xlink:href='#fixflex.users_active'><text id='fixflex&#46;users&#46;active' x='1107' y='359'>active</text><title>&#10697;  active
+     * boolean</title></a>
+<text x='1341' y='356' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1090' y='365' xlink:href='#nn'/><a xlink:href='#fixflex.users_phoneNumVerified'><text id='fixflex&#46;users&#46;phoneNumVerified' x='1107' y='375'>phoneNumVerified</text><title>&#10697;  phoneNumVerified
+     * boolean</title></a>
+<text x='1341' y='372' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1090' y='381' xlink:href='#nn'/><a xlink:href='#fixflex.users_createdAt'><text id='fixflex&#46;users&#46;createdAt' x='1107' y='391'>createdAt</text><title>&#10697;  createdAt
+     * date</title></a>
+<text x='1341' y='388' text-anchor='end' class='colType'>d</text>  <use id='nn' x='1090' y='397' xlink:href='#nn'/><a xlink:href='#fixflex.users_updatedAt'><text id='fixflex&#46;users&#46;updatedAt' x='1107' y='407'>updatedAt</text><title>&#10697;  updatedAt
+     * date</title></a>
+<text x='1341' y='404' text-anchor='end' class='colType'>d</text>  <use id='nn' x='1090' y='413' xlink:href='#nn'/><a xlink:href='#fixflex.users___v'><text id='fixflex&#46;users&#46;&#95;&#95;v' x='1107' y='423'>&#95;&#95;v</text><title>&#10697;  __v
+     * int</title></a>
+<text x='1341' y='420' text-anchor='end' class='colType'>&#35;</text>  <use id='unq' x='1090' y='428' xlink:href='#unq'><title>&#x1F50D;  Unq phoneNumber_1 ( phoneNumber ) </title></use><a xlink:href='#fixflex.users_phoneNumber'><text id='fixflex&#46;users&#46;phoneNumber' x='1107' y='439'>phoneNumber</text><title>&#10697;  phoneNumber
+     string</title></a>
+<text x='1341' y='436' text-anchor='end' class='colType'>t</text>  <a xlink:href='#fixflex.users_phoneNumVerificationCode'><text id='fixflex&#46;users&#46;phoneNumVerificationCode' x='1107' y='455'>phoneNumVerificationCode</text><title>&#10697;  phoneNumVerificationCode
+     string</title></a>
+<text x='1341' y='452' text-anchor='end' class='colType'>t</text>  <a xlink:href='#fixflex.users_phoneNumVerificationCodeExpiration'><text id='fixflex&#46;users&#46;phoneNumVerificationCodeExpiration' x='1107' y='471'>phoneNumVerificationCodeExpiration</text><title>&#10697;  phoneNumVerificationCodeExpiration
+     date</title></a>
+<text x='1341' y='468' text-anchor='end' class='colType'>d</text>  <a xlink:href='#fixflex.users_passwordResetCode'><text id='fixflex&#46;users&#46;passwordResetCode' x='1107' y='487'>passwordResetCode</text><title>&#10697;  passwordResetCode
+     string</title></a>
+<text x='1341' y='484' text-anchor='end' class='colType'>t</text>  <a xlink:href='#fixflex.users_passwordResetCodeExpiration'><text id='fixflex&#46;users&#46;passwordResetCodeExpiration' x='1107' y='503'>passwordResetCodeExpiration</text><title>&#10697;  passwordResetCodeExpiration
+     date</title></a>
+<text x='1341' y='500' text-anchor='end' class='colType'>d</text>  <a xlink:href='#fixflex.users_passwordResetVerified'><text id='fixflex&#46;users&#46;passwordResetVerified' x='1107' y='519'>passwordResetVerified</text><title>&#10697;  passwordResetVerified
+     boolean</title></a>
+<text x='1341' y='516' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'profilePicture' == -->
+<rect id='depict_profilePicture' class='entity' style='stroke:#8D76B9' x='1408' y='408' width='96' height='80' />
+<rect x='1408' y='408' width='96' height='28' style='stroke-width:0; fill:#F4F1FA'/>
+<line class='topLine' style='stroke:#441798;' stroke-linecap='round' x1='1408' y1='408' x2='1504' y2='408'/>
+<a xlink:href='#profilePicture'><text x='1414' y='427' >profilePicture</text><title>Sub-document profilePicture</title></a>
+  <use id='nn' x='1410' y='445' xlink:href='#nn'/><a xlink:href='#profilePicture_url'><text id='profilePicture&#46;url' x='1427' y='455'>url</text><title>&#10697;  url
+     * string</title></a>
+<text x='1501' y='452' text-anchor='end' class='colType'>t</text>  <use id='nn' x='1410' y='461' xlink:href='#nn'/><a xlink:href='#profilePicture_publicId'><text id='profilePicture&#46;publicId' x='1427' y='471'>publicId</text><title>&#10697;  publicId
+     * string</title></a>
+<text x='1501' y='468' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'taskers' == -->
+<rect id='depict_fixflex&#46;taskers' class='entity' style='stroke:#7676B9' x='800' y='296' width='160' height='304' />
+<rect x='800' y='296' width='160' height='28' style='stroke-width:0; fill:#F1F1FA'/>
+<line class='topLine' style='stroke:#171798;' stroke-linecap='round' x1='800' y1='296' x2='960' y2='296'/>
+<a xlink:href='#fixflex.taskers'><text x='857' y='315' >taskers</text><title>Collection fixflex.taskers</title></a>
+  <use id='nn' x='802' y='333' xlink:href='#nn'/><use id='pk' x='802' y='332' xlink:href='#pk'><title>&#x1F511;  Pk _id_ ( _id ) </title></use><a xlink:href='#fixflex.taskers__id'><text id='fixflex&#46;taskers&#46;&#95;id' x='819' y='343' onmouseover="hghl(['reviews_fk_reviews_taskers','fixflex.reviews.taskerId','tasks_fk_tasks_taskers','fixflex.tasks.taskerId','transactions_fk_transactions_taskers','fixflex.transactions.taskerId'])" onmouseout="uhghl(['reviews_fk_reviews_taskers','fixflex.reviews.taskerId','tasks_fk_tasks_taskers','fixflex.tasks.taskerId','transactions_fk_transactions_taskers','fixflex.transactions.taskerId'])">&#95;id</text><title>&#10697;  _id
+     * objectid
+ &#8601; reviews( _id )
+ &#8601; tasks( _id )
+ &#8601; transactions( _id )</title></a>
+<a xlink:href='#fixflex.taskers._id'><use id='ref' x='948' y='332' xlink:href='#ref'/><title>&#x1F517;  Referred by reviews ( taskerId -&gt; _id ) 
+Referred by tasks ( taskerId -&gt; _id ) 
+Referred by transactions ( taskerId -&gt; _id ) </title></a>
+  <use id='nn' x='802' y='349' xlink:href='#nn'/><use id='unq' x='802' y='348' xlink:href='#unq'><title>&#x1F50D;  Unq userId_1 ( userId ) </title></use><a xlink:href='#fixflex.taskers_userId'><text id='fixflex&#46;taskers&#46;userId' x='819' y='359' onmouseover="hghl(['taskers_fk_taskers_users','fixflex.users._id'])" onmouseout="uhghl(['taskers_fk_taskers_users','fixflex.users._id'])">userId</text><title>&#10697;  userId
+     * string
+ &#8599; taskers( _id )</title></a>
+<a xlink:href='#fixflex.taskers.userId'><use id='fk' x='948' y='348' xlink:href='#fk'/><title>&#x1F517;  References users ( userId -&gt; _id ) </title></a>
+  <use id='nn' x='802' y='365' xlink:href='#nn'/><a xlink:href='#fixflex.taskers_categories'><text id='fixflex&#46;taskers&#46;categories' x='819' y='375' onmouseover="hghl(['taskers_fk_taskers_categories','fixflex.categories._id'])" onmouseout="uhghl(['taskers_fk_taskers_categories','fixflex.categories._id'])">categories</text><title>&#10697;  categories
+     * array[string]
+ &#8599; taskers( _id )</title></a>
+<a xlink:href='#fixflex.taskers.categories'><use id='fk' x='948' y='364' xlink:href='#fk'/><title>&#x1F517;  References categories ( categories -&gt; _id ) </title></a>
+  <use id='nn' x='802' y='381' xlink:href='#nn'/><a xlink:href='#fixflex.taskers_ratingAverage'><text id='fixflex&#46;taskers&#46;ratingAverage' x='819' y='391'>ratingAverage</text><title>&#10697;  ratingAverage
+     * object</title></a>
+  <use id='nn' x='802' y='397' xlink:href='#nn'/><a xlink:href='#fixflex.taskers_ratingQuantity'><text id='fixflex&#46;taskers&#46;ratingQuantity' x='819' y='407'>ratingQuantity</text><title>&#10697;  ratingQuantity
+     * int</title></a>
+<text x='957' y='404' text-anchor='end' class='colType'>&#35;</text>  <use id='nn' x='802' y='413' xlink:href='#nn'/><use id='idx' x='802' y='412' xlink:href='#idx'><title>&#x1F50D;  location_2dsphere ( location ) </title></use><a xlink:href='#fixflex.taskers_location'><text id='fixflex&#46;taskers&#46;location' x='819' y='423' onmouseover="hghl(['location_JSon'])" onmouseout="uhghl(['location_JSon'])">location</text><title>&#10697;  location
+     * object
+ &#8601; location( location )</title></a>
+  <use id='nn' x='802' y='429' xlink:href='#nn'/><a xlink:href='#fixflex.taskers_notPaidTasks'><text id='fixflex&#46;taskers&#46;notPaidTasks' x='819' y='439'>notPaidTasks</text><title>&#10697;  notPaidTasks
+     * array</title></a>
+<text x='957' y='436' text-anchor='end' class='colType'>&#91;&#93;</text>  <use id='nn' x='802' y='445' xlink:href='#nn'/><a xlink:href='#fixflex.taskers_totalCanceledTasks'><text id='fixflex&#46;taskers&#46;totalCanceledTasks' x='819' y='455'>totalCanceledTasks</text><title>&#10697;  totalCanceledTasks
+     * int</title></a>
+<text x='957' y='452' text-anchor='end' class='colType'>&#35;</text>  <use id='nn' x='802' y='461' xlink:href='#nn'/><a xlink:href='#fixflex.taskers_totalEarnings'><text id='fixflex&#46;taskers&#46;totalEarnings' x='819' y='471'>totalEarnings</text><title>&#10697;  totalEarnings
+     * int</title></a>
+<text x='957' y='468' text-anchor='end' class='colType'>&#35;</text>  <use id='nn' x='802' y='477' xlink:href='#nn'/><a xlink:href='#fixflex.taskers_netEarnings'><text id='fixflex&#46;taskers&#46;netEarnings' x='819' y='487'>netEarnings</text><title>&#10697;  netEarnings
+     * object</title></a>
+  <use id='nn' x='802' y='493' xlink:href='#nn'/><a xlink:href='#fixflex.taskers_completedTasks'><text id='fixflex&#46;taskers&#46;completedTasks' x='819' y='503'>completedTasks</text><title>&#10697;  completedTasks
+     * array</title></a>
+<text x='957' y='500' text-anchor='end' class='colType'>&#91;&#93;</text>  <use id='nn' x='802' y='509' xlink:href='#nn'/><a xlink:href='#fixflex.taskers_commissionRate'><text id='fixflex&#46;taskers&#46;commissionRate' x='819' y='519'>commissionRate</text><title>&#10697;  commissionRate
+     * double</title></a>
+<text x='957' y='516' text-anchor='end' class='colType'>&#35;</text>  <use id='nn' x='802' y='525' xlink:href='#nn'/><a xlink:href='#fixflex.taskers_createdAt'><text id='fixflex&#46;taskers&#46;createdAt' x='819' y='535'>createdAt</text><title>&#10697;  createdAt
+     * date</title></a>
+<text x='957' y='532' text-anchor='end' class='colType'>d</text>  <use id='nn' x='802' y='541' xlink:href='#nn'/><a xlink:href='#fixflex.taskers_updatedAt'><text id='fixflex&#46;taskers&#46;updatedAt' x='819' y='551'>updatedAt</text><title>&#10697;  updatedAt
+     * date</title></a>
+<text x='957' y='548' text-anchor='end' class='colType'>d</text>  <use id='nn' x='802' y='557' xlink:href='#nn'/><a xlink:href='#fixflex.taskers___v'><text id='fixflex&#46;taskers&#46;&#95;&#95;v' x='819' y='567'>&#95;&#95;v</text><title>&#10697;  __v
+     * int</title></a>
+<text x='957' y='564' text-anchor='end' class='colType'>&#35;</text>  <a xlink:href='#fixflex.taskers_isActive'><text id='fixflex&#46;taskers&#46;isActive' x='819' y='583'>isActive</text><title>&#10697;  isActive
+     boolean</title></a>
+<text x='957' y='580' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'offers' == -->
+<rect id='depict_fixflex&#46;offers' class='entity' style='stroke:#7690B9' x='496' y='744' width='128' height='208' />
+<rect x='496' y='744' width='128' height='28' style='stroke-width:0; fill:#F1F4FA'/>
+<line class='topLine' style='stroke:#174998;' stroke-linecap='round' x1='496' y1='744' x2='624' y2='744'/>
+<a xlink:href='#fixflex.offers'><text x='540' y='763' >offers</text><title>Collection fixflex.offers</title></a>
+  <use id='nn' x='498' y='781' xlink:href='#nn'/><use id='pk' x='498' y='780' xlink:href='#pk'><title>&#x1F511;  Pk _id_ ( _id ) </title></use><a xlink:href='#fixflex.offers__id'><text id='fixflex&#46;offers&#46;&#95;id' x='515' y='791' onmouseover="hghl(['tasks_fk_tasks_offers','fixflex.tasks.offers','tasks_fk_tasks_offers_0','fixflex.tasks.acceptedOffer'])" onmouseout="uhghl(['tasks_fk_tasks_offers','fixflex.tasks.offers','tasks_fk_tasks_offers_0','fixflex.tasks.acceptedOffer'])">&#95;id</text><title>&#10697;  _id
+     * objectid
+ &#8601; tasks( _id )
+ &#8601; tasks( _id )</title></a>
+<a xlink:href='#fixflex.offers._id'><use id='ref' x='612' y='780' xlink:href='#ref'/><title>&#x1F517;  Referred by tasks ( offers -&gt; _id ) 
+Referred by tasks ( acceptedOffer -&gt; _id ) </title></a>
+  <use id='nn' x='498' y='797' xlink:href='#nn'/><a xlink:href='#fixflex.offers_taskerId'><text id='fixflex&#46;offers&#46;taskerId' x='515' y='807'>taskerId</text><title>&#10697;  taskerId
+     * string</title></a>
+<text x='621' y='804' text-anchor='end' class='colType'>t</text>  <use id='nn' x='498' y='813' xlink:href='#nn'/><a xlink:href='#fixflex.offers_taskId'><text id='fixflex&#46;offers&#46;taskId' x='515' y='823'>taskId</text><title>&#10697;  taskId
+     * string</title></a>
+<text x='621' y='820' text-anchor='end' class='colType'>t</text>  <use id='nn' x='498' y='829' xlink:href='#nn'/><a xlink:href='#fixflex.offers_price'><text id='fixflex&#46;offers&#46;price' x='515' y='839'>price</text><title>&#10697;  price
+     * int</title></a>
+<text x='621' y='836' text-anchor='end' class='colType'>&#35;</text>  <use id='nn' x='498' y='845' xlink:href='#nn'/><a xlink:href='#fixflex.offers_status'><text id='fixflex&#46;offers&#46;status' x='515' y='855'>status</text><title>&#10697;  status
+     * string</title></a>
+<text x='621' y='852' text-anchor='end' class='colType'>t</text>  <use id='nn' x='498' y='861' xlink:href='#nn'/><a xlink:href='#fixflex.offers_message'><text id='fixflex&#46;offers&#46;message' x='515' y='871'>message</text><title>&#10697;  message
+     * string</title></a>
+<text x='621' y='868' text-anchor='end' class='colType'>t</text>  <use id='nn' x='498' y='877' xlink:href='#nn'/><a xlink:href='#fixflex.offers_subMessages'><text id='fixflex&#46;offers&#46;subMessages' x='515' y='887'>subMessages</text><title>&#10697;  subMessages
+     * array</title></a>
+<text x='621' y='884' text-anchor='end' class='colType'>&#91;&#93;</text>  <use id='nn' x='498' y='893' xlink:href='#nn'/><a xlink:href='#fixflex.offers_createdAt'><text id='fixflex&#46;offers&#46;createdAt' x='515' y='903'>createdAt</text><title>&#10697;  createdAt
+     * date</title></a>
+<text x='621' y='900' text-anchor='end' class='colType'>d</text>  <use id='nn' x='498' y='909' xlink:href='#nn'/><a xlink:href='#fixflex.offers_updatedAt'><text id='fixflex&#46;offers&#46;updatedAt' x='515' y='919'>updatedAt</text><title>&#10697;  updatedAt
+     * date</title></a>
+<text x='621' y='916' text-anchor='end' class='colType'>d</text>  <use id='nn' x='498' y='925' xlink:href='#nn'/><a xlink:href='#fixflex.offers___v'><text id='fixflex&#46;offers&#46;&#95;&#95;v' x='515' y='935'>&#95;&#95;v</text><title>&#10697;  __v
+     * int</title></a>
+<text x='621' y='932' text-anchor='end' class='colType'>&#35;</text>
+</g></svg>

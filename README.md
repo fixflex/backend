@@ -141,6 +141,25 @@ The backend architecture of `fixflex` includes middleware functions that interce
 
 The backend architecture of `fixflex` employs dependency injection using the tsyringe package to manage component dependencies and improve code maintainability, flexibility, and testability. Dependency injection helps decouple components, promote code reuse, and facilitate the implementation of inversion of control (IoC) principles.
 
+## Database Schema 📊
+
+The database used for `fixflex` is MongoDB, a NoSQL database that stores data in a flexible, JSON-like format.
+
+See [Database Schema](MongoDB-schema-visualization.md) file for more details.
+
+The database schema for `fixflex` consists of the following collections:
+
+- `Users`: Stores user information such as name, email, phone number, password, role, profile picture, and verification status.
+- `Taskers`: Stores tasker information such as user ID, description, skills, qualifications, availability, ratings, and earnings.
+- `Tasks`: Stores task information such as user ID, title, description, category, location, status, budget, images, and timestamps.
+- `Categories`: Stores category information such as name, description, parent category, and subcategories.
+- `Coupons`: Stores coupon information such as code, discount amount, expiry date, and usage limit.
+- `Offers`: Stores offer information such as task ID, tasker ID, amount, status, and timestamps.
+- `Reviews`: Stores review information such as task ID, tasker ID, user ID, rating, comment, and timestamps.
+- `Chats`: Stores chat information such as user IDs, task ID, tasker ID, and timestamps.
+- `Messages`: Stores message information such as chat ID, user ID, tasker ID, content, and timestamps.
+- `Transactions`: Stores transaction information such as user ID, tasker ID, amount, type, status, and timestamps.
+
 ## RESTful API Design 📐
 
 The API design for `fixflex` follows RESTful principles, with clear and predictable URL structures, HTTP methods, and status codes. The API endpoints are organized into resource-based routes, with each route corresponding to a specific resource or entity in the system. The API design includes the following key features:
@@ -171,28 +190,19 @@ The API design for `fixflex` follows RESTful principles, with clear and predicta
 - **Sockets**: Implement real-time communication between clients and servers using WebSockets.
 - **Types**: Define custom TypeScript types, interfaces, and declarations for better type safety and code quality.
 
-## Database Schema 📊
+## Error Handling 🚨
 
-The database schema for `fixflex` consists of the following collections:
+The backend architecture of `fixflex` includes a robust error handling mechanism to catch and handle exceptions gracefully, providing informative error messages, status codes, and error responses to clients. The error handling mechanism includes the following key features:
 
-- `Users`: Stores user information such as name, email, phone number, password, role, profile picture, and verification status.
-- `Taskers`: Stores tasker information such as user ID, description, skills, qualifications, availability, ratings, and earnings.
-- `Tasks`: Stores task information such as user ID, title, description, category, location, status, budget, images, and timestamps.
-- `Categories`: Stores category information such as name, description, parent category, and subcategories.
-- `Coupons`: Stores coupon information such as code, discount amount, expiry date, and usage limit.
-- `Offers`: Stores offer information such as task ID, tasker ID, amount, status, and timestamps.
-- `Reviews`: Stores review information such as task ID, tasker ID, user ID, rating, comment, and timestamps.
-- `Chats`: Stores chat information such as user IDs, task ID, tasker ID, and timestamps.
-- `Messages`: Stores message information such as chat ID, user ID, tasker ID, content, and timestamps.
-- `Transactions`: Stores transaction information such as user ID, tasker ID, amount, type, status, and timestamps.
+- `Custom Exceptions`: Defines custom exception classes to handle errors and exceptions in the application, providing detailed error messages and status codes.
+- `Error Middleware`: Implements error middleware functions to catch and handle exceptions, log errors, and send error responses to clients.
+- `Global Error Handling`: Centralizes error handling logic in a global error handler middleware to ensure consistent error responses across the application.
+- `Error Logging`: Logs errors and exceptions to track application behavior, monitor performance, and debug issues effectively.
+- `Error Response Format`: Standardizes error responses with a consistent format, including status codes, error messages, error details, and stack traces.
 
 # API Documentation 📖
 
-The API documentation for `fixflex` is available using Swagger UI. You can access the API documentation by visiting the following URL:
-https://server.fixflex.tech/api-docs
-
-For postman collection visit:
-https://documenter.getpostman.com/view/24552265/2sA2r53QzT#intro
+The API documentation for `fixflex` is available using [Swagger UI](https://server.fixflex.tech/api-docs) and [Postman Collection](https://documenter.getpostman.com/view/24552265/2sA2r53QzT#intro).
 
 ## API Endpoints 🚀
 
