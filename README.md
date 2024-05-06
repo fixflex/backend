@@ -4,13 +4,31 @@
 
 **Fixflex** is a platform that connects people who need tasks done with individuals who are willing to complete those tasks for pay. It operates like traditional freelancing platforms such as _Upwork_, _Fiverr_, and _Freelancer_, where users can post tasks or jobs and taskers make offers on these tasks. The user then selects the most suitable tasker for the job. However, the main difference between **fixflex** and traditional freelancing platforms lies in their primary objectives. While platforms like _Upwork_ primarily focus on digital services such as programming, writing, and design, **fixflex**'s core mission is to facilitate the completion of a wide range of everyday tasks and services. **Fixflex** specializes in connecting people who need tasks like plumbing, electricity, painting, cleaning, gardening, moving, cooking, and more with handymen who are willing to perform these tasks for pay.
 
-# Tech Stack (main) 📚
+# Tech Stack And Tools 🛠️️
 
-- [x] `Node.js`: A JavaScript runtime built on Chrome's V8 JavaScript engine.
-- [x] `TypeScript`: A superset of JavaScript that adds static types to the language.
-- [x] `Express.js`: A minimalist web framework for Node.js, used to build APIs and web apps.
-- [x] `MongoDB`: A NoSQL database system known for its flexibility and scalability.
-- [x] `Mongoose`: An Object Data Modeling (ODM) library for MongoDB.
+- `Node.js`: A JavaScript runtime built on Chrome's V8 JavaScript engine, used for building scalable network applications.
+- `Express.js`: A fast, unopinionated, minimalist web framework for Node.js, used for building APIs and web applications.
+- `MongoDB`: A NoSQL database used for storing data in a flexible, JSON-like format.
+- `Mongoose`: An Object Data Modeling (ODM) library for MongoDB and Node.js, used to model application data and interact with the database.
+- `TypeScript`: A typed superset of JavaScript that compiles to plain JavaScript, used to add static types to JavaScript and improve code quality.
+- `Swagger`: An open-source software framework used to design, build, document, and consume RESTful web services.
+- `Jest`: A JavaScript testing framework used for unit testing and assertions, used to validate code functionality and identify bugs.
+- `Supertest`: A library used to test HTTP requests and responses in Node.js applications, used to validate API endpoints and functionality.
+- `Docker`: A containerization platform used to package the backend of `fixflex` and its dependencies into a lightweight, portable container.
+- `GitHub Actions`: Automated workflows triggered by GitHub events, used for continuous integration and continuous deployment (CI/CD) pipelines.
+- `Render`: A cloud platform for deploying and scaling web applications, providing simplicity and scalability.
+- `Paymob`: A payment gateway used to facilitate secure online payments between users and taskers.
+- `OneSignal`: A push notification service used to send push notifications to users and taskers for task updates, messages, reminders, and other relevant events.
+- `Cloudinary`: A cloud-based image and video management service used to store, manage, and deliver images and videos for the application.
+- `Socket.io`: A library used to enable real-time, bidirectional communication between clients and servers using WebSockets.
+- `Multer`: A middleware used to handle file uploads in Node.js applications, used to upload images and files to the server.
+- `i18next`: An internationalization (i18n) library used to support multiple languages and locales in the application.
+- `Google OAuth 2.0`: An authentication and authorization service used to allow users to sign in using their Google accounts.
+- `Whatsapp-web.js`: A WhatsApp API used to send WhatsApp messages to users and taskers for task updates, reminders, and other relevant events.
+- `Nodemailer`: A module used to send emails from the application to users and taskers for account verification, password reset, task updates, and other events.
+- `Winston`: A logging library used to log application behavior and performance to track errors and debug issues.
+- `Morgan`: An HTTP request logger middleware used to log HTTP requests and responses for debugging and monitoring.
+- `Prettier`: An opinionated code formatter used to enforce a consistent code style and improve code readability.
 
 # Deployment Stack (CI/CD) 🚀
 
@@ -59,6 +77,7 @@ The backend of `fixflex` is deployed using the following technologies:
 
 - [x] `TypeScript`: Utilizes TypeScript to add static types to JavaScript, improving code quality, and catching errors early in the development process.
 - [x] `RESTful API Design`: Adheres to RESTful API design principles to create a standardized and predictable API interface for clients to interact with.
+- [x] `Scalable Architecture`: Implements a scalable architecture to accommodate future growth and changes in the application's requirements.
 - [x] `Modular Architecture`: Organizes code into classes, and functions to improve code readability, and maintainability using the MVC and DAO (Data Access Object) pattern.
 - [x] `Dependency Injection`: Implements dependency injection using tsyringe package to manage component dependencies and improve code maintainability, flexibility.
 - [x] `Code Linting`: Enforces code style and quality standards using prettier.
@@ -66,7 +85,7 @@ The backend of `fixflex` is deployed using the following technologies:
 - [x] `API Documentation`: Provides comprehensive documentation for APIs using tools like Swagger and postman to facilitate code maintenance and collaboration.
 - [x] `Code Version Control`: Utilizes version control systems such as Git to track code changes.
 - [x] `Environment Configuration`: Utilizes environment variables to manage configuration settings and sensitive information, ensuring security and flexibility.
-- [x] `Best Practices & Clean Code`: Follows industry-standard design principles as possible including SOLID, DRY (Don't Repeat Yourself), and KISS (Keep It Simple, Stupid).
+- [x] `Best Practices & Clean Code`: Follows best practices and clean code principles such as ( SOLID, DRY, KISS )
 
 ### Security Features 🌟
 
