@@ -109,6 +109,83 @@ The backend of `fixflex` is deployed using the following technologies:
 - [ ] `Tasker Performance Metrics`: Provides taskers with performance metrics, analytics, and insights to help them improve their services and grow their businesses.
 - [ ] `Third-Party API Integration`: Integrates third-party APIs such as Twilio, or Mailgun to enhance functionality and provide additional features.
 
+# Architecture 🏗️
+
+The backend of `fixflex` follows a modular, scalable, and maintainable architecture, leveraging TypeScript, Express.js, and MongoDB. The architecture is designed to ensure code reusability, separation of concerns, and scalability to accommodate future growth and changes in the application's requirements.
+
+## Model-View-Controller (MVC) Pattern 🌐
+
+The backend architecture of `fixflex` follows the Model-View-Controller (MVC) pattern, which divides the application into three main components:
+
+- `Models`: Represents the data structure of the application, interacts with the database using Mongoose, and defines the schema for each resource.
+- `Controllers`: Processes incoming requests, interacts with services, and returns responses to clients.
+- `Routes`: Defines the API endpoints, maps HTTP methods to controller actions, and provides a standardized interface for clients to interact with the application.
+
+## Data Access Object (DAO) Pattern 💾
+
+The backend architecture of `fixflex` employs the Data Access Object (DAO) pattern to separate the data access logic from the business logic. The DAO pattern encapsulates the database operations for each resource into a separate file, providing a clean and modular structure for managing data access.
+
+## Data Transfer Object (DTO) Pattern 📦
+
+The backend architecture of `fixflex` uses Data Transfer Objects (DTOs) to transfer data between layers and components. DTOs define the structure of data exchanged between the client and server, ensuring consistency and type safety throughout the application.
+
+## Service Layer 🛠️
+
+The backend architecture of `fixflex` includes a service layer that encapsulates the business logic of the application, interacts with the data access layer, and provides a centralized interface for controllers to access application functionality. The service layer helps maintain separation of concerns, improves code reusability, and facilitates testing and debugging.
+
+## Middleware 🚪
+
+The backend architecture of `fixflex` includes middleware functions that intercept incoming requests, perform actions, and pass control to the next middleware or route handler. Middleware functions are used for tasks such as authentication, error handling, logging, input validation, and more, providing a modular and extensible architecture for managing request processing.
+
+## Dependency Injection 🔄
+
+The backend architecture of `fixflex` employs dependency injection using the tsyringe package to manage component dependencies and improve code maintainability, flexibility, and testability. Dependency injection helps decouple components, promote code reuse, and facilitate the implementation of inversion of control (IoC) principles.
+
+## RESTful API Design 📐
+
+The API design for `fixflex` follows RESTful principles, with clear and predictable URL structures, HTTP methods, and status codes. The API endpoints are organized into resource-based routes, with each route corresponding to a specific resource or entity in the system. The API design includes the following key features:
+
+- `Resource-Based Routes`: Organizes API endpoints into resource-based routes such as /users, /tasks, /taskers, /offers, /reviews, /categories, and /coupons.
+- `CRUD Operations`: Implements Create, Read, Update, and Delete operations for all resources using HTTP methods such as GET, POST, PUT, PATCH, and DELETE.
+- `Pagination and Filtering`: Supports pagination and filtering for listing resources, allowing users to limit the number of results and filter based on specific criteria.
+- `Search and Sorting`: Allows users to search for resources based on keywords, categories, locations, and other criteria, enhancing resource discovery.
+- `Error Handling`: Provides informative error messages, status codes, and error responses to help clients understand and handle errors effectively.
+
+## Modular Structure 🧩
+
+- **Controllers**: Handle incoming requests, process data, and send responses to clients.
+- **Services**: Contain business logic, interact with the database, and perform operations on data.
+- **Models**: Define data structures and schemas for MongoDB collections using Mongoose.
+- **Routes**: Define API endpoints, route requests to controllers, and handle HTTP methods.
+- **Middleware**: Implement custom middleware functions for authentication, validation, error handling, etc.
+- **Exceptions**: Define custom exception classes to handle errors and exceptions in the application.
+- **Helpers**: Contain utility functions, helper classes, and third-party integrations to assist with common tasks.
+- **Config**: Store configuration settings, environment variables, and validation rules.
+- **DB**: Contain data access objects (DAOs) to interact with the MongoDB database.
+- **Docs**: Define Swagger documentation files for API endpoints and models.
+- **DTOs**: Define data transfer objects (DTOs) to transfer data between layers and components.
+- **Interfaces**: Define TypeScript interfaces for data structures, models, and API requests and responses.
+- **Middlewares**: Implement custom middleware functions for authentication, validation, error handling, etc.
+- **Routes**: Define API endpoints, route requests to controllers, and handle HTTP methods.
+- **Services**: Contain business logic, interact with the database, and perform operations on data.
+- **Sockets**: Implement real-time communication between clients and servers using WebSockets.
+- **Types**: Define custom TypeScript types, interfaces, and declarations for better type safety and code quality.
+
+## Database Schema 📊
+
+The database schema for `fixflex` consists of the following collections:
+
+- `Users`: Stores user information such as name, email, phone number, password, role, profile picture, and verification status.
+- `Taskers`: Stores tasker information such as user ID, description, skills, qualifications, availability, ratings, and earnings.
+- `Tasks`: Stores task information such as user ID, title, description, category, location, status, budget, images, and timestamps.
+- `Categories`: Stores category information such as name, description, parent category, and subcategories.
+- `Coupons`: Stores coupon information such as code, discount amount, expiry date, and usage limit.
+- `Offers`: Stores offer information such as task ID, tasker ID, amount, status, and timestamps.
+- `Reviews`: Stores review information such as task ID, tasker ID, user ID, rating, comment, and timestamps.
+- `Chats`: Stores chat information such as user IDs, task ID, tasker ID, and timestamps.
+- `Messages`: Stores message information such as chat ID, user ID, tasker ID, content, and timestamps.
+- `Transactions`: Stores transaction information such as user ID, tasker ID, amount, type, status, and timestamps.
+
 # API Documentation 📖
 
 The API documentation for `fixflex` is available using Swagger UI. You can access the API documentation by visiting the following URL:
@@ -117,7 +194,7 @@ https://server.fixflex.tech/api-docs
 For postman collection visit:
 https://documenter.getpostman.com/view/24552265/2sA2r53QzT#intro
 
-## Endpoints
+## API Endpoints 🚀
 
 ### Admin
 
