@@ -16,7 +16,7 @@ class TaskController implements ITaskController {
 
   taskImages = uploadMixFiles([
     { name: 'imageCover', maxCount: 1 },
-    { name: 'image', maxCount: 5 },
+    { name: 'image', maxCount: 6 },
   ]);
 
   createTask = asyncHandler(async (req: Request<ITask>, res: Response, next: NextFunction) => {

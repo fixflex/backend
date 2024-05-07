@@ -4,7 +4,7 @@
 
 **Fixflex** is a platform that connects people who need tasks done with individuals who are willing to complete those tasks for pay. It operates like traditional freelancing platforms such as _Upwork_, _Fiverr_, and _Freelancer_, where users can post tasks or jobs and taskers make offers on these tasks. The user then selects the most suitable tasker for the job. However, the main difference between **fixflex** and traditional freelancing platforms lies in their primary objectives. While platforms like _Upwork_ primarily focus on digital services such as programming, writing, and design, **fixflex**'s core mission is to facilitate the completion of a wide range of everyday tasks and services. **Fixflex** specializes in connecting people who need tasks like plumbing, electricity, painting, cleaning, gardening, moving, cooking, and more with handymen who are willing to perform these tasks for pay.
 
-# Tech Stack And Tools 🛠️️
+# Tech Stack And Tools ✨
 
 - `Node.js`: A JavaScript runtime built on Chrome's V8 JavaScript engine, used for building scalable network applications.
 - `Express.js`: A fast, unopinionated, minimalist web framework for Node.js, used for building APIs and web applications.
