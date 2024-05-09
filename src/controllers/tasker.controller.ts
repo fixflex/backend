@@ -15,7 +15,6 @@ class TaskerController implements ITaskerController {
     let userId = req.user._id;
     let tasker = await this.taskerService.createTasker(userId, req.body);
     if (!tasker) return next(new HttpException(400, 'something_went_wrong'));
-    console.log('tasker: ', tasker);
     res.status(201).json(customResponse<ITasker>({ data: tasker, success: true, message: req.t('tasker_created') }));
   });
 
