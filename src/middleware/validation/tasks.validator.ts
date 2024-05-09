@@ -93,6 +93,7 @@ export const updateTaskValidator = [
   check('dueDate.before').optional().isDate({ format: 'YYYY-MM-DD' }).withMessage(' "Invalid date format, must be YYYY-MM-DD",'),
   check('dueDate').custom(dueDate => {
     if (dueDate) {
+      if (dueDate.flexible === true && !dueDate.on && !dueDate.before) return true;
       if (dueDate.before && dueDate.on) {
         throw new Error('can not set both before and on');
       }
@@ -103,12 +104,12 @@ export const updateTaskValidator = [
       if (dueDate.flexible === false && !dueDate.on && !dueDate.before) {
         throw new Error('dueDate.flexible should be true or on or before should be set');
       }
-      // check if the date is in the past
-      if (new Date(dueDate.before) < new Date()) {
+      //   // check if the date is in the past
+      if (dueDate.before && new Date(dueDate.before).toISOString().slice(0, 10) < new Date().toISOString().slice(0, 10)) {
+        // only compare the date part not the time part
         throw new Error('invalid_dueDate');
       }
-
-      if (new Date(dueDate.on) < new Date()) {
+      if (dueDate.on && new Date(dueDate.on).toISOString().slice(0, 10) < new Date().toISOString().slice(0, 10)) {
         throw new Error('invalid_dueDate');
       }
     }
