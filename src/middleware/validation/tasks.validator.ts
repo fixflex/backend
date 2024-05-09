@@ -52,12 +52,12 @@ export const createTaskValidator = [
       if (dueDate.flexible === false && !dueDate.on && !dueDate.before) {
         throw new Error('dueDate.flexible should be true or on or before should be set');
       }
-      // check if the date is in the past
-      if (new Date(dueDate.before).toISOString().slice(0, 10) < new Date().toISOString().slice(0, 10)) {
+      //   // check if the date is in the past
+      if (dueDate.before && new Date(dueDate.before).toISOString().slice(0, 10) < new Date().toISOString().slice(0, 10)) {
         // only compare the date part not the time part
         throw new Error('invalid_dueDate');
       }
-      if (new Date(dueDate.on).toISOString().slice(0, 10) < new Date().toISOString().slice(0, 10)) {
+      if (dueDate.on && new Date(dueDate.on).toISOString().slice(0, 10) < new Date().toISOString().slice(0, 10)) {
         throw new Error('invalid_dueDate');
       }
     }
