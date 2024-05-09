@@ -88,6 +88,7 @@ let taskSchema: Schema<ITask> = new Schema(
       },
       coordinates: {
         type: [Number],
+        default: [0, 0],
       },
       online: {
         type: Boolean,

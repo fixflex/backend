@@ -35,9 +35,12 @@ class TaskService implements ITaskService {
     }
     const newTask = await this.taskDao.create(task);
     // send push notification to all taskers where the task is in their service area and the task category is in their categories list
+    let location;
+    if (task.location.online) location = undefined;
+    else location = `${task.location.coordinates[0]},${task.location.coordinates[1]}`;
 
     let query: Query = {
-      location: `${task.location.coordinates[0]},${task.location.coordinates[1]}`,
+      location,
       categories: task.categoryId,
       maxDistance: '60',
       isActive: 'true',
@@ -56,9 +59,8 @@ class TaskService implements ITaskService {
       external_ids: taskersIds,
     };
 
-    // let notification =
-    await this.oneSignalApiHandler.createNotification(notificationOptions);
-    // console.log(notification);
+    let notification = await this.oneSignalApiHandler.createNotification(notificationOptions);
+    console.log(notification);
 
     return newTask;
   };
