@@ -82,9 +82,13 @@ class App {
   }
 
   private initializeWhatsAppWeb() {
+    //  let flage = process.env.flag;
+    let flag = false;
     // Initialize the WhatsApp Web Client after 5 seconds
     setTimeout(() => {
-      if (process.env.NODE_ENV !== 'testing') WhatsAppClient.getInstance();
+      if (process.env.NODE_ENV !== 'testing' && flag) {
+        WhatsAppClient.getInstance();
+      }
     }, 5000);
   }
   private initializeRoutes(routes: Routes[]) {
