@@ -42,14 +42,14 @@ class TaskService implements ITaskService {
     let query: Query = {
       location,
       categories: task.categoryId,
-      maxDistance: '60',
+      maxDistance: '60000',
       isActive: 'true',
     };
     let taskers = await this.taskerDao.getTaskers(query);
     // loop through the taskers and collect their userIds and but them in an array of external_ids to send the push notification to them
     // @ts-ignore // TODO: fix the taskersIds type
     let taskersIds = taskers.taskers.map(tasker => tasker.userId._id.toString());
-    // console.log(taskersIds);
+    console.log(taskersIds);
 
     // send push notification to the taskers
     let notificationOptions: NotificationOptions = {
