@@ -122,7 +122,6 @@ describe('Authentication', () => {
         .send({ oldPassword: user.password, newPassword: user.password })
         .set('Cookie', `access_token=${accessToken}`);
 
-      console.log('response.body ===========>>>>>> ', response.body);
       expect(response.status).toBe(200);
 
       expect(response.body.message).toBeDefined();
