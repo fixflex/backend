@@ -44,6 +44,15 @@ let taskerSchema: Schema<ITasker> = new Schema(
         default: 50000, // 50 km
       },
     },
+    portfolio: [
+      {
+        url: String,
+        publicId: {
+          type: String,
+          default: null,
+        },
+      },
+    ],
     bio: String,
     isActive: {
       type: Boolean,

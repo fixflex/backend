@@ -37,6 +37,7 @@ export interface ITasker extends Document {
   completedTasks: string[];
   commissionRate: number;
   balance: number; // the amount of money that the tasker has in his account (wallet)
+  portfolio: { url: string; publicId: string | null }[];
   createdAt: Date;
   updatedAt: Date;
 }

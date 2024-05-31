@@ -23,6 +23,13 @@ class TaskerRoute implements Routes {
     this.router.post(`${this.path}/become-tasker`, authenticateUser, createTaskerValidator, this.taskerController.createTasker);
     this.router.get(`${this.path}/me`, authenticateUser, this.taskerController.getMe);
     this.router.patch(`${this.path}/me`, authenticateUser, updateTaskerValidator, this.taskerController.updateMe);
+    this.router.patch(
+      `${this.path}/me/portfolio`,
+      this.taskerController.taskerPortfolio,
+      authenticateUser,
+      this.taskerController.updateProfileImages
+    );
+
     // this.router.delete(`${this.path}/me`, authenticateUser, this.taskerController.deleteTasker);
 
     this.router.post(`${this.path}/commission-pay`, authenticateUser, this.taskerController.checkout);

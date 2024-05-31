@@ -62,8 +62,7 @@ class WhatsAppClient {
           } else {
             await WhatsAppClient.whatsappClient.sendMessage(
               message.from,
-              `Hello 👋 ` +
-                "\n\nNeed help or have questions? Don't hesitate to reach out to our dedicated customer service team – they're here for you!\n📞 Call +201146238572 or email support@fixflex.tech for assistance."
+              `Need help or have questions?\n\n Don't hesitate to reach out to our dedicated customer service team – they're here for you!\n Call 📞 +201146238572 or Email 📧 support@fixflex.tech for assistance.`
             );
           }
         }

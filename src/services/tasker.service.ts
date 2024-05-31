@@ -1,9 +1,11 @@
+import { UploadApiResponse } from 'cloudinary';
 import { Query } from 'express-serve-static-core';
 import { autoInjectable } from 'tsyringe';
 
 import { CategoryDao, CouponDao, TaskDao } from '../DB/dao';
 import { TaskerDao } from '../DB/dao';
 import HttpException from '../exceptions/HttpException';
+import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { IPagination, IUser, PaymobOrderDetails } from '../interfaces';
 import { ITasker, ITaskerService } from '../interfaces/tasker.interface';
 import { TransactionType } from '../interfaces/transaction.interface';
@@ -56,6 +58,39 @@ class TaskerService implements ITaskerService {
       );
 
     return await this.taskerDao.updateOne({ userId }, tasker);
+  }
+
+  async updateProfileImages(userId: string, files: { [fieldname: string]: Express.Multer.File[] }) {
+    if (!files.image) throw new HttpException(400, 'file_not_found');
+
+    let tasker = await this.taskerDao.getOne({ userId });
+    if (!tasker) throw new HttpException(404, 'tasker_not_found');
+    let images: UploadApiResponse[];
+    const updateData: any = {};
+    // 1. upload images if exists
+    if (files.image) {
+      // 1.1 upload images to cloudinary and get the urls
+      images = await Promise.all(
+        files.image.map(async (img: Express.Multer.File) => await cloudinaryUploadImage(img.buffer, 'tasker-portfolio'))
+      );
+
+      // 1.2 delete old images from cloudinary
+      if (tasker.portfolio.length > 0) {
+        await Promise.all(
+          tasker.portfolio.map(async img => {
+            if (img.publicId) return await cloudinaryDeleteImage(img.publicId);
+          })
+        );
+      }
+
+      updateData.portfolio = images.map(img => {
+        return { url: img.secure_url, publicId: img.public_id };
+      });
+    }
+
+    let updatedTasker = await this.taskerDao.updateOneById(tasker._id, updateData);
+
+    return updatedTasker;
   }
 
   async deleteTasker(userId: string) {
