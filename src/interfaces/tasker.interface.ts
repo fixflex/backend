@@ -30,6 +30,7 @@ export interface ITasker extends Document {
     start: string;
     end: string;
   };
+  age: number;
   notPaidTasks: string[]; // taskIds that the tasker has to pay commission for
   totalCanceledTasks: number;
   totalEarnings: number;

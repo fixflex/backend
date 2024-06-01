@@ -44,6 +44,11 @@ let taskerSchema: Schema<ITasker> = new Schema(
         default: 50000, // 50 km
       },
     },
+    age: {
+      type: Number,
+      min: 10,
+      max: 100,
+    },
     portfolio: [
       {
         url: String,
