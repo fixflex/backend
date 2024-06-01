@@ -21,8 +21,13 @@ class ChatService implements IChatService {
     data.user = user._id.toString();
     // 2. check that the user and tasker are not the same
     if (data.user === data.tasker) throw new HttpException(400, 'User and tasker cannot be the same');
-    // 3. check if chat already  exists
-    let chat = await this.chatDao.getOne({ user: data.user, tasker: data.tasker });
+    // 3. check if chat already  exists wheither the user is the tasker or the user
+    let chat = await this.chatDao.getOne({
+      $or: [
+        { user: data.user, tasker: data.tasker },
+        { user: data.tasker, tasker: data.user },
+      ],
+    });
     if (chat) return chat;
     // 4. create chat and return it
     let newChat = await this.chatDao.create(data);

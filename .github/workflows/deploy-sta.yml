@@ -1,6 +1,10 @@
 name: Deploy to staging server
 
 on:
+  push:
+    branches:
+      - stage
+
   workflow_dispatch:
 
 jobs:
