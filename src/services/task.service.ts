@@ -48,7 +48,11 @@ class TaskService implements ITaskService {
     let taskers = await this.taskerDao.getTaskers(query);
     // loop through the taskers and collect their userIds and but them in an array of external_ids to send the push notification to them
     // @ts-ignore // TODO: fix the taskersIds type
-    let taskersIds = taskers.taskers.map(tasker => tasker.userId._id.toString());
+    let taskersIds = taskers.taskers.map(tasker => {
+      // @ts-ignore // TODO: fix the taskersIds type
+      if (tasker.userId) return tasker.userId._id.toString();
+    });
+
     console.log(taskersIds);
 
     // send push notification to the taskers
