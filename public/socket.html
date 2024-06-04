@@ -31,9 +31,11 @@
 
 
     <script>
-        let baseUrlProd = 'https://fixflex.onrender.com/api/v1'
+        let baseUrlProd = 'https://server.fixflex.tech/api/v1'
         let baseUrlDev = 'http://localhost:8080/api/v1'
-        let wsUrlProd = 'wss://fixflex.onrender.com'
+        // let wsUrlProd = 'wss://fixflex.onrender.com'
+        // let wsUrlProd = 'wss://server-fixflex.onrender.com'
+        let wsUrlProd = 'wss://server.fixflex.tech'
         let wsUrlDev = 'ws://localhost:8080'
         let userId = ''
 
@@ -59,6 +61,19 @@
             console.log('Connected to server');
             socket.emit('joinMyRoom') //  join the room with the name of the user id and the user will be able to receive messages from the server
             getMyChatRooms()
+        });
+
+
+        socket.on('joinChatRoom', async room => {
+            console.log('User joined chat room:', room);
+            // check if the user is a participant in the chat room and the chat room exists
+            let chatRoom = await new ChatDao().getOneById(room);
+            // console.log(chatRoom);
+            if (!chatRoom) return socket.emit('error', { message: 'Chat room not found' });
+            if (chatRoom.user !== socket.request.user._id && chatRoom.tasker !== socket.request.user._id)
+                return socket.emit('error', { message: 'You are not a participant in this chat room' });
+            console.log(`User ${socket.request.user._id} joined chat room:`, room);
+            socket.join(room);
         });
 
         socket.on('newChatRoom', data => {

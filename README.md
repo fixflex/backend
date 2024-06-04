@@ -145,7 +145,7 @@ The backend architecture of `fixflex` employs dependency injection using the tsy
 
 The database used for `fixflex` is MongoDB, a NoSQL database that stores data in a flexible, JSON-like format.
 
-See [Database Schema](MongoDB-schema-visualization.md) file for more details.
+<!-- See [Database Schema](MongoDB-schema-visualization.md) file for more details. -->
 
 The database schema for `fixflex` consists of the following collections:
 
@@ -159,6 +159,8 @@ The database schema for `fixflex` consists of the following collections:
 - `Chats`: Stores chat information such as user IDs, task ID, tasker ID, and timestamps.
 - `Messages`: Stores message information such as chat ID, user ID, tasker ID, content, and timestamps.
 - `Transactions`: Stores transaction information such as user ID, tasker ID, amount, type, status, and timestamps.
+
+For more details, see the [Database Schema](https://github.com/fixflex/backend/assets/124518625/c094b37f-0e4b-41a6-9d28-2df0da258110)
 
 ## RESTful API Design 📐
 

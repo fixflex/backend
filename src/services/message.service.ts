@@ -23,7 +23,7 @@ class MessageService implements IMessageService {
     // 5. Push message to chat messages array
     await this.chatDao.updateOneById(chat._id, { $push: { messages: message._id } });
     // 6. emit message to chat room
-    io.to(chat._id.toString()).emit('message', message);
+    io.to(chat._id.toString()).emit('message', JSON.stringify(message, null, 2));
     // 7. return message
     return message;
   }
