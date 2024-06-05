@@ -67,7 +67,7 @@ class OfferService implements IOfferService {
     };
     this.oneSignalApiHandler.createNotification(notificationOptions);
     // console.log(notification);
-    io.to(task.userId).emit('newOffer', newOffer);
+    io.to(task.userId).emit('newOffer', JSON.stringify(newOffer, null, 2));
     // socketIO.to(taskCreatorSocketId).emit('newOffer', newOffer);
     return newOffer;
   }
