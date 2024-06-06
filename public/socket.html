@@ -24,7 +24,7 @@
     <button onclick="getMyChatRooms()">Get My Chat Rooms</button>
 
 
-    <input type="email" id="email" value="james@gmail.com">
+    <input type="email" id="email" value="admin@gmail.com">
     <input type="password" id="password" value="password">
     <button onclick="login()">Login</button>
 
@@ -44,12 +44,13 @@
         // let baseUrl = baseUrlDev
         // let wsUrl = wsUrlDev
         let baseUrl = baseUrlProd
-        let wsUrl = wsUrlProd
+        // let wsUrl = wsUrlProd
+        let wsUrl = wsUrlDev
         let accessToken = ''
         const socket = io(wsUrl, {
             // withCredentials: true,
             extraHeaders: {
-                "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjMzZTQxMGIxMTE3MTYxOGJmN2YyZjEiLCJpYXQiOjE3MTQ4NTQ0MjIsImV4cCI6MTcyMDAzODQyMn0.ez_RGXad3wcdqSl0jSTT2zvoP0fXOQLhvtfWw7_OIQc`
+                "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjBkMWE2NWNmOWI5ZGEzNmRhNTIyMmQiLCJpYXQiOjE3MTc2MjczNjQsImV4cCI6MTcxODIzMjE2NH0.KJZnrqWCTdq9h6Qd6eKHvURphTNZ-d7Pe7_QclsflgE`
             }
         });
 
@@ -156,7 +157,7 @@
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjMzZTQxMGIxMTE3MTYxOGJmN2YyZjEiLCJpYXQiOjE3MTQ4NTQ0MjIsImV4cCI6MTcyMDAzODQyMn0.ez_RGXad3wcdqSl0jSTT2zvoP0fXOQLhvtfWw7_OIQc`
+                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjBkMWE2NWNmOWI5ZGEzNmRhNTIyMmQiLCJpYXQiOjE3MTc2MjczNjQsImV4cCI6MTcxODIzMjE2NH0.KJZnrqWCTdq9h6Qd6eKHvURphTNZ-d7Pe7_QclsflgE`
                 }
             })
                 .then((response) => {

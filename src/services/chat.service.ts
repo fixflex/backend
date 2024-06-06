@@ -33,7 +33,6 @@ class ChatService implements IChatService {
     let newChat = await this.chatDao.create(data);
     // make user and tasker join the chat room where the room name is the newChat._id
     io.to(newChat.user).emit('newChatRoom', JSON.stringify(newChat, null, 2));
-    console.log(newChat.user);
     io.to(newChat.tasker).emit('newChatRoom', JSON.stringify(newChat, null, 2));
 
     return newChat;
