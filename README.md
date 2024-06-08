@@ -14,7 +14,7 @@
 - `Swagger`: An open-source software framework used to design, build, document, and consume RESTful web services.
 - `Jest`: A JavaScript testing framework used for unit testing and assertions, used to validate code functionality and identify bugs.
 - `Supertest`: A library used to test HTTP requests and responses in Node.js applications, used to validate API endpoints and functionality.
-- `Docker`: A containerization platform used to package the backend of `fixflex` and its dependencies into a lightweight, portable container.
+<!-- - `Docker`: A containerization platform used to package the backend of `fixflex` and its dependencies into a lightweight, portable container. -->
 - `GitHub Actions`: Automated workflows triggered by GitHub events, used for continuous integration and continuous deployment (CI/CD) pipelines.
 - `Render`: A cloud platform for deploying and scaling web applications, providing simplicity and scalability.
 - `Paymob`: A payment gateway used to facilitate secure online payments between users and taskers.
@@ -36,7 +36,7 @@ The backend of `fixflex` is deployed using the following technologies:
 
 - `Render`: A cloud platform for deploying and scaling web applications, providing simplicity and scalability.
 - `GitHub Actions`: Automated workflows triggered by GitHub events, used for continuous integration and continuous deployment (CI/CD) pipelines.
-- `Docker`: Containerization platform used to package the backend of `fixflex` and its dependencies into a lightweight, portable container.
+<!-- - `Docker`: Containerization platform used to package the backend of `fixflex` and its dependencies into a lightweight, portable container. -->
 
 # Features 📌
 

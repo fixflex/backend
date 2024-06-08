@@ -127,7 +127,7 @@ export class AuthServie implements IAuthService {
     // 5- send the reset code to the user email address using nodemailer
     // 3- Send the reset code via email (the code will be expired after 10 minutes)
 
-    const message = `Hi ${user.firstName}, \nwe received a request to reset the password on your Khidma Account.
+    const message = `Hi ${user.firstName}, \nwe received a request to reset the password on your Fixflex Account.
         ${resetCode} \nEnter this code to complete the reset (the code will be expired after 10 minutes).\nThanks for helping us keep your account secure.`;
     try {
       await sendMailer(user.email, 'Reset Password', message);
