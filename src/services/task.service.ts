@@ -53,7 +53,7 @@ class TaskService implements ITaskService {
       if (tasker.userId) return tasker.userId._id.toString();
     });
 
-    console.log(taskersIds);
+    // console.log(taskersIds);
 
     // send push notification to the taskers
     let notificationOptions: NotificationOptions = {
@@ -63,9 +63,10 @@ class TaskService implements ITaskService {
       external_ids: taskersIds,
     };
 
-    let notification = await this.oneSignalApiHandler.createNotification(notificationOptions);
+    // let notification =
+    await this.oneSignalApiHandler.createNotification(notificationOptions);
     // { id: '', errors: { invalid_aliases: { external_id: [Array] } } }
-    console.log(notification.errors.invalid_aliases.external_id);
+    // console.log(notification.errors.invalid_aliases.external_id);
 
     return newTask;
   };
