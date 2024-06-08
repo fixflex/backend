@@ -44,13 +44,13 @@
         // let baseUrl = baseUrlDev
         // let wsUrl = wsUrlDev
         let baseUrl = baseUrlProd
-        // let wsUrl = wsUrlProd
-        let wsUrl = wsUrlDev
+        let wsUrl = wsUrlProd
+        // let wsUrl = wsUrlDev
         let accessToken = ''
         const socket = io(wsUrl, {
             // withCredentials: true,
             extraHeaders: {
-                "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjBkMWE2NWNmOWI5ZGEzNmRhNTIyMmQiLCJpYXQiOjE3MTc2MjczNjQsImV4cCI6MTcxODIzMjE2NH0.KJZnrqWCTdq9h6Qd6eKHvURphTNZ-d7Pe7_QclsflgE`
+                "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjYxZTE2YTQ5OGFiYmMxNjEzNzQyMDAiLCJpYXQiOjE3MTc3OTA5MjYsImV4cCI6MTcxODM5NTcyNn0.ReAFbF0zQxAYEJXbyVokiYPZMyFx7YHnyLNRPn5QzGs`
             }
         });
 
@@ -157,7 +157,7 @@
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjBkMWE2NWNmOWI5ZGEzNmRhNTIyMmQiLCJpYXQiOjE3MTc2MjczNjQsImV4cCI6MTcxODIzMjE2NH0.KJZnrqWCTdq9h6Qd6eKHvURphTNZ-d7Pe7_QclsflgE`
+                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjYxZTE2YTQ5OGFiYmMxNjEzNzQyMDAiLCJpYXQiOjE3MTc3OTA5MjYsImV4cCI6MTcxODM5NTcyNn0.ReAFbF0zQxAYEJXbyVokiYPZMyFx7YHnyLNRPn5QzGs`
                 }
             })
                 .then((response) => {

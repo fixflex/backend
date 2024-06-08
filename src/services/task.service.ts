@@ -64,7 +64,8 @@ class TaskService implements ITaskService {
     };
 
     let notification = await this.oneSignalApiHandler.createNotification(notificationOptions);
-    console.log(notification);
+    // { id: '', errors: { invalid_aliases: { external_id: [Array] } } }
+    console.log(notification.errors.invalid_aliases.external_id);
 
     return newTask;
   };

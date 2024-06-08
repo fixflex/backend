@@ -6,7 +6,7 @@ export const createReviewValidator = [
   // ====================>>>>>>>> required <<<<<<<<<<<==================== //
   body('taskId').notEmpty().withMessage('required').isMongoId().withMessage('invalid_MongoId'),
   body('rating').isNumeric().withMessage('invalid_input').isFloat({ min: 0, max: 5 }).withMessage('invalid_rating'),
-  body('review').isString().withMessage('invalid_input').isLength({ max: 8000, min: 5 }).withMessage('review_lenght'),
+  body('review').isString().withMessage('invalid_input').isLength({ max: 8000, min: 3 }).withMessage('review_lenght'),
 
   // ====================>>>>>>>> empty <<<<<<<<<<<==================== //
   body('userId').isEmpty().withMessage('not_allowed'),
@@ -18,7 +18,7 @@ export const updateReviewValidator = [
   // ====================>>>>>>>> required <<<<<<<<<<<==================== //
   body('id').isMongoId().withMessage('invalid_MongoId'),
   body('rating').optional().isNumeric().withMessage('invalid_input').isFloat({ min: 0, max: 5 }).withMessage('invalid_rating'),
-  body('review').optional().isString().withMessage('invalid_input').isLength({ max: 8000, min: 5 }).withMessage('review_lenght'),
+  body('review').optional().isString().withMessage('invalid_input').isLength({ max: 8000, min: 3 }).withMessage('review_lenght'),
 
   // ====================>>>>>>>> empty <<<<<<<<<<<==================== //
   body('userId').isEmpty().withMessage('not_allowed'),
