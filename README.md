@@ -13,8 +13,7 @@
 - `TypeScript`: A typed superset of JavaScript that compiles to plain JavaScript, used to add static types to JavaScript and improve code quality.
 - `Swagger`: An open-source software framework used to design, build, document, and consume RESTful web services.
 - `Jest`: A JavaScript testing framework used for unit testing and assertions, used to validate code functionality and identify bugs.
-- `Supertest`: A library used to test HTTP requests and responses in Node.js applications, used to validate API endpoints and functionality.
-<!-- - `Docker`: A containerization platform used to package the backend of `fixflex` and its dependencies into a lightweight, portable container. -->
+- `Supertest`: A library used to test HTTP requests and responses in Node.js applications, used to validate API endpoints and functionality.<!-- - `Docker`: A containerization platform used to package the backend of `fixflex` and its dependencies into a lightweight, portable container. -->
 - `GitHub Actions`: Automated workflows triggered by GitHub events, used for continuous integration and continuous deployment (CI/CD) pipelines.
 - `Render`: A cloud platform for deploying and scaling web applications, providing simplicity and scalability.
 - `Paymob`: A payment gateway used to facilitate secure online payments between users and taskers.
@@ -61,13 +60,12 @@ The backend of `fixflex` is deployed using the following technologies:
 
 ## Additional Features 🌟
 
-- [x] `Multi-Language Support`: Supports multiple languages and locales to cater to a diverse user base, providing a localized experience.
+- [x] `Multi-Language Support`: Supports multiple languages (ar & en) and locales to cater to a diverse user base, providing a localized experience.
 - [x] `Email Notifications`: Sends automated email notifications to users and taskers for account verification, password reset, task updates, and other events.
 - [x] `Push Notifications`: Sends push notifications using OneSignal to users and taskers for task updates, messages, reminders, and other relevant events.
 - [x] `Webhooks`: Enables the integration of external service by providing webhook endpoints for event-driven communication.
 - [x] `Testing Suite`: Includes a comprehensive testing suite comprising unit tests, integration tests to ensure code reliability and maintainability.
 - [x] `Continuous Integration/Deployment (CI/CD)`: Integrates automated testing and deployment processes to streamline development workflows using GitHub Actions.
-- [x] `Localization and Internationalization`: Supports multiple languages (ar & en) and locales to cater to a diverse user base, providing a localized experience.
 - [x] `WebSockets`: Implements real-time communication between clients and the server using WebSockets, enabling interactive features such as live chat or notifications.
 - [x] `CRUD Operations`: Implements Create, Read, Update, and Delete operations for all resources using RESTful API design.
 - [x] `API Versioning`: Organizes API endpoints into versions for better management, with the current version being `v1`.
