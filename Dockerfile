@@ -10,5 +10,7 @@ RUN npm i
 
 COPY . .
 
-CMD [ "npm", "run", "start:sta-build-run" ]
+RUN  npm run build-ts
+
+CMD [ "npm", "run", "start:sta"]
 
