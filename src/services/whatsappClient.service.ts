@@ -25,9 +25,10 @@ class WhatsAppClient {
 
       puppeteer: {
         headless: true,
-        ignoreHTTPSErrors: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'], // this is required to run puppeteer in a docker container
-        executablePath: '/usr/bin/google-chrome',
+        // ignoreHTTPSErrors: true,
+        // args: ['--no-sandbox', '--disable-setuid-sandbox'], // this is required to run puppeteer in a docker container
+        // executablePath: '/usr/bin/google-chrome',
+        // executablePath: '/usr/bin/chromium-browser', // if without using chromium package: executablePath: process.env.CHROMIUM_PATH,
       },
     });
 

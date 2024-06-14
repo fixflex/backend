@@ -87,7 +87,7 @@ class App {
       if (process.env.NODE_ENV !== 'testing') {
         WhatsAppClient.getInstance();
       }
-    }, 60000); // 60 seconds
+    }, 9000); // 9 seconds
   }
   private initializeRoutes(routes: Routes[]) {
     // serve the static files (index.html)
