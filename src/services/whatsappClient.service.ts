@@ -10,7 +10,7 @@ import { sendMailer } from '../helpers';
 class WhatsAppClient {
   private static instance: WhatsAppClient | null = null;
   private static whatsappClient: Client;
-  private flag = true;
+  private flag = false;
 
   private constructor() {
     WhatsAppClient.whatsappClient = new Client({
@@ -27,7 +27,7 @@ class WhatsAppClient {
         headless: true,
         ignoreHTTPSErrors: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox'], // this is required to run puppeteer in a docker container
-        executablePath: '/usr/bin/chromium-browser', // if without using chromium package: executablePath: process.env.CHROMIUM_PATH,
+        // executablePath: '/usr/bin/chromium-browser', // if without using chromium package: executablePath: process.env.CHROMIUM_PATH,
       },
     });
 
