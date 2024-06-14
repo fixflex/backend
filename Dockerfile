@@ -10,5 +10,5 @@ RUN npm i
 
 COPY . .
 
-CMD [ "npm", "run", "start:sta" ]
+CMD [ "npm", "run", "start:dev-stg" ]
 
