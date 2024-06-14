@@ -24,11 +24,9 @@ class WhatsAppClient {
       },
 
       puppeteer: {
-        headless: true,
+        headless: true, // browser will not be visible
         args: ['--no-sandbox'], // this is required to run puppeteer in a docker container
-        // ignoreHTTPSErrors: true,
-        // args: ['--no-sandbox', '--disable-setuid-sandbox'], // this is required to run puppeteer in a docker container
-        // executablePath: '/usr/bin/chromium-browser', // if without using chromium package: executablePath: process.env.CHROMIUM_PATH,
+        // --no-sandbox is a security feature that is used to prevent the browser from running in the root user
       },
     });
 
