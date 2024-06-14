@@ -1,6 +1,6 @@
-FROM node:v20.14.0
+FROM node
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 EXPOSE 8080
 
