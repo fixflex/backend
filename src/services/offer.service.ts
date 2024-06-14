@@ -55,6 +55,7 @@ class OfferService implements IOfferService {
     let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });
     if (isOfferExist) throw new HttpException(400, 'You_already_made_an_offer_on_this_task');
     // 4. create the offer and add the tasker id to it
+    // @ts-ignore
     offer.taskerId = tasker._id;
     let newOffer = await this.offerDao.create(offer);
     // 5. update the task offers array with the new offer
@@ -135,9 +136,11 @@ class OfferService implements IOfferService {
     offer.status = OfferStatus.ACCEPTED;
     await offer.save();
 
+    // @ts-ignore
     await this.taskDao.updateOneById(offer.taskId._id, {
       status: TaskStatus.ASSIGNED,
       acceptedOffer: offer._id,
+      // @ts-ignore
       taskerId: offer.taskerId._id.toString(),
       commission: offer.price * offer.taskerId.commissionRate,
     });
@@ -147,6 +150,7 @@ class OfferService implements IOfferService {
       headings: { en: 'Offer Accepted' },
       contents: { en: 'Your offer has been accepted' },
 
+      // @ts-ignore
       data: { task: offer.taskId._id.toString() },
 
       external_ids: [offer.taskerId.userId],

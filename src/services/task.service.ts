@@ -231,6 +231,7 @@ class TaskService implements ITaskService {
     // 4. if the task is ASSIGNED then remove the acceptedOffer and update the task status to OPEN and update the offers status to PENDING instead of ACCEPTED
     if (task.status === TaskStatus.ASSIGNED) {
       // 4.1 change the offer status to PENDING
+      // @ts-ignore
       await this.offerDao.updateOneById(task.acceptedOffer._id.toString(), { status: OfferStatus.PENDING });
       // 4.2 notify the tasker that the task is open
       let tasker = await this.taskerDao.getOneById(task.acceptedOffer.taskerId, '', false);
@@ -304,6 +305,7 @@ class TaskService implements ITaskService {
     task.commission = commission;
     // Step 5.1: If the payment method is CASH, calculate the commission and add the task to the tasker's notPaidTasks
     if (task.paymentMethod === PaymentMethod.CASH) {
+      // @ts-ignore
       tasker.notPaidTasks.push(task._id);
     }
     // TODO: Implement online payment method

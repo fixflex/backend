@@ -2,6 +2,7 @@ import { ITask } from '../interfaces';
 
 export class TaskDto {
   constructor(task: ITask) {
+    // @ts-ignore
     this._id = task._id!;
     this.userId = task.userId;
     this.taskerId = task.taskerId;
