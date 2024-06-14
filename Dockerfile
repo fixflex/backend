@@ -1,4 +1,4 @@
-FROM node
+FROM node:v20.14.0
 
 WORKDIR /usr/src/app
 
@@ -10,5 +10,5 @@ RUN npm i
 
 COPY . .
 
-CMD [ "npm", "run", "start:dev-stg" ]
+CMD [ "npm", "run", "start:sta-build-run" ]
 
