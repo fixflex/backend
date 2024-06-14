@@ -22,6 +22,11 @@ class WhatsAppClient {
         type: 'remote',
         remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${env.WEB_VERSION}.html`,
       },
+
+      puppeteer: {
+        headless: false,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'], // this is required to run puppeteer in a docker container
+      },
     });
 
     WhatsAppClient.whatsappClient.on('qr', async (qr: string) => {
