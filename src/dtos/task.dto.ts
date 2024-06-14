@@ -2,7 +2,7 @@ import { ITask } from '../interfaces';
 
 export class TaskDto {
   constructor(task: ITask) {
-    this._id = task._id!;
+    this._id = task._id;
     this.userId = task.userId;
     this.taskerId = task.taskerId;
     this.dueDate = task.dueDate;
