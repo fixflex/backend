@@ -87,7 +87,7 @@ class TaskerService implements ITaskerService {
         return { url: img.secure_url, publicId: img.public_id };
       });
     }
-
+    // @ts-ignore
     let updatedTasker = await this.taskerDao.updateOneById(tasker._id, updateData);
 
     return updatedTasker;
