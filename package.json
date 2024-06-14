@@ -13,7 +13,7 @@
     "start:dev-prod": "cross-env NODE_ENV=production nodemon --files ./src/index.ts",
     "start:dev-stg": "cross-env NODE_ENV=staging nodemon --files ./src/index.ts",
     "start:sta": "cross-env NODE_ENV=staging  node  ./dist/index.js",
-    "start:sta-build-run": "cross-env NODE_ENV=staging npm run build-ts &&  node  ./dist/index.js",
+    "start:sta-build-run": "cross-env NODE_ENV=staging npm run build-ts &&  node --max-old-space-size=6144 ./dist/index.js",
     "test": "cross-env NODE_ENV=testing  jest   --runInBand  --verbose",
     "test:watch": "cross-env NODE_ENV=testing  jest  --runInBand  --verbose  --watchAll",
     "test:file": "cross-env NODE_ENV=testing  jest  --verbose   thau.test.ts",
