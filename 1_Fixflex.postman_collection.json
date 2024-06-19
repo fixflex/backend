@@ -1,13 +1,443 @@
 {
 	"info": {
-		"_postman_id": "698eb9d3-2a4d-4f89-b3d5-4ab810abc424",
+		"_postman_id": "4109e865-6c6b-4868-9605-6d794a3f1dd7",
 		"name": "1_Fixflex",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "24552265"
 	},
 	"item": [
 		{
-			"name": "Authentication",
+			"name": "Admin",
+			"item": [
+				{
+					"name": "categories",
+					"item": [
+						{
+							"name": "create category",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": {\r\n        \"en\": \"plumbing\",\r\n        \"ar\": \"سباكة\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{URL}}/api/v1/categories",
+								"description": "Admin only"
+							},
+							"response": []
+						},
+						{
+							"name": "category",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/Ahmed mostafa/Pictures/Saved Pictures/images (1).jpeg"
+										}
+									]
+								},
+								"url": "{{URL}}/api/v1/categories/656d38d7a9247d81b7537dee",
+								"description": "Admin only"
+							},
+							"response": []
+						},
+						{
+							"name": "category image",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/Ahmed mostafa/Pictures/Saved Pictures/images (1).jpeg"
+										}
+									]
+								},
+								"url": "{{URL}}/api/v1/categories/category-image/656d38d7a9247d81b7537dee",
+								"description": "Admin only"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "user by id",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/users/:id",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "user by id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"phoneNumber\": \"01066032817\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/:id",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "user profile image",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "D:\\picture\\Screenshot 2022-02-20 103310.png"
+										}
+									],
+									"options": {
+										"formdata": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/users/:id/profile-picture",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										":id",
+										"profile-picture"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "user by id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/api/v1/users/:id",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								},
+								"description": "TODO"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "coupons",
+					"item": [
+						{
+							"name": "all coupons",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{URL}}/api/v1/coupons",
+								"description": "Admin only"
+							},
+							"response": []
+						},
+						{
+							"name": "coupon by id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"fix-flex\",\r\n    \"expirationDate\": \"2022-12-31T00:00:00.000Z\",\r\n    \"value\": 100,\r\n    \"maxUses\" : 6000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/coupons/:id",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"coupons",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								},
+								"description": "Admin only"
+							},
+							"response": []
+						},
+						{
+							"name": "create coupon",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"fix-flex\",\r\n    \"expirationDate\": \"2025-12-31T00:00:00.000Z\",\r\n    \"value\": 100,\r\n    \"maxUses\" : 6000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{URL}}/api/v1/coupons",
+								"description": "Admin only"
+							},
+							"response": []
+						},
+						{
+							"name": "update coupon",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"fix-flex\",\r\n    \"expirationDate\": \"2022-12-31T00:00:00.000Z\",\r\n    \"value\": 100,\r\n    \"maxUses\" : 6000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/coupons/:id",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"coupons",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								},
+								"description": "Admin only"
+							},
+							"response": []
+						},
+						{
+							"name": "delete coupon",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"fix-flex\",\r\n    \"expirationDate\": \"2022-12-31T00:00:00.000Z\",\r\n    \"value\": 100,\r\n    \"maxUses\" : 6000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/v1/coupons/:id",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"coupons",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								},
+								"description": "Admin only"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Auth",
 			"item": [
 				{
 					"name": "Signup",
@@ -16,156 +446,80 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.environment.set(\"JWT\", pm.response.json().token);\r",
-									" "
+									"// No changes made to the existing test script",
+									"pm.environment.set(\"JWT\", pm.response.json().token);",
+									""
 								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
 								"type": "text/javascript"
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
 					"request": {
 						"method": "POST",
 						"header": [
 							{
-								"name": "cache-control",
-								"sortOrder": 2,
-								"infoTitle": "We recommend using this header",
-								"info": "Postman added \"Cache-Control: no-cache\" as a precautionary measure to prevent the server from returning stale response when one makes repeated requests.\n\nYou can remove this header in the app settings or enter a new one with a different value.",
-								"allowedToToggle": false,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to settings",
 								"key": "Cache-Control",
-								"value": "no-cache",
-								"system": true,
-								"type": "text"
+								"value": "no-cache"
 							},
 							{
-								"name": "postman-token",
-								"sortOrder": 3,
-								"infoTitle": "We recommend using this header",
-								"info": "The Postman-Token header appends a random UUID to every outgoing request. Postman adds this header for API developers to better debug requests sent and to ensure separate requests appear distinct to the receiving server.\n\nYou can remove this header in the app settings.",
-								"allowedToToggle": false,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to settings",
 								"key": "Postman-Token",
-								"value": "<calculated when request is sent>",
-								"system": true,
-								"type": "text"
+								"value": "<calculated when request is sent>"
 							},
 							{
-								"name": "content-type",
-								"sortOrder": 4,
-								"infoTitle": "This header was automatically added",
-								"info": "The Content-Type header is added to help the server identify the media type of the request body that is present in this request.\n\nUse the request body tab to control the value or to remove this header.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to body",
 								"key": "Content-Type",
-								"value": "application/json",
-								"system": true,
-								"type": "text"
+								"value": "application/json"
 							},
 							{
-								"name": "content-length",
-								"sortOrder": 5,
-								"infoTitle": "This header was automatically added",
-								"info": "The Content-Length header was added to indicate to the server the size of the request body that is added to this request. Server uses this value to parse the request body accurately.\n\nYou can remove the header or enter a new one with a different value.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to body",
 								"key": "Content-Length",
-								"value": "<calculated when request is sent>",
-								"system": true,
-								"type": "text"
+								"value": "<calculated when request is sent>"
 							},
 							{
-								"name": "host",
-								"sortOrder": 6,
-								"infoTitle": "We recommend using this header",
-								"info": "The Host header is added to identify the domain name for which a request is being sent to the server. This header is implicitly sent by every HTTP client.\n\nYou can remove the header or enter a new one with a different value. It is most likely that without this header, your request will return an HTTP 400 error.",
-								"allowedToToggle": true,
-								"disableEdit": true,
 								"key": "Host",
-								"value": "<calculated when request is sent>",
-								"system": true,
-								"type": "text"
+								"value": "<calculated when request is sent>"
 							},
 							{
-								"name": "user-agent",
-								"sortOrder": 7,
-								"infoTitle": "We recommend using this header",
-								"info": "The User-Agent header is added to help the server identify Postman as the HTTP requesting application or client.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
-								"allowedToToggle": true,
-								"disableEdit": true,
 								"key": "User-Agent",
-								"value": "PostmanRuntime/7.32.1",
-								"system": true,
-								"type": "text"
+								"value": "PostmanRuntime/7.32.1"
 							},
 							{
-								"name": "accept",
-								"sortOrder": 8,
-								"infoTitle": "We recommend using this header",
-								"info": "The \"Accept: */*\" header is added to tell the server that Postman can understand and process all forms of response content types.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
-								"allowedToToggle": true,
-								"disableEdit": true,
 								"key": "Accept",
-								"value": "*/*",
-								"system": true,
-								"type": "text"
+								"value": "*/*"
 							},
 							{
-								"name": "accept-encoding",
-								"sortOrder": 9,
-								"infoTitle": "We recommend using this header",
-								"info": "The Accept-Encoding header is added to indicate to the server that Postman HTTP client supports a defined list of content-encoding or compression algorithms as response.\n\nYou can remove the header or enter a new one with a different value. Doing that may not accurately render the response within the app.",
-								"allowedToToggle": true,
-								"disableEdit": true,
 								"key": "Accept-Encoding",
-								"value": "gzip, deflate, br",
-								"system": true,
-								"type": "text"
+								"value": "gzip, deflate, br"
 							},
 							{
-								"name": "connection",
-								"sortOrder": 10,
-								"infoTitle": "We recommend using this header",
-								"info": "Postman added the Connection header to indicate the server to keep the underlying network connection open once the current response is received. This allows Postman to reuse the same connection for faster response times in subsequent requests to the same server.\n\nYou can remove this header or enter a new one with a different value, such as `Connection: Close` to control this behaviour.",
-								"allowedToToggle": true,
-								"disableEdit": true,
 								"key": "Connection",
-								"value": "keep-alive",
-								"system": true,
-								"type": "text"
+								"value": "keep-alive"
 							},
 							{
 								"key": "accept-language",
-								"value": "ar",
-								"type": "text",
-								"id": 0
+								"value": "en",
+								"disabled": true
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"firstName\": \"user2\",\r\n    \"lastName\": \"user2\",\r\n    \"email\": \"user2@gmail.com\",\r\n    \"password\" :\"password\"\r\n}",
+							"raw": "{\r\n    \"firstName\": \"admin\",\r\n    \"lastName\": \"admin\",\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\": \"password\",\r\n    \"phoneNumber\": \"01066032817\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/auth/signup",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"signup"
-							]
-						}
+						"url": "{{URL}}/api/v1/auth/signup"
 					},
 					"response": []
 				},
@@ -176,200 +530,102 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.environment.set(\"JWT\", pm.response.json().token);\r",
+									"pm.environment.set(\"JWT\", pm.response.json().accessToken);\r",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
 					"request": {
 						"method": "POST",
-						"header": [
-							{
-								"name": "cache-control",
-								"sortOrder": 2,
-								"infoTitle": "We recommend using this header",
-								"info": "Postman added \"Cache-Control: no-cache\" as a precautionary measure to prevent the server from returning stale response when one makes repeated requests.\n\nYou can remove this header in the app settings or enter a new one with a different value.",
-								"allowedToToggle": false,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to settings",
-								"key": "Cache-Control",
-								"value": "no-cache",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "postman-token",
-								"sortOrder": 3,
-								"infoTitle": "We recommend using this header",
-								"info": "The Postman-Token header appends a random UUID to every outgoing request. Postman adds this header for API developers to better debug requests sent and to ensure separate requests appear distinct to the receiving server.\n\nYou can remove this header in the app settings.",
-								"allowedToToggle": false,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to settings",
-								"key": "Postman-Token",
-								"value": "<calculated when request is sent>",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "content-type",
-								"sortOrder": 4,
-								"infoTitle": "This header was automatically added",
-								"info": "The Content-Type header is added to help the server identify the media type of the request body that is present in this request.\n\nUse the request body tab to control the value or to remove this header.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to body",
-								"key": "Content-Type",
-								"value": "application/json",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "content-length",
-								"sortOrder": 5,
-								"infoTitle": "This header was automatically added",
-								"info": "The Content-Length header was added to indicate to the server the size of the request body that is added to this request. Server uses this value to parse the request body accurately.\n\nYou can remove the header or enter a new one with a different value.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to body",
-								"key": "Content-Length",
-								"value": "<calculated when request is sent>",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "host",
-								"sortOrder": 6,
-								"infoTitle": "We recommend using this header",
-								"info": "The Host header is added to identify the domain name for which a request is being sent to the server. This header is implicitly sent by every HTTP client.\n\nYou can remove the header or enter a new one with a different value. It is most likely that without this header, your request will return an HTTP 400 error.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Host",
-								"value": "<calculated when request is sent>",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "user-agent",
-								"sortOrder": 7,
-								"infoTitle": "We recommend using this header",
-								"info": "The User-Agent header is added to help the server identify Postman as the HTTP requesting application or client.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "User-Agent",
-								"value": "PostmanRuntime/7.32.1",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "accept",
-								"sortOrder": 8,
-								"infoTitle": "We recommend using this header",
-								"info": "The \"Accept: */*\" header is added to tell the server that Postman can understand and process all forms of response content types.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Accept",
-								"value": "*/*",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "accept-encoding",
-								"sortOrder": 9,
-								"infoTitle": "We recommend using this header",
-								"info": "The Accept-Encoding header is added to indicate to the server that Postman HTTP client supports a defined list of content-encoding or compression algorithms as response.\n\nYou can remove the header or enter a new one with a different value. Doing that may not accurately render the response within the app.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Accept-Encoding",
-								"value": "gzip, deflate, br",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "connection",
-								"sortOrder": 10,
-								"infoTitle": "We recommend using this header",
-								"info": "Postman added the Connection header to indicate the server to keep the underlying network connection open once the current response is received. This allows Postman to reuse the same connection for faster response times in subsequent requests to the same server.\n\nYou can remove this header or enter a new one with a different value, such as `Connection: Close` to control this behaviour.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Connection",
-								"value": "keep-alive",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDMzZmViZDVjNzIwZDcxMGJiMzg4OGIiLCJpYXQiOjE2ODExMjkxNDksImV4cCI6MTY4ODkwNTE0OX0.YqWTlPl9YSVitnUYiDywPGKuGb-JcN6Jvg4nmpkPf1g",
-								"type": "text",
-								"id": 0
-							},
-							{
-								"key": "accept-language",
-								"value": "en",
-								"type": "text",
-								"id": 1
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"user1@gmail.com\",\r\n  \"password\": \"password\"\r\n}",
+							"raw": "{\r\n    \"email\": \"user3@gmail.com\",\r\n    \"password\": \"password\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/auth/login",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"login"
-							]
-						}
+						"url": "{{URL}}/api/v1/auth/login"
 					},
 					"response": []
 				},
 				{
-					"name": "logout",
+					"name": "Logout",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.environment.set(\"JWT\", pm.response.json().token);\r",
 									""
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
 					"request": {
 						"method": "POST",
 						"header": [
 							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDMzZmViZDVjNzIwZDcxMGJiMzg4OGIiLCJpYXQiOjE2ODExMjkxNDksImV4cCI6MTY4ODkwNTE0OX0.YqWTlPl9YSVitnUYiDywPGKuGb-JcN6Jvg4nmpkPf1g",
-								"type": "text"
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Postman-Token",
+								"value": "<calculated when request is sent>"
+							},
+							{
+								"key": "Content-Length",
+								"value": "0",
+								"disabled": true
+							},
+							{
+								"key": "Host",
+								"value": "<calculated when request is sent>",
+								"disabled": true
+							},
+							{
+								"key": "User-Agent",
+								"value": "PostmanRuntime/7.32.1",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "*/*",
+								"disabled": true
+							},
+							{
+								"key": "Accept-Encoding",
+								"value": "gzip, deflate, br",
+								"disabled": true
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive",
+								"disabled": true
 							}
 						],
-						"url": {
-							"raw": "{{URL}}/api/v1/auth/logout",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"logout"
-							]
-						}
+						"url": "{{URL}}/api/v1/auth/logout"
 					},
 					"response": []
 				},
@@ -391,37 +647,62 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDMzZmViZDVjNzIwZDcxMGJiMzg4OGIiLCJpYXQiOjE2ODExMjkxNDksImV4cCI6MTY4ODkwNTE0OX0.YqWTlPl9YSVitnUYiDywPGKuGb-JcN6Jvg4nmpkPf1g",
-								"type": "text"
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Postman-Token",
+								"value": "<calculated when request is sent>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Content-Length",
+								"value": "<calculated when request is sent>",
+								"disabled": true
+							},
+							{
+								"key": "Host",
+								"value": "<calculated when request is sent>",
+								"disabled": true
+							},
+							{
+								"key": "User-Agent",
+								"value": "PostmanRuntime/7.32.1",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "*/*",
+								"disabled": true
+							},
+							{
+								"key": "Accept-Encoding",
+								"value": "gzip, deflate, br"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"credentiala\" : \"eyJhbGciOiJSUzI1NiIsImtpZCI6IjliMDI4NWMzMWJmZDhiMDQwZTAzMTU3YjE5YzRlOTYwYmRjMTBjNmYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI1NzQ3MTI2MzYxMDItZG5zYWNwcTByOHRjYTlycW10cjA4cGZraGk2bWUybWwuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI1NzQ3MTI2MzYxMDItZG5zYWNwcTByOHRjYTlycW10cjA4cGZraGk2bWUybWwuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDA4OTgzMjg2NTk2NDQ0OTIyNDYiLCJlbWFpbCI6ImFobWVkNDMyMW11c3RhZmE1QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYmYiOjE3MDMyNzc3ODgsIm5hbWUiOiJBaG1lZCBNdXN0YWZhIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0lSY0kyZG45dzl4cGtuakhsRGFnMnN3cTJYZEc5Q1lZVUEyUmtCU2VhZHRMUT1zOTYtYyIsImdpdmVuX25hbWUiOiJBaG1lZCIsImZhbWlseV9uYW1lIjoiTXVzdGFmYSIsImxvY2FsZSI6ImFyIiwiaWF0IjoxNzAzMjc4MDg4LCJleHAiOjE3MDMyODE2ODgsImp0aSI6IjNmZGI1OWViYTMzOGUzNzg1M2E0ZDJjYjQ3ZjNlZWZlNDc0YmVhM2YifQ.SPyHwCjPp9kzlKxXSSoQn2KcEzaZvuloWHlYcKMsz-txBQBYPwIX6EA_lkUQ5rSKbFmCDlvWu7IuckeytgblITyaD3DZu3aQqKZJ6_dSaeciJN3R2nHO0v6rIUydwm4SEgxmI59AAz_KC6H5-KlwphaNFKh-Cm5BmkoZvts2GBbT7XmjG9cDUIkxLVHfr0EyXECs74Dy3E3rB0nbJ4LZ9KTQs3QgfGHEIJydw1wWGiywPI9JurJzzO69Tb5JoZkdF_IHpOsmH3OKsZ7ZW1Z8DTXBTln4nC_0XAd2x685Qt1sgAJHQtYej4Sk8T9z_Fip8XoduYKvJMuLjnyy1LwKew\"\r\n}",
+							"raw": "{\r\n  \"credential\" : \"loJhbGciOiJSxzI1NiIsImtpqCI6Ijl2MDI4NWMzMWJmZDhiMDQwZTAzMTU3YjE5YzRlOTYwYmRjMTBjNmYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI1NzQ3MTI2MzYxMDItZG5zYWNwcTByOHRjYTlycW10cjA4cGZraGk2bWUybWwuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI1NzQ3MTIaMzYxMDItZG5zYWNwcTByOHRjYTlycW10cjA4cGZraGk2bWUybWwuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDs4OTgzMjg2NTk2NDQ0OTIyNDYiLCJlbWFpbCI6ImFobWVkNDMyMW11c3RhZmE1QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYmYiOjE3MDMyNzc3ODgsIm5hbWUiOiJBaG1lZCBNdXN0YWZhIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0lSY0kyZG45dzl4cGtuakhsRGFnMnN3cTJYZEc5Q1lZVUEyUmtCUcVhZHRMUT1zOTYtYyIsImdpdmVuX25hbWUiOiJBaG1lZCIsImZhbWlseV9uYW1lIjoiTXVzdGFmYSIsImxvY2FsZSI6ImFyIiwiaWF0IjoxNzAzMjc4MDg4LCJleHAiOjE3MDMyODE2ODgsImp0aSI6IjNmZGI1OWVdYTMzOGUzNzg1M2E0ZDJjYjQ3ZjNlZWZlNDc0YmVhM2YifQ.SPyHwCjPp9kzlKxXSSoQn2KcEzaZvuloWHlYcKMsz-txBQBYPwIX6EA_lkUQ5rSKbFmCDlvWu7IuckeytgblITyaD3DZu3aQqKZJ6_dSaeciJN3R2nHO0v6rIUydwm4SEgxmI59AAz_KC6H5-KlwphaNFKh-Cm5BmkoZvts2GBbT7XmjG9cDUIkxLVHfr0EyXECs74Dy3E3rB0nbJ4yZ9KTQs3QgfGHEIJydw1wWGiywPI9JurJzzO69Tb5JoZkdF_IHpOsmH3OKsZ7ZW1Z8DTXBTln4nC_0XAd2x685Qt1sgAJHQtYej4Sk8T9z_Fip8XoduYKvJMuLjnyy1awKew\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/auth/google",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"google"
-							]
-						}
+						"url": "{{URL}}/api/v1/auth/google"
 					},
 					"response": []
 				},
 				{
-					"name": "refresh token",
+					"name": "Refresh token",
 					"event": [
 						{
 							"listen": "test",
@@ -438,12 +719,38 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [
 							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDMzZmViZDVjNzIwZDcxMGJiMzg4OGIiLCJpYXQiOjE2ODExMjkxNDksImV4cCI6MTY4ODkwNTE0OX0.YqWTlPl9YSVitnUYiDywPGKuGb-JcN6Jvg4nmpkPf1g",
-								"type": "text"
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Postman-Token",
+								"value": "<calculated when request is sent>"
+							},
+							{
+								"key": "Host",
+								"value": "<calculated when request is sent>"
+							},
+							{
+								"key": "User-Agent",
+								"value": "PostmanRuntime/7.32.1"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Accept-Encoding",
+								"value": "gzip, deflate, br"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
 							}
 						],
 						"body": {
@@ -455,23 +762,12 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/auth/refresh-token",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"refresh-token"
-							]
-						}
+						"url": "{{URL}}/api/v1/auth/refresh-token"
 					},
 					"response": []
 				},
 				{
-					"name": "forgotPassword",
+					"name": "Forgot Password",
 					"event": [
 						{
 							"listen": "test",
@@ -479,6 +775,14 @@
 								"exec": [
 									""
 								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
 								"type": "text/javascript"
 							}
 						}
@@ -487,9 +791,40 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDMzZmViZDVjNzIwZDcxMGJiMzg4OGIiLCJpYXQiOjE2ODExMjkxNDksImV4cCI6MTY4ODkwNTE0OX0.YqWTlPl9YSVitnUYiDywPGKuGb-JcN6Jvg4nmpkPf1g",
-								"type": "text"
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Postman-Token",
+								"value": "<calculated when request is sent>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Length",
+								"value": "<calculated when request is sent>"
+							},
+							{
+								"key": "Host",
+								"value": "<calculated when request is sent>"
+							},
+							{
+								"key": "User-Agent",
+								"value": "PostmanRuntime/7.32.1"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Accept-Encoding",
+								"value": "gzip, deflate, br"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
 							}
 						],
 						"body": {
@@ -501,23 +836,12 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/auth/forgot-password",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"forgot-password"
-							]
-						}
+						"url": "{{URL}}/api/v1/auth/forgot-password"
 					},
 					"response": []
 				},
 				{
-					"name": "verifyResetCode",
+					"name": "Verify Reset Code",
 					"event": [
 						{
 							"listen": "test",
@@ -533,37 +857,57 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDMzZmViZDVjNzIwZDcxMGJiMzg4OGIiLCJpYXQiOjE2ODExMjkxNDksImV4cCI6MTY4ODkwNTE0OX0.YqWTlPl9YSVitnUYiDywPGKuGb-JcN6Jvg4nmpkPf1g",
-								"type": "text"
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Postman-Token",
+								"value": "<calculated when request is sent>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Length",
+								"value": "<calculated when request is sent>"
+							},
+							{
+								"key": "Host",
+								"value": "<calculated when request is sent>"
+							},
+							{
+								"key": "User-Agent",
+								"value": "PostmanRuntime/7.32.1"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Accept-Encoding",
+								"value": "gzip, deflate, br"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"resetCode\": \"183308\"\r\n}",
+							"raw": "{\r\n    \"resetCode\": \"914137\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/auth/verifyResetCode",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"verifyResetCode"
-							]
-						}
+						"url": "{{URL}}/api/v1/auth/verify-reset-code"
 					},
 					"response": []
 				},
 				{
-					"name": "change-password",
+					"name": "Change Password",
 					"event": [
 						{
 							"listen": "test",
@@ -579,13 +923,9 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{JWT}}"
+							}
 						},
 						"method": "PATCH",
 						"header": [],
@@ -598,23 +938,12 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/auth/change-password",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"change-password"
-							]
-						}
+						"url": "{{URL}}/api/v1/auth/change-password"
 					},
 					"response": []
 				},
 				{
-					"name": "resetPassword",
+					"name": "Reset Password",
 					"event": [
 						{
 							"listen": "test",
@@ -633,32 +962,52 @@
 						"method": "PATCH",
 						"header": [
 							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDMzZmViZDVjNzIwZDcxMGJiMzg4OGIiLCJpYXQiOjE2ODExMjkxNDksImV4cCI6MTY4ODkwNTE0OX0.YqWTlPl9YSVitnUYiDywPGKuGb-JcN6Jvg4nmpkPf1g",
-								"type": "text"
+								"key": "Cache-Control",
+								"value": "no-cache"
+							},
+							{
+								"key": "Postman-Token",
+								"value": "<calculated when request is sent>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Length",
+								"value": "<calculated when request is sent>"
+							},
+							{
+								"key": "Host",
+								"value": "<calculated when request is sent>"
+							},
+							{
+								"key": "User-Agent",
+								"value": "PostmanRuntime/7.32.1"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Accept-Encoding",
+								"value": "gzip, deflate, br"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"ahmed4321mustafa5@gmail.com\",\r\n    \"newPassword\": \"password\"\r\n}",
+							"raw": "{\r\n    \"email\": \"user@gmail.com\",\r\n    \"newPassword\": \"password\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/auth/reset-password",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"reset-password"
-							]
-						}
+						"url": "{{URL}}/api/v1/auth/reset-password"
 					},
 					"response": []
 				}
@@ -671,72 +1020,14 @@
 					"name": "me",
 					"request": {
 						"auth": {
-							"type": "noauth"
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/v1/users/me",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"me"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "me",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.environment.set(\"JWT\", pm.response.json().token);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": " {{JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"currentPassword\": \"password\",\r\n    \"password\": \"password\",\r\n    \"passwordConfirm\": \"password\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{URL}} /api/v1/users/updateMyPassword",
-							"host": [
-								"{{URL}} "
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"updateMyPassword"
-							]
-						}
+						"url": "{{URL}}/api/v1/users/me"
 					},
 					"response": []
 				},
@@ -749,205 +1040,36 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"firstName\" : \"user\"\r\n\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
+								"type": "text/javascript",
+								"packages": {}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/users/me",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"me"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "verifyResetCode",
-					"event": [
 						{
-							"listen": "test",
+							"listen": "prerequest",
 							"script": {
-								"exec": [
-									"pm.environment.set(\"JWT\", pm.response.json().token);\r",
-									""
-								],
+								"exec": [],
 								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"ahmed4321mustafa4@gmail.com\",\r\n    \"resetCode\": \"newPassword\"\r\n}",
+							"raw": "{\r\n    \"phoneNumber\": \"01018704869\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/users/me/verifyResetCode",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"me",
-								"verifyResetCode"
-							]
-						}
+						"url": "{{URL}}/api/v1/users/me"
 					},
 					"response": []
 				},
 				{
-					"name": "verifyResetCode Copy",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.environment.set(\"JWT\", pm.response.json().token);\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"resetCode\": \"newPassword\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{URL}}/api/v1/users/me/verifyResetCode",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"me",
-								"verifyResetCode"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "verifyResetCode Copy 2",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.environment.set(\"JWT\", pm.response.json().token);\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"resetCode\": \"newPassword\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{URL}}/api/v1/users/me/verifyResetCode",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"me",
-								"verifyResetCode"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "profile-picture-upload",
+					"name": "Profile Image",
 					"event": [
 						{
 							"listen": "test",
@@ -955,21 +1077,22 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
@@ -978,28 +1101,11 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "D:\\picture\\repository\\387774369_1674841953025776_1998538386850238701_n.jpg"
+									"src": "/D:/picture/repository/Saved Pictures/billboard.png"
 								}
-							],
-							"options": {
-								"formdata": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{URL}}/api/v1/users/me/profile-picture",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"me",
-								"profile-picture"
 							]
-						}
+						},
+						"url": "{{URL}}/api/v1/users/me/profile-picture"
 					},
 					"response": []
 				},
@@ -1017,39 +1123,75 @@
 						}
 					],
 					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/users/me",
+						"description": "TODO"
+					},
+					"response": []
+				},
+				{
+					"name": "send-verification-code",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{JWT}}"
+							}
 						},
-						"method": "DELETE",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"ali\"\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}} /api/v1/users/me",
-							"host": [
-								"{{URL}} "
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"me"
-							]
-						}
+						"url": "{{URL}}/api/v1/users/send-verification-code",
+						"description": "Admin only"
+					},
+					"response": []
+				},
+				{
+					"name": "verify-phone-number",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"verificationCode\": \"845999\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/users/verify",
+						"description": "Admin only"
+					},
+					"response": []
+				},
+				{
+					"name": "user by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/users/660db3387d13e4a2eab638f8"
 					},
 					"response": []
 				}
@@ -1059,137 +1201,55 @@
 			"name": "Taskers",
 			"item": [
 				{
-					"name": "taskers",
+					"name": "List of taskers",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [
 							{
-								"name": "authorization",
-								"sortOrder": 0,
-								"infoTitle": "This header was automatically added",
-								"info": "This header is added because of the authorization method used for this request.\n\nThe value of this header is tentative. You can find the exact value in the console once the request is sent.\n\nUse the authorization tab to remove authorization or to change the value of this header.",
-								"allowedToToggle": false,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to authorization",
 								"key": "Authorization",
-								"value": "Bearer {{JWT}}",
-								"system": true,
-								"auth": true,
-								"type": "text"
+								"value": "Bearer {{JWT}}"
 							},
 							{
-								"name": "cache-control",
-								"sortOrder": 2,
-								"infoTitle": "We recommend using this header",
-								"info": "Postman added \"Cache-Control: no-cache\" as a precautionary measure to prevent the server from returning stale response when one makes repeated requests.\n\nYou can remove this header in the app settings or enter a new one with a different value.",
-								"allowedToToggle": false,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to settings",
 								"key": "Cache-Control",
-								"value": "no-cache",
-								"system": true,
-								"type": "text"
+								"value": "no-cache"
 							},
 							{
-								"name": "postman-token",
-								"sortOrder": 3,
-								"infoTitle": "We recommend using this header",
-								"info": "The Postman-Token header appends a random UUID to every outgoing request. Postman adds this header for API developers to better debug requests sent and to ensure separate requests appear distinct to the receiving server.\n\nYou can remove this header in the app settings.",
-								"allowedToToggle": false,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to settings",
 								"key": "Postman-Token",
-								"value": "<calculated when request is sent>",
-								"system": true,
-								"type": "text"
+								"value": "<calculated when request is sent>"
 							},
 							{
-								"name": "host",
-								"sortOrder": 6,
-								"infoTitle": "We recommend using this header",
-								"info": "The Host header is added to identify the domain name for which a request is being sent to the server. This header is implicitly sent by every HTTP client.\n\nYou can remove the header or enter a new one with a different value. It is most likely that without this header, your request will return an HTTP 400 error.",
-								"allowedToToggle": true,
-								"disableEdit": true,
 								"key": "Host",
-								"value": "<calculated when request is sent>",
-								"system": true,
-								"type": "text"
+								"value": "<calculated when request is sent>"
 							},
 							{
-								"name": "user-agent",
-								"sortOrder": 7,
-								"infoTitle": "We recommend using this header",
-								"info": "The User-Agent header is added to help the server identify Postman as the HTTP requesting application or client.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
-								"allowedToToggle": true,
-								"disableEdit": true,
 								"key": "User-Agent",
-								"value": "PostmanRuntime/7.32.1",
-								"system": true,
-								"type": "text"
+								"value": "PostmanRuntime/7.32.1"
 							},
 							{
-								"name": "accept",
-								"sortOrder": 8,
-								"infoTitle": "We recommend using this header",
-								"info": "The \"Accept: */*\" header is added to tell the server that Postman can understand and process all forms of response content types.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
-								"allowedToToggle": true,
-								"disableEdit": true,
 								"key": "Accept",
-								"value": "*/*",
-								"system": true,
-								"type": "text"
+								"value": "*/*"
 							},
 							{
-								"name": "accept-encoding",
-								"sortOrder": 9,
-								"infoTitle": "We recommend using this header",
-								"info": "The Accept-Encoding header is added to indicate to the server that Postman HTTP client supports a defined list of content-encoding or compression algorithms as response.\n\nYou can remove the header or enter a new one with a different value. Doing that may not accurately render the response within the app.",
-								"allowedToToggle": true,
-								"disableEdit": true,
 								"key": "Accept-Encoding",
-								"value": "gzip, deflate, br",
-								"system": true,
-								"type": "text"
+								"value": "gzip, deflate, br"
 							},
 							{
-								"name": "connection",
-								"sortOrder": 10,
-								"infoTitle": "We recommend using this header",
-								"info": "Postman added the Connection header to indicate the server to keep the underlying network connection open once the current response is received. This allows Postman to reuse the same connection for faster response times in subsequent requests to the same server.\n\nYou can remove this header or enter a new one with a different value, such as `Connection: Close` to control this behaviour.",
-								"allowedToToggle": true,
-								"disableEdit": true,
 								"key": "Connection",
-								"value": "keep-alive",
-								"system": true,
-								"type": "text"
+								"value": "keep-alive"
 							},
 							{
 								"key": "longitude",
 								"value": "30.6826534",
-								"type": "text",
-								"id": 0,
 								"disabled": true
 							},
 							{
 								"key": "l",
 								"value": "28.0965208",
-								"type": "text",
-								"id": 1,
 								"disabled": true
 							}
 						],
 						"url": {
-							"raw": "{{URL}}/api/v1/taskers?location=32.226966,26.006616&maxDistance=5000&sort=-location.coordinates&limit=2",
+							"raw": "{{URL}}/api/v1/taskers",
 							"host": [
 								"{{URL}}"
 							],
@@ -1201,7 +1261,8 @@
 							"query": [
 								{
 									"key": "location",
-									"value": "32.226966,26.006616"
+									"value": "32.226966,26.006616",
+									"disabled": true
 								},
 								{
 									"key": "categories",
@@ -1210,7 +1271,8 @@
 								},
 								{
 									"key": "maxDistance",
-									"value": "5000"
+									"value": "5000",
+									"disabled": true
 								},
 								{
 									"key": "fields",
@@ -1219,11 +1281,13 @@
 								},
 								{
 									"key": "sort",
-									"value": "-location.coordinates"
+									"value": "-location.coordinates",
+									"disabled": true
 								},
 								{
 									"key": "limit",
-									"value": "2"
+									"value": "2",
+									"disabled": true
 								},
 								{
 									"key": "page",
@@ -1236,27 +1300,17 @@
 									"disabled": true
 								}
 							]
-						}
+						},
+						"description": "the default limit is 10"
 					},
 					"response": []
 				},
 				{
-					"name": "tasker by id",
+					"name": "Tasker by id",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/v1/taskers/65b64c83ac819f33de11df9d",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taskers",
-								"65b64c83ac819f33de11df9d"
-							]
-						}
+						"url": "{{URL}}/api/v1/taskers/6633b769237de8fd1e5b9932"
 					},
 					"response": []
 				},
@@ -1265,78 +1319,100 @@
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{JWT}}"
+							}
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/v1/taskers/me",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taskers",
-								"me"
-							]
-						}
+						"url": "{{URL}}/api/v1/taskers/me"
 					},
 					"response": []
 				},
 				{
-					"name": "become-tasker",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
+					"name": "apply coupon",
 					"request": {
 						"auth": {
 							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
+							"bearer": {
+								"token": "{{JWT}}"
+							}
 						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"categories\": [\r\n        \"65af2825d3ed5c2a3a6f117a\"\r\n    ],\r\n    \"bio\": \"Faiyum\",\r\n    \"location\": {\r\n        \"coordinates\": [\r\n              32.165368,  26.052517\r\n        ]\r\n    },\r\n    \"phoneNumber\": \"01066032857\"\r\n}",
+							"raw": "{\r\n    \"couponCode\": \"fix-flex\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/taskers/become-tasker",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taskers",
-								"become-tasker"
-							]
+						"url": "{{URL}}/api/v1/taskers/apply-coupon",
+						"description": "Admin only"
+					},
+					"response": []
+				},
+				{
+					"name": "commission pay",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"paymentMethod\": \"card\"\r\n    // \"phoneNumber\": \"01010101010\",\r\n    //    \"paymentMethod\": \"wallet\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/taskers/commission-pay",
+						"description": "Admin only"
+					},
+					"response": []
+				},
+				{
+					"name": "become a tasker",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
 						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"categories\": [\"66115fb6857a0db926ef85fd\"],\r\n  \"location\": {\r\n      // \"coordinates\": [longitude, latitude]\r\n    //   31.542937, 25.162279\r\n        \"coordinates\": [ 25.162279,31.542937] \r\n      },\r\n   \"phoneNumber\": \"01066032817\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/taskers/become-tasker"
 					},
 					"response": []
 				},
@@ -1354,216 +1430,103 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \r\n    \"bio\": \"Farshut\"\r\n\r\n\r\n}",
+							"raw": "{\r\n    \"bio\": \"i am a tasker\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/taskers/me",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taskers",
-								"me"
-							]
+						"url": "{{URL}}/api/v1/taskers/me"
+					},
+					"response": []
+				},
+				{
+					"name": "portfolio",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
 						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/D:/picture/repository/Saved Pictures/download.jpeg"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/D:/picture/repository/Saved Pictures/download.png"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/D:/picture/repository/Saved Pictures/1604582418118.jpeg"
+								}
+							]
+						},
+						"url": "{{URL}}/api/v1/taskers/me/portfolio"
 					},
 					"response": []
 				},
 				{
 					"name": "me",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "DELETE",
 						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/v1/taskers/me",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"taskers",
-								"me"
-							]
-						}
+						"url": "{{URL}}/api/v1/taskers/me"
 					},
 					"response": []
 				}
-			]
+			],
+			"auth": {
+				"type": "noauth"
+			}
 		},
 		{
 			"name": "categories",
 			"item": [
 				{
 					"name": "get  categories",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "GET",
-						"header": [
-							{
-								"name": "authorization",
-								"sortOrder": 0,
-								"infoTitle": "This header was automatically added",
-								"info": "This header is added because of the authorization method used for this request.\n\nThe value of this header is tentative. You can find the exact value in the console once the request is sent.\n\nUse the authorization tab to remove authorization or to change the value of this header.",
-								"allowedToToggle": false,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to authorization",
-								"key": "Authorization",
-								"value": "Bearer {{JWT}}",
-								"system": true,
-								"auth": true,
-								"type": "text"
-							},
-							{
-								"name": "cache-control",
-								"sortOrder": 2,
-								"infoTitle": "We recommend using this header",
-								"info": "Postman added \"Cache-Control: no-cache\" as a precautionary measure to prevent the server from returning stale response when one makes repeated requests.\n\nYou can remove this header in the app settings or enter a new one with a different value.",
-								"allowedToToggle": false,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to settings",
-								"key": "Cache-Control",
-								"value": "no-cache",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "postman-token",
-								"sortOrder": 3,
-								"infoTitle": "We recommend using this header",
-								"info": "The Postman-Token header appends a random UUID to every outgoing request. Postman adds this header for API developers to better debug requests sent and to ensure separate requests appear distinct to the receiving server.\n\nYou can remove this header in the app settings.",
-								"allowedToToggle": false,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to settings",
-								"key": "Postman-Token",
-								"value": "<calculated when request is sent>",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "host",
-								"sortOrder": 6,
-								"infoTitle": "We recommend using this header",
-								"info": "The Host header is added to identify the domain name for which a request is being sent to the server. This header is implicitly sent by every HTTP client.\n\nYou can remove the header or enter a new one with a different value. It is most likely that without this header, your request will return an HTTP 400 error.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Host",
-								"value": "<calculated when request is sent>",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "user-agent",
-								"sortOrder": 7,
-								"infoTitle": "We recommend using this header",
-								"info": "The User-Agent header is added to help the server identify Postman as the HTTP requesting application or client.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "User-Agent",
-								"value": "PostmanRuntime/7.32.1",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "accept",
-								"sortOrder": 8,
-								"infoTitle": "We recommend using this header",
-								"info": "The \"Accept: */*\" header is added to tell the server that Postman can understand and process all forms of response content types.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Accept",
-								"value": "*/*",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "accept-encoding",
-								"sortOrder": 9,
-								"infoTitle": "We recommend using this header",
-								"info": "The Accept-Encoding header is added to indicate to the server that Postman HTTP client supports a defined list of content-encoding or compression algorithms as response.\n\nYou can remove the header or enter a new one with a different value. Doing that may not accurately render the response within the app.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Accept-Encoding",
-								"value": "gzip, deflate, br",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "connection",
-								"sortOrder": 10,
-								"infoTitle": "We recommend using this header",
-								"info": "Postman added the Connection header to indicate the server to keep the underlying network connection open once the current response is received. This allows Postman to reuse the same connection for faster response times in subsequent requests to the same server.\n\nYou can remove this header or enter a new one with a different value, such as `Connection: Close` to control this behaviour.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Connection",
-								"value": "keep-alive",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"key": "accept-language",
-								"value": "en",
-								"type": "text",
-								"id": 0,
-								"disabled": true
-							}
-						],
-						"url": {
-							"raw": "{{URL}}/api/v1/categories",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"categories"
-							]
-						}
+						"header": [],
+						"url": "{{URL}}/api/v1/categories"
 					},
 					"response": []
 				},
 				{
-					"name": "create service",
+					"name": "create category",
 					"event": [
 						{
 							"listen": "test",
@@ -1576,43 +1539,24 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": {\r\n        \"en\": \"cleaning\",\r\n        \"ar\": \"تنظيف\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"name\": {\r\n        \"en\": \"plumbing\",\r\n        \"ar\": \"السباكة\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/categories",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"categories"
-							]
-						}
+						"url": "{{URL}}/api/v1/categories",
+						"description": "Admin only"
 					},
 					"response": []
 				},
 				{
-					"name": "service image",
+					"name": "category image",
 					"event": [
 						{
 							"listen": "test",
@@ -1625,160 +1569,29 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"new service\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "D:\\downloads\\chrome&edge-downloads\\category.png"
 								}
-							}
-						},
-						"url": {
-							"raw": "{{URL}}/api/v1/services/upload-service-image/656d38d7a9247d81b7537dee",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"services",
-								"upload-service-image",
-								"656d38d7a9247d81b7537dee"
 							]
-						}
+						},
+						"url": "{{URL}}/api/v1/categories/category-image/6611ac3aad7fa3fdb8d3f713",
+						"description": "Admin only"
 					},
 					"response": []
 				},
 				{
-					"name": "services by id",
+					"name": "category by id",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"name": "cache-control",
-								"sortOrder": 2,
-								"infoTitle": "We recommend using this header",
-								"info": "Postman added \"Cache-Control: no-cache\" as a precautionary measure to prevent the server from returning stale response when one makes repeated requests.\n\nYou can remove this header in the app settings or enter a new one with a different value.",
-								"allowedToToggle": false,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to settings",
-								"key": "Cache-Control",
-								"value": "no-cache",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "postman-token",
-								"sortOrder": 3,
-								"infoTitle": "We recommend using this header",
-								"info": "The Postman-Token header appends a random UUID to every outgoing request. Postman adds this header for API developers to better debug requests sent and to ensure separate requests appear distinct to the receiving server.\n\nYou can remove this header in the app settings.",
-								"allowedToToggle": false,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to settings",
-								"key": "Postman-Token",
-								"value": "<calculated when request is sent>",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "host",
-								"sortOrder": 6,
-								"infoTitle": "We recommend using this header",
-								"info": "The Host header is added to identify the domain name for which a request is being sent to the server. This header is implicitly sent by every HTTP client.\n\nYou can remove the header or enter a new one with a different value. It is most likely that without this header, your request will return an HTTP 400 error.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Host",
-								"value": "<calculated when request is sent>",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "user-agent",
-								"sortOrder": 7,
-								"infoTitle": "We recommend using this header",
-								"info": "The User-Agent header is added to help the server identify Postman as the HTTP requesting application or client.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "User-Agent",
-								"value": "PostmanRuntime/7.32.1",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "accept",
-								"sortOrder": 8,
-								"infoTitle": "We recommend using this header",
-								"info": "The \"Accept: */*\" header is added to tell the server that Postman can understand and process all forms of response content types.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Accept",
-								"value": "*/*",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "accept-encoding",
-								"sortOrder": 9,
-								"infoTitle": "We recommend using this header",
-								"info": "The Accept-Encoding header is added to indicate to the server that Postman HTTP client supports a defined list of content-encoding or compression algorithms as response.\n\nYou can remove the header or enter a new one with a different value. Doing that may not accurately render the response within the app.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Accept-Encoding",
-								"value": "gzip, deflate, br",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "connection",
-								"sortOrder": 10,
-								"infoTitle": "We recommend using this header",
-								"info": "Postman added the Connection header to indicate the server to keep the underlying network connection open once the current response is received. This allows Postman to reuse the same connection for faster response times in subsequent requests to the same server.\n\nYou can remove this header or enter a new one with a different value, such as `Connection: Close` to control this behaviour.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Connection",
-								"value": "keep-alive",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"key": "accept-language",
-								"value": "en",
-								"type": "text",
-								"id": 0
-							}
-						],
-						"url": {
-							"raw": "{{URL}}/api/v1/categories/65aee72b4adc6b5e31e94044",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"categories",
-								"65aee72b4adc6b5e31e94044"
-							],
-							"query": [
-								{
-									"key": "accept-language",
-									"value": "ar",
-									"disabled": true
-								}
-							]
-						}
+						"header": [],
+						"url": "{{URL}}/api/v1/categories/656d38d7a9247d81b7537dee"
 					},
 					"response": []
 				}
@@ -1790,22 +1603,12 @@
 				{
 					"name": "list of tasks",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}} /api/v1/tasks?status=OPEN",
+							"raw": "{{URL}}/api/v1/tasks?status=COMPLETED",
 							"host": [
-								"{{URL}} "
+								"{{URL}}"
 							],
 							"path": [
 								"api",
@@ -1850,7 +1653,7 @@
 								},
 								{
 									"key": "maxDistance",
-									"value": "1010",
+									"value": "10",
 									"disabled": true
 								},
 								{
@@ -1865,12 +1668,17 @@
 								},
 								{
 									"key": "userId",
-									"value": "653369a0e6180a57104a9a32",
+									"value": "660db3387d13e4a2eab638f8",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "-createdAt",
 									"disabled": true
 								},
 								{
 									"key": "status",
-									"value": "OPEN"
+									"value": "COMPLETED"
 								}
 							]
 						}
@@ -1886,43 +1694,34 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"task 2\",\r\n    \"category\": \"65aee72b4adc6b5e31e94044\",\r\n    \"details\": \"description\",\r\n    \"location\": {\r\n        \"coordinates\": [\r\n        27.237556, 33.790052\r\n        ]\r\n    },\r\n    \"dueDate\": {\r\n        \"on\" :\"2026-12-30\"\r\n    },\r\n    \"time\": [\r\n        \"MIDDAY\",\r\n        \"MORNING\"\r\n    ],\r\n    \"budget\": 100\r\n}",
+							"raw": "{\r\n    \"title\": \"Carpentry\",\r\n    \"details\": \"I want to fix my door\",\r\n    \"categoryId\": \"662bb8080f0d3501e870cb5e\",\r\n    \"dueDate\": { \r\n        // \"flexible\": true\r\n        // \"on\" : \"2024-05-09\"\r\n        \"before\" : \"2024-05-09\"\r\n    },\r\n    \"location\": {\r\n        // 31.552774, 25.156921\r\n        /** \"coordinates\": [longitude, latitude]*/\r\n        \"coordinates\": [\r\n            25.156921,\r\n            31.552774\r\n        ]\r\n        // \"online\": true\r\n    },\r\n    \"budget\": \"159\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/tasks",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"tasks"
-							]
-						}
+						"url": "{{URL}}/api/v1/tasks"
 					},
 					"response": []
 				},
@@ -1931,18 +1730,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/v1/tasks/65bcfa5ec6b84484680fc2d1",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"tasks",
-								"65bcfa5ec6b84484680fc2d1"
-							]
-						}
+						"url": "{{URL}}/api/v1/tasks/66154fe1857a0db926ef86b4"
 					},
 					"response": []
 				},
@@ -1950,14 +1738,7 @@
 					"name": "upload task images",
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
+							"type": "noauth"
 						},
 						"method": "PATCH",
 						"header": [],
@@ -1967,177 +1748,247 @@
 								{
 									"key": "imageCover",
 									"type": "file",
-									"src": "D:\\picture\\repository\\Saved Pictures\\1604582418118.jpeg"
+									"src": "/D:/picture/repository/Saved Pictures/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg"
 								},
 								{
 									"key": "image",
 									"type": "file",
-									"src": "D:\\picture\\repository\\Saved Pictures\\images (1).jpeg"
+									"src": "/D:/picture/repository/Saved Pictures/Screenshot 2023-07-03 010525.jpg"
 								},
 								{
 									"key": "image",
 									"type": "file",
-									"src": "D:\\picture\\repository\\Saved Pictures\\images (4).jpeg"
-								},
-								{
-									"key": "image",
-									"type": "file",
-									"src": "D:\\picture\\repository\\Saved Pictures\\انا عايز جملة مفيدة رياكشن.jpg"
-								},
-								{
-									"key": "image",
-									"type": "file",
-									"src": [],
+									"src": "/D:/picture/repository/Saved Pictures/images.png",
 									"disabled": true
 								},
 								{
 									"key": "image",
 									"type": "file",
-									"src": [],
+									"src": "/D:/picture/repository/Saved Pictures/FA-article-nodeJS@2x-1-.png",
 									"disabled": true
 								},
 								{
 									"key": "image",
 									"type": "file",
-									"src": [],
+									"src": "/D:/picture/repository/Saved Pictures/d105ly7n2r4ob6zxu8ch.png",
 									"disabled": true
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": [
+										"/D:/picture/repository/Saved Pictures/d105ly7n2r4ob6zxu8ch.png",
+										"/D:/picture/repository/Saved Pictures/FA-article-nodeJS@2x-1-.png"
+									]
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/D:/picture/repository/Saved Pictures/FA-article-nodeJS@2x-1-.png"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/D:/picture/repository/Saved Pictures/images (3).jpeg"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/D:/picture/repository/Saved Pictures/1656089046795.jpeg"
 								}
 							]
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/tasks/65b236563ea5079d86670037/images",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"tasks",
-								"65b236563ea5079d86670037",
-								"images"
-							]
-						}
+						"url": "{{URL}}/api/v1/tasks/663d0a0684121565e67a7d17/images"
 					},
 					"response": []
 				},
 				{
 					"name": "task",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    // \"location.coordinates\": [\r\n    //         27.727928,\r\n    //         30.836675\r\n    //     ],\r\n    // \"dueDate\": {\r\n    //     \"on\": \"2022-12-30\"\r\n    // }65b8a8a38cf4b39adeede16e\r\n    \"offers\": [\"65b8a8a38cf4b39adeede16e\"]\r\n}",
+							"raw": "{\r\n    \"dueDate\": {\r\n        \"on\": \"2022-12-30\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/tasks/65b5f5c0da3c116da141380e",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"tasks",
-								"65b5f5c0da3c116da141380e"
-							]
-						}
+						"url": "{{URL}}/api/v1/tasks/65b5f5c0da3c116da141380e"
 					},
 					"response": []
 				},
 				{
 					"name": "open task",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PATCH",
 						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/v1/tasks/65bcfa5ec6b84484680fc2d1/open",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"tasks",
-								"65bcfa5ec6b84484680fc2d1",
-								"open"
-							]
-						}
+						"url": "{{URL}}/api/v1/tasks/66355565e7381ef923dfbff3/open"
 					},
 					"response": []
 				},
 				{
-					"name": "complete",
+					"name": "complete  task",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PATCH",
 						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/v1/tasks/65bcfa5ec6b84484680fc2d1/complete",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"tasks",
-								"65bcfa5ec6b84484680fc2d1",
-								"complete"
-							]
-						}
+						"url": "{{URL}}/api/v1/tasks/66355565e7381ef923dfbff3/complete"
+					},
+					"response": []
+				},
+				{
+					"name": "cancel task",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "{{URL}}/api/v1/tasks/65de884d791678beaed55ae3/cancel"
 					},
 					"response": []
 				},
 				{
 					"name": "task",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/tasks/65b4eb5cc8e69b2000f592bd"
+					},
+					"response": []
+				},
+				{
+					"name": "task checkout",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phoneNumber\": \"01010101010\",\r\n    \"paymentMethod\": \"card\"\r\n    //    \"paymentMethod\": \"wallet\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/tasks/checkout/66355565e7381ef923dfbff3"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reviews",
+			"item": [
+				{
+					"name": "Reviews",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/v1/reviews",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews"
+							],
+							"query": [
 								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
+									"key": "taskId",
+									"value": "65e1b76101ebc99621e38244",
+									"disabled": true
 								}
 							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Review",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/reviews/65e1b8d901ebc99621e3826b"
+					},
+					"response": []
+				},
+				{
+					"name": "review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": " {{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"taskId\": \"65e2933cc3e5cbf8092d37cd\",\r\n    \"review\":\"The task was done on time\" ,\r\n    \"rating\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/reviews"
+					},
+					"response": []
+				},
+				{
+					"name": "Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": " {{JWT}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"review\":\"Task was done on time\" ,\r\n    \"rating\": 3.22\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/reviews/65e19872078beaa7fd797f86"
+					},
+					"response": []
+				},
+				{
+					"name": "Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": " {{JWT}}"
+							}
 						},
 						"method": "DELETE",
 						"header": [],
+						"url": "{{URL}}/api/v1/reviews/65e19872078beaa7fd797f86"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks/Reviews",
+			"item": [
+				{
+					"name": "Reviews of  Task",
+					"request": {
+						"method": "GET",
+						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/v1/tasks/65b4eb5cc8e69b2000f592bd",
+							"raw": "{{URL}}/api/v1/tasks/65e1b76101ebc99621e38244/reviews",
 							"host": [
 								"{{URL}}"
 							],
@@ -2145,9 +1996,50 @@
 								"api",
 								"v1",
 								"tasks",
-								"65b4eb5cc8e69b2000f592bd"
+								"65e1b76101ebc99621e38244",
+								"reviews"
+							],
+							"query": [
+								{
+									"key": "asdf",
+									"value": "12345",
+									"disabled": true
+								}
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reviews of  task",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/tasks/65e197c8078beaa7fd797f5d/reviews/65e1b8d901ebc99621e3826b"
+					},
+					"response": []
+				},
+				{
+					"name": "Review of task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": " {{JWT}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    // \"taskId\": \"65e197c8078beaa7fd797f5d\",\r\n    \"review\":\"The task was done on time\" ,\r\n    \"rating\": 5.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/tasks/6633b84cbd9ab5d2fa673966/reviews"
 					},
 					"response": []
 				}
@@ -2159,22 +2051,12 @@
 				{
 					"name": "list of offers",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}} /api/v1/offers?taskId=65b913a07846f0b770d184eb&status=PENDING&price[gt]=150",
+							"raw": "{{URL}}/api/v1/offers",
 							"host": [
-								"{{URL}} "
+								"{{URL}}"
 							],
 							"path": [
 								"api",
@@ -2184,15 +2066,18 @@
 							"query": [
 								{
 									"key": "taskId",
-									"value": "65b913a07846f0b770d184eb"
+									"value": "65b913a07846f0b770d184eb",
+									"disabled": true
 								},
 								{
 									"key": "status",
-									"value": "PENDING"
+									"value": "PENDING",
+									"disabled": true
 								},
 								{
 									"key": "price[gt]",
-									"value": "150"
+									"value": "150",
+									"disabled": true
 								}
 							]
 						}
@@ -2208,43 +2093,34 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"taskId\": \"65b236563ea5079d86670037\",\r\n    \"price\":  120\r\n}",
+							"raw": "{\r\n    \"taskId\": \"66355565e7381ef923dfbff3\",\r\n    \"price\": 3000,\r\n    \"message\": \"I can do it\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/offers",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"offers"
-							]
-						}
+						"url": "{{URL}}/api/v1/offers"
 					},
 					"response": []
 				},
@@ -2253,34 +2129,13 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/v1/offers/65bcfaa5c6b84484680fc2dc",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"offers",
-								"65bcfaa5c6b84484680fc2dc"
-							]
-						}
+						"url": "{{URL}}/api/v1/offers/6636534950071b04fe41a032"
 					},
 					"response": []
 				},
 				{
 					"name": "offer",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
@@ -2292,48 +2147,16 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/offers/6567ee6a18a180d67bd93fe4",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"offers",
-								"6567ee6a18a180d67bd93fe4"
-							]
-						}
+						"url": "{{URL}}/api/v1/offers/6567ee6a18a180d67bd93fe4"
 					},
 					"response": []
 				},
 				{
 					"name": "offer",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "DELETE",
 						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/v1/offers/65b9fb84714624796831652e",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"offers",
-								"65b9fb84714624796831652e"
-							]
-						}
+						"url": "{{URL}}/api/v1/offers/65dd87c4f68af6972b03f1b2"
 					},
 					"response": []
 				},
@@ -2342,19 +2165,7 @@
 					"request": {
 						"method": "PATCH",
 						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/v1/offers/65bcfaa5c6b84484680fc2dc/accept",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"offers",
-								"65bcfaa5c6b84484680fc2dc",
-								"accept"
-							]
-						}
+						"url": "{{URL}}/api/v1/offers/663559cccc5734759e8387e8/accept"
 					},
 					"response": []
 				}
@@ -2372,102 +2183,112 @@
 								"exec": [
 									""
 								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
 								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"client\": \"653c078a976a85f7b91bbde3\",\r\n    \"tasker\": \"653637b1a8a134962aa13456\"\r\n}",
+							"raw": "{   // userId of the tasker \r\n    \"tasker\": \"6531fb134b050167705db4a8\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": {
-							"raw": "{{URL}}/api/v1/chats",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"chats"
-							]
-						}
+						"url": "{{URL}}/api/v1/chats"
 					},
 					"response": []
 				},
 				{
 					"name": "chat by id",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/v1/chats/653c126cfaa6376e11108809",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"chats",
-								"653c126cfaa6376e11108809"
-							]
-						}
+						"url": "{{URL}}/api/v1/chats/663562030e82c2c11c97f98b"
 					},
 					"response": []
 				},
 				{
 					"name": "my chats",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{JWT}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/v1/chats",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"chats"
-							]
+						"url": "{{URL}}/api/v1/chats"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "messages",
+			"item": [
+				{
+					"name": "message",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"message\": \"new message from Menna to james\",\r\n    \"chatId\": \"66364f46912e7cbc18c5b35a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}/api/v1/messages"
+					},
+					"response": []
+				},
+				{
+					"name": "messages by chat id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api/v1/messages/chat/66364f46912e7cbc18c5b35a"
+					},
+					"response": []
+				},
+				{
+					"name": "message",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{URL}}/api/v1/messages/65cb7622893cc975265b6bd3"
 					},
 					"response": []
 				}
@@ -2477,153 +2298,58 @@
 			"name": "healthz",
 			"item": [
 				{
-					"name": "api-docs",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{URL}}/api-docs",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api-docs"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "healthz",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{URL}}/api/v1/healthz",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"healthz"
-							]
-						}
+						"url": "{{URL}}/api/v1/healthz"
 					},
 					"response": []
 				},
 				{
 					"name": "/",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true,
+							"accept-encoding": true,
+							"connection": true
+						}
+					},
 					"request": {
 						"method": "GET",
 						"header": [
 							{
-								"name": "cache-control",
-								"sortOrder": 2,
-								"infoTitle": "We recommend using this header",
-								"info": "Postman added \"Cache-Control: no-cache\" as a precautionary measure to prevent the server from returning stale response when one makes repeated requests.\n\nYou can remove this header in the app settings or enter a new one with a different value.",
-								"allowedToToggle": false,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to settings",
-								"key": "Cache-Control",
-								"value": "no-cache",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "postman-token",
-								"sortOrder": 3,
-								"infoTitle": "We recommend using this header",
-								"info": "The Postman-Token header appends a random UUID to every outgoing request. Postman adds this header for API developers to better debug requests sent and to ensure separate requests appear distinct to the receiving server.\n\nYou can remove this header in the app settings.",
-								"allowedToToggle": false,
-								"disableEdit": true,
-								"previewSettingsLink": "Go to settings",
-								"key": "Postman-Token",
-								"value": "<calculated when request is sent>",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "host",
-								"sortOrder": 6,
-								"infoTitle": "We recommend using this header",
-								"info": "The Host header is added to identify the domain name for which a request is being sent to the server. This header is implicitly sent by every HTTP client.\n\nYou can remove the header or enter a new one with a different value. It is most likely that without this header, your request will return an HTTP 400 error.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Host",
-								"value": "<calculated when request is sent>",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "user-agent",
-								"sortOrder": 7,
-								"infoTitle": "We recommend using this header",
-								"info": "The User-Agent header is added to help the server identify Postman as the HTTP requesting application or client.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "User-Agent",
-								"value": "PostmanRuntime/7.32.1",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "accept",
-								"sortOrder": 8,
-								"infoTitle": "We recommend using this header",
-								"info": "The \"Accept: */*\" header is added to tell the server that Postman can understand and process all forms of response content types.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Accept",
-								"value": "*/*",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "accept-encoding",
-								"sortOrder": 9,
-								"infoTitle": "We recommend using this header",
-								"info": "The Accept-Encoding header is added to indicate to the server that Postman HTTP client supports a defined list of content-encoding or compression algorithms as response.\n\nYou can remove the header or enter a new one with a different value. Doing that may not accurately render the response within the app.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Accept-Encoding",
-								"value": "gzip, deflate, br",
-								"system": true,
-								"type": "text"
-							},
-							{
-								"name": "connection",
-								"sortOrder": 10,
-								"infoTitle": "We recommend using this header",
-								"info": "Postman added the Connection header to indicate the server to keep the underlying network connection open once the current response is received. This allows Postman to reuse the same connection for faster response times in subsequent requests to the same server.\n\nYou can remove this header or enter a new one with a different value, such as `Connection: Close` to control this behaviour.",
-								"allowedToToggle": true,
-								"disableEdit": true,
-								"key": "Connection",
-								"value": "keep-alive",
-								"system": true,
-								"type": "text"
-							},
-							{
 								"key": "accept-language",
 								"value": "ar",
-								"type": "text",
-								"id": 0
+								"disabled": true
 							}
 						],
-						"url": {
-							"raw": "{{URL}}/api/v1",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"api",
-								"v1"
-							]
-						}
+						"url": "{{URL}}/api/v1/"
 					},
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Docs",
+			"item": [
+				{
+					"name": "swagger",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}/api-docs"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "https://fixflex.onrender.com",
+			"type": "string"
 		}
 	]
 }
