@@ -16,4 +16,4 @@ COPY . .
 
 RUN  npm run build-ts
 
-CMD [ "npm", "run", "start:sta"]
+CMD [ "npm", "run", "start:dev"]

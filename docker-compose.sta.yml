@@ -4,7 +4,4 @@ services:
   node-app:
     container_name: fix-c
 
-    build: .
-
-    ports:
-      - '8080:8080'
+    command: npm run start:sta

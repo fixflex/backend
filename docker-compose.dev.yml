@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+  node-app:
+    volumes:
+      - ./src:/usr/src/app/src:ro
+
+    command: npm run start:dev
