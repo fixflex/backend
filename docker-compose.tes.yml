@@ -1,6 +1,14 @@
 version: '2'
 
 services:
+  mongo:
+    image: mongo
+    container_name: mongo-c
+    ports:
+      - '27017:27017'
+    restart: always
+    command: mongod --quiet --logpath /dev/null
+
   node-app:
     container_name: fix-c
     build:
