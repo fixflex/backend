@@ -3,5 +3,9 @@ version: '2'
 services:
   node-app:
     container_name: fix-c
+    build:
+      context: .
+      args:
+        - NODE_ENV=staging
 
     command: npm run start:sta

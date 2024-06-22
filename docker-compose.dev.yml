@@ -4,5 +4,9 @@ services:
   node-app:
     volumes:
       - ./src:/usr/src/app/src:ro
+    build:
+      context: .
+      args:
+        - NODE_ENV=development
 
     command: npm run start:dev

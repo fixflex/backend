@@ -10,10 +10,17 @@ EXPOSE 8080
 
 COPY package.json .
 
-RUN npm i 
+ARG NODE_ENV=development
+
+RUN if [ "$NODE_ENV" = "production" ]; \
+    then npm install --omit=dev; \
+    else npm install; \
+    fi
 
 COPY . .
 
-RUN  npm run build-ts
+RUN if [ "$NODE_ENV" = "production" || "$NODE_ENV" = "staging" ]; \
+    then npm run build; \
+    fi
 
 CMD [ "npm", "run", "start:dev"]
