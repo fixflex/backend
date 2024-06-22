@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  node-app:
+    container_name: fix-c
+    build:
+      context: .
+      args:
+        - NODE_ENV=testing
+
+    command: npm run test
