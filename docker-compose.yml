@@ -3,6 +3,16 @@ version: '2'
 services:
   node-app:
     container_name: fix-c
-
+    image: ahmedelasiri/fixflex
     ports:
       - '8080:8080'
+
+  nginx:
+    image: nginx
+    container_name: nginx-c
+    ports:
+      - '8000:80'
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - node-app
