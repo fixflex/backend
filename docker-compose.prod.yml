@@ -1,8 +1,7 @@
-version: '2'
+version: '3.8'
 
 services:
   node-app:
-    container_name: fix-c
     build:
       context: .
       args:
