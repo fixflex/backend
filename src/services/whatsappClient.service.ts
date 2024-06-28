@@ -10,7 +10,7 @@ import { sendMailer } from '../helpers';
 class WhatsAppClient {
   private static instance: WhatsAppClient | null = null;
   private static whatsappClient: Client;
-  private flag = true;
+  private flag = false;
 
   private constructor() {
     WhatsAppClient.whatsappClient = new Client({
