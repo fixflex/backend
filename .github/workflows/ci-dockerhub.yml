@@ -33,5 +33,5 @@ jobs:
           REGISTRY: fixflex
           IMAGE_TAG: latest
         run: |
-          docker compose -f docker-compose.yml -f docker-compose.sta.yml build 
-          docker compose -f docker-compose.yml -f docker-compose.sta.yml push node-app
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml build 
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml push node-app
