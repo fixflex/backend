@@ -15,10 +15,48 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: create .env file
+        run: |
+          touch .env
+          echo ACCESS_TOKEN_KEY_EXPIRE_TIME=${{ secrets.ACCESS_TOKEN_KEY_EXPIRE_TIME }} >> .env
+          echo ACCESS_TOKEN_SECRET_KEY=${{ secrets.ACCESS_TOKEN_SECRET_KEY }} >> .env
+          echo API_KEY=${{ secrets.API_KEY }} >> .env
+          echo APP_ID=${{ secrets.APP_ID }} >> .env
+          echo BASE_URL=${{ secrets.BASE_URL }} >> .env
+          echo CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} >> .env
+          echo CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} >> .env
+          echo COMMISSION_RATE=${{ secrets.COMMISSION_RATE }} >> .env
+          echo DEVELOPER_EMAIL=${{ secrets.DEVELOPER_EMAIL }} >> .env
+          echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env
+          echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env
+          echo PAYMOB_API_KEY=${{ secrets.PAYMOB_API_KEY }} >> .env
+          echo PAYMOB_HMAC_SECRET=${{ secrets.PAYMOB_HMAC_SECRET }} >> .env
+          echo PAYMOB_INTEGRATION_ID=${{ secrets.PAYMOB_INTEGRATION_ID }} >> .env
+          echo PAYMOB_INTEGRATION_ID_WALLET=${{ secrets.PAYMOB_INTEGRATION_ID_WALLET }} >> .env
+          echo PAYMOB_PUBLIC_KEY=${{ secrets.PAYMOB_PUBLIC_KEY }} >> .env
+          echo PAYMOB_SECRET_KEY=${{ secrets.PAYMOB_SECRET_KEY }} >> .env
+          echo PORT=${{ secrets.PORT }} >> .env
+          echo REFRESH_TOKEN_KEY_EXPIRE_TIME=${{ secrets.REFRESH_TOKEN_KEY_EXPIRE_TIME }} >> .env
+          echo REFRESH_TOKEN_SECRET_KEY=${{ secrets.REFRESH_TOKEN_SECRET_KEY }} >> .env
+          echo SALT_ROUNDS=${{ secrets.SALT_ROUNDS }} >> .env
+          echo CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} >> .env
+          echo SMTP_HOST=${{ secrets.SMTP_HOST }} >> .env
+          echo SMTP_NAME=${{ secrets.SMTP_NAME }} >> .env
+          echo SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }} >> .env
+          echo SMTP_PORT=${{ secrets.SMTP_PORT }} >> .env
+          echo SMTP_USERNAME=${{ secrets.SMTP_USERNAME }} >> .env
+          echo USER_AUTH_KEY=${{ secrets.USER_AUTH_KEY }} >> .env
+          echo defaultLocale=${{ secrets.defaultLocale }} >> .env
+          echo FRONTEND_URL=${{secrets.FRONTEND_URL}} >> .env
+          echo WEB_VERSION=${{secrets.WEB_VERSION}} >> .env
+          echo DB_URI=${{ secrets.DB_URI }} >> .env
+          echo REDIS_URL=${{ secrets.REDIS_URL }} >> .env
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
