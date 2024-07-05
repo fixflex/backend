@@ -101,7 +101,6 @@ class App {
 
   private initializeSwagger() {
     if (this.env !== 'production') {
-      // this.app.use('/api-docs/saddamarbaa/', swaggerUi.serve, swaggerUi.setup(swaggerSaddamarbaa));
       this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     }
   }

@@ -29,7 +29,6 @@ export enum TaskTime {
   AFTERNOON = 'AFTERNOON',
   EVENING = 'EVENING',
 }
-//  TODO: Add question and answer to the task model
 export interface ITask extends Document {
   // _id: string;
   userId: string;
@@ -75,10 +74,6 @@ export interface ITask extends Document {
 export interface ITaskController {
   getTasks(req: Request, res: Response, next: NextFunction): void;
   getTaskById(req: Request, res: Response, next: NextFunction): void;
-  // getTaskOffers(req: Request, res: Response, next: NextFunction): void;
-  // getTaskOwner(req: Request, res: Response, next: NextFunction): void;
-  // getTaskTasker(req: Request, res: Response, next: NextFunction): void;
-  // getTaskChat(req: Request, res: Response, next: NextFunction): void;
 
   createTask(req: Request, res: Response, next: NextFunction): void;
   updateTask(req: Request, res: Response, next: NextFunction): void;
@@ -89,10 +84,6 @@ export interface ITaskController {
 export interface ITaskService {
   getTasks(reqQuery: any): Promise<{ tasks: ITask[]; pagination: IPagination | undefined }>;
   getTaskById(taskId: string): Promise<ITask | null>;
-  // getTaskOffers(taskId: string): Promise<any>;
-  // getTaskOwner(taskId: string): Promise<any>;
-  // getTaskTasker(taskId: string): Promise<any>;
-  // getTaskChat(taskId: string): Promise<any>;
 
   createTask(task: ITask): Promise<ITask>;
   updateTask(taskId: string, task: ITask, userId: string | undefined): Promise<any>;

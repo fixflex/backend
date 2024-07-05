@@ -193,12 +193,7 @@ class PaymobService {
       if (success && transaction.transactionType === TransactionType.ONLINE_TASK_PAYMENT) {
         // Replace with your actual logic to update the task
         let taskId = transactionData.order.data.taskId;
-        // console.log('taskId ======================>>', taskId);
-        // if (!taskId.match(/^[0-9a-fA-F]{24}$/)) {
-        //   taskId = transactionData.order.merchant_order_id.slice(3); //  TODO: remove this line
-        //   console.log('taskId ======================>>', taskId);
-        // }
-        // const updatedTask =
+
         await this.taskDao.updateOneById(taskId, {
           paid: true,
           paymentMethod: PaymentMethod.ONLINE_PAYMENT,

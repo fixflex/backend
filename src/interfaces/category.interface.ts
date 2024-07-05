@@ -12,7 +12,6 @@ export interface ICategory extends Document {
     publicId: string | null;
   };
 }
-// const categories = ['plumbing', 'electricity', 'painting', 'carpentry', 'cleaning', 'gardening', 'moving', 'other', 'handyman', 'assembly', 'delivery', 'personal assistant', 'shopping', 'cooking', 'laundry', 'other'];
 
 export interface ICategoryController {
   getCategories(req: Request, res: Response, next: NextFunction): void;

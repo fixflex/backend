@@ -18,7 +18,6 @@ class UserController implements IUserController {
     let user = await this.userService.getUser(req.params.id);
     if (!user) throw new HttpException(404, 'user_not_found');
     user.password = '';
-    // TODO: remove status from customResponse
     res.status(200).json(customResponse<Partial<IUser>>({ data: user, success: true, message: req.t('user_found') }));
   });
 

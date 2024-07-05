@@ -10,7 +10,6 @@ import { IUser } from '../interfaces';
 import { IAuthController } from '../interfaces';
 import { AuthServie } from '../services';
 
-// TODO: use passport.js for authentication
 @autoInjectable()
 export class AuthController implements IAuthController {
   constructor(private readonly authService: AuthServie) {}
@@ -24,7 +23,7 @@ export class AuthController implements IAuthController {
 
   private refreshTokenCookieOptions: CookieOptions = {
     httpOnly: true,
-    maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months (6 * 30 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+    maxAge: 6 * 30 * 24 * 60 * 60 * 1000, // six months
     secure: env.NODE_ENV !== 'development',
     // sameSite: env.NODE_ENV === 'development' ? 'none' : 'strict',
     sameSite: env.NODE_ENV === 'development' ? 'none' : 'lax',
@@ -33,7 +32,6 @@ export class AuthController implements IAuthController {
 
   public signup = asyncHandler(async (req: Request<IUser>, res: Response) => {
     let { user, accessToken, refreshToken } = await this.authService.signup(req.body);
-    // TODO: make save the cookie name in a variable
     res.cookie('access_token', accessToken, this.accessTokenCookieOptions);
     res.cookie('refresh_token', refreshToken, this.refreshTokenCookieOptions);
 
