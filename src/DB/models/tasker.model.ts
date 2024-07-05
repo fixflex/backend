@@ -44,14 +44,25 @@ let taskerSchema: Schema<ITasker> = new Schema(
         default: 50000, // 50 km
       },
     },
+    age: {
+      type: Number,
+      min: 10,
+      max: 100,
+    },
+    portfolio: [
+      {
+        url: String,
+        publicId: {
+          type: String,
+          default: null,
+        },
+      },
+    ],
     bio: String,
-    // phoneNumber: {
-    //   unique: true,
-    //   type: String,
-    //   required: true,
-    //   minlength: 11,
-    //   maxlength: 11,
-    // },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
     notPaidTasks: [
       {
         type: String,

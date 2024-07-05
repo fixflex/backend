@@ -2,6 +2,7 @@ import { NextFunction, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import { autoInjectable } from 'tsyringe';
 
+import { TaskDto } from '../dtos';
 import HttpException from '../exceptions/HttpException';
 import { Request } from '../helpers';
 import customResponse from '../helpers/customResponse';
@@ -15,7 +16,7 @@ class TaskController implements ITaskController {
 
   taskImages = uploadMixFiles([
     { name: 'imageCover', maxCount: 1 },
-    { name: 'image', maxCount: 5 },
+    { name: 'image', maxCount: 6 },
   ]);
 
   createTask = asyncHandler(async (req: Request<ITask>, res: Response, next: NextFunction) => {
@@ -33,7 +34,7 @@ class TaskController implements ITaskController {
   getTaskById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const task = await this.taskService.getTaskById(req.params.id);
     if (!task) return next(new HttpException(404, 'resource_not_found'));
-    res.status(200).json(customResponse({ data: task, success: true, message: null }));
+    res.status(200).json(customResponse({ data: new TaskDto(task), success: true, message: null }));
   });
 
   updateTask = asyncHandler(async (req: Request<ITask>, res: Response, next: NextFunction) => {

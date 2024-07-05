@@ -37,6 +37,11 @@ const optionsForTaskImage: UploadApiOptions = {
   resource_type: 'auto',
 };
 
+const optionsForTaskerPortfolio: UploadApiOptions = {
+  folder: 'tasker-portfolio',
+  resource_type: 'auto',
+};
+
 const cloudinaryUploadImage = async (buffer: Buffer, imageType: any): Promise<UploadApiResponse> => {
   try {
     if (buffer) {
@@ -45,6 +50,7 @@ const cloudinaryUploadImage = async (buffer: Buffer, imageType: any): Promise<Up
         if (imageType === 'user-profile-image') uploadOptions = optionsForUserProfileImage;
         else if (imageType === 'service-image') uploadOptions = optionsForServiceImage;
         else if (imageType === 'task-image') uploadOptions = optionsForTaskImage;
+        else if (imageType === 'tasker-portfolio') uploadOptions = optionsForTaskerPortfolio;
         else throw new HttpException(400, 'Invalid image type');
         let cld_upload_stream = cloudinary.uploader.upload_stream(uploadOptions, function (error, result) {
           if (result) {

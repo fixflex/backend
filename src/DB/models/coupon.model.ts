@@ -34,11 +34,9 @@ const couponSchema = new Schema<ICoupon>(
       required: true,
     },
     minOrderAmount: {
-      // minimum order amount required to apply the coupon
       type: Number,
     },
     createdBy: {
-      // the admin who created the coupon
       type: String,
       required: true,
     },

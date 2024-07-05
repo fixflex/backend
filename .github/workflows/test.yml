@@ -66,6 +66,7 @@ jobs:
           echo FRONTEND_URL=${{secrets.FRONTEND_URL}} >> test.env
           echo WEB_VERSION=${{secrets.WEB_VERSION}} >> test.env
           echo DB_URI=${{ secrets.DB_URI }} >> test.env
+          echo REDIS_URL=${{ secrets.REDIS_URL }} >> test.env
 
       - name: Run tests
         run: npm run test

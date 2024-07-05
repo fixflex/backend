@@ -8,7 +8,6 @@ if (process.env.NODE_ENV === 'testing') {
 }
 
 const validateEnv = cleanEnv(process.env, {
-  // PORT: port(),
   PORT: num(),
   NODE_ENV: str(),
   BASE_URL: url(),
@@ -42,6 +41,7 @@ const validateEnv = cleanEnv(process.env, {
   PAYMOB_HMAC_SECRET: str(),
   FRONTEND_URL: url(),
   WEB_VERSION: str(),
+  REDIS_URL: str(),
 });
 
 export default validateEnv;

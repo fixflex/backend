@@ -4,7 +4,6 @@ import { autoInjectable } from 'tsyringe';
 
 import { CategoryDao, OfferDao, TaskDao, TaskerDao } from '../DB/dao';
 import HttpException from '../exceptions/HttpException';
-import { IPopulate } from '../helpers';
 import { cloudinaryDeleteImage, cloudinaryUploadImage } from '../helpers/cloudinary';
 import { NotificationOptions, OneSignalApiHandler } from '../helpers/onesignal';
 import { IPagination, ITask, ITaskService, IUser, OfferStatus, PaymobOrderDetails, TaskStatus } from '../interfaces';
@@ -23,10 +22,10 @@ class TaskService implements ITaskService {
     private readonly paymobService: PaymobService
   ) {}
 
-  private taskPopulate: IPopulate = {
-    path: 'userId offers reviews',
-    select: '-__v -password -active -role',
-  };
+  // private taskPopulate: IPopulate = {
+  //   path: 'userId offers reviews',
+  //   select: '-__v -password -active -role',
+  // };
 
   createTask = async (task: ITask) => {
     // if there is categoryId, check if it exists
@@ -36,16 +35,24 @@ class TaskService implements ITaskService {
     }
     const newTask = await this.taskDao.create(task);
     // send push notification to all taskers where the task is in their service area and the task category is in their categories list
+    let location;
+    if (task.location.online) location = undefined;
+    else location = `${task.location.coordinates[0]},${task.location.coordinates[1]}`;
 
     let query: Query = {
-      location: `${task.location.coordinates[0]},${task.location.coordinates[1]}`,
+      location,
       categories: task.categoryId,
-      maxDistance: '60',
+      maxDistance: '60000',
+      isActive: 'true',
     };
     let taskers = await this.taskerDao.getTaskers(query);
     // loop through the taskers and collect their userIds and but them in an array of external_ids to send the push notification to them
     // @ts-ignore // TODO: fix the taskersIds type
-    let taskersIds = taskers.taskers.map(tasker => tasker.userId._id.toString());
+    let taskersIds = taskers.taskers.map(tasker => {
+      // @ts-ignore // TODO: fix the taskersIds type
+      if (tasker.userId) return tasker.userId._id.toString();
+    });
+
     // console.log(taskersIds);
 
     // send push notification to the taskers
@@ -58,7 +65,8 @@ class TaskService implements ITaskService {
 
     // let notification =
     await this.oneSignalApiHandler.createNotification(notificationOptions);
-    // console.log(notification);
+    // { id: '', errors: { invalid_aliases: { external_id: [Array] } } }
+    // console.log(notification.errors.invalid_aliases.external_id);
 
     return newTask;
   };
@@ -69,10 +77,9 @@ class TaskService implements ITaskService {
   };
 
   getTaskById = async (id: string) => {
-    let task = await this.taskDao.getOneByIdPopulate(id, this.taskPopulate);
+    // let task = await this.taskDao.getOneByIdPopulate(id, this.taskPopulate);
+    let task = await this.taskDao.getTaskById(id);
     if (!task) throw new HttpException(404, 'Task not found');
-    // console.log('extract time from _id=> ', task._id.getTimestamp());
-    // console.log('extract time from _id=> ', task._id.getTimestamp().toISOString());
     return task;
   };
 
@@ -224,6 +231,7 @@ class TaskService implements ITaskService {
     // 4. if the task is ASSIGNED then remove the acceptedOffer and update the task status to OPEN and update the offers status to PENDING instead of ACCEPTED
     if (task.status === TaskStatus.ASSIGNED) {
       // 4.1 change the offer status to PENDING
+      // @ts-ignore
       await this.offerDao.updateOneById(task.acceptedOffer._id.toString(), { status: OfferStatus.PENDING });
       // 4.2 notify the tasker that the task is open
       let tasker = await this.taskerDao.getOneById(task.acceptedOffer.taskerId, '', false);
@@ -297,6 +305,7 @@ class TaskService implements ITaskService {
     task.commission = commission;
     // Step 5.1: If the payment method is CASH, calculate the commission and add the task to the tasker's notPaidTasks
     if (task.paymentMethod === PaymentMethod.CASH) {
+      // @ts-ignore
       tasker.notPaidTasks.push(task._id);
     }
     // TODO: Implement online payment method
@@ -318,14 +327,14 @@ class TaskService implements ITaskService {
     // Step 9.1 Send push notification to the tasker that the task is completed and the payment is pending
     let notificationOptionsTasker: NotificationOptions = {
       headings: { en: 'Task Completed' },
-      contents: { en: 'The task is completed and the payment is pending' },
+      contents: { en: 'The task is completed' },
       data: { task: task._id },
       external_ids: [tasker.userId],
     };
     // 9.2 Send push notification to the task owner that the task is completed and the payment is pending , thank him for using the app and ask him to rate the tasker, rate the app and share the app with his friends , rate the tasker and the app and share the app with his friends
     let notificationOptionsUser: NotificationOptions = {
       headings: { en: 'Task Completed' },
-      contents: { en: 'Thank you for using the app' },
+      contents: { en: 'Thank you for using the app you can rate the tasker now' },
       data: { task: task._id }, // send the task id to the user to use it to navigate to the task details, Note: this data will not appear in the notification but it will be sent with the notification
       external_ids: [task.userId],
     };

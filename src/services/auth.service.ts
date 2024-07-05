@@ -8,13 +8,13 @@ import HttpException from '../exceptions/HttpException';
 import { createAccessToken, createRefreshToken } from '../helpers/createToken';
 import { hashCode } from '../helpers/hashing';
 import { sendMailer } from '../helpers/nodemailer';
+import { randomNum } from '../helpers/randomNumGen';
 import { IUser } from '../interfaces';
 import { IAuthService } from '../interfaces/auth.interface';
-import { randomNum } from '../helpers/randomNumGen';
 
 @autoInjectable()
 export class AuthServie implements IAuthService {
-  constructor(private readonly userDao: UserDao) { }
+  constructor(private readonly userDao: UserDao) {}
   /**
    * Signup a new user
    * @param user - The user object to signup
@@ -32,7 +32,7 @@ export class AuthServie implements IAuthService {
     user.password = await bcrypt.hash(user.password, env.SALT_ROUNDS);
     let newUser = await this.userDao.create(user);
     let accessToken = createAccessToken(newUser._id!);
-    let refreshToken = createAccessToken(newUser._id!);
+    let refreshToken = createRefreshToken(newUser._id!);
 
     return { user: newUser, accessToken, refreshToken };
   }
@@ -127,7 +127,7 @@ export class AuthServie implements IAuthService {
     // 5- send the reset code to the user email address using nodemailer
     // 3- Send the reset code via email (the code will be expired after 10 minutes)
 
-    const message = `Hi ${user.firstName}, \nwe received a request to reset the password on your Khidma Account.
+    const message = `Hi ${user.firstName}, \nwe received a request to reset the password on your Fixflex Account.
         ${resetCode} \nEnter this code to complete the reset (the code will be expired after 10 minutes).\nThanks for helping us keep your account secure.`;
     try {
       await sendMailer(user.email, 'Reset Password', message);

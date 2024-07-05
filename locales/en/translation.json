@@ -95,5 +95,6 @@
   "found_successfully": "Entity retrieved successfully",
 
   "already_exist": "Entity already exist",
-  "not_active": "Entity not active"
+  "not_active": "Entity not active",
+  "services_found": "Categories found"
 }

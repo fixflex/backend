@@ -1,7 +1,8 @@
 // WhatsAppClient.ts
 import qrcode from 'qrcode-terminal';
-import { Client, LocalAuth } from 'whatsapp-web.js';
+import { Client, RemoteAuth } from 'whatsapp-web.js';
 
+import { getRemoteAuthStore } from '../DB';
 import env from '../config/validateEnv';
 import HttpException from '../exceptions/HttpException';
 import { sendMailer } from '../helpers';
@@ -9,13 +10,23 @@ import { sendMailer } from '../helpers';
 class WhatsAppClient {
   private static instance: WhatsAppClient | null = null;
   private static whatsappClient: Client;
+  private flag = false;
 
   private constructor() {
     WhatsAppClient.whatsappClient = new Client({
-      authStrategy: new LocalAuth(),
+      authStrategy: new RemoteAuth({
+        store: getRemoteAuthStore(),
+        backupSyncIntervalMs: 300000, // the backup sync interval means that the client will sync the data with the server every 3 minutes
+      }),
       webVersionCache: {
         type: 'remote',
         remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${env.WEB_VERSION}.html`,
+      },
+
+      puppeteer: {
+        headless: true, // browser will not be visible
+        args: ['--no-sandbox'], // this is required to run puppeteer in a docker container
+        // --no-sandbox is a security feature that is used to prevent the browser from running in the root user
       },
     });
 
@@ -23,8 +34,11 @@ class WhatsAppClient {
       qrcode.generate(qr, { small: true });
       try {
         console.log('New QR code generated');
-        const message = `Scan the QR code to login to WhatsApp account \n\nhttps://dashboard.render.com/web/srv-clkt2gsjtl8s73f24g00/logs?m=max\n\n`;
-        await sendMailer(env.DEVELOPER_EMAIL, 'WhatsApp QR Code', message);
+        if (this.flag) {
+          this.flag = false;
+          const message = `Scan the QR code to login to WhatsApp account \n\nhttps://dashboard.render.com/web/srv-clkt2gsjtl8s73f24g00/logs?m=max\n\n`;
+          await sendMailer(env.DEVELOPER_EMAIL, 'WhatsApp QR Code', message);
+        }
       } catch (err) {
         console.log(err);
       }
@@ -54,8 +68,7 @@ class WhatsAppClient {
           } else {
             await WhatsAppClient.whatsappClient.sendMessage(
               message.from,
-              `👋 Hello ${message._data.notifyName}` +
-                "\n\nNeed help or have questions? Don't hesitate to reach out to our dedicated customer service team – they're here for you!\n📞 Call +201146238572 or email support@fixflex.tech for assistance."
+              `Need help or have questions?\n\n Don't hesitate to reach out to our dedicated customer service team – they're here for you!\n Call 📞 +201146238572 or Email 📧 support@fixflex.tech for assistance.`
             );
           }
         }

@@ -22,7 +22,7 @@ class CategoryController implements ICategoryController {
   public getCategories = asyncHandler(async (req: Request, res: Response) => {
     let categories = await this.categoryService.getCategories(req.language);
 
-    res.status(200).json(customResponse<ICategory[] | null>({ data: categories, success: true, message: 'Services found' }));
+    res.status(200).json(customResponse<ICategory[] | null>({ data: categories, success: true, message: req.t('services_found') }));
   });
 
   // authenticated routes

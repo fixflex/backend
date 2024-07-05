@@ -22,7 +22,7 @@ class OfferService implements IOfferService {
     private taskDao: TaskDao,
     // private transactionDao: TransactionDao,
     private oneSignalApiHandler: OneSignalApiHandler
-  ) { }
+  ) {}
 
   //  // 4-   Decrement product quantity, increment product sold
   //  if (order) {
@@ -41,7 +41,8 @@ class OfferService implements IOfferService {
     // 1. check if the user is a tasker & notPaidTask array is empty
     let tasker = await this.taskerDao.getOnePopulate<{ userId: IUser }>({ userId }, { path: 'userId' });
     if (!tasker) throw new HttpException(403, 'You_are_not_a_tasker');
-    if (tasker.notPaidTasks && tasker.notPaidTasks.length > 0) throw new HttpException(403, 'You must pay the previous tasks commissions');
+    if (!tasker.isActive) throw new HttpException(403, 'You_are_not_active');
+    // if (tasker.notPaidTasks && tasker.notPaidTasks.length > 0) throw new HttpException(403, 'You must pay the previous tasks commissions');
     // 2. check if the task is exist and status is open
     let task = await this.taskDao.getOne({ _id: offer.taskId }); // TODO: use getOneById
     if (!task) throw new HttpException(400, 'Task_not_found');
@@ -54,6 +55,7 @@ class OfferService implements IOfferService {
     let isOfferExist = await this.offerDao.getOne({ taskId: offer.taskId, taskerId: tasker._id });
     if (isOfferExist) throw new HttpException(400, 'You_already_made_an_offer_on_this_task');
     // 4. create the offer and add the tasker id to it
+    // @ts-ignore
     offer.taskerId = tasker._id;
     let newOffer = await this.offerDao.create(offer);
     // 5. update the task offers array with the new offer
@@ -64,9 +66,10 @@ class OfferService implements IOfferService {
       data: { task: task._id },
       external_ids: [task.userId],
     };
-    this.oneSignalApiHandler.createNotification(notificationOptions);
-    // console.log(notification);
-    io.to(task.userId).emit('newOffer', newOffer);
+    // let notification =
+    await this.oneSignalApiHandler.createNotification(notificationOptions);
+    // console.log(notification.id);
+    io.to(task.userId).emit('newOffer', JSON.stringify(newOffer, null, 2));
     // socketIO.to(taskCreatorSocketId).emit('newOffer', newOffer);
     return newOffer;
   }
@@ -133,9 +136,11 @@ class OfferService implements IOfferService {
     offer.status = OfferStatus.ACCEPTED;
     await offer.save();
 
+    // @ts-ignore
     await this.taskDao.updateOneById(offer.taskId._id, {
       status: TaskStatus.ASSIGNED,
       acceptedOffer: offer._id,
+      // @ts-ignore
       taskerId: offer.taskerId._id.toString(),
       commission: offer.price * offer.taskerId.commissionRate,
     });
@@ -145,6 +150,7 @@ class OfferService implements IOfferService {
       headings: { en: 'Offer Accepted' },
       contents: { en: 'Your offer has been accepted' },
 
+      // @ts-ignore
       data: { task: offer.taskId._id.toString() },
 
       external_ids: [offer.taskerId.userId],

@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  node-app:
+    image: ahmedelasiri/fixflex
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+    env_file:
+      - ./.env
+    networks:
+      - mynetwork
+    depends_on:
+      - redis
+
+  redis:
+    image: redis
+    container_name: redis-c
+    networks:
+      - mynetwork
+
+  nginx:
+    image: nginx
+    container_name: nginx-c
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    depends_on:
+      - node-app
+    networks:
+      - mynetwork
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    networks:
+      - mynetwork
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email ahmedmostafa5214@gmail.com -d server.fixflex.tech --agree-tos
+    depends_on:
+      - nginx
+
+networks:
+  mynetwork:
+    driver: bridge

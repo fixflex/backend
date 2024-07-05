@@ -10,7 +10,6 @@ export interface ITasker extends Document {
   ratingQuantity: number;
   bio: string;
   categories: string[];
-  // phoneNumber: string;
   location: {
     type: string;
     coordinates: [number, number];
@@ -31,6 +30,7 @@ export interface ITasker extends Document {
     start: string;
     end: string;
   };
+  age: number;
   notPaidTasks: string[]; // taskIds that the tasker has to pay commission for
   totalCanceledTasks: number;
   totalEarnings: number;
@@ -38,6 +38,7 @@ export interface ITasker extends Document {
   completedTasks: string[];
   commissionRate: number;
   balance: number; // the amount of money that the tasker has in his account (wallet)
+  portfolio: { url: string; publicId: string | null }[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -57,11 +58,3 @@ export interface ITaskerService {
   updateTasker(userId: string, tasker: Partial<ITasker>): Promise<any>;
   deleteTasker(taskerId: string): Promise<any>;
 }
-
-// export interface ITaskerRepository {
-//   getTasker(taskerId: string): Promise<ITasker | null>;
-//   getTaskers(): Promise<ITasker[]>;
-//   createTasker(tasker: ITasker): Promise<ITasker>;
-//   updateTasker(taskerId: string, tasker: Partial<ITasker>): Promise<ITasker | null>;
-//   deleteTasker(taskerId: string): Promise<ITasker | null>;
-// }

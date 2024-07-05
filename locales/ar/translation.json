@@ -90,5 +90,7 @@
   "deleted_successfully": "تم حذف الكيان بنجاح",
   "updated_successfully": "تم تحديث الكيان بنجاح",
   "created_successfully": "تم إنشاء الكيان بنجاح",
-  "found_successfully": "تم استرداد الكيان بنجاح"
+  "found_successfully": "تم استرداد الكيان بنجاح",
+
+  "services_found": "تم استرداد الفئات بنجاح"
 }

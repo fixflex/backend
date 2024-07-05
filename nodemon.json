@@ -1,6 +1,5 @@
 {
   "watch": ["src", "swagger.json", "swagger.yaml", "z_test", ".env", "public"],
   "ext": ".ts,.js,.json,.yaml, .html",
-  "exec": "ts-node --files ./src/index.ts",
   "ignore": ["__test__"]
 }

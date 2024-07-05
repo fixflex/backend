@@ -20,7 +20,6 @@ class UserRoute implements Routes {
     this.router.get(`${this.path}/send-verification-code`, authenticateUser, this.userController.sendVerificationCode);
     this.router.post(`${this.path}/verify`, authenticateUser, this.userController.verifyCode);
     this.router
-      // TODO: change the route to /profile
       .route(`${this.path}/me`)
       .get(authenticateUser, this.userController.getMe)
       .patch(updateLoggedUserValidator, authenticateUser, this.userController.updateMe);
