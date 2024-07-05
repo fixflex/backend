@@ -1,4 +1,4 @@
-# For more information about the project please see the [Documentation](https://github.com/fixflex/)
+# For more info about the project see the Documentation [Here](https://github.com/fixflex/)
 
 # Tech Stack And Tools ✨
 
