@@ -1,4 +1,3 @@
-
 # Tech Stack And Tools ✨
 
 - `Node.js`: A JavaScript runtime built on Chrome's V8 JavaScript engine, used for building scalable network applications.
@@ -6,11 +5,9 @@
 - `MongoDB`: A NoSQL database used for storing data in a flexible, JSON-like format.
 - `Mongoose`: An Object Data Modeling (ODM) library for MongoDB and Node.js, used to model application data and interact with the database.
 - `TypeScript`: A typed superset of JavaScript that compiles to plain JavaScript, used to add static types to JavaScript and improve code quality.
+- `Redis`: An in-memory data structure store used as a cache, message broker, and session store.
 - `Swagger`: An open-source software framework used to design, build, document, and consume RESTful web services.
 - `Jest`: A JavaScript testing framework used for unit testing and assertions, used to validate code functionality and identify bugs.
-- `Supertest`: A library used to test HTTP requests and responses in Node.js applications, used to validate API endpoints and functionality.<!-- - `Docker`: A containerization platform used to package the backend of `fixflex` and its dependencies into a lightweight, portable container. -->
-- `GitHub Actions`: Automated workflows triggered by GitHub events, used for continuous integration and continuous deployment (CI/CD) pipelines.
-- `Render`: A cloud platform for deploying and scaling web applications, providing simplicity and scalability.
 - `Paymob`: A payment gateway used to facilitate secure online payments between users and taskers.
 - `OneSignal`: A push notification service used to send push notifications to users and taskers for task updates, messages, reminders, and other relevant events.
 - `Cloudinary`: A cloud-based image and video management service used to store, manage, and deliver images and videos for the application.
@@ -24,13 +21,16 @@
 - `Morgan`: An HTTP request logger middleware used to log HTTP requests and responses for debugging and monitoring.
 - `Prettier`: An opinionated code formatter used to enforce a consistent code style and improve code readability.
 
-# Deployment Stack (CI/CD) 🚀
+# Deployment (Stack & Tools) 🚀
 
-The backend of `fixflex` is deployed using the following technologies:
+The backend of `fixflex` is deployed using the following technologies and tools:
 
-- `Render`: A cloud platform for deploying and scaling web applications, providing simplicity and scalability.
+- `AWS (EC2)`: A cloud computing service used to deploy and host the backend of `fixflex`.
 - `GitHub Actions`: Automated workflows triggered by GitHub events, used for continuous integration and continuous deployment (CI/CD) pipelines.
-<!-- - `Docker`: Containerization platform used to package the backend of `fixflex` and its dependencies into a lightweight, portable container. -->
+- `Docker swarm`: A container orchestration tool used to deploy and manage Docker containers in a clustered environment.
+- `Nginx`: A web server used as a reverse proxy, load balancer.
+- `Mongo Atlas`: A cloud-based database service used to host MongoDB databases.
+- `Render`: A cloud-based platform used to deploy and host the testing environment of `fixflex`.
 
 # Features 📌
 
@@ -95,9 +95,7 @@ The backend of `fixflex` is deployed using the following technologies:
 
 ### Future Features 🚀
 
-- [ ] `Machine Learning Integration`: Integrates machine learning models to provide personalized recommendations, predictive analytics, or automated decision-making capabilities within the application.
 - [ ] `Task Recommendations`: Provides personalized task recommendations based on user preferences, history, and behavior, enhancing user engagement.
-- [ ] `Caching Mechanisms`: Utilizes caching mechanisms to improve performance and reduce database load, enhancing overall system efficiency.
 - [ ] `Tasker Matching Algorithm`: Develops a tasker matching algorithm to recommend the most suitable taskers for specific tasks based on skills, ratings, and availability.
 - [ ] `Tasker Performance Metrics`: Provides taskers with performance metrics, analytics, and insights to help them improve their services and grow their businesses.
 - [ ] `Third-Party API Integration`: Integrates third-party APIs such as Twilio, or Mailgun to enhance functionality and provide additional features.
@@ -164,26 +162,6 @@ The API design for `fixflex` follows RESTful principles, with clear and predicta
 - `Pagination and Filtering`: Supports pagination and filtering for listing resources, allowing users to limit the number of results and filter based on specific criteria.
 - `Search and Sorting`: Allows users to search for resources based on keywords, categories, locations, and other criteria, enhancing resource discovery.
 - `Error Handling`: Provides informative error messages, status codes, and error responses to help clients understand and handle errors effectively.
-
-## Modular Structure 🧩
-
-- **Controllers**: Handle incoming requests, process data, and send responses to clients.
-- **Services**: Contain business logic, interact with the database, and perform operations on data.
-- **Models**: Define data structures and schemas for MongoDB collections using Mongoose.
-- **Routes**: Define API endpoints, route requests to controllers, and handle HTTP methods.
-- **Middleware**: Implement custom middleware functions for authentication, validation, error handling, etc.
-- **Exceptions**: Define custom exception classes to handle errors and exceptions in the application.
-- **Helpers**: Contain utility functions, helper classes, and third-party integrations to assist with common tasks.
-- **Config**: Store configuration settings, environment variables, and validation rules.
-- **DB**: Contain data access objects (DAOs) to interact with the MongoDB database.
-- **Docs**: Define Swagger documentation files for API endpoints and models.
-- **DTOs**: Define data transfer objects (DTOs) to transfer data between layers and components.
-- **Interfaces**: Define TypeScript interfaces for data structures, models, and API requests and responses.
-- **Middlewares**: Implement custom middleware functions for authentication, validation, error handling, etc.
-- **Routes**: Define API endpoints, route requests to controllers, and handle HTTP methods.
-- **Services**: Contain business logic, interact with the database, and perform operations on data.
-- **Sockets**: Implement real-time communication between clients and servers using WebSockets.
-- **Types**: Define custom TypeScript types, interfaces, and declarations for better type safety and code quality.
 
 ## Error Handling 🚨
 
@@ -342,6 +320,19 @@ The API documentation for `fixflex` is available using [Swagger UI](https://serv
 
 ```
 fixflex/
+├── .github/
+│   ├── workflows/
+│   │   ├── ci-dockerhub.yml
+│   │   ├── deploy-sta.yml
+│   │   ├── test.yml
+├── locales/
+│   ├── ar/
+│   │   ├── translation.json
+│   ├── en/
+│   │   ├── translation.json
+│   ├── missing.json
+├── nginx/
+│   ├── default.conf
 ├── src/
 │   ├── config/
 │   │   ├── validateEnv.ts
@@ -495,6 +486,13 @@ fixflex/
 ├── .gitignore
 ├── .nvrmc
 ├── .prettierrc.json
+├── docker-compose.dev.yml
+├── docker-compose.prod.yml
+├── docker-compose.sta.yml
+├── docker-compose.tes.yml
+├── docker-compose.yml
+├── Dockerfile
+├── eslintrc.json
 ├── jest.config.js
 ├── LICENSE
 ├── nodemon.json
@@ -524,6 +522,8 @@ DEVELOPER_EMAIL="xxxxxxx"
 
 # DATABASE CONFIG
 DB_URI="xxxxxxx"
+REDIS_URL="xxxxxxx"
+
 
 # JWT CONFIG
 ACCESS_TOKEN_SECRET_KEY="xxxxxxx"
@@ -571,13 +571,19 @@ SMTP_PORT="xxxxxxx"
 # Getting Started 🚀
 
 ```bash
+
 # Clone the repository
 git clone https://github.com/fixflex/backend.git
 
 # Go into the repository
 cd backend
 
-# Install dependencies
+# Using Docker compose 🐳
+docker compose -f docker-compose.yml -f docker-compose.sta.yml build   # Build the project
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up      # Start the project
+
+# Using npm 📦
+
 npm install
 
 # Start the server in development mode
@@ -594,12 +600,11 @@ npm run test
 npm run build-ts
 ```
 
-# License 📝
+# Author 🙋‍♂️
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-#
+- [GitHub](https://github.com/ahmadalasiri)
 
 ```
-# Happy Coding! 🚀
+
+# Happy Coding ⚡️
 ```
