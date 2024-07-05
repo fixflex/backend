@@ -1,3 +1,5 @@
+# For more information about the project please see the [Documentation](https://github.com/fixflex/)
+
 # Tech Stack And Tools ✨
 
 - `Node.js`: A JavaScript runtime built on Chrome's V8 JavaScript engine, used for building scalable network applications.
@@ -31,6 +33,8 @@ The backend of `fixflex` is deployed using the following technologies and tools:
 - `Nginx`: A web server used as a reverse proxy, load balancer.
 - `Mongo Atlas`: A cloud-based database service used to host MongoDB databases.
 - `Render`: A cloud-based platform used to deploy and host the testing environment of `fixflex`.
+
+![diagram-export-7-5-2024-9_14_27-PM](https://github.com/fixflex/backend/assets/124518625/552c54db-c20a-4bd1-ac82-5170548b51c1)
 
 # Features 📌
 
