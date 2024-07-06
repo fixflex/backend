@@ -1,4 +1,4 @@
-# For more info about the project see the Documentation [Here](https://github.com/fixflex/)
+# For more info about the project check the [Documentation](https://github.com/fixflex/)
 
 # Tech Stack And Tools ✨
 
@@ -32,6 +32,7 @@ The backend of `fixflex` is deployed using the following technologies and tools:
 - `Docker swarm`: A container orchestration tool used to deploy and manage Docker containers in a clustered environment.
 - `Nginx`: A web server used as a reverse proxy, load balancer.
 - `Mongo Atlas`: A cloud-based database service used to host MongoDB databases.
+- `Redis`: An in-memory database used for sharing socket connections between multiple instances of the application.
 - `Render`: A cloud-based platform used to deploy and host the testing environment of `fixflex`.
 
 ![diagram-export-7-5-2024-9_14_27-PM](https://github.com/fixflex/backend/assets/124518625/552c54db-c20a-4bd1-ac82-5170548b51c1)
@@ -139,6 +140,16 @@ The backend architecture of `fixflex` employs dependency injection using the tsy
 ## Database Schema 📊
 
 The database used for `fixflex` is MongoDB, a NoSQL database that stores data in a flexible, JSON-like format.
+
+### Why MongoDB? 🤔
+
+#### MongoDB is the suitable database for `fixflex` due to the following reasons:
+
+- `Geospatial Data Handling`: MongoDB has robust support for geospatial data, allowing FixFlex to efficiently store and query location-based data. This is particularly useful for matching tasks with nearby taskers and providing location-based search results.
+
+- `Real-Time Data Processing`: MongoDB provides real-time data processing capabilities, enabling FixFlex to handle real-time updates, notifications, and messaging between users and taskers.
+
+- `Cloud Integration with MongoDB Atlas`: MongoDB Atlas provides a cloud-based database service that offers high availability, scalability, and security, Plus, it offers a free tier to get started! 😊
 
 <!-- See [Database Schema](MongoDB-schema-visualization.md) file for more details. -->
 
