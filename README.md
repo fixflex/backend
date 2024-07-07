@@ -2,20 +2,21 @@
 
 # Table of Contents 📜
 
-- [Tech Stack And Tools ✨](#tech-stack-and-tools-✨)
-- [Deployment (Stack & Tools 🚀)](#deployment-stack-and-tools-🚀)
-- [Features 📌](#features-📌)
+- [Tech Stack And Tools](#tech-stack-and-tools)
 
-  - [Core Features](#core-features-🌟)
-  - [Additional Features](#additional-features-🌟)
-  - [Code Features](#code-features-🌟)
-  - [Security Features](#security-features-🌟)
-  - [Future Features](#future-features-🚀)
+- [Deployment (Stack & Tools)](#deployment-stack-and-tools)
+- [Features ](#features)
 
-- [Architecture 🏗️](#architecture-🏗️)
+  - [Core Features](#core-features)
+  - [Additional Features](#additional-features)
+  - [Code Features](#code-features)
+  - [Security Features](#security-features)
+  - [Future Features](#future-features)
+
+- [Architecture](#architecture)
 
   <!--
-  - [Model-View-Controller (MVC) Pattern](#model-view-controller-mvc-pattern-🌐)
+  - [Model-View-Controller (MVC) Pattern](#model-view-controller-mvc-pattern-)
   - [Data Access Object (DAO) Pattern](#data-access-object-dao-pattern-💾)
   - [Data Transfer Object (DTO) Pattern](#data-transfer-object-dto-pattern-📦)
   - [Service Layer](#service-layer-🛠️)
@@ -24,19 +25,19 @@
   - [Database Schema](#database-schema-📊)
   - [RESTful API Design](#restful-api-design-📐) -->
 
-- [Error Handling 🚨](#error-handling-🚨)
+- [Error Handling ](#error-handling)
 
-- [API Endpoints](#api-endpoints-🚀)
+- [API Endpoints](#api-endpoints)
 
-- [Project Structure 📁](#project-structure-📁)
+- [Project Structure ](#project-structure)
 
-- [Environment Variables 🌐](#environment-variables-🌐)
+- [Environment Variables ](#environment-variables)
 
-- [Getting Started](#getting-started-🚀)
+- [Getting Started](#getting-started)
 
-- [Author 🙋‍♂️](#author-🙋‍♂️)
+- [Author ](#author)
 
-# Tech Stack And Tools ✨
+# Tech Stack And Tools
 
 - `TypeScript`: A typed superset of JavaScript that compiles to plain JavaScript, used to add static types to JavaScript and improve code quality.
 - `Node.js`: A JavaScript runtime built on Chrome's V8 JavaScript engine, used for building scalable network applications.
@@ -55,7 +56,7 @@
 - `Nodemailer`: A module used to send emails from the application to users and taskers for account verification, password reset, task updates, and other events.
 - `Winston`: A logging library used to log application behavior and performance to track errors and debug issues.
 
-# Deployment Stack And Tools 🚀
+# Deployment Stack And Tools
 
 The backend of `fixflex` is deployed using the following technologies and tools:
 
@@ -69,9 +70,9 @@ The backend of `fixflex` is deployed using the following technologies and tools:
 
 ![diagram-export-7-5-2024-9_14_27-PM](https://github.com/fixflex/backend/assets/124518625/552c54db-c20a-4bd1-ac82-5170548b51c1)
 
-# Features 📌
+# Features
 
-## Core Features 🌟
+## Core Features
 
 - [x] `User Authentication`: Authenticates users using JWT (JSON Web Tokens)
 - [x] `Role-Based Access Control`: Implements role-based access control to restrict user access to specific resources based on their roles and permissions.
@@ -90,7 +91,7 @@ The backend of `fixflex` is deployed using the following technologies and tools:
 - [x] `Location-Based Services`: Utilizes geolocation services to display tasks and taskers based on the user's location, providing a personalized experience.
 - [x] `Real-Time Chat`: Enables direct communication between users and taskers to discuss task details, negotiate terms, and provide updates.
 
-## Additional Features 🌟
+## Additional Features
 
 - [x] `Multi-Language Support`: Supports multiple languages (ar & en) and locales to cater to a diverse user base, providing a localized experience.
 - [x] `Email Notifications`: Sends automated email notifications to users and taskers for account verification, password reset, task updates, and other events.
@@ -102,7 +103,7 @@ The backend of `fixflex` is deployed using the following technologies and tools:
 - [x] `API Versioning`: Organizes API endpoints into versions for better management, with the current version being `v1`.
 - [x] `Geolocation Services`: Integrates geolocation services to provide location-based functionalities such as finding nearby service providers.
 
-### Code Features 🌟
+### Code Features
 
 - [x] `TypeScript`: Utilizes TypeScript to add static types to JavaScript, improving code quality, and catching errors early in the development process.
 - [x] `RESTful API Design`: Adheres to RESTful API design principles to create a standardized and predictable API interface for clients to interact with.
@@ -116,7 +117,7 @@ The backend of `fixflex` is deployed using the following technologies and tools:
 - [x] `Environment Configuration`: Utilizes environment variables to manage configuration settings and sensitive information, ensuring security and flexibility.
 - [x] `Best Practices & Clean Code`: Follows best practices and clean code principles such as ( SOLID, DRY, KISS )
 
-### Security Features 🌟
+### Security Features
 
 - [x] `Logging and Monitoring`: Includes logging functionality to track application behavior and performance using Winston and Morgan.
 - [x] `Input Validation`: Validates user input to prevent common security vulnerabilities such MongoDB injection, cross-site scripting (XSS).
@@ -129,18 +130,18 @@ The backend of `fixflex` is deployed using the following technologies and tools:
 - [x] `OAuth 2.0`: Integrate with google OAuth 2.0 for secure authentication and authorization, allowing users to sign in using their Google accounts.
 - [x] `Error Handling`: Implements error handling mechanisms to catch and handle exceptions gracefully, providing informative error messages to users.
 
-### Future Features 🚀
+### Future Features
 
 - [ ] `Task Recommendations`: Provides personalized task recommendations based on user preferences, history, and behavior, enhancing user engagement.
 - [ ] `Tasker Matching Algorithm`: Develops a tasker matching algorithm to recommend the most suitable taskers for specific tasks based on skills, ratings, and availability.
 - [ ] `Tasker Performance Metrics`: Provides taskers with performance metrics, analytics, and insights to help them improve their services and grow their businesses.
 - [ ] `Third-Party API Integration`: Integrates third-party APIs such as Twilio, or Mailgun to enhance functionality and provide additional features.
 
-# Architecture 🏗️
+# Architecture
 
-The backend of `fixflex` follows a modular, scalable, and maintainable architecture. The architecture is designed to ensure code reusability, separation of concerns, and scalability to accommodate future growth and changes in the application's requirements.
+The backe of `fixflex` follows a modular, scalable, and maintainable architecture. The architecture is designed to ensure code reusability, separation of concerns, and scalability to accommodate future growth and changes in the application's requirements.
 
-## Model-View-Controller (MVC) Pattern 🌐
+## Model-View-Controller (MVC) Pattern
 
 The backend architecture of `fixflex` follows the Model-View-Controller (MVC) pattern, which divides the application into three main components:
 
@@ -209,7 +210,7 @@ The API design for `fixflex` follows RESTful principles, with clear and predicta
 - `Search and Sorting`: Allows users to search for resources based on keywords, categories, locations, and other criteria, enhancing resource discovery.
 - `Error Handling`: Provides informative error messages, status codes, and error responses to help clients understand and handle errors effectively.
 
-## Error Handling 🚨
+## Error Handling
 
 The backend architecture of `fixflex` includes a robust error handling mechanism to catch and handle exceptions gracefully, providing informative error messages, status codes, and error responses to clients. The error handling mechanism includes the following key features:
 
@@ -223,7 +224,7 @@ The backend architecture of `fixflex` includes a robust error handling mechanism
 
 The API documentation for `fixflex` is available using [Swagger UI](https://server.fixflex.tech/api-docs) and [Postman Collection](https://documenter.getpostman.com/view/24552265/2sA2r53QzT#intro).
 
-## API Endpoints 🚀
+## API Endpoints
 
 ### Admin
 
@@ -362,7 +363,7 @@ The API documentation for `fixflex` is available using [Swagger UI](https://serv
 - [x] `GET /healthz`: Health check endpoint
 - [x] `GET /`: Health check endpoint
 
-# Project Structure 📁
+# Project Structure
 
 ```
 fixflex/
@@ -550,7 +551,7 @@ fixflex/
 
 ```
 
-# Environment Variables 🌐
+# Environment Variables
 
 ```bash
 
@@ -614,7 +615,7 @@ SMTP_PORT="xxxxxxx"
 
 ```
 
-# Getting Started 🚀
+# Getting Started
 
 ```bash
 
@@ -646,7 +647,7 @@ npm run test
 npm run build-ts
 ```
 
-# Author 🙋‍♂️
+# Author
 
 - [GitHub](https://github.com/ahmadalasiri)
 
