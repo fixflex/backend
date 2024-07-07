@@ -1,29 +1,61 @@
 # For more info about the project check the [Documentation](https://github.com/fixflex/)
 
+# Table of Contents 📜
+
+- [Tech Stack And Tools ✨](#tech-stack-and-tools-✨)
+- [Deployment (Stack & Tools 🚀)](#deployment-stack-and-tools-🚀)
+- [Features 📌](#features-📌)
+
+  - [Core Features](#core-features-🌟)
+  - [Additional Features](#additional-features-🌟)
+  - [Code Features](#code-features-🌟)
+  - [Security Features](#security-features-🌟)
+  - [Future Features](#future-features-🚀)
+
+- [Architecture 🏗️](#architecture-🏗️)
+
+  <!--
+  - [Model-View-Controller (MVC) Pattern](#model-view-controller-mvc-pattern-🌐)
+  - [Data Access Object (DAO) Pattern](#data-access-object-dao-pattern-💾)
+  - [Data Transfer Object (DTO) Pattern](#data-transfer-object-dto-pattern-📦)
+  - [Service Layer](#service-layer-🛠️)
+  - [Middleware](#middleware-🚪)
+  - [Dependency Injection](#dependency-injection-🔄)
+  - [Database Schema](#database-schema-📊)
+  - [RESTful API Design](#restful-api-design-📐) -->
+
+- [Error Handling 🚨](#error-handling-🚨)
+
+- [API Endpoints](#api-endpoints-🚀)
+
+- [Project Structure 📁](#project-structure-📁)
+
+- [Environment Variables 🌐](#environment-variables-🌐)
+
+- [Getting Started](#getting-started-🚀)
+
+- [Author 🙋‍♂️](#author-🙋‍♂️)
+
 # Tech Stack And Tools ✨
 
+- `TypeScript`: A typed superset of JavaScript that compiles to plain JavaScript, used to add static types to JavaScript and improve code quality.
 - `Node.js`: A JavaScript runtime built on Chrome's V8 JavaScript engine, used for building scalable network applications.
 - `Express.js`: A fast, unopinionated, minimalist web framework for Node.js, used for building APIs and web applications.
 - `MongoDB`: A NoSQL database used for storing data in a flexible, JSON-like format.
-- `Mongoose`: An Object Data Modeling (ODM) library for MongoDB and Node.js, used to model application data and interact with the database.
-- `TypeScript`: A typed superset of JavaScript that compiles to plain JavaScript, used to add static types to JavaScript and improve code quality.
 - `Redis`: An in-memory data structure store used as a cache, message broker, and session store.
-- `Swagger`: An open-source software framework used to design, build, document, and consume RESTful web services.
 - `Jest`: A JavaScript testing framework used for unit testing and assertions, used to validate code functionality and identify bugs.
 - `Paymob`: A payment gateway used to facilitate secure online payments between users and taskers.
 - `OneSignal`: A push notification service used to send push notifications to users and taskers for task updates, messages, reminders, and other relevant events.
 - `Cloudinary`: A cloud-based image and video management service used to store, manage, and deliver images and videos for the application.
 - `Socket.io`: A library used to enable real-time, bidirectional communication between clients and servers using WebSockets.
-- `Multer`: A middleware used to handle file uploads in Node.js applications, used to upload images and files to the server.
+- `Swagger`: An open-source software framework used to design, build, document, and consume RESTful web services.
 - `i18next`: An internationalization (i18n) library used to support multiple languages and locales in the application.
 - `Google OAuth 2.0`: An authentication and authorization service used to allow users to sign in using their Google accounts.
 - `Whatsapp-web.js`: A WhatsApp API used to send WhatsApp messages to users and taskers for task updates, reminders, and other relevant events.
 - `Nodemailer`: A module used to send emails from the application to users and taskers for account verification, password reset, task updates, and other events.
 - `Winston`: A logging library used to log application behavior and performance to track errors and debug issues.
-- `Morgan`: An HTTP request logger middleware used to log HTTP requests and responses for debugging and monitoring.
-- `Prettier`: An opinionated code formatter used to enforce a consistent code style and improve code readability.
 
-# Deployment (Stack & Tools) 🚀
+# Deployment Stack And Tools 🚀
 
 The backend of `fixflex` is deployed using the following technologies and tools:
 
@@ -32,7 +64,7 @@ The backend of `fixflex` is deployed using the following technologies and tools:
 - `Docker swarm`: A container orchestration tool used to deploy and manage Docker containers in a clustered environment.
 - `Nginx`: A web server used as a reverse proxy, load balancer.
 - `Mongo Atlas`: A cloud-based database service used to host MongoDB databases.
-- `Redis`: An in-memory database used for sharing socket connections between multiple instances of the application.
+- `Upstash-Redis`: A cloud-based Redis service.
 - `Render`: A cloud-based platform used to deploy and host the testing environment of `fixflex`.
 
 ![diagram-export-7-5-2024-9_14_27-PM](https://github.com/fixflex/backend/assets/124518625/552c54db-c20a-4bd1-ac82-5170548b51c1)
@@ -63,7 +95,6 @@ The backend of `fixflex` is deployed using the following technologies and tools:
 - [x] `Multi-Language Support`: Supports multiple languages (ar & en) and locales to cater to a diverse user base, providing a localized experience.
 - [x] `Email Notifications`: Sends automated email notifications to users and taskers for account verification, password reset, task updates, and other events.
 - [x] `Push Notifications`: Sends push notifications using OneSignal to users and taskers for task updates, messages, reminders, and other relevant events.
-- [x] `Webhooks`: Enables the integration of external service by providing webhook endpoints for event-driven communication.
 - [x] `Testing Suite`: Includes a comprehensive testing suite comprising unit tests, integration tests to ensure code reliability and maintainability.
 - [x] `Continuous Integration/Deployment (CI/CD)`: Integrates automated testing and deployment processes to streamline development workflows using GitHub Actions.
 - [x] `WebSockets`: Implements real-time communication between clients and the server using WebSockets, enabling interactive features such as live chat or notifications.
@@ -107,7 +138,7 @@ The backend of `fixflex` is deployed using the following technologies and tools:
 
 # Architecture 🏗️
 
-The backend of `fixflex` follows a modular, scalable, and maintainable architecture, leveraging TypeScript, Express.js, and MongoDB. The architecture is designed to ensure code reusability, separation of concerns, and scalability to accommodate future growth and changes in the application's requirements.
+The backend of `fixflex` follows a modular, scalable, and maintainable architecture. The architecture is designed to ensure code reusability, separation of concerns, and scalability to accommodate future growth and changes in the application's requirements.
 
 ## Model-View-Controller (MVC) Pattern 🌐
 
