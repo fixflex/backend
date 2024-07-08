@@ -1,11 +1,12 @@
-# For more info about the project check the [Documentation](https://github.com/fixflex/)
+# For more details about the project check the [Documentation](https://github.com/fixflex/)
 
 # Table of Contents 📜
 
-- [Tech Stack And Tools](#tech-stack-and-tools)
-
-- [Deployment (Stack & Tools)](#deployment-stack-and-tools)
-- [Features ](#features)
+- [Tech Stack And Tools ✨](#tech-stack-and-tools)
+- [Deployment (Stack & Tools 🚀)](#deployment-stack-and-tools)
+<!-- # API Documentation 📖 -->
+- [API Documentation 📖](#api-documentation)
+- [Features 📌](#features)
 
   - [Core Features](#core-features)
   - [Additional Features](#additional-features)
@@ -13,29 +14,19 @@
   - [Security Features](#security-features)
   - [Future Features](#future-features)
 
-- [Architecture](#architecture)
+- [Architecture 🏗️](#architecture)
 
-  <!--
-  - [Model-View-Controller (MVC) Pattern](#model-view-controller-mvc-pattern-)
-  - [Data Access Object (DAO) Pattern](#data-access-object-dao-pattern-💾)
-  - [Data Transfer Object (DTO) Pattern](#data-transfer-object-dto-pattern-📦)
-  - [Service Layer](#service-layer-🛠️)
-  - [Middleware](#middleware-🚪)
-  - [Dependency Injection](#dependency-injection-🔄)
-  - [Database Schema](#database-schema-📊)
-  - [RESTful API Design](#restful-api-design-📐) -->
-
-- [Error Handling ](#error-handling)
+- [Error Handling 🚨](#error-handling)
 
 - [API Endpoints](#api-endpoints)
 
-- [Project Structure ](#project-structure)
+- [Project Structure 📁](#project-structure)
 
-- [Environment Variables ](#environment-variables)
+- [Environment Variables 🌐](#environment-variables)
 
 - [Getting Started](#getting-started)
 
-- [Author ](#author)
+- [Author 🙋‍♂️](#author)
 
 # Tech Stack And Tools
 
@@ -220,9 +211,9 @@ The backend architecture of `fixflex` includes a robust error handling mechanism
 - `Error Logging`: Logs errors and exceptions to track application behavior, monitor performance, and debug issues effectively.
 - `Error Response Format`: Standardizes error responses with a consistent format, including status codes, error messages, error details, and stack traces.
 
-# API Documentation 📖
+# API Documentation
 
-The API documentation for `fixflex` is available using [Swagger UI](https://server.fixflex.tech/api-docs) and [Postman Collection](https://documenter.getpostman.com/view/24552265/2sA2r53QzT#intro).
+[Swagger UI](https://server.fixflex.tech/api-docs) - [Postman Collection](https://documenter.getpostman.com/view/24552265/2sA2r53QzT#intro).
 
 ## API Endpoints
 
