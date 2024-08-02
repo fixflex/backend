@@ -57,7 +57,8 @@ class App {
 
   private initializeMiddlewares() {
     if (this.env === 'development' || this.env === 'staging') {
-      this.app.use(morgan('dev'));
+      const morganFmt = ':date[iso] | :remote-addr | ":method :url" :status :response-time ms';
+      this.app.use(morgan(morganFmt));
     }
     if (this.env === 'production' || this.env === 'staging') this.app.enable('trust proxy'); // This will enable the app to work behind a proxy (Render, Heroku, AWS, Nginx etc.) which sets the X-Forwarded-Proto header to "https" when a request is made over HTTPS
     this.app.use(cors);
